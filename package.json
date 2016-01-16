@@ -1,0 +1,32 @@
+{
+  "name": "redux-query",
+  "version": "1.0.0",
+  "description": "Redux tools for querying remote resources",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "redux",
+    "react",
+    "query",
+    "resource",
+    "remote",
+    "fetch"
+  ],
+  "author": "Ryan Ashcraft",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.1.2",
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.1.2",
+    "babel-preset-stage-2": "^6.3.13",
+    "react": "^0.14.6",
+    "react-redux": "^4.0.6",
+    "redux": "^3.0.5",
+    "redux-devtools": "^3.0.0",
+    "redux-devtools-log-monitor": "^1.0.1",
+    "webpack": "^1.12.9"
+  }
+}

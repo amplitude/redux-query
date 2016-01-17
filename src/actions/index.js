@@ -17,6 +17,7 @@ export const requestSuccess = (url, status, entities) => {
         url,
         status,
         entities,
+        time: Date.now(),
     };
 };
 
@@ -25,16 +26,19 @@ export const requestFailure = (url, status) => {
         type: actionTypes.REQUEST_SUCCCESS,
         url,
         status,
+        time: Date.now(),
     };
 };
 
-export const requestAsync = (url, schema, requestsSelector) => (dispatch, getState) => {
+export const requestAsync = (url, schema, requestsSelector, force) => (dispatch, getState) => {
     const state = getState();
     const requests = requestsSelector(state);
     const request = requests[url];
     const isPending = get(request, ['isPending'], false);
+    const status = get(request, ['status']);
+    const hasSucceeded = status >= 200 && status < 300;
 
-    if (!isPending) {
+    if (force || (!isPending && !hasSucceeded)) {
         dispatch(requestStart(url));
 
         superagent.get(url)

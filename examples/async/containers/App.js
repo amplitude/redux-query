@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { createContainer, Schema, arrayOf } from 'redux-query';
-import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
+import { createContainer, Schema, arrayOf } from 'redux-query'
+import get from 'lodash/get'
+import { selectReddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
+
+const getRedditUrl = (reddit) => `https://www.reddit.com/r/${reddit}.json`
 
 class App extends Component {
   constructor(props) {
@@ -12,28 +15,13 @@ class App extends Component {
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
   }
 
-  componentDidMount() {
-    const { dispatch, selectedReddit } = this.props
-    dispatch(fetchPostsIfNeeded(selectedReddit))
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedReddit !== this.props.selectedReddit) {
-      const { dispatch, selectedReddit } = nextProps
-      dispatch(fetchPostsIfNeeded(selectedReddit))
-    }
-  }
-
   handleChange(nextReddit) {
     this.props.dispatch(selectReddit(nextReddit))
   }
 
   handleRefreshClick(e) {
     e.preventDefault()
-
-    const { dispatch, selectedReddit } = this.props
-    dispatch(invalidateReddit(selectedReddit))
-    dispatch(fetchPostsIfNeeded(selectedReddit))
+    this.props.forceRequest();
   }
 
   render() {
@@ -82,15 +70,12 @@ App.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { selectedReddit, postsByReddit } = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: posts
-  } = postsByReddit[selectedReddit] || {
-    isFetching: true,
-    items: []
-  }
+  const { selectedReddit } = state
+  const url = getRedditUrl(selectedReddit)
+  const isFetching = get(state, ['requests', url, 'isPending'], false)
+  const lastUpdated = get(state, ['requests', url, 'lastUpdated'])
+  const postIds = get(state, ['entities', 'reddits', selectedReddit, 'data', 'children'], [])
+  const posts = postIds.map((id) => get(state, ['entities', 'posts', id]))
 
   return {
     selectedReddit,
@@ -100,21 +85,31 @@ function mapStateToProps(state) {
   }
 }
 
-const post = new Schema('posts', {
-  idAttribute: (entity) => {
-    return entity.data.id;
-  }
-});
+function getSchema(reddit) {
+  const subreddit = new Schema('reddits', {
+    idAttribute: () => reddit
+  })
+
+  const post = new Schema('posts', {
+    idAttribute: (entity) => {
+      return entity.data.id
+    }
+  })
+
+  subreddit.define({
+    data: {
+      children: arrayOf(post)
+    }
+  })
+
+  return subreddit
+}
 
 const AppContainer = createContainer((props) => {
   return {
-    url: `https://www.reddit.com/r/${props.selectedReddit}.json`,
-    schema: {
-      data: {
-        children: arrayOf(post)
-      }
-    }
-  };
-}, (state) => state.requests)(App);
+    url: getRedditUrl(props.selectedReddit),
+    schema: getSchema(props.selectedReddit)
+  }
+}, (state) => state.requests)(App)
 
 export default connect(mapStateToProps)(AppContainer)

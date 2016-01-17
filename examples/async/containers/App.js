@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { createContainer, Schema, arrayOf } from 'redux-query';
 import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
@@ -99,4 +100,21 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(App)
+const post = new Schema('posts', {
+  idAttribute: (entity) => {
+    return entity.data.id;
+  }
+});
+
+const AppContainer = createContainer((props) => {
+  return {
+    url: `https://www.reddit.com/r/${props.selectedReddit}.json`,
+    schema: {
+      data: {
+        children: arrayOf(post)
+      }
+    }
+  };
+}, (state) => state.requests)(App);
+
+export default connect(mapStateToProps)(AppContainer)

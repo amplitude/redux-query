@@ -3,6 +3,7 @@ import {
   SELECT_REDDIT, INVALIDATE_REDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
 } from '../actions'
+import { requestsReducer } from 'redux-query';
 
 function selectedReddit(state = 'reactjs', action) {
   switch (action.type) {
@@ -55,7 +56,8 @@ function postsByReddit(state = { }, action) {
 
 const rootReducer = combineReducers({
   postsByReddit,
-  selectedReddit
+  selectedReddit,
+  requests: requestsReducer
 })
 
 export default rootReducer

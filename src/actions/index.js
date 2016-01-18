@@ -23,12 +23,39 @@ export const requestSuccess = (url, status, entities) => {
 
 export const requestFailure = (url, status) => {
     return {
-        type: actionTypes.REQUEST_SUCCCESS,
+        type: actionTypes.REQUEST_FAILURE,
         url,
         status,
         time: Date.now(),
     };
 };
+
+export const mutateStart = (url) => {
+    return {
+        type: actionTypes.MUTATE_START,
+        url,
+    };
+};
+
+export const mutateSuccess = (url, status, entities) => {
+    return {
+        type: actionTypes.MUTATE_SUCCESS,
+        url,
+        status,
+        entities,
+        time: Date.now(),
+    };
+};
+
+export const mutateFailure = (url, status) => {
+    return {
+        type: actionTypes.MUTATE_FAILURE,
+        url,
+        status,
+        time: Date.now(),
+    };
+};
+
 
 export const requestAsync = (url, schema, requestsSelector, force) => (dispatch, getState) => {
     const state = getState();
@@ -51,4 +78,20 @@ export const requestAsync = (url, schema, requestsSelector, force) => (dispatch,
                 }
             });
     }
+};
+
+export const mutateAsync = (url, schema) => (dispatch, getState) => {
+    const state = getState();
+
+    dispatch(mutateStart(url));
+
+    superagent.post(url)
+        .end((err, response) => {
+            if (err) {
+                dispatch(mutateFailure(url, response.status));
+            } else {
+                const normalized = normalize(response.body, schema);
+                dispatch(mutateSuccess(url, response.status, normalized.entities));
+            }
+        });
 };

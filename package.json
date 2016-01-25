@@ -22,18 +22,15 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-2": "^6.3.13",
-    "react": "^0.14.6",
-    "react-redux": "^4.0.6",
-    "redux": "^3.0.5",
-    "redux-devtools": "^3.0.0",
-    "redux-devtools-log-monitor": "^1.0.1",
     "webpack": "^1.12.9"
   },
   "dependencies": {
     "lodash": "^4.0.0",
+    "react": "^0.14.6",
     "superagent": "^1.6.1"
   },
   "peerDependencies": {
+    "redux": "^3.0.5",
     "redux-thunk": "^1.0.3"
   }
 }

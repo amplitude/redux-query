@@ -1,8 +1,10 @@
+import identity from 'lodash/identity';
 import { mutateAsync } from '../actions'
 
-const createMutatingAction = (mapArgsToDeps) => (args) => (dispatch) => {
-    const deps = mapArgsToDeps(args);
-    dispatch(mutateAsync(deps.url, deps.schema));
+const createMutatingAction = (mapArgsToUrl, mapArgsToTransform) => (args) => (dispatch) => {
+    const url = mapArgsToUrl(args);
+    const transform = mapArgsToTransform ? mapArgsToTransform(args) : identity;
+    dispatch(mutateAsync(url, transform));
 };
 
 export default createMutatingAction;

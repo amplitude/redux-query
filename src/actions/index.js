@@ -1,5 +1,4 @@
 import superagent from 'superagent'
-import { normalize } from 'normalizr';
 import get from 'lodash/get';
 
 import * as actionTypes from '../constants/action-types';
@@ -57,7 +56,7 @@ export const mutateFailure = (url, status) => {
 };
 
 
-export const requestAsync = (url, schema, requestsSelector, force) => (dispatch, getState) => {
+export const requestAsync = (url, requestsSelector, transform, force) => (dispatch, getState) => {
     const state = getState();
     const requests = requestsSelector(state);
     const request = requests[url];
@@ -73,14 +72,14 @@ export const requestAsync = (url, schema, requestsSelector, force) => (dispatch,
                 if (err) {
                     dispatch(requestFailure(url, response.status));
                 } else {
-                    const normalized = normalize(response.body, schema);
-                    dispatch(requestSuccess(url, response.status, normalized.entities));
+                    const transformed = transform(response.body);
+                    dispatch(requestSuccess(url, response.status, transformed));
                 }
             });
     }
 };
 
-export const mutateAsync = (url, schema) => (dispatch, getState) => {
+export const mutateAsync = (url, transform) => (dispatch, getState) => {
     const state = getState();
 
     dispatch(mutateStart(url));
@@ -90,8 +89,8 @@ export const mutateAsync = (url, schema) => (dispatch, getState) => {
             if (err) {
                 dispatch(mutateFailure(url, response.status));
             } else {
-                const normalized = normalize(response.body, schema);
-                dispatch(mutateSuccess(url, response.status, normalized.entities));
+                const transformed = transform(response.body);
+                dispatch(mutateSuccess(url, response.status, transformed));
             }
         });
 };

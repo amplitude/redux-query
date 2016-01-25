@@ -10,6 +10,7 @@
   "dependencies": {
     "babel-polyfill": "^6.3.14",
     "isomorphic-fetch": "^2.1.1",
+    "normalizr": "^2.0.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-redux": "^4.0.0",

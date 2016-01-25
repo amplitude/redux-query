@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { createContainer, Schema, arrayOf } from 'redux-query'
+import { Schema, arrayOf, normalize } from 'normalizr';
+import { createContainer } from 'redux-query'
 import get from 'lodash/get'
 import { selectReddit } from '../actions'
 import Picker from '../components/Picker'
@@ -105,11 +106,10 @@ function getSchema(reddit) {
   return subreddit
 }
 
-const AppContainer = createContainer((props) => {
-  return {
-    url: getRedditUrl(props.selectedReddit),
-    schema: getSchema(props.selectedReddit)
-  }
-}, (state) => state.requests)(App)
+const AppContainer = createContainer(
+  (props) => getRedditUrl(props.selectedReddit),
+  (state) => state.requests,
+  (props) => (response) => normalize(response, getSchema(props.selectedReddit)).entities
+)(App)
 
 export default connect(mapStateToProps)(AppContainer)

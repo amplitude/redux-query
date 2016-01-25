@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "lodash": "^4.0.0",
-    "normalizr": "^2.0.0",
     "superagent": "^1.6.1"
   },
   "peerDependencies": {

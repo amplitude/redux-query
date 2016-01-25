@@ -1,10 +1,11 @@
+import identity from 'lodash/identity';
 import React, { Component } from 'react';
 import storeShape from 'react-redux/lib/utils/storeShape';
 import partial from 'lodash/partial';
 
 import { requestAsync } from '../actions';
 
-const createContainer = (mapPropsToDeps, responsesSelector) => (WrappedComponent) => {
+const createContainer = (mapPropsToUrl, mapStateToRequests, mapPropsToTransform) => (WrappedComponent) => {
     class ReduxQueryContainer extends Component {
         componentDidMount() {
             this.fetch(this.props);
@@ -16,8 +17,9 @@ const createContainer = (mapPropsToDeps, responsesSelector) => (WrappedComponent
 
         fetch(props, force = false) {
             const { dispatch } = this.context.store;
-            const deps = mapPropsToDeps(props);
-            dispatch(requestAsync(deps.url, deps.schema, responsesSelector, force));
+            const url = mapPropsToUrl(props);
+            const transform = mapPropsToTransform ? mapPropsToTransform(props) : identity;
+            dispatch(requestAsync(url, mapStateToRequests, transform, force));
         }
 
         render() {

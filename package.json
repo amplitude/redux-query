@@ -2,8 +2,9 @@
   "name": "redux-query",
   "version": "1.0.0",
   "description": "Redux tools for querying remote resources",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
+    "build:lib": "babel src --out-dir lib",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

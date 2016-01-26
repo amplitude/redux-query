@@ -6,12 +6,7 @@ const entities = (state = {}, action) => {
     if (action.type === REQUEST_SUCCCESS || action.type === MUTATE_SUCCESS) {
         return {
             ...state,
-            ...mapValues(action.entities, (value, key) => {
-                return {
-                    ...state[key],
-                    ...value,
-                };
-            }),
+            ...action.entities,
         };
     } else {
         return state;

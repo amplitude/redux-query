@@ -25,6 +25,8 @@
     "fetch",
     "REST"
   ],
+  "author": "Ryan Ashcraft <ryan@amplitude.com>",
+  "license": "MIT",
   "dependencies": {
     "backo": "^1.1.0",
     "invariant": "^2.2.0",

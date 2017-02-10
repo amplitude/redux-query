@@ -17,6 +17,10 @@
     "lint": "eslint src test",
     "test": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amplitude/redux-query.git"
+  },
   "keywords": [
     "redux",
     "react",

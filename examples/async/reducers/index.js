@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { SELECT_REDDIT } from '../actions'
-import { entitiesReducer, requestsReducer } from 'redux-query'
+import { entitiesReducer, queriesReducer } from 'redux-query'
 
 function selectedReddit(state = 'reactjs', action) {
   switch (action.type) {
@@ -13,7 +13,7 @@ function selectedReddit(state = 'reactjs', action) {
 
 const rootReducer = combineReducers({
   selectedReddit,
-  requests: requestsReducer,
+  queries: queriesReducer,
   entities: entitiesReducer
 })
 

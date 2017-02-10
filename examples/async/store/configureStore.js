@@ -2,9 +2,11 @@ import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
+import { queryMiddleware } from 'redux-query'
 
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware,
+  queryMiddleware((state) => state.queries, (state) => state.entities),
   createLogger()
 )(createStore)
 

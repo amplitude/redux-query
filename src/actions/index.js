@@ -1,96 +1,147 @@
-import superagent from 'superagent'
-import get from 'lodash/get';
-
 import * as actionTypes from '../constants/action-types';
 
-export const requestStart = (url) => {
+export const requestStart = (url, body, request, meta, queryKey) => {
     return {
         type: actionTypes.REQUEST_START,
         url,
+        body,
+        request,
+        meta,
+        queryKey,
     };
 };
 
-export const requestSuccess = (url, status, entities) => {
+export const requestSuccess = (url, body, status, entities, meta, queryKey) => {
     return {
-        type: actionTypes.REQUEST_SUCCCESS,
+        type: actionTypes.REQUEST_SUCCESS,
         url,
+        body,
         status,
         entities,
+        meta,
+        queryKey,
         time: Date.now(),
     };
 };
 
-export const requestFailure = (url, status) => {
+export const requestFailure = (url, body, status, responseBody, meta, queryKey) => {
     return {
         type: actionTypes.REQUEST_FAILURE,
         url,
+        body,
         status,
+        responseBody,
+        meta,
+        queryKey,
         time: Date.now(),
     };
 };
 
-export const mutateStart = (url) => {
+export const mutateStart = (url, body, request, optimisticEntities, queryKey) => {
     return {
         type: actionTypes.MUTATE_START,
         url,
+        body,
+        request,
+        optimisticEntities,
+        queryKey,
     };
 };
 
-export const mutateSuccess = (url, status, entities) => {
+export const mutateSuccess = (url, body, status, entities, queryKey) => {
     return {
         type: actionTypes.MUTATE_SUCCESS,
         url,
+        body,
         status,
         entities,
+        queryKey,
         time: Date.now(),
     };
 };
 
-export const mutateFailure = (url, status) => {
+export const mutateFailure = (url, body, status, originalEntities, queryKey) => {
     return {
         type: actionTypes.MUTATE_FAILURE,
         url,
+        body,
         status,
+        originalEntities,
+        queryKey,
         time: Date.now(),
     };
 };
 
-
-export const requestAsync = (url, requestsSelector, transform, force) => (dispatch, getState) => {
-    const state = getState();
-    const requests = requestsSelector(state);
-    const request = requests[url];
-    const isPending = get(request, ['isPending'], false);
-    const status = get(request, ['status']);
-    const hasSucceeded = status >= 200 && status < 300;
-
-    if (force || (!isPending && !hasSucceeded)) {
-        dispatch(requestStart(url));
-
-        superagent.get(url)
-            .end((err, response) => {
-                if (err) {
-                    dispatch(requestFailure(url, response.status));
-                } else {
-                    const transformed = transform(response.body);
-                    dispatch(requestSuccess(url, response.status, transformed));
-                }
-            });
-    }
+export const requestAsync = ({
+    body,
+    force,
+    queryKey,
+    meta,
+    options,
+    retry,
+    transform,
+    update,
+    url,
+}) => {
+    return {
+        type: actionTypes.REQUEST_ASYNC,
+        body,
+        force,
+        queryKey,
+        meta,
+        options,
+        retry,
+        transform,
+        update,
+        url,
+    };
 };
 
-export const mutateAsync = (url, transform) => (dispatch, getState) => {
-    const state = getState();
+export const mutateAsync = ({
+    body,
+    onRequestEnd,
+    optimisticUpdate,
+    options,
+    queryKey,
+    transform,
+    update,
+    url,
+}) => (dispatch) => {
+    return dispatch({
+        type: actionTypes.MUTATE_ASYNC,
+        body,
+        optimisticUpdate,
+        options,
+        queryKey,
+        transform,
+        update,
+        url,
+    }).then((responseMetadata) => {
+        if (onRequestEnd) {
+            dispatch(onRequestEnd(responseMetadata));
+        }
 
-    dispatch(mutateStart(url));
+        return responseMetadata;
+    });
+};
 
-    superagent.post(url)
-        .end((err, response) => {
-            if (err) {
-                dispatch(mutateFailure(url, response.status));
-            } else {
-                const transformed = transform(response.body);
-                dispatch(mutateSuccess(url, response.status, transformed));
-            }
-        });
+export const cancelQuery = (queryKey) => {
+    return {
+        type: actionTypes.CANCEL_QUERY,
+        queryKey,
+    };
+};
+
+export const removeEntity = (path) => {
+    return {
+        type: actionTypes.REMOVE_ENTITY,
+        path,
+    };
+};
+
+export const removeEntities = (paths) => {
+    return {
+        type: actionTypes.REMOVE_ENTITIES,
+        paths,
+    };
 };

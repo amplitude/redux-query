@@ -1,6 +1,8 @@
 var path = require('path')
 var webpack = require('webpack')
 
+var reduxQuerySrc = path.join(__dirname, 'node_modules', 'redux-query')
+
 module.exports = {
   devtool: 'cheap-source-map',
   entry: [
@@ -18,29 +20,22 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: ['babel'],
-      exclude: /node_modules/,
-      include: __dirname
-    }]
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loaders: ['babel'],
+        exclude: /node_modules/,
+        include: __dirname
+      },
+      {
+        test: /\.jsx?$/,
+        loaders: ['babel'],
+        include: reduxQuerySrc
+      }
+    ]
   }
-}
-
-
-// When inside Redux repo, prefer src to compiled version.
-// You can safely delete these lines in your project.
-var reduxQuerySrc = path.join(__dirname, '..', '..', 'src')
-var reduxQueryNodeModules = path.join(__dirname, '..', '..', 'node_modules')
-var fs = require('fs')
-if (fs.existsSync(reduxQuerySrc) && fs.existsSync(reduxQueryNodeModules)) {
-  // Resolve Redux to source
-  module.exports.resolve = { alias: { 'redux-query': reduxQuerySrc } }
-  // Compile Redux from source
-  module.exports.module.loaders.push({
-    test: /\.js$/,
-    loaders: ['babel'],
-    include: reduxQuerySrc
-  })
 }

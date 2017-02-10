@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Schema, arrayOf, normalize } from 'normalizr';
-import { createContainer } from 'redux-query'
+import { connectRequest, querySelectors } from 'redux-query'
 import get from 'lodash/get'
 import { selectReddit } from '../actions'
 import Picker from '../components/Picker'
@@ -73,8 +73,9 @@ App.propTypes = {
 function mapStateToProps(state) {
   const { selectedReddit } = state
   const url = getRedditUrl(selectedReddit)
-  const isFetching = get(state, ['requests', url, 'isPending'], false)
-  const lastUpdated = get(state, ['requests', url, 'lastUpdated'])
+  const queriesState = get(state, 'queries')
+  const isFetching = querySelectors.isPending(url)(queriesState)
+  const lastUpdated = querySelectors.lastUpdated(url)(queriesState)
   const postIds = get(state, ['entities', 'reddits', selectedReddit, 'data', 'children'], [])
   const posts = postIds.map((id) => get(state, ['entities', 'posts', id]))
 
@@ -106,10 +107,23 @@ function getSchema(reddit) {
   return subreddit
 }
 
-const AppContainer = createContainer(
-  (props) => getRedditUrl(props.selectedReddit),
-  (state) => state.requests,
-  (props) => (response) => normalize(response, getSchema(props.selectedReddit)).entities
-)(App)
+const AppContainer = connectRequest((props) => ({
+  url: getRedditUrl(props.selectedReddit),
+  transform: (response) => normalize(response, getSchema(props.selectedReddit)).entities,
+  update: {
+    posts: (prevPosts, posts) => {
+      return {
+        ...prevPosts,
+        ...posts
+      }
+    },
+    reddits: (prevReddits, reddits) => {
+      return {
+        ...prevReddits,
+        ...reddits
+      }
+    }
+  }
+}))(App)
 
 export default connect(mapStateToProps)(AppContainer)

@@ -1,5 +1,9 @@
 # redux-query
 
+[![Travis](https://img.shields.io/travis/amplitude/redux-query.svg?style=flat-square)](https://travis-ci.org/amplitude/redux-query)
+[![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)
+[![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
+
 Redux-query places several constraints in order to bring a consistent, declarative mechanisms for fetching, storing,
 and updating remote data:
 

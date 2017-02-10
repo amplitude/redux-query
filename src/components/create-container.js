@@ -1,9 +1,9 @@
 import identity from 'lodash/identity';
 import React, { Component } from 'react';
-import storeShape from 'react-redux/lib/utils/storeShape';
 import partial from 'lodash/partial';
 
 import { requestAsync } from '../actions';
+import storeShape from '../lib/store-shape';
 
 const createContainer = (mapPropsToUrl, mapStateToRequests, mapPropsToTransform) => (WrappedComponent) => {
     class ReduxQueryContainer extends Component {

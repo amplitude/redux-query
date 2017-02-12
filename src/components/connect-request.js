@@ -1,9 +1,10 @@
 import _ from 'lodash';
-import React, { PropTypes } from 'react';
+import React from 'react';
 import shallowEqual from 'react-pure-render/shallowEqual';
 
 import { requestAsync, cancelQuery } from '../actions';
 import getQueryKey from '../lib/get-query-key';
+import storeShape from '../lib/store-shape';
 
 const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) => {
     const { pure = true, withRef = false } = options;
@@ -112,11 +113,7 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
 
     ReduxQueryContainer.displayName = `ReduxQueryContainer(${WrappedComponent.displayName})`;
     ReduxQueryContainer.contextTypes = {
-        store: PropTypes.shape({
-            subscribe: PropTypes.func.isRequired,
-            dispatch: PropTypes.func.isRequired,
-            getState: PropTypes.func.isRequired,
-        }),
+        store: storeShape,
     };
 
     return ReduxQueryContainer;

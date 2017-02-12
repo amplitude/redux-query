@@ -64,7 +64,7 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
             const config = mapPropsToConfig(props);
 
             if (config) {
-                const { url, body, onRequestEnd } = config;
+                const { url, body } = config;
 
                 if (url) {
                     const requestPromise = dispatch(requestAsync({
@@ -78,11 +78,7 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
                         const queryKey = getQueryKey(url, body);
                         this._pendingRequests[queryKey] = null;
 
-                        requestPromise.then((responseMetadata) => {
-                            if (onRequestEnd) {
-                                dispatch(onRequestEnd(responseMetadata));
-                            }
-
+                        requestPromise.then(() => {
                             delete this._pendingRequests[queryKey];
                         });
                     }

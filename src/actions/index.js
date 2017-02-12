@@ -99,15 +99,14 @@ export const requestAsync = ({
 
 export const mutateAsync = ({
     body,
-    onRequestEnd,
     optimisticUpdate,
     options,
     queryKey,
     transform,
     update,
     url,
-}) => (dispatch) => {
-    return dispatch({
+}) => {
+    return {
         type: actionTypes.MUTATE_ASYNC,
         body,
         optimisticUpdate,
@@ -116,13 +115,7 @@ export const mutateAsync = ({
         transform,
         update,
         url,
-    }).then((responseMetadata) => {
-        if (onRequestEnd) {
-            dispatch(onRequestEnd(responseMetadata));
-        }
-
-        return responseMetadata;
-    });
+    };
 };
 
 export const cancelQuery = (queryKey) => {

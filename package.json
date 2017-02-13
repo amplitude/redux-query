@@ -1,7 +1,7 @@
 {
   "name": "redux-query",
-  "version": "1.0.0",
-  "description": "Library for React+Redux apps to query remote data",
+  "version": "1.0.1",
+  "description": "Library for React/Redux apps that use REST APIs to synchronize and manage network state",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
   "jsnext:main": "dist/es/index.js",
@@ -28,7 +28,6 @@
     "redux",
     "react",
     "query",
-    "resource",
     "fetch",
     "REST"
   ],

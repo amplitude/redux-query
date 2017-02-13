@@ -4,69 +4,62 @@
 [![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)
 [![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
 
-Redux-query places several constraints in order to bring a consistent, declarative mechanisms for fetching, storing,
-and updating remote data:
+`redux-query` is a library for Redux/React apps that communicate with REST APIs to query and manage network state. With `redux-query` you can:
 
-- All request metadata is stored in a single place in the Redux store.
-- All remote resource data (aka "entities") managed by redux-query is located in a single place in the Redux store.
-- Data should be normalized before being stored.
-- Data must be namespaced before being stored. Queries that involve data in the same namespace should be not be made
-simultaneously.
-- Only the transformed, normalized data is retained (not the raw response data).
-- There is no differentiation between creations, updates, and deletions. There are only "requests" for reading and
-"mutations" for destructive actions.
+- Declare your network dependencies right next to your React components. Data is requested automatically when components mount. When components update and unmount, in-flight requests are automatically cancelled.
+- Trigger server-side effects by dispatching regular Redux actions.
+- Have a consistent, boilerplate-free interface for all network-related state.
+- Transform and normalize data to avoid duplicate Redux state.
+- Perform optimistic updates.
+- Use in conjunction with other Redux libraries [redux-thunk](https://github.com/gaearon/redux-thunk) and [redux-saga](https://github.com/redux-saga/redux-saga).
+- Debug network state and actions with Redux dev tools (e.g. [redux-logger](https://github.com/evgenyrodionov/redux-logger)).
 
-As different endpoints can have subtle differences in their responses, redux-query does __not__ place constraints or
-make assumptions about the shape of the response data, except that it is parseable JSON. This places the responsibility
-on the client to handle how data is transformed and reconciled with previously-stored data.
+## Getting Started
 
-### Requests
+### Installation
 
-The recommended way to trigger a request is to use the [connectRequest](src/components/connect-request.js) React
-component class wrapper. This wrapper will leverage the React lifecycle methods to trigger new requests when the
-component mounts and updates. It will also cancel in-flight requests when the component unmounts.
+Install `redux-query` via npm:
 
-Example usage:
+```
+$ npm install --save redux-query
+```
 
-    import { connectRequest } from 'redux-query';
+### Setup
 
-    class Funnels extends Component {
-        ...
-    }
+Add the `entities` and `queries` reducers to your combined reducer. Then add the `queryMiddleware` (which requires two arguments – one selector for the `entities` reducer state, and the other for the `queries` reducer state).
 
-    const FunnelsContainer = connectRequest((props) => ({
-        url: '/config/funnels',
-        transform: normalizeFunnelsResponse,
-        update: {
-            funnels: (prevFunnels, funnels) => funnels,
-            funnelsById: (prevFunnelsById, funnelsById) => ({ ...prevFunnelsById, ...funnelsById }),
-        },
-    }))(Funnels);
+```javascript
+import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
+import createLogger from 'redux-logger';
 
-### Mutations
+export const getQueries = (state) => state.queries;
+export const getEntities = (state) => state.entities;
 
-Mutations can be triggered by dispatching a `mutateAsync` action. For example:
+const reducer = combineReducers({
+    entities: entitiesReducer,
+    queries: queriesReducer,
+});
 
-    import { mutateAsync } from 'redux-query';
+const logger = createLogger();
+const store = createStore(
+    reducer,
+    applyMiddleware(queryMiddleware(getQueries, getEntities), logger)
+);
+```
 
-    export const removeFunnel = (id) => mutateAsync({
-        url: '/config/funnels/remove',
-        body: { id },
-        transform: normalizeFunnelsResponse,
-        update: {
-            funnels: (prevFunnels, funnels) => funnels,
-            funnelsById: (prevFunnelsById, funnelsById) => ({ ...prevFunnelsById, ...funnelsById }),
-        },
-    });
+`queryMiddleware` is responsible for tracking `redux-query` actions, performing the queries, and dispatching resulting Redux actions that alter the queries and entities reducer states.
 
-Mutation actions can be dispatched by other async actions using [redux-thunk](https://github.com/gaearon/redux-thunk).
-This allows you to query the redux state to compose the body for the mutation request.
+### Usage
 
-### Required setup
+## Example
 
-1. Add one entities and one queries reducer to the Redux store.
-2. Add the queryMiddleware (which requires two arguments – one selector for the entities reducer state, and the other
-for the queries reducer state).
+### Async
 
-The queryMiddleware is responsible for intercepting `REQUEST_ASYNC` and `MUTATE_ASYNC` actions, performing the queries,
-and dispatching other actions that can alter the queries and entities reducer states.
+This is a fork of the `redux` [Async](https://github.com/reactjs/redux/tree/master/examples/async) example.
+
+```sh
+$ cd examples/async
+$ npm install
+$ npm run start
+```

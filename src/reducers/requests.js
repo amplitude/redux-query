@@ -1,5 +1,5 @@
-import values from 'lodash/values';
-import includes from 'lodash/includes';
+import values from 'lodash.values';
+import includes from 'lodash.includes';
 
 import * as actionTypes from '../constants/action-types';
 

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import omit from 'lodash.omit';
 
 import {
     MUTATE_FAILURE,
@@ -21,7 +21,7 @@ const withoutPath = (state, path) => {
             [key]: withoutPath(state[key], restPath),
         };
     } else {
-        return _.omit(state, key);
+        return omit(state, key);
     }
 };
 

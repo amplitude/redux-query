@@ -1,6 +1,9 @@
 import Backoff from 'backo';
 import invariant from 'invariant';
-import _ from 'lodash';
+import get from 'lodash.get';
+import identity from 'lodash.identity';
+import includes from 'lodash.includes';
+import pickBy from 'lodash.pickby';
 import superagent from 'superagent';
 
 import {
@@ -54,7 +57,7 @@ const defaultConfig = {
 };
 
 const getPendingQueries = (queries) => {
-    return _.pickBy(queries, (query) => query.isPending);
+    return pickBy(queries, (query) => query.isPending);
 };
 
 const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConfig) => {
@@ -69,7 +72,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                     body,
                     force,
                     retry,
-                    transform = _.identity,
+                    transform = identity,
                     update,
                     options = {},
                     queryKey: providedQueryKey,
@@ -85,8 +88,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                 const queries = queriesSelector(state);
 
                 const queriesState = queries[queryKey];
-                const isPending = _.get(queriesState, ['isPending']);
-                const status = _.get(queriesState, ['status']);
+                const isPending = get(queriesState, ['isPending']);
+                const status = get(queriesState, ['status']);
                 const hasSucceeded = status >= 200 && status < 300;
 
                 if (force || !queriesState || (retry && !isPending && !hasSucceeded)) {
@@ -136,7 +139,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
 
                                 if (err || !resOk) {
                                     if (
-                                        _.includes(config.retryableStatusCodes, resStatus) &&
+                                        includes(config.retryableStatusCodes, resStatus) &&
                                         attempts < config.backoff.maxAttempts
                                     ) {
                                         // TODO take into account Retry-After header if 503
@@ -181,7 +184,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
             case actionTypes.MUTATE_ASYNC: {
                 const {
                     url,
-                    transform = _.identity,
+                    transform = identity,
                     update,
                     queryKey: providedQueryKey,
                     body,

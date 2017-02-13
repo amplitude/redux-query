@@ -1,6 +1,6 @@
-import identity from 'lodash/identity';
+import identity from 'lodash.identity';
 import React, { Component } from 'react';
-import partial from 'lodash/partial';
+import partial from 'lodash.partial';
 
 import { requestAsync } from '../actions';
 import storeShape from '../lib/store-shape';

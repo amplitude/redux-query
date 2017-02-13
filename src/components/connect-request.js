@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import partial from 'lodash.partial';
 import React from 'react';
 import shallowEqual from 'react-pure-render/shallowEqual';
 
@@ -88,7 +88,7 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
         }
 
         render() {
-            const forceRequest = _.partial(this.requestAsync.bind(this), this.props, true, false);
+            const forceRequest = partial(this.requestAsync.bind(this), this.props, true, false);
 
             if (withRef) {
                 return (

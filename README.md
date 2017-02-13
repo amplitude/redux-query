@@ -13,8 +13,8 @@ With `redux-query` you can:
 - Have a consistent, minimal-boilerplate interface for all network-related state.
 - Transform and normalize data to avoid duplicate state.
 - Perform optimistic updates.
-- Use in conjunction with other Redux libraries [redux-thunk](https://github.com/gaearon/redux-thunk) and [redux-saga](https://github.com/redux-saga/redux-saga).
-- Debug network state and actions with Redux dev tools (e.g. [redux-logger](https://github.com/evgenyrodionov/redux-logger)).
+- Use in conjunction with other Redux libraries like [redux-thunk](https://github.com/gaearon/redux-thunk) and [redux-saga](https://github.com/redux-saga/redux-saga).
+- Debug network state and actions with Redux dev tools like [redux-logger](https://github.com/evgenyrodionov/redux-logger).
 
 ## Getting Started
 
@@ -189,6 +189,7 @@ export const getDashboard = (state, { dashboardId }) => {
     } else {
         return null;
     }
+};
 
 // src/components/Dashboard.jsx
 

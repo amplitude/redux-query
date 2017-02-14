@@ -1,7 +1,7 @@
 {
   "name": "redux-query",
   "version": "1.0.1",
-  "description": "Library for React/Redux apps that use REST APIs to synchronize and manage network state",
+  "description": "A library for querying and managing network state in React/Redux applications",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
   "jsnext:main": "dist/es/index.js",

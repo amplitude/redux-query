@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)
 [![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
 
-`redux-query` is a library for React/Redux apps that use REST APIs to synchronize and manage network state.
+`redux-query` is a library for querying and managing network state in React/Redux applications.
 
 With `redux-query` you can:
 
@@ -26,7 +26,7 @@ $ npm install --save redux-query
 
 Add the `entitiesReducer` and `queriesReducer` to your combined reducer.
 
-Include the `queryMiddleware` to your store's `applyMiddleware` call. `queryMiddleware` requires two arguments: a function (selector) that returns entities state, and a function for the queries state.
+Include the `queryMiddleware` in your store's `applyMiddleware` call. `queryMiddleware` requires two arguments: a selector (or function) that returns entities state, and a function for the queries state.
 
 For example:
 
@@ -52,7 +52,7 @@ const store = createStore(
 
 ## Dependencies
 
-All dependencies are listed in [`package.json`](./package.json). Redux and React are peer dependencies. HTTP requests are made using superagent(https://github.com/visionmedia/superagent).
+All dependencies are listed in [`package.json`](./package.json). Redux and React are peer dependencies. HTTP requests are made using [superagent](https://github.com/visionmedia/superagent).
 
 ## Usage and API
 
@@ -66,9 +66,9 @@ By default, requests are GETs and mutations are POSTS.
 
 ### Query configs
 
-Query configs are objects used to describe how redux-query should handle the request or mutation.
+Query configs are objects used to describe how redux-query should handle the request or mutation. Query config options differ slightly between requests and mutations
 
-Query configs for requests have the following options:
+#### Request query config options
 
 | Name | Type | Required? | Description |
 |:---|:---|:---:|:---|
@@ -81,7 +81,7 @@ Query configs for requests have the following options:
 | `meta` | object |  | Various metadata for the query. Can be used to update other reducers when queries succeed or fail. |
 | `options` | object |  | Options for the request. Set `options.method` to change the HTTP method. |
 
-Query configs for mutations are slightly different. They have the following options:
+#### Mutation query config options
 
 | Name | Type | Required? | Description |
 |:---|:---|:---:|:---|
@@ -123,7 +123,7 @@ The `prevValue` is the whatever value is selected from the `entities` reducer fo
 
 ### `connectRequest`
 
-Use the `connectRequest` higher-order component to declare network dependencies for a React component. `connectRequest` takes a function that transforms the component `props` to a query config. Example usage:
+Use the `connectRequest` higher-order component to declare network dependencies for a React component. `connectRequest` takes a function that transforms the component `props` to a request query config. Example usage:
 
 ```javascript
 import { connectRequest, querySelectors } from 'redux-query';
@@ -159,7 +159,7 @@ export default connect(mapStateToProps)(DashboardContainer);
 
 ### `mutateAsync`
 
-Dispatch `mutateAsync` Redux actions to trigger mutations. Example usage with a [react-redux](https://github.com/reactjs/react-redux)-connected component:
+Dispatch `mutateAsync` Redux actions to trigger mutations. `mutateAsync` takes a mutation query config as its only argument. Example usage with a [react-redux](https://github.com/reactjs/react-redux)-connected component:
 
 ```javascript
 // src/queries/dashboard.js
@@ -241,7 +241,7 @@ const mapDispatchToProps = (dispatch, props) => {
 
 ### `requestAsync`
 
-Similarly to how mutations are triggered by dispatching `mutateAsync` actions, you can trigger requests by dispatching `requestAsync` actions.
+Similarly to how mutations are triggered by dispatching `mutateAsync` actions, you can trigger requests by dispatching `requestAsync` actions with a request query config.
 
 ## Example
 

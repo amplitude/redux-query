@@ -5,6 +5,7 @@ import superagentMock from 'superagent-mock';
 import * as actionTypes from '../../src/constants/action-types';
 import getQueryKey from '../../src/lib/get-query-key';
 import queryMiddleware from '../../src/middleware/query';
+import networkAdapter from '../../src/adapters/superagent';
 
 const apiMessage = 'hello, world!';
 const mockEndpoint = (match, data) => {
@@ -68,7 +69,11 @@ describe('query middleware', () => {
             const entitiesSelector = (state) => state.entities;
             const dispatch = () => {};
             const getState = () => {};
-            nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
         });
 
         it('must return a next handler', () => {
@@ -117,7 +122,11 @@ describe('query middleware', () => {
                 entities: {},
                 queries: {},
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.REQUEST_ASYNC,
@@ -152,7 +161,11 @@ describe('query middleware', () => {
                 entities: {},
                 queries: {},
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.REQUEST_ASYNC,
@@ -178,7 +191,11 @@ describe('query middleware', () => {
                     },
                 },
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             const requestAction = actionHandler({
                 type: actionTypes.REQUEST_ASYNC,
@@ -206,7 +223,11 @@ describe('query middleware', () => {
                     },
                 },
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.REQUEST_ASYNC,
@@ -245,7 +266,11 @@ describe('query middleware', () => {
                     },
                 },
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.REQUEST_ASYNC,
@@ -284,7 +309,11 @@ describe('query middleware', () => {
                     },
                 },
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.REQUEST_ASYNC,
@@ -322,7 +351,11 @@ describe('query middleware', () => {
                 entities: {},
                 queries: {},
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.MUTATE_ASYNC,
@@ -357,7 +390,11 @@ describe('query middleware', () => {
                 entities: {},
                 queries: {},
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.MUTATE_ASYNC,
@@ -396,7 +433,11 @@ describe('query middleware', () => {
                 },
                 queries: {},
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.MUTATE_ASYNC,
@@ -437,7 +478,11 @@ describe('query middleware', () => {
                 },
                 queries: {},
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler();
             actionHandler({
                 type: actionTypes.MUTATE_ASYNC,
@@ -477,7 +522,11 @@ describe('query middleware', () => {
                 },
             });
             const next = () => {};
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler(next);
             actionHandler({
                 type: actionTypes.CANCEL_QUERY,
@@ -507,7 +556,11 @@ describe('query middleware', () => {
                 },
             });
             const next = () => {};
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler(next);
             actionHandler({
                 type: actionTypes.CANCEL_QUERY,
@@ -547,7 +600,11 @@ describe('query middleware', () => {
                     },
                 },
             });
-            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const nextHandler = queryMiddleware(
+                queriesSelector,
+                entitiesSelector,
+                networkAdapter,
+            )({ dispatch, getState });
             const actionHandler = nextHandler(next);
             actionHandler({
                 type: actionTypes.RESET,

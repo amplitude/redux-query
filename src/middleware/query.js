@@ -4,7 +4,6 @@ import get from 'lodash.get';
 import identity from 'lodash.identity';
 import includes from 'lodash.includes';
 import pickBy from 'lodash.pickby';
-import superagent from 'superagent';
 
 import {
     requestStart,
@@ -60,7 +59,7 @@ const getPendingQueries = (queries) => {
     return pickBy(queries, (query) => query.isPending);
 };
 
-const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConfig) => {
+const queryMiddleware = (queriesSelector, entitiesSelector, networkAdapter, config = defaultConfig) => {
     return ({ dispatch, getState }) => (next) => (action) => {
         // TODO(ryan): add warnings when there are simultaneous requests and mutation queries for the same entities
         let returnValue;
@@ -97,28 +96,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         const start = new Date();
                         const { method = httpMethods.GET } = options;
 
-                        let request;
-                        switch (method) {
-                            case httpMethods.GET:
-                                request = superagent.get(url);
-                                break;
-                            case httpMethods.POST:
-                                request = superagent.post(url);
-                                break;
-                            case httpMethods.PUT:
-                                request = superagent.put(url);
-                                break;
-                            case httpMethods.DELETE:
-                                request = superagent.del(url);
-                                break;
-                            default:
-                                console.error(`Unsupported HTTP method: ${method}`);
-                                return;
-                        }
-
-                        if (body) {
-                            request.send(body);
-                        }
+                        const request = networkAdapter(url, method, body);
 
                         let attempts = 0;
                         const backoff = new Backoff({
@@ -131,12 +109,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
 
                             attempts += 1;
 
-                            request.end((err, response) => {
-                                const resOk = !!(response && response.ok);
-                                const resStatus = (response && response.status) || 0;
-                                const resBody = (response && response.body) || undefined;
-                                const resText = (response && response.text) || undefined;
-
+                            request.execute((err, resOk, resStatus, resBody, resText) => {
                                 if (err || !resOk) {
                                     if (
                                         includes(config.retryableStatusCodes, resStatus) &&
@@ -203,18 +176,13 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
 
                 returnValue = new Promise((resolve) => {
                     const start = new Date();
-                    const request = superagent.post(url);
+                    const request = networkAdapter(url, httpMethods.POST, body);
 
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
                     // `mutateStart` action as `optimisticEntities`
                     dispatch(mutateStart(url, body, request, optimisticEntities, queryKey));
 
-                    request.send(body).end((err, response) => {
-                        const resOk = !!(response && response.ok);
-                        const resStatus = (response && response.status) || 0;
-                        const resBody = (response && response.body) || undefined;
-                        const resText = (response && response.text) || undefined;
-
+                    request.execute((err, resOk, resStatus, resBody, resText) => {
                         if (err || !resOk) {
                             dispatch(mutateFailure(url, body, resStatus, entities, queryKey));
                         } else {

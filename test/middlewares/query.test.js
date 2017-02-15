@@ -18,7 +18,7 @@ const mockEndpoint = (match, data) => {
                 ok: true,
             };
         }
-        
+
         default: {
             return {
                 body: {},
@@ -37,7 +37,7 @@ const mockEndpointForHeaders = (match, data) => {
         ok: true,
     };
 };
-        
+
 const superagentMockConfig = [
     {
         pattern: '/echo-headers',
@@ -182,7 +182,7 @@ describe('query middleware', () => {
                 },
             });
         });
-        
+
         it('should use headers if provided as an option', (done) => {
             const url = '/echo-headers';
             const headers = { 'x-message': apiMessage };
@@ -218,7 +218,7 @@ describe('query middleware', () => {
                 },
             });
         });
-        
+
         it('should not fetch if request by same URL has been made', () => {
             const url = '/api';
             const dispatch = () => {
@@ -423,7 +423,7 @@ describe('query middleware', () => {
                 },
             });
         });
-        
+
         it('should use headers if provided as an option', (done) => {
             const url = '/echo-headers';
             const headers = { 'x-message': apiMessage };
@@ -459,7 +459,7 @@ describe('query middleware', () => {
                 },
             });
         });
-        
+
         it('by supporting optimistic updates', (done) => {
             const url = '/api';
             const optimisticMessage = 'hello, optimistic world!';

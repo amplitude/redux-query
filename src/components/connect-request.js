@@ -1,6 +1,6 @@
 import partial from 'lodash.partial';
-import difference from 'lodash.difference'
-import intersection from 'lodash.intersection'
+import difference from 'lodash.difference';
+import intersection from 'lodash.intersection';
 import React from 'react';
 import shallowEqual from 'react-pure-render/shallowEqual';
 
@@ -47,7 +47,7 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
                 configs = [configs];
             }
 
-            const diffs = this.diffConfigs(prevConfigs, configs);
+            const diffs = this._diffConfigs(prevConfigs, configs);
             const toCancel = diffs[0];
             const toRequest = diffs[1];
 

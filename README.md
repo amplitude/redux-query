@@ -60,7 +60,7 @@ All dependencies are listed in [`package.json`](./package.json). Redux and React
 
 There are two types of queries with `redux-query`: "requests" and "mutations". Requests are for reading values from HTTP endpoints. Mutations are for HTTP endpoints that change network state – the "C", "U", and "D" in "CRUD".
 
-Requests can be triggered from the `connectRequest` higher-order component or a `requestAync` action. Mutations are triggered by dispatching a `mutateAsync` action.
+Requests can be triggered from the `connectRequest` higher-order component or a `requestAsync` action. Mutations are triggered by dispatching a `mutateAsync` action.
 
 By default, requests are GETs and mutations are POSTS.
 

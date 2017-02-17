@@ -29,7 +29,7 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
         }
 
         componentDidMount() {
-            const configs = mapPropsToConfig(configs);
+            const configs = mapPropsToConfig(this.props);
             if (Array.isArray(configs)) {
                 this.requestAsync(configs, false, true);
             } else {

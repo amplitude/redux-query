@@ -119,6 +119,10 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         if (body) {
                             request.send(body);
                         }
+                        
+                        if (options.headers) {
+                            request.set(options.headers);
+                        }
 
                         let attempts = 0;
                         const backoff = new Backoff({

@@ -79,7 +79,7 @@ Query configs are objects used to describe how redux-query should handle the req
 | `force` | boolean |  | Perform the request even if we've already successfully requested it. |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
 | `meta` | object |  | Various metadata for the query. Can be used to update other reducers when queries succeed or fail. |
-| `options` | object |  | Options for the request. Set `options.method` to change the HTTP method. |
+| `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, and `options.headers` to set any headers. |
 
 #### Mutation query config options
 
@@ -91,7 +91,7 @@ Query configs are objects used to describe how redux-query should handle the req
 | `optimisticUpdate` | object |  | Object where keys are entity IDs and values are functions that provide the current entity value. The return values are used to update the `entities` store until the mutation finishes. |
 | `body` | object |  | The HTTP request body. |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
-| `options` | object |  | Options for the request. Set `options.method` to change the HTTP method. |
+| `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, and `options.headers` to set any headers. |
 
 ### `transform` functions
 

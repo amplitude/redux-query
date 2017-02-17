@@ -245,7 +245,14 @@ Similarly to how mutations are triggered by dispatching `mutateAsync` actions, y
 
 ## Example
 
-A fork of the `redux` [Async](https://github.com/reactjs/redux/tree/master/examples/async) example is included. To run:
+A fork of the `redux` [Async](https://github.com/reactjs/redux/tree/master/examples/async) example is included. To run, first build the package:
+
+```sh
+$ npm install
+$ npm run build
+```
+
+Then you can run the examples:
 
 ```sh
 $ cd examples/async

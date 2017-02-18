@@ -31,22 +31,22 @@ const mockEndpoint = (match, data) => {
 const superagentMockConfig = [
     {
         pattern: '/echo-headers',
-        fixtures: (match, params, headers, context) => {
+        fixtures: (match, params, headers) => {
             return headers;
         },
         get: (match, data) => {
             return {
                 body: {
-                    message: data
+                    message: data,
                 },
                 status: 200,
-                ok: true
-            }
-        }
+                ok: true,
+            };
+        },
     },
     {
         pattern: '/(\\w+)',
-        fixtures: (match, params, headers, context) => {
+        fixtures: () => {
             return apiMessage;
         },
         get: mockEndpoint,
@@ -182,11 +182,11 @@ describe('query middleware', () => {
         
         it('should use headers if provided as an option', (done) => {
             const url = '/echo-headers';
-            const headers = {"x-message": apiMessage};
+            const headers = { 'x-message': apiMessage };
             const actionsToDispatch = [
                 {
                     type: actionTypes.REQUEST_START,
-                    url
+                    url,
                 },
                 {
                     type: actionTypes.REQUEST_SUCCESS,
@@ -208,7 +208,7 @@ describe('query middleware', () => {
                 type: actionTypes.REQUEST_ASYNC,
                 url,
                 options: {
-                    headers
+                    headers,
                 },
                 update: {
                     message: (prevMessage, message) => message,

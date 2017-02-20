@@ -1,4 +1,3 @@
-import toArray from 'lodash.toarray';
 import partial from 'lodash.partial';
 import difference from 'lodash.difference';
 import intersection from 'lodash.intersection';
@@ -8,6 +7,10 @@ import shallowEqual from 'react-pure-render/shallowEqual';
 import { requestAsync, cancelQuery } from '../actions';
 import getQueryKey from '../lib/get-query-key';
 import storeShape from '../lib/store-shape';
+
+const ensureArray = (maybe) => {
+    return Array.isArray(maybe) ? maybe : [maybe];
+};
 
 const unpackConfigQueryKeys = (c) => {
     return getQueryKey(c.url, c.body);
@@ -50,11 +53,11 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
         }
 
         componentDidUpdate(prevProps) {
-            const prevConfigs = toArray(mapPropsToConfig(prevProps)).filter(Boolean);
-            const configs = toArray(mapPropsToConfig(this.props)).filter(Boolean);
+            const prevConfigs = ensureArray(mapPropsToConfig(prevProps)).filter(Boolean);
+            const configs = ensureArray(mapPropsToConfig(this.props)).filter(Boolean);
 
             const { cancelKeys, requestKeys } = diffConfigs(prevConfigs, configs);
-            const requestConfigs = prevConfigs.filter((c) => {
+            const requestConfigs = configs.filter((c) => {
                 return requestKeys.includes(getQueryKey(c.url, c.body));
             });
 
@@ -77,14 +80,17 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
 
         cancelPendingRequests(cancelKeys) {
             const { dispatch } = this.context.store;
-            toArray(cancelKeys).filter(Boolean).forEach((queryKey) => {
-                dispatch(cancelQuery(queryKey));
-            });
+            const pendingKeys = Object.keys(this._pendingRequests);
+
+            ensureArray(cancelKeys)
+            .filter((key) => pendingKeys.includes(key))
+            .filter(Boolean)
+            .forEach((queryKey) => dispatch(cancelQuery(queryKey)));
         }
 
         requestAsync(configs, force = false, retry = false) {
             // propsToConfig mapping has happened already
-            toArray(configs).filter(Boolean).forEach((c) => {
+            ensureArray(configs).filter(Boolean).forEach((c) => {
                 this.makeRequest(c, force, retry);
             });
         }

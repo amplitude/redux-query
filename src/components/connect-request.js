@@ -1,3 +1,4 @@
+import toArray from 'lodash.toarray';
 import partial from 'lodash.partial';
 import difference from 'lodash.difference';
 import intersection from 'lodash.intersection';
@@ -7,6 +8,21 @@ import shallowEqual from 'react-pure-render/shallowEqual';
 import { requestAsync, cancelQuery } from '../actions';
 import getQueryKey from '../lib/get-query-key';
 import storeShape from '../lib/store-shape';
+
+const unpackConfigQueryKeys = (c) => {
+    return getQueryKey(c.url, c.body);
+};
+
+const diffConfigs = (prevConfigs, configs) => {
+    const prevQueryKeys = prevConfigs.map(unpackConfigQueryKeys);
+    const queryKeys = configs.map(unpackConfigQueryKeys);
+
+    const intersect = intersection(prevQueryKeys, queryKeys);
+    const cancelKeys = difference(prevQueryKeys, intersect);
+    const requestKeys = difference(queryKeys, intersect);
+
+    return { cancelKeys, requestKeys };
+};
 
 const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) => {
     const { pure = true, withRef = false } = options;
@@ -30,93 +46,47 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
 
         componentDidMount() {
             const configs = mapPropsToConfig(this.props);
-            if (Array.isArray(configs)) {
-                this.requestAsync(configs, false, true);
-            } else {
-                this.requestAsync(this.props, false, true);
-            }
+            this.requestAsync(configs, false, true);
         }
 
         componentDidUpdate(prevProps) {
-            let prevConfigs = mapPropsToConfig(prevProps);
-            let configs = mapPropsToConfig(this.props);
-            if (!Array.isArray(prevConfigs)) {
-                prevConfigs = [prevConfigs];
-            }
-            if (!Array.isArray(configs)) {
-                configs = [configs];
-            }
+            const prevConfigs = toArray(mapPropsToConfig(prevProps)).filter(Boolean);
+            const configs = toArray(mapPropsToConfig(this.props)).filter(Boolean);
 
-            const diffs = this._diffConfigs(prevConfigs, configs);
-            const toCancel = diffs[0];
-            const toRequest = diffs[1];
+            const { cancelKeys, requestKeys } = diffConfigs(prevConfigs, configs);
+            const requestConfigs = prevConfigs.filter((c) => {
+                return requestKeys.includes(getQueryKey(c.url, c.body));
+            });
 
-            if (toCancel.length) {
-                this.cancelPendingRequests(toCancel);
+            if (cancelKeys.length) {
+                this.cancelPendingRequests(cancelKeys);
             }
-            if (toRequest.length) {
-                this.requestAsync(toRequest);
+            if (requestConfigs.length) {
+                this.requestAsync(requestConfigs);
             }
         }
 
         componentWillUnmount() {
-            this.cancelPendingRequests();
+            const cancelKeys = Object.keys(this._pendingRequests);
+            this.cancelPendingRequests(cancelKeys);
         }
 
         getWrappedInstance() {
             return this._wrappedInstance;
         }
 
-        // returns [[ "keys", "to", "cancel"], [{ config objects to request }]]
-        _diffConfigs(prevConfigs, configs) {
-            const unpack = (c) => {
-                return getQueryKey(c.url, c.body);
-            };
-            const prevQueryKeys = prevConfigs.map(unpack);
-            const queryKeys = configs.map(unpack);
-            const i = intersection(prevQueryKeys, queryKeys);
-            const cancelKeys = difference(prevQueryKeys, i);
-            const requestKeys = difference(queryKeys, i);
-
-            const toRequest = prevConfigs.filter((c) => {
-                const k = getQueryKey(c.url, c.body);
-                return requestKeys.includes(k);
-            });
-
-            return [cancelKeys, toRequest];
-        }
-
-        cancelPendingRequests(toCancel) {
+        cancelPendingRequests(cancelKeys) {
             const { dispatch } = this.context.store;
-            if (toCancel && Array.isArray(toCancel)) {
-                // Only cancel specific keys, supports multiple configs
-                toCancel.forEach((queryKey) => {
-                    if (this._pendingRequests.hasOwnProperty(queryKey)) {
-                        dispatch(cancelQuery(queryKey));
-                    }
-                });
-            } else {
-                for (const queryKey in this._pendingRequests) {
-                    if (this._pendingRequests.hasOwnProperty(queryKey)) {
-                        dispatch(cancelQuery(queryKey));
-                    }
-                }
-            }
+            toArray(cancelKeys).filter(Boolean).forEach((queryKey) => {
+                dispatch(cancelQuery(queryKey));
+            });
         }
 
-        requestAsync(propsOrConfigs, force = false, retry = false) {
-            if (Array.isArray(propsOrConfigs)) {
-                // propsToConfig mapping has happened already
-                propsOrConfigs.forEach((c) => {
-                    this._makeRequest(c, force, retry);
-                });
-            } else {
-                const config = mapPropsToConfig(propsOrConfigs);
-
-                if (config) {
-                    this._makeRequest(config, force, retry);
-                }
-            }
+        requestAsync(configs, force = false, retry = false) {
+            // propsToConfig mapping has happened already
+            toArray(configs).filter(Boolean).forEach((c) => {
+                this._makeRequest(c, force, retry);
+            });
         }
 
         _makeRequest(config, force, retry) {

@@ -18,6 +18,7 @@ const mockEndpoint = (match, data) => {
                 ok: true,
             };
         }
+        
         default: {
             return {
                 body: {},
@@ -27,7 +28,25 @@ const mockEndpoint = (match, data) => {
         }
     }
 };
+const mockEndpointForHeaders = (match, data) => {
+    return {
+        body: {
+            message: data,
+        },
+        status: 200,
+        ok: true,
+    };
+};
+        
 const superagentMockConfig = [
+    {
+        pattern: '/echo-headers',
+        fixtures: (match, params, headers) => {
+            return headers;
+        },
+        get: mockEndpointForHeaders,
+        post: mockEndpointForHeaders,
+    },
     {
         pattern: '/(\\w+)',
         fixtures: () => {
@@ -163,7 +182,43 @@ describe('query middleware', () => {
                 },
             });
         });
-
+        
+        it('should use headers if provided as an option', (done) => {
+            const url = '/echo-headers';
+            const headers = { 'x-message': apiMessage };
+            const actionsToDispatch = [
+                {
+                    type: actionTypes.REQUEST_START,
+                    url,
+                },
+                {
+                    type: actionTypes.REQUEST_SUCCESS,
+                    url,
+                    status: 200,
+                    entities: {
+                        message: headers,
+                    },
+                },
+            ];
+            const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+            const getState = () => ({
+                entities: {},
+                queries: {},
+            });
+            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const actionHandler = nextHandler();
+            actionHandler({
+                type: actionTypes.REQUEST_ASYNC,
+                url,
+                options: {
+                    headers,
+                },
+                update: {
+                    message: (prevMessage, message) => message,
+                },
+            });
+        });
+        
         it('should not fetch if request by same URL has been made', () => {
             const url = '/api';
             const dispatch = () => {
@@ -368,7 +423,43 @@ describe('query middleware', () => {
                 },
             });
         });
-
+        
+        it('should use headers if provided as an option', (done) => {
+            const url = '/echo-headers';
+            const headers = { 'x-message': apiMessage };
+            const actionsToDispatch = [
+                {
+                    type: actionTypes.MUTATE_START,
+                    url,
+                },
+                {
+                    type: actionTypes.MUTATE_SUCCESS,
+                    url,
+                    status: 200,
+                    entities: {
+                        message: headers,
+                    },
+                },
+            ];
+            const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+            const getState = () => ({
+                entities: {},
+                queries: {},
+            });
+            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({ dispatch, getState });
+            const actionHandler = nextHandler();
+            actionHandler({
+                type: actionTypes.MUTATE_ASYNC,
+                url,
+                options: {
+                    headers,
+                },
+                update: {
+                    message: (prevMessage, message) => message,
+                },
+            });
+        });
+        
         it('by supporting optimistic updates', (done) => {
             const url = '/api';
             const optimisticMessage = 'hello, optimistic world!';

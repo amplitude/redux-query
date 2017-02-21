@@ -119,6 +119,10 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         if (body) {
                             request.send(body);
                         }
+                        
+                        if (options.headers) {
+                            request.set(options.headers);
+                        }
 
                         let attempts = 0;
                         const backoff = new Backoff({
@@ -189,6 +193,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                     queryKey: providedQueryKey,
                     body,
                     optimisticUpdate,
+                    options = {},
                 } = action;
                 invariant(!!url, 'Missing required `url` field in action handler');
 
@@ -204,7 +209,11 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                 returnValue = new Promise((resolve) => {
                     const start = new Date();
                     const request = superagent.post(url);
-
+                    
+                    if (options.headers) {
+                        request.set(options.headers);
+                    }
+                    
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
                     // `mutateStart` action as `optimisticEntities`
                     dispatch(mutateStart(url, body, request, optimisticEntities, queryKey));

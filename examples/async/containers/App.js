@@ -110,6 +110,11 @@ function getSchema(reddit) {
 const AppContainer = connectRequest((props) => ({
     url: getRedditUrl(props.selectedReddit),
     transform: (response) => normalize(response, getSchema(props.selectedReddit)).entities,
+    options: {
+      headers: {
+        Accept: "application/json"
+      }
+    },
     update: {
       posts: (prevPosts, posts) => {
         return {

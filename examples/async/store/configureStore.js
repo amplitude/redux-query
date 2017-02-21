@@ -3,10 +3,15 @@ import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
 import { queryMiddleware } from 'redux-query'
+import networkAdapter from 'redux-query/dist/commonjs/adapters/superagent'
 
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware,
-  queryMiddleware((state) => state.queries, (state) => state.entities),
+  queryMiddleware(
+    (state) => state.queries,
+    (state) => state.entities,
+    networkAdapter,
+  ),
   createLogger()
 )(createStore)
 

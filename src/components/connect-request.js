@@ -119,7 +119,8 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
         }
 
         render() {
-            const forceRequest = partial(this.requestAsync.bind(this), this.props, true, false);
+            const config = mapPropsToConfig(this.props);
+            const forceRequest = partial(this.requestAsync.bind(this), config, true, false);
 
             if (withRef) {
                 return (

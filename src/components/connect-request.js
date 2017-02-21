@@ -27,7 +27,7 @@ const diffConfigs = (prevConfigs, configs) => {
     return { cancelKeys, requestKeys };
 };
 
-const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) => {
+const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) => {
     const { pure = true, withRef = false } = options;
 
     class ReduxQueryContainer extends React.Component {
@@ -48,13 +48,13 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
         }
 
         componentDidMount() {
-            const configs = mapPropsToConfig(this.props);
+            const configs = mapPropsToConfigs(this.props);
             this.requestAsync(configs, false, true);
         }
 
         componentDidUpdate(prevProps) {
-            const prevConfigs = ensureArray(mapPropsToConfig(prevProps)).filter(Boolean);
-            const configs = ensureArray(mapPropsToConfig(this.props)).filter(Boolean);
+            const prevConfigs = ensureArray(mapPropsToConfigs(prevProps)).filter(Boolean);
+            const configs = ensureArray(mapPropsToConfigs(this.props)).filter(Boolean);
 
             const { cancelKeys, requestKeys } = diffConfigs(prevConfigs, configs);
             const requestConfigs = configs.filter((c) => {
@@ -84,7 +84,6 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
 
             ensureArray(cancelKeys)
             .filter((key) => pendingKeys.includes(key))
-            .filter(Boolean)
             .forEach((queryKey) => dispatch(cancelQuery(queryKey)));
         }
 
@@ -119,8 +118,8 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
         }
 
         render() {
-            const config = mapPropsToConfig(this.props);
-            const forceRequest = partial(this.requestAsync.bind(this), config, true, false);
+            const configs = mapPropsToConfigs(this.props);
+            const forceRequest = partial(this.requestAsync.bind(this), configs, true, false);
 
             if (withRef) {
                 return (

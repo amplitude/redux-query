@@ -1,4 +1,6 @@
 import partial from 'lodash.partial';
+import difference from 'lodash.difference';
+import intersection from 'lodash.intersection';
 import React from 'react';
 import shallowEqual from 'react-pure-render/shallowEqual';
 
@@ -6,7 +8,26 @@ import { requestAsync, cancelQuery } from '../actions';
 import getQueryKey from '../lib/get-query-key';
 import storeShape from '../lib/store-shape';
 
-const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) => {
+const ensureArray = (maybe) => {
+    return Array.isArray(maybe) ? maybe : [maybe];
+};
+
+const unpackConfigQueryKeys = (c) => {
+    return getQueryKey(c.url, c.body);
+};
+
+const diffConfigs = (prevConfigs, configs) => {
+    const prevQueryKeys = prevConfigs.map(unpackConfigQueryKeys);
+    const queryKeys = configs.map(unpackConfigQueryKeys);
+
+    const intersect = intersection(prevQueryKeys, queryKeys);
+    const cancelKeys = difference(prevQueryKeys, intersect);
+    const requestKeys = difference(queryKeys, intersect);
+
+    return { cancelKeys, requestKeys };
+};
+
+const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) => {
     const { pure = true, withRef = false } = options;
 
     class ReduxQueryContainer extends React.Component {
@@ -27,68 +48,78 @@ const connectRequest = (mapPropsToConfig, options = {}) => (WrappedComponent) =>
         }
 
         componentDidMount() {
-            this.requestAsync(this.props, false, true);
+            const configs = mapPropsToConfigs(this.props);
+            this.requestAsync(configs, false, true);
         }
 
         componentDidUpdate(prevProps) {
-            const prevConfig = mapPropsToConfig(prevProps);
-            const config = mapPropsToConfig(this.props);
-            const prevQueryKey = prevConfig && getQueryKey(prevConfig.url, prevConfig.body);
-            const queryKey = config && getQueryKey(config.url, config.body);
+            const prevConfigs = ensureArray(mapPropsToConfigs(prevProps)).filter(Boolean);
+            const configs = ensureArray(mapPropsToConfigs(this.props)).filter(Boolean);
 
-            if (prevQueryKey !== queryKey) {
-                this.cancelPendingRequests();
-                this.requestAsync(this.props, false, true);
+            const { cancelKeys, requestKeys } = diffConfigs(prevConfigs, configs);
+            const requestConfigs = configs.filter((c) => {
+                return requestKeys.includes(getQueryKey(c.url, c.body));
+            });
+
+            if (cancelKeys.length) {
+                this.cancelPendingRequests(cancelKeys);
+            }
+            if (requestConfigs.length) {
+                this.requestAsync(requestConfigs);
             }
         }
 
         componentWillUnmount() {
-            this.cancelPendingRequests();
+            const cancelKeys = Object.keys(this._pendingRequests);
+            this.cancelPendingRequests(cancelKeys);
         }
 
         getWrappedInstance() {
             return this._wrappedInstance;
         }
 
-        cancelPendingRequests() {
+        cancelPendingRequests(cancelKeys) {
             const { dispatch } = this.context.store;
+            const pendingKeys = Object.keys(this._pendingRequests);
 
-            for (const queryKey in this._pendingRequests) {
-                if (this._pendingRequests.hasOwnProperty(queryKey)) {
-                    dispatch(cancelQuery(queryKey));
-                }
-            }
+            ensureArray(cancelKeys)
+            .filter((key) => pendingKeys.includes(key))
+            .forEach((queryKey) => dispatch(cancelQuery(queryKey)));
         }
 
-        requestAsync(props, force = false, retry = false) {
+        requestAsync(configs, force = false, retry = false) {
+            // propsToConfig mapping has happened already
+            ensureArray(configs).filter(Boolean).forEach((c) => {
+                this.makeRequest(c, force, retry);
+            });
+        }
+
+        makeRequest(config, force, retry) {
             const { dispatch } = this.context.store;
-            const config = mapPropsToConfig(props);
+            const { url, body } = config;
 
-            if (config) {
-                const { url, body } = config;
+            if (url) {
+                const requestPromise = dispatch(requestAsync({
+                    force,
+                    retry,
+                    ...config,
+                }));
 
-                if (url) {
-                    const requestPromise = dispatch(requestAsync({
-                        force,
-                        retry,
-                        ...config,
-                    }));
+                if (requestPromise) {
+                    // Record pending request since a promise was returned
+                    const queryKey = getQueryKey(url, body);
+                    this._pendingRequests[queryKey] = null;
 
-                    if (requestPromise) {
-                        // Record pending request since a promise was returned
-                        const queryKey = getQueryKey(url, body);
-                        this._pendingRequests[queryKey] = null;
-
-                        requestPromise.then(() => {
-                            delete this._pendingRequests[queryKey];
-                        });
-                    }
+                    requestPromise.then(() => {
+                        delete this._pendingRequests[queryKey];
+                    });
                 }
             }
         }
 
         render() {
-            const forceRequest = partial(this.requestAsync.bind(this), this.props, true, false);
+            const configs = mapPropsToConfigs(this.props);
+            const forceRequest = partial(this.requestAsync.bind(this), configs, true, false);
 
             if (withRef) {
                 return (

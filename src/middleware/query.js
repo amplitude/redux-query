@@ -19,6 +19,28 @@ import * as httpMethods from '../constants/http-methods';
 import * as statusCodes from '../constants/status-codes';
 import { reconcileQueryKey } from '../lib/get-query-key';
 
+const createRequest = (url, method) => {
+    let request;
+    switch (method) {
+        case httpMethods.GET:
+            request = superagent.get(url);
+            break;
+        case httpMethods.POST:
+            request = superagent.post(url);
+            break;
+        case httpMethods.PUT:
+            request = superagent.put(url);
+            break;
+        case httpMethods.DELETE:
+            request = superagent.del(url);
+            break;
+        default:
+            throw new Error(`Unsupported HTTP method: ${method}`);
+    }
+
+    return request;
+};
+
 const updateEntities = (update, entities, transformed) => {
     // If update, not supplied, then no change to entities should be made
 
@@ -97,29 +119,12 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         const start = new Date();
                         const { method = httpMethods.GET } = options;
 
-                        let request;
-                        switch (method) {
-                            case httpMethods.GET:
-                                request = superagent.get(url);
-                                break;
-                            case httpMethods.POST:
-                                request = superagent.post(url);
-                                break;
-                            case httpMethods.PUT:
-                                request = superagent.put(url);
-                                break;
-                            case httpMethods.DELETE:
-                                request = superagent.del(url);
-                                break;
-                            default:
-                                console.error(`Unsupported HTTP method: ${method}`);
-                                return;
-                        }
+                        const request = createRequest(url, method);
 
                         if (body) {
                             request.send(body);
                         }
-                        
+
                         if (options.headers) {
                             request.set(options.headers);
                         }
@@ -208,12 +213,14 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
 
                 returnValue = new Promise((resolve) => {
                     const start = new Date();
-                    const request = superagent.post(url);
-                    
+                    const { method = httpMethods.POST } = options;
+
+                    const request = createRequest(url, method);
+
                     if (options.headers) {
                         request.set(options.headers);
                     }
-                    
+
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
                     // `mutateStart` action as `optimisticEntities`
                     dispatch(mutateStart(url, body, request, optimisticEntities, queryKey));

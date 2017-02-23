@@ -123,7 +123,7 @@ The `prevValue` is the whatever value is selected from the `entities` reducer fo
 
 ### `connectRequest`
 
-Use the `connectRequest` higher-order component to declare network dependencies for a React component. `connectRequest` takes a function that transforms the component `props` to a request query config. Example usage:
+Use the `connectRequest` higher-order component to declare network dependencies for a React component. `connectRequest` takes a function that transforms the component `props` to a request query config or an array of request query configs. Example usage:
 
 ```javascript
 import { connectRequest, querySelectors } from 'redux-query';
@@ -155,7 +155,7 @@ const mapStateToProps = (state, props) => {
 export default connect(mapStateToProps)(DashboardContainer);
 ```
 
-`connectRequest` passes an extra prop to the child component: `forceRequest`. Calling this function will cause the request to be made again. This may be useful for polling or creating an interface to trigger refreshes.
+`connectRequest` passes an extra prop to the child component: `forceRequest`. Calling this function will cause the request(s) to be made again. This may be useful for polling or creating an interface to trigger refreshes.
 
 ### `mutateAsync`
 

@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Use lodash.includes instead of native Array#includes
+
 ## 1.1.0
 
 - Added support for multiple requests with `connectRequest` (MrNice [#8](https://github.com/amplitude/redux-query/pull/8))

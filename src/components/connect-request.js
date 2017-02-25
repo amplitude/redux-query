@@ -1,5 +1,6 @@
 import partial from 'lodash.partial';
 import difference from 'lodash.difference';
+import includes from 'lodash.includes';
 import intersection from 'lodash.intersection';
 import React from 'react';
 import shallowEqual from 'react-pure-render/shallowEqual';
@@ -58,7 +59,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
 
             const { cancelKeys, requestKeys } = diffConfigs(prevConfigs, configs);
             const requestConfigs = configs.filter((c) => {
-                return requestKeys.includes(getQueryKey(c.url, c.body));
+                return includes(requestKeys, getQueryKey(c.url, c.body));
             });
 
             if (cancelKeys.length) {
@@ -83,7 +84,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
             const pendingKeys = Object.keys(this._pendingRequests);
 
             ensureArray(cancelKeys)
-            .filter((key) => pendingKeys.includes(key))
+            .filter((key) => includes(pendingKeys, key))
             .forEach((queryKey) => dispatch(cancelQuery(queryKey)));
         }
 

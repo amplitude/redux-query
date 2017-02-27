@@ -1,3 +1,8 @@
+## 1.1.2
+
+- Fix `connectRequest` not retrying failed/cancelled requests on update
+
+
 ## 1.1.1
 
 - Use lodash.includes instead of native Array#includes

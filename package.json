@@ -16,7 +16,7 @@
     "clean:umd": "rimraf dist/umd",
     "clean": "npm run clean:commonjs && npm run clean:es && npm run clean:umd",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "prepublish": "npm run lint && npm run test && npm run build",
+    "prepublish": "npm run lint && npm run test",
     "lint": "eslint src test",
     "test:cov": "cross-env NODE_ENV=test nyc npm test",
     "test": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js"

@@ -126,7 +126,8 @@ The `prevValue` is the whatever value is selected from the `entities` reducer fo
 Use the `connectRequest` higher-order component to declare network dependencies for a React component. `connectRequest` takes a function that transforms the component `props` to a request query config or an array of request query configs. Example usage:
 
 ```javascript
-import { connectRequest, querySelectors } from 'redux-query';
+import { connectRequest } from 'redux-query';
+import { connect } from 'react-redux';
 
 class Dashboard extends Component {
     ...
@@ -252,7 +253,7 @@ $ npm install
 $ npm run build
 ```
 
-Then you can run the examples:
+Then you can run the example:
 
 ```sh
 $ cd examples/async

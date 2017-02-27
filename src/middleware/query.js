@@ -146,6 +146,9 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                 const resBody = (response && response.body) || undefined;
                                 const resText = (response && response.text) || undefined;
 
+                                let transformed;
+                                let newEntities;
+
                                 if (err || !resOk) {
                                     if (
                                         includes(config.retryableStatusCodes, resStatus) &&
@@ -168,8 +171,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                 } else {
                                     const callbackState = getState();
                                     const entities = entitiesSelector(callbackState);
-                                    const transformed = transform(resBody, resText);
-                                    const newEntities = updateEntities(update, entities, transformed);
+                                    transformed = transform(resBody, resText);
+                                    newEntities = updateEntities(update, entities, transformed);
                                     dispatch(requestSuccess(url, body, resStatus, newEntities, meta, queryKey));
                                 }
 
@@ -180,6 +183,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                     duration,
                                     status: resStatus,
                                     text: resText,
+                                    transformed,
+                                    entities: newEntities,
                                 });
                             });
                         };
@@ -231,11 +236,14 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         const resBody = (response && response.body) || undefined;
                         const resText = (response && response.text) || undefined;
 
+                        let transformed;
+                        let newEntities;
+
                         if (err || !resOk) {
                             dispatch(mutateFailure(url, body, resStatus, entities, queryKey));
                         } else {
-                            const transformed = transform(resBody, resText);
-                            const newEntities = updateEntities(update, entities, transformed);
+                            transformed = transform(resBody, resText);
+                            newEntities = updateEntities(update, entities, transformed);
                             dispatch(mutateSuccess(url, body, resStatus, newEntities, queryKey));
                         }
 
@@ -246,6 +254,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                             duration,
                             status: resStatus,
                             text: resText,
+                            transformed,
+                            entities: newEntities,
                         });
                     });
                 });

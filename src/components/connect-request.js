@@ -66,7 +66,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
                 this.cancelPendingRequests(cancelKeys);
             }
             if (requestConfigs.length) {
-                this.requestAsync(requestConfigs);
+                this.requestAsync(requestConfigs, false, true);
             }
         }
 

@@ -244,13 +244,13 @@ const mapDispatchToProps = (dispatch, props) => {
 The result of the promise returned by `mutateAsync` will be the following object:
 
 | Name | Type | Description |
-|:----|:-----|:-----|
-| status | number | HTTP status code
-| body | object | Response body auto-parsed by SuperAgent
-| text | string | Unparsed response body string
-| duration | number | Elapsed time between the action dispatched and resolved
-| transformed | any | Normalized data by the `transform` function
-| entities | object | The new entity collection
+|:-----|:-----|:-----|
+| status | number | HTTP status code.
+| body | object or null | Parsed response body.
+| text | string | Unparsed response body string.
+| duration | number | The total duration from the start of the query to receiving the full response.
+| transformed | any | Result from the transform function. Will be identical to body if transform is unprovided in the query config.
+| entities | object | The new, updated entities that have been affected by the query.
 
 ### `requestAsync`
 

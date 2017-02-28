@@ -180,6 +180,7 @@ export const createUpdateDashboardQuery = (dashboardId, newName) => ({
 
 // src/actions/dashboard.js
 
+import { mutateAsync } from 'redux-query';
 import { createUpdateDashboardQuery } from '../queries/dashboard';
 
 export const updateDashboard = (dashboardId, newName) => {
@@ -239,6 +240,17 @@ const mapDispatchToProps = (dispatch, props) => {
     };
 };
 ```
+
+The result of the promise returned by `mutateAsync` will be the following object:
+
+| Name | Type | Description |
+|:-----|:-----|:-----|
+| status | number | HTTP status code.
+| body | object or null | Parsed response body.
+| text | string | Unparsed response body string.
+| duration | number | The total duration from the start of the query to receiving the full response.
+| transformed | any | Result from the transform function. Will be identical to body if transform is unprovided in the query config.
+| entities | object | The new, updated entities that have been affected by the query.
 
 ### `requestAsync`
 

@@ -3,7 +3,7 @@ import difference from 'lodash.difference';
 import includes from 'lodash.includes';
 import intersection from 'lodash.intersection';
 import React from 'react';
-import shallowEqual from 'react-pure-render/shallowEqual';
+import shallowCompare from 'react-addons-shallow-compare';
 
 import { requestAsync, cancelQuery } from '../actions';
 import getQueryKey from '../lib/get-query-key';
@@ -42,7 +42,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
 
         shouldComponentUpdate(nextProps, nextState) {
             if (pure) {
-                return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
+                return shallowCompare(this, nextProps, nextState);
             } else {
                 return true;
             }

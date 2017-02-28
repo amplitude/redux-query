@@ -41,7 +41,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
 
         shouldComponentUpdate(nextProps, nextState) {
             if (pure) {
-                return !shallowCompare(this, nextProps, nextState);
+                return shallowCompare(this, nextProps, nextState);
             } else {
                 return true;
             }

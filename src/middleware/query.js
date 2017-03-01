@@ -129,6 +129,10 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                             request.set(options.headers);
                         }
 
+                        if (options.credentials === 'include') {
+                            request.withCredentials();
+                        }
+
                         let attempts = 0;
                         const backoff = new Backoff({
                             min: config.backoff.minDuration,
@@ -224,6 +228,10 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
 
                     if (options.headers) {
                         request.set(options.headers);
+                    }
+
+                    if (options.credentials === 'include') {
+                        request.withCredentials();
                     }
 
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the

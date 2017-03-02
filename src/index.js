@@ -4,7 +4,7 @@ import * as httpMethods from './constants/http-methods';
 import * as querySelectors from './selectors/query-selectors';
 
 export { default as connectRequest } from './components/connect-request';
-export { default as getQueryKey } from './lib/get-query-key';
+export { getQueryKey, reconcileQueryKey } from './lib/query-key';
 export { default as queriesReducer } from './reducers/queries';
 export { default as entitiesReducer } from './reducers/entities';
 export { default as queryMiddleware } from './middleware/query';

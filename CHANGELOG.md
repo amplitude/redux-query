@@ -1,7 +1,15 @@
+## 1.2.0
+
+- CORS support (rogovdm [#27](https://github.com/amplitude/redux-query/pull/29))
+- Switch to react-addons-shallow-compare for React Native compatibility (mmalfertheiner [#27](https://github.com/amplitude/redux-query/pull/27))
+- Pass transformed and updated entities to the promise result for `mutateAsync` and `requestAsync` (CAPSLOCKUSER [#25](https://github.com/amplitude/redux-query/pull/25))
+- Improve connectRequest's displayName
+- Use the `queryKey` property from query configs in connectRequest
+- Allow passing full query configs instead of the url and body to the query selectors
+
 ## 1.1.2
 
 - Fix `connectRequest` not retrying failed/cancelled requests on update
-
 
 ## 1.1.1
 

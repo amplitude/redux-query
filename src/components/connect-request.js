@@ -31,7 +31,7 @@ const diffConfigs = (prevConfigs, configs) => {
 const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) => {
     const { pure = true, withRef = false } = options;
 
-    class ReduxQueryContainer extends React.Component {
+    class ConnectRequest extends React.Component {
         constructor() {
             super();
 
@@ -143,12 +143,13 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
         }
     }
 
-    ReduxQueryContainer.displayName = `ReduxQueryContainer(${WrappedComponent.displayName})`;
-    ReduxQueryContainer.contextTypes = {
+    const wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+    ConnectRequest.displayName = `ConnectRequest(${wrappedComponentName})`;
+    ConnectRequest.contextTypes = {
         store: storeShape,
     };
 
-    return ReduxQueryContainer;
+    return ConnectRequest;
 };
 
 export default connectRequest;

@@ -70,6 +70,8 @@
         "no-shadow": 0,
         "no-this-before-super": 2,
         "no-throw-literal": 2,
+        "no-trailing-spaces": 2,
+        "no-undef": 2,
         "no-underscore-dangle": 0,
         "no-unexpected-multiline": 2,
         "no-unneeded-ternary": 2,

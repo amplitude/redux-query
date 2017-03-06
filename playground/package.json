@@ -1,0 +1,31 @@
+{
+  "name": "playground",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "react": "^15.4.2",
+    "react-codemirror": "^0.3.0",
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.3",
+    "react-syntax-highlighter": "^5.0.0",
+    "redux": "^3.6.0",
+    "redux-devtools": "^3.3.2",
+    "redux-devtools-log-monitor": "^1.2.0",
+    "redux-query": "^1.2.0",
+    "styled-components": "^1.4.4",
+    "todomvc-app-css": "^2.0.6"
+  },
+  "devDependencies": {
+    "file-loader": "^0.10.1",
+    "raw-loader": "^0.5.1",
+    "react-scripts": "0.9.3"
+  },
+  "scripts": {
+    "start": "npm run build-raw-demo-code && react-scripts start",
+    "build": "npm run build-raw-demo-code && react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "build-raw-demo-code": "cp ./src/demos/connect-request/App.js ./src/demos/connect-request/App.txt"
+  }
+}

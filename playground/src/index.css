@@ -1,0 +1,20 @@
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+#root {
+    display: flex;
+    min-height: 100%;
+    flex-grow: 1;
+}

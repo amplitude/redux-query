@@ -149,28 +149,29 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                 const resBody = (response && response.body) || undefined;
                                 const resText = (response && response.text) || undefined;
 
+                                if (
+                                    includes(config.retryableStatusCodes, resStatus) &&
+                                    attempts < config.backoff.maxAttempts
+                                ) {
+                                    // TODO take into account Retry-After header if 503
+                                    setTimeout(attemptRequest, backoff.duration());
+                                    return;
+                                }
+
                                 let transformed;
                                 let newEntities;
 
                                 if (err || !resOk) {
-                                    if (
-                                        includes(config.retryableStatusCodes, resStatus) &&
-                                        attempts < config.backoff.maxAttempts
-                                    ) {
-                                        // TODO take into account Retry-After header if 503
-                                        setTimeout(attemptRequest, backoff.duration());
-                                    } else {
-                                        dispatch(
-                                            requestFailure(
-                                                url,
-                                                body,
-                                                resStatus,
-                                                resBody,
-                                                meta,
-                                                queryKey
-                                            )
-                                        );
-                                    }
+                                    dispatch(
+                                        requestFailure(
+                                            url,
+                                            body,
+                                            resStatus,
+                                            resBody,
+                                            meta,
+                                            queryKey
+                                        )
+                                    );
                                 } else {
                                     const callbackState = getState();
                                     const entities = entitiesSelector(callbackState);

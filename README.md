@@ -79,7 +79,7 @@ Query configs are objects used to describe how redux-query should handle the req
 | `force` | boolean |  | Perform the request even if we've already successfully requested it. |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
 | `meta` | object |  | Various metadata for the query. Can be used to update other reducers when queries succeed or fail. |
-| `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, and `options.headers` to set any headers. |
+| `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, `options.headers` to set any headers and `options.credentials = 'include'` for CORS. |
 
 #### Mutation query config options
 
@@ -91,7 +91,7 @@ Query configs are objects used to describe how redux-query should handle the req
 | `optimisticUpdate` | object |  | Object where keys are entity IDs and values are functions that provide the current entity value. The return values are used to update the `entities` store until the mutation finishes. |
 | `body` | object |  | The HTTP request body. |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
-| `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, and `options.headers` to set any headers. |
+| `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, `options.headers` to set any headers and `options.credentials = 'include'` for CORS. |
 
 ### `transform` functions
 
@@ -180,6 +180,7 @@ export const createUpdateDashboardQuery = (dashboardId, newName) => ({
 
 // src/actions/dashboard.js
 
+import { mutateAsync } from 'redux-query';
 import { createUpdateDashboardQuery } from '../queries/dashboard';
 
 export const updateDashboard = (dashboardId, newName) => {
@@ -239,6 +240,17 @@ const mapDispatchToProps = (dispatch, props) => {
     };
 };
 ```
+
+The result of the promise returned by `mutateAsync` will be the following object:
+
+| Name | Type | Description |
+|:-----|:-----|:-----|
+| status | number | HTTP status code.
+| body | object or null | Parsed response body.
+| text | string | Unparsed response body string.
+| duration | number | The total duration from the start of the query to receiving the full response.
+| transformed | any | Result from the transform function. Will be identical to body if transform is unprovided in the query config.
+| entities | object | The new, updated entities that have been affected by the query.
 
 ### `requestAsync`
 

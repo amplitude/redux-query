@@ -17,7 +17,7 @@ import {
 import * as actionTypes from '../constants/action-types';
 import * as httpMethods from '../constants/http-methods';
 import * as statusCodes from '../constants/status-codes';
-import { reconcileQueryKey } from '../lib/get-query-key';
+import { reconcileQueryKey } from '../lib/query-key';
 
 const createRequest = (url, method) => {
     let request;
@@ -97,14 +97,13 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                     transform = identity,
                     update,
                     options = {},
-                    queryKey: providedQueryKey,
                     meta,
                 } = action;
 
                 invariant(!!url, 'Missing required `url` field in action handler');
                 invariant(!!update, 'Missing required `update` field in action handler');
 
-                const queryKey = reconcileQueryKey(url, body, providedQueryKey);
+                const queryKey = reconcileQueryKey(action);
 
                 const state = getState();
                 const queries = queriesSelector(state);
@@ -127,6 +126,10 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
 
                         if (options.headers) {
                             request.set(options.headers);
+                        }
+
+                        if (options.credentials === 'include') {
+                            request.withCredentials();
                         }
 
                         let attempts = 0;
@@ -155,6 +158,9 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                     return;
                                 }
 
+                                let transformed;
+                                let newEntities;
+
                                 if (err || !resOk) {
                                     dispatch(
                                         requestFailure(
@@ -169,8 +175,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                 } else {
                                     const callbackState = getState();
                                     const entities = entitiesSelector(callbackState);
-                                    const transformed = transform(resBody, resText);
-                                    const newEntities = updateEntities(update, entities, transformed);
+                                    transformed = transform(resBody, resText);
+                                    newEntities = updateEntities(update, entities, transformed);
                                     dispatch(requestSuccess(url, body, resStatus, newEntities, meta, queryKey));
                                 }
 
@@ -181,6 +187,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                     duration,
                                     status: resStatus,
                                     text: resText,
+                                    transformed,
+                                    entities: newEntities,
                                 });
                             });
                         };
@@ -196,7 +204,6 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                     url,
                     transform = identity,
                     update,
-                    queryKey: providedQueryKey,
                     body,
                     optimisticUpdate,
                     options = {},
@@ -210,7 +217,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                     optimisticEntities = optimisticUpdateEntities(optimisticUpdate, entities);
                 }
 
-                const queryKey = reconcileQueryKey(url, body, providedQueryKey);
+                const queryKey = reconcileQueryKey(action);
 
                 returnValue = new Promise((resolve) => {
                     const start = new Date();
@@ -220,6 +227,10 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
 
                     if (options.headers) {
                         request.set(options.headers);
+                    }
+
+                    if (options.credentials === 'include') {
+                        request.withCredentials();
                     }
 
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
@@ -232,11 +243,14 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         const resBody = (response && response.body) || undefined;
                         const resText = (response && response.text) || undefined;
 
+                        let transformed;
+                        let newEntities;
+
                         if (err || !resOk) {
                             dispatch(mutateFailure(url, body, resStatus, entities, queryKey));
                         } else {
-                            const transformed = transform(resBody, resText);
-                            const newEntities = updateEntities(update, entities, transformed);
+                            transformed = transform(resBody, resText);
+                            newEntities = updateEntities(update, entities, transformed);
                             dispatch(mutateSuccess(url, body, resStatus, newEntities, queryKey));
                         }
 
@@ -247,6 +261,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                             duration,
                             status: resStatus,
                             text: resText,
+                            transformed,
+                            entities: newEntities,
                         });
                     });
                 });

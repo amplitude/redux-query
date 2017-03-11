@@ -31,6 +31,9 @@ const createRequest = (url, method) => {
         case httpMethods.PUT:
             request = superagent.put(url);
             break;
+        case httpMethods.PATCH:
+            request = superagent.patch(url);
+            break;
         case httpMethods.DELETE:
             request = superagent.del(url);
             break;

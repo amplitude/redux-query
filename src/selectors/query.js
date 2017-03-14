@@ -38,6 +38,30 @@ export const status = (urlOrConfig, body) => (queriesState) => {
     return get(queriesState, [queryKey, 'status']);
 };
 
+export const resBody = (urlOrConfig, body) => (queriesState) => {
+    let queryKey;
+
+    if (typeof urlOrConfig === 'string') {
+        queryKey = reconcileQueryKey({ url: urlOrConfig, body });
+    } else {
+        queryKey = reconcileQueryKey(urlOrConfig);
+    }
+
+    return get(queriesState, [queryKey, 'resBody']);
+};
+
+export const resText = (urlOrConfig, body) => (queriesState) => {
+    let queryKey;
+
+    if (typeof urlOrConfig === 'string') {
+        queryKey = reconcileQueryKey({ url: urlOrConfig, body });
+    } else {
+        queryKey = reconcileQueryKey(urlOrConfig);
+    }
+
+    return get(queriesState, [queryKey, 'resText']);
+};
+
 export const lastUpdated = (urlOrConfig, body) => (queriesState) => {
     let queryKey;
 

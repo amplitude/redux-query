@@ -11,7 +11,7 @@ export const requestStart = (url, body, request, meta, queryKey) => {
     };
 };
 
-export const requestSuccess = (url, body, status, entities, meta, queryKey) => {
+export const requestSuccess = (url, body, status, entities, meta, queryKey, resBody, resText) => {
     return {
         type: actionTypes.REQUEST_SUCCESS,
         url,
@@ -21,10 +21,12 @@ export const requestSuccess = (url, body, status, entities, meta, queryKey) => {
         meta,
         queryKey,
         time: Date.now(),
+        resBody,
+        resText,
     };
 };
 
-export const requestFailure = (url, body, status, responseBody, meta, queryKey) => {
+export const requestFailure = (url, body, status, responseBody, meta, queryKey, resBody, resText) => {
     return {
         type: actionTypes.REQUEST_FAILURE,
         url,
@@ -34,6 +36,8 @@ export const requestFailure = (url, body, status, responseBody, meta, queryKey) 
         meta,
         queryKey,
         time: Date.now(),
+        resBody,
+        resText,
     };
 };
 
@@ -48,7 +52,7 @@ export const mutateStart = (url, body, request, optimisticEntities, queryKey) =>
     };
 };
 
-export const mutateSuccess = (url, body, status, entities, queryKey) => {
+export const mutateSuccess = (url, body, status, entities, queryKey, resBody, resText) => {
     return {
         type: actionTypes.MUTATE_SUCCESS,
         url,
@@ -57,10 +61,12 @@ export const mutateSuccess = (url, body, status, entities, queryKey) => {
         entities,
         queryKey,
         time: Date.now(),
+        resBody,
+        resText,
     };
 };
 
-export const mutateFailure = (url, body, status, originalEntities, queryKey) => {
+export const mutateFailure = (url, body, status, originalEntities, queryKey, resBody, resText) => {
     return {
         type: actionTypes.MUTATE_FAILURE,
         url,
@@ -69,6 +75,8 @@ export const mutateFailure = (url, body, status, originalEntities, queryKey) => 
         originalEntities,
         queryKey,
         time: Date.now(),
+        resBody,
+        resText,
     };
 };
 

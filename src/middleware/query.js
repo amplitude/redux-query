@@ -170,9 +170,10 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                             url,
                                             body,
                                             resStatus,
-                                            resBody,
                                             meta,
-                                            queryKey
+                                            queryKey,
+                                            resBody,
+                                            resText
                                         )
                                     );
                                 } else {
@@ -180,7 +181,18 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                     const entities = entitiesSelector(callbackState);
                                     transformed = transform(resBody, resText);
                                     newEntities = updateEntities(update, entities, transformed);
-                                    dispatch(requestSuccess(url, body, resStatus, newEntities, meta, queryKey));
+                                    dispatch(
+                                        requestSuccess(
+                                            url,
+                                            body,
+                                            resStatus,
+                                            newEntities,
+                                            meta,
+                                            queryKey,
+                                            resBody,
+                                            resText
+                                        )
+                                    );
                                 }
 
                                 const end = new Date();
@@ -250,11 +262,11 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         let newEntities;
 
                         if (err || !resOk) {
-                            dispatch(mutateFailure(url, body, resStatus, entities, queryKey));
+                            dispatch(mutateFailure(url, body, resStatus, entities, queryKey, resBody, resText));
                         } else {
                             transformed = transform(resBody, resText);
                             newEntities = updateEntities(update, entities, transformed);
-                            dispatch(mutateSuccess(url, body, resStatus, newEntities, queryKey));
+                            dispatch(mutateSuccess(url, body, resStatus, newEntities, queryKey, resBody, resText));
                         }
 
                         const end = new Date();

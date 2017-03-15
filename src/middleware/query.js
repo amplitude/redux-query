@@ -171,7 +171,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                         resStatus,
                                         resBody,
                                         meta,
-                                        queryKey
+                                        queryKey,
+                                        resText
                                     ));
                                 } else {
                                     const callbackState = getState();
@@ -185,7 +186,8 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                         newEntities,
                                         meta,
                                         queryKey,
-                                        resBody
+                                        resBody,
+                                        resText
                                     ));
                                 }
 
@@ -256,11 +258,27 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         let newEntities;
 
                         if (err || !resOk) {
-                            dispatch(mutateFailure(url, body, resStatus, entities, queryKey, resBody));
+                            dispatch(mutateFailure(
+                                url,
+                                body,
+                                resStatus,
+                                entities,
+                                queryKey,
+                                resBody,
+                                resText
+                            ));
                         } else {
                             transformed = transform(resBody, resText);
                             newEntities = updateEntities(update, entities, transformed);
-                            dispatch(mutateSuccess(url, body, resStatus, newEntities, queryKey, resBody));
+                            dispatch(mutateSuccess(
+                                url,
+                                body,
+                                resStatus,
+                                newEntities,
+                                queryKey,
+                                resBody,
+                                resText
+                            ));
                         }
 
                         const end = new Date();

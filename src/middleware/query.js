@@ -165,22 +165,28 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                 let newEntities;
 
                                 if (err || !resOk) {
-                                    dispatch(
-                                        requestFailure(
-                                            url,
-                                            body,
-                                            resStatus,
-                                            resBody,
-                                            meta,
-                                            queryKey
-                                        )
-                                    );
+                                    dispatch(requestFailure(
+                                        url,
+                                        body,
+                                        resStatus,
+                                        resBody,
+                                        meta,
+                                        queryKey
+                                    ));
                                 } else {
                                     const callbackState = getState();
                                     const entities = entitiesSelector(callbackState);
                                     transformed = transform(resBody, resText);
                                     newEntities = updateEntities(update, entities, transformed);
-                                    dispatch(requestSuccess(url, body, resStatus, newEntities, meta, queryKey));
+                                    dispatch(requestSuccess(
+                                        url,
+                                        body,
+                                        resStatus,
+                                        newEntities,
+                                        meta,
+                                        queryKey,
+                                        resBody
+                                    ));
                                 }
 
                                 const end = new Date();
@@ -250,11 +256,11 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         let newEntities;
 
                         if (err || !resOk) {
-                            dispatch(mutateFailure(url, body, resStatus, entities, queryKey));
+                            dispatch(mutateFailure(url, body, resStatus, entities, queryKey, resBody));
                         } else {
                             transformed = transform(resBody, resText);
                             newEntities = updateEntities(update, entities, transformed);
-                            dispatch(mutateSuccess(url, body, resStatus, newEntities, queryKey));
+                            dispatch(mutateSuccess(url, body, resStatus, newEntities, queryKey, resBody));
                         }
 
                         const end = new Date();

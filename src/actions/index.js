@@ -11,13 +11,14 @@ export const requestStart = (url, body, request, meta, queryKey) => {
     };
 };
 
-export const requestSuccess = (url, body, status, entities, meta, queryKey) => {
+export const requestSuccess = (url, body, status, entities, meta, queryKey, responseBody) => {
     return {
         type: actionTypes.REQUEST_SUCCESS,
         url,
         body,
         status,
         entities,
+        responseBody,
         meta,
         queryKey,
         time: Date.now(),
@@ -48,24 +49,26 @@ export const mutateStart = (url, body, request, optimisticEntities, queryKey) =>
     };
 };
 
-export const mutateSuccess = (url, body, status, entities, queryKey) => {
+export const mutateSuccess = (url, body, status, entities, queryKey, responseBody) => {
     return {
         type: actionTypes.MUTATE_SUCCESS,
         url,
         body,
         status,
+        responseBody,
         entities,
         queryKey,
         time: Date.now(),
     };
 };
 
-export const mutateFailure = (url, body, status, originalEntities, queryKey) => {
+export const mutateFailure = (url, body, status, originalEntities, queryKey, responseBody) => {
     return {
         type: actionTypes.MUTATE_FAILURE,
         url,
         body,
         status,
+        responseBody,
         originalEntities,
         queryKey,
         time: Date.now(),

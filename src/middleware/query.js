@@ -151,6 +151,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                 const resStatus = (response && response.status) || 0;
                                 const resBody = (response && response.body) || undefined;
                                 const resText = (response && response.text) || undefined;
+                                const resHeader = (response && response.header) || undefined;
 
                                 if (
                                     includes(config.retryableStatusCodes, resStatus) &&
@@ -200,6 +201,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                                     text: resText,
                                     transformed,
                                     entities: newEntities,
+                                    header: resHeader,
                                 });
                             });
                         };
@@ -253,6 +255,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                         const resStatus = (response && response.status) || 0;
                         const resBody = (response && response.body) || undefined;
                         const resText = (response && response.text) || undefined;
+                        const resHeader = (response && response.header) || undefined;
 
                         let transformed;
                         let newEntities;
@@ -290,6 +293,7 @@ const queryMiddleware = (queriesSelector, entitiesSelector, config = defaultConf
                             text: resText,
                             transformed,
                             entities: newEntities,
+                            header: resHeader,
                         });
                     });
                 });

@@ -48,7 +48,7 @@ const store = createStore(
     reducer,
     applyMiddleware(queryMiddleware(getQueries, getEntities), logger)
 );
-```/
+```
 
 ## Dependencies
 

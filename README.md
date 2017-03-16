@@ -48,7 +48,7 @@ const store = createStore(
     reducer,
     applyMiddleware(queryMiddleware(getQueries, getEntities), logger)
 );
-```
+```/
 
 ## Dependencies
 
@@ -157,6 +157,9 @@ export default connect(mapStateToProps)(DashboardContainer);
 ```
 
 `connectRequest` passes an extra prop to the child component: `forceRequest`. Calling this function will cause the request(s) to be made again. This may be useful for polling or creating an interface to trigger refreshes.
+
+### `mapPropsToConfig`
+The function you give to `connectRequest` can be referred to as `mapPropsToConfig` in the same spirit as `react-redux`'s `mapStateToProps` and `mapDispatchToProps` functions. If one component needs to make multiple requests, `mapPropsToConfig` may return multiple configuration objects inside an array. A `mapPropsToConfig` which returns a single config object can then be included in a different `mapPropsToConfig`.
 
 ### `mutateAsync`
 

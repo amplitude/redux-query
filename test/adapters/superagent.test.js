@@ -20,6 +20,11 @@ describe('superagent adapter', () => {
             assert.equal(request.method, HTTPMethods.GET);
         });
 
+        it('must return a PATCH request when supplied a PATCH method', () => {
+            const request = createRequest('http://localhost', HTTPMethods.PATCH);
+            assert.equal(request.method, HTTPMethods.PATCH);
+        });
+
         it('must return a POST request when supplied a POST method', () => {
             const request = createRequest('http://localhost', HTTPMethods.POST);
             assert.equal(request.method, HTTPMethods.POST);

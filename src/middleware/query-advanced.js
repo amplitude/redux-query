@@ -115,34 +115,43 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                             attempts += 1;
 
                             request.execute((err, resStatus, resBody, resText) => {
+                                if (
+                                    includes(config.retryableStatusCodes, resStatus) &&
+                                    attempts < config.backoff.maxAttempts
+                                ) {
+                                    // TODO take into account Retry-After header if 503
+                                    setTimeout(attemptRequest, backoff.duration());
+                                    return;
+                                }
+
                                 let transformed;
                                 let newEntities;
 
                                 if (err || !resOk(resStatus)) {
-                                    if (
-                                        includes(config.retryableStatusCodes, resStatus) &&
-                                        attempts < config.backoff.maxAttempts
-                                    ) {
-                                        // TODO take into account Retry-After header if 503
-                                        setTimeout(attemptRequest, backoff.duration());
-                                    } else {
-                                        dispatch(
-                                            requestFailure(
-                                                url,
-                                                body,
-                                                resStatus,
-                                                resBody,
-                                                meta,
-                                                queryKey
-                                            )
-                                        );
-                                    }
+                                    dispatch(requestFailure(
+                                        url,
+                                        body,
+                                        resStatus,
+                                        resBody,
+                                        meta,
+                                        queryKey,
+                                        resText
+                                    ));
                                 } else {
                                     const callbackState = getState();
                                     const entities = entitiesSelector(callbackState);
                                     transformed = transform(resBody, resText);
                                     newEntities = updateEntities(update, entities, transformed);
-                                    dispatch(requestSuccess(url, body, resStatus, newEntities, meta, queryKey));
+                                    dispatch(requestSuccess(
+                                        url,
+                                        body,
+                                        resStatus,
+                                        newEntities,
+                                        meta,
+                                        queryKey,
+                                        resBody,
+                                        resText
+                                    ));
                                 }
 
                                 const end = new Date();
@@ -203,11 +212,27 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                         let newEntities;
 
                         if (err || !resOk(resStatus)) {
-                            dispatch(mutateFailure(url, body, resStatus, entities, queryKey));
+                            dispatch(mutateFailure(
+                                url,
+                                body,
+                                resStatus,
+                                entities,
+                                queryKey,
+                                resBody,
+                                resText
+                            ));
                         } else {
                             transformed = transform(resBody, resText);
                             newEntities = updateEntities(update, entities, transformed);
-                            dispatch(mutateSuccess(url, body, resStatus, newEntities, queryKey));
+                            dispatch(mutateSuccess(
+                                url,
+                                body,
+                                resStatus,
+                                newEntities,
+                                queryKey,
+                                resBody,
+                                resText
+                            ));
                         }
 
                         const end = new Date();

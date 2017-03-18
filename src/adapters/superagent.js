@@ -9,6 +9,8 @@ export const createRequest = (url, method) => {
             return superagent.post(url);
         case httpMethods.PUT:
             return superagent.put(url);
+        case httpMethods.PATCH:
+            return superagent.patch(url);
         case httpMethods.DELETE:
             return superagent.del(url);
         default:

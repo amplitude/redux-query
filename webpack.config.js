@@ -25,7 +25,8 @@ module.exports = {
     'redux': reduxExternal,
   },
   entry: {
-    'redux-query': './src/index.js'
+    'redux-query': './src/index.js',
+    'redux-query/advanced': './src/advanced.js',
   },
   output: {
     path: 'dist/umd',

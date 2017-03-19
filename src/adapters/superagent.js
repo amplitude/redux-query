@@ -38,7 +38,7 @@ const superagentNetworkAdapter = (url, method, { body, headers, credentials } = 
         const resBody = (response && response.body) || undefined;
         const resText = (response && response.text) || undefined;
 
-        return cb(err, resStatus, resBody, resText);
+        cb(err, resStatus, resBody, resText);
     });
 
     const abort = () => request.abort();

@@ -256,6 +256,53 @@ The result of the promise returned by `mutateAsync` will be the following object
 
 Similarly to how mutations are triggered by dispatching `mutateAsync` actions, you can trigger requests by dispatching `requestAsync` actions with a request query config.
 
+### Usage without superagent with `redux-query/advanced`
+
+By default, `redux-query` makes XHR requests using the [superagent](https://github.com/visionmedia/superagent) library. If you'd rather use a different library for making requests, you can use the `redux-query`'s "advanced" mode by importing from `redux-query/advanced` instead of `redux-query`.
+
+Note: The default [`queryMiddleware`](./src/middleware/query.js) exported from the main `redux-query` entry point is simply a [superagent adapter](./src/adapters/superagent.js) bound to `queryMiddlewareAdvanced`.
+
+Example `queryMiddlewareAdvanced` usage:
+
+```javascript
+import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { entitiesReducer, queriesReducer, queryMiddlewareAdvanced } from 'redux-query/advanced';
+
+// A function that takes a url, method, and other options. This function should return an object
+// with two required properties: execute and abort.
+import myNetworkAdapter from './network-adapter';
+
+export const getQueries = (state) => state.queries;
+export const getEntities = (state) => state.entities;
+
+const reducer = combineReducers({
+    entities: entitiesReducer,
+    queries: queriesReducer,
+});
+
+const store = createStore(
+    reducer,
+    applyMiddleware(queryMiddlewareAdvanced(myNetworkAdapter)(getQueries, getEntities))
+);
+```
+
+#### Network adapters
+
+You must provide a function to `queryMiddlewareAdvanced` that adheres to the following `NetworkAdapter` interface:
+
+```javascript
+type NetworkAdapter = (
+    url: string,
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+    config?: { body?: string | Object, headers?: Object, credentials?: 'omit' | 'include' } = {},
+) => Adapter;
+
+type NetworkRequest = {
+    execute: (callback: (err: any, resStatus: number, resBody: ?Object, resText: string) => void) => void,
+    abort: () => void,
+};
+```
+
 ## Example
 
 A fork of the `redux` [Async](https://github.com/reactjs/redux/tree/master/examples/async) example is included. To run, first build the package:

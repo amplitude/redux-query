@@ -298,7 +298,7 @@ type NetworkAdapter = (
 ) => NetworkRequest;
 
 type NetworkRequest = {
-    execute: (callback: (err: any, resStatus: number, resBody: ?Object, resText: string) => void) => void,
+    execute: (callback: (err: any, resStatus: number, resBody: ?Object, resText: string, resHeaders: Object) => void) => void,
     abort: () => void,
 };
 ```

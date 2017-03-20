@@ -114,7 +114,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
 
                             attempts += 1;
 
-                            request.execute((err, resStatus, resBody, resText) => {
+                            request.execute((err, resStatus, resBody, resText, resHeaders) => {
                                 if (
                                     includes(config.retryableStatusCodes, resStatus) &&
                                     attempts < config.backoff.maxAttempts
@@ -135,7 +135,8 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                         resBody,
                                         meta,
                                         queryKey,
-                                        resText
+                                        resText,
+                                        resHeaders
                                     ));
                                 } else {
                                     const callbackState = getState();
@@ -150,7 +151,8 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                         meta,
                                         queryKey,
                                         resBody,
-                                        resText
+                                        resText,
+                                        resHeaders
                                     ));
                                 }
 
@@ -163,6 +165,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                     text: resText,
                                     transformed,
                                     entities: newEntities,
+                                    headers: resHeaders,
                                 });
                             });
                         };
@@ -207,7 +210,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                     // `mutateStart` action as `optimisticEntities`
                     dispatch(mutateStart(url, body, request, optimisticEntities, queryKey));
 
-                    request.execute((err, resStatus, resBody, resText) => {
+                    request.execute((err, resStatus, resBody, resText, resHeaders) => {
                         let transformed;
                         let newEntities;
 
@@ -219,7 +222,8 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                 entities,
                                 queryKey,
                                 resBody,
-                                resText
+                                resText,
+                                resHeaders
                             ));
                         } else {
                             transformed = transform(resBody, resText);
@@ -231,7 +235,8 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                 newEntities,
                                 queryKey,
                                 resBody,
-                                resText
+                                resText,
+                                resHeaders
                             ));
                         }
 
@@ -244,6 +249,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                             text: resText,
                             transformed,
                             entities: newEntities,
+                            headers: resHeaders,
                         });
                     });
                 });

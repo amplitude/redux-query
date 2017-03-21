@@ -41,7 +41,6 @@
         "indent": [2, 4, { "SwitchCase": 1 }],
         "jsx-quotes": [2, "prefer-double"],
         "keyword-spacing": [2, {"before": true, "after": true, "overrides": {}}],
-        "linebreak-style": 2,
         "lines-around-comment": [2, { "beforeBlockComment": true, "allowBlockStart": true }],
         "max-len": [2, 120, 4],
         "new-parens": 2,

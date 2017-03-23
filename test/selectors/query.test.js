@@ -218,4 +218,47 @@ describe('query selectors', () => {
             assert.equal(queryCount, 2);
         });
     });
+
+    describe('responseBody', () => {
+        it('should work with just url', () => {
+            const responseBody = querySelectors.responseBody('/api/dashboards')({
+                '{"url":"/api/dashboards"}': {
+                    responseBody: { some: 'json' },
+                },
+            });
+            assert.deepEqual(responseBody, { some: 'json' });
+        });
+
+        it('should work with a config', () => {
+            const queryConfig = {
+                url: '/api/dashboard/1/rename',
+                body: {
+                    name: 'My KPIs',
+                },
+            };
+            const queryKey = getQueryKey(queryConfig.url, queryConfig.body);
+            const responseBody = querySelectors.responseBody(queryConfig)({
+                [queryKey]: {
+                    responseBody: { some: 'json' },
+                },
+            });
+            assert.deepEqual(responseBody, { some: 'json' });
+        });
+
+        it('should work with a config with a queryKey field', () => {
+            const queryConfig = {
+                url: '/api/dashboard/1/rename',
+                body: {
+                    name: 'My KPIs',
+                },
+                queryKey: 'myQueryKey',
+            };
+            const responseBody = querySelectors.responseBody(queryConfig)({
+                myQueryKey: {
+                    responseBody: { some: 'json' },
+                },
+            });
+            assert.deepEqual(responseBody, { some: 'json' });
+        });
+    });
 });

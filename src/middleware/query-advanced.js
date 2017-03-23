@@ -187,10 +187,10 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                 } = action;
                 invariant(!!url, 'Missing required `url` field in action handler');
 
-                const state = getState();
-                const entities = entitiesSelector(state);
                 let optimisticEntities;
                 if (optimisticUpdate) {
+                    const state = getState();
+                    const entities = entitiesSelector(state);
                     optimisticEntities = optimisticUpdateEntities(optimisticUpdate, entities);
                 }
 
@@ -213,6 +213,9 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                     request.execute((err, resStatus, resBody, resText, resHeaders) => {
                         let transformed;
                         let newEntities;
+
+                        const state = getState();
+                        const entities = entitiesSelector(state);
 
                         if (err || !resOk(resStatus)) {
                             dispatch(mutateFailure(

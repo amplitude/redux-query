@@ -61,3 +61,15 @@ export const queryCount = (urlOrConfig, body) => (queriesState) => {
 
     return get(queriesState, [queryKey, 'queryCount']);
 };
+
+export const responseBody = (urlOrConfig, body) => (queriesState) => {
+    let queryKey;
+
+    if (typeof urlOrConfig === 'string') {
+        queryKey = reconcileQueryKey({ url: urlOrConfig, body });
+    } else {
+        queryKey = reconcileQueryKey(urlOrConfig);
+    }
+
+    return get(queriesState, [queryKey, 'responseBody']);
+};

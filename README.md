@@ -167,7 +167,48 @@ export default compose(
 `connectRequest` passes an extra prop to the child component: `forceRequest`. Calling this function will cause the request(s) to be made again. This may be useful for polling or creating an interface to trigger refreshes.
 
 ### `mapPropsToConfig`
-The function you give to `connectRequest` can be referred to as `mapPropsToConfig` in the same spirit as `react-redux`'s `mapStateToProps` and `mapDispatchToProps` functions. If one component needs to make multiple requests, `mapPropsToConfig` may return multiple configuration objects inside an array.
+is a function which... maps a React component's props to one or more requestAsync configuration objects. It is similar to `react-redux`'s `mapStateToProps` or `mapDispatchToProps`. If, in the vein of [Relay](https://facebook.github.io/relay/) and [GraphQL](http://graphql.org/), you wish to have components which automatically load "just enough" state to render, you may pass signal props from `mapStateToProps` to `mapPropsToConfig` using `redux`'s `compose` method:
+```js
+/* extends connectRequest example */
+import {isEmpty} from 'lodash'
+// requests is a bundle of mapPropsToConfig functions
+import requests from './requests.js'
+
+// This is the best place to answer: Do we have enough data to render, either partially or fully?
+const mapStateToProps = (state, props) => {
+    // Assuming state which loads outside of redux-query
+    // Either baked in the HTML payload or fetched with legacy requests
+    // Which means it won't be in redux-query's cache
+    const userReady = !isEmpty(state.users[props.userId]);
+    const isReady = userReady && !isEmpty(state.entities.dashboard[props.dashboardId]);
+    const isRenderable = userReady;
+    return {
+        isReady,
+        isRenderable,
+        dashboard: getDashboard(state, props.dashboardId),
+    };
+};
+
+const mapPropsToConfig = (props) => {
+    const {isReady, isRenderable} = props;
+
+    if (isReady) {
+        // Signal that no more requests must be made for this component
+        return undefined;
+    }
+
+    // Add the dashboard and user request configs by passing the props to the named mapPropsToConfig methods
+    return isRenderable ?
+        [requests.dashboards(props)] :
+        [requests.dashboards(props), requests.users(props)];
+};
+
+export default compose(
+    // mapState sends the props to connectRequest through this glue
+    connect(mapStateToProps),
+    connectRequest(mapPropsToConfig)
+)(Dashboard);
+```
 
 ### `mutateAsync`
 
@@ -330,4 +371,3 @@ $ cd examples/async
 $ npm install
 $ npm run start
 ```
-

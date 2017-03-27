@@ -110,7 +110,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                         });
 
                         const attemptRequest = () => {
-                            dispatch(requestStart(url, body, request, meta, queryKey));
+                            dispatch(requestStart(url, body, request.instance, meta, queryKey));
 
                             attempts += 1;
 
@@ -208,7 +208,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
 
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
                     // `mutateStart` action as `optimisticEntities`
-                    dispatch(mutateStart(url, body, request, optimisticEntities, queryKey));
+                    dispatch(mutateStart(url, body, request.instance, optimisticEntities, queryKey));
 
                     request.execute((err, resStatus, resBody, resText, resHeaders) => {
                         let transformed;

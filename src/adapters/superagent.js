@@ -44,7 +44,11 @@ const superagentNetworkAdapter = (url, method, { body, headers, credentials } = 
 
     const abort = () => request.abort();
 
-    return { execute, abort };
+    return {
+        abort,
+        execute,
+        instance: request,
+    };
 };
 
 export default superagentNetworkAdapter;

@@ -184,6 +184,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                     body,
                     optimisticUpdate,
                     options = {},
+                    meta,
                 } = action;
                 invariant(!!url, 'Missing required `url` field in action handler');
 
@@ -208,7 +209,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
 
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
                     // `mutateStart` action as `optimisticEntities`
-                    dispatch(mutateStart(url, body, request.instance, optimisticEntities, queryKey));
+                    dispatch(mutateStart(url, body, request.instance, optimisticEntities, queryKey, meta));
 
                     request.execute((err, resStatus, resBody, resText, resHeaders) => {
                         let transformed;
@@ -223,7 +224,8 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                 queryKey,
                                 resBody,
                                 resText,
-                                resHeaders
+                                resHeaders,
+                                meta
                             ));
                         } else {
                             transformed = transform(resBody, resText);
@@ -236,7 +238,8 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                 queryKey,
                                 resBody,
                                 resText,
-                                resHeaders
+                                resHeaders,
+                                meta
                             ));
                         }
 

@@ -82,25 +82,27 @@ class ResultFrame extends Component {
             ReduxQuery.queryMiddleware = ReduxQuery.queryMiddlewareAdvanced(mockAdapter);
         </script>`);
         contentWindow.document.write(`<script type="text/javascript">
-            var createStore = Redux.createStore;
-            Redux.createStore = function() {
-                var store = createStore.apply(createStore, arguments);
-                var dispatch = store.dispatch;
-                store.dispatch = function(action) {
-                    var prevState = store.getState();
-                    var result = dispatch.call(store, action);
-                    var nextState = store.getState();
-                    parent.postMessage(JSON.stringify({
-                        type: 'dispatch',
-                        action: action,
-                        prevState: prevState,
-                        nextState: nextState
-                    }), '*');
+            var postMessageMiddleware = function(store) {
+                return function(next) {
+                    return function(action) {
+                        var prevState = store.getState();
+                        var result = next(action);
+                        var nextState = store.getState();
+                        parent.postMessage(JSON.stringify({
+                            type: 'dispatch',
+                            action: action,
+                            prevState: prevState,
+                            nextState: nextState
+                        }), '*');
 
-                    return result;
+                        return result;
+                    };
                 };
-
-                return store;
+            };
+            var applyMiddleware = Redux.applyMiddleware;
+            Redux.applyMiddleware = function() {
+                var modifiedMiddleware = Array.prototype.slice.call(arguments).concat([postMessageMiddleware]);
+                return applyMiddleware.apply(applyMiddleware, modifiedMiddleware);
             };
         </script>`);
         contentWindow.document.write(`<script type="text/javascript">${transformed.code}</script>`);

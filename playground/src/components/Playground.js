@@ -121,10 +121,11 @@ const Code = styled.div`
     }
 `;
 
-const ReduxDevToolsContainer = styled.div`
+const ReduxLog = styled.div`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 
     > li {
         padding: 4px 8px 2px;
@@ -270,7 +271,7 @@ class Playground extends Component {
                             </ToolbarButton>
                         </Toolbar>
                         {state.devTool === 'REDUX_LOG' &&
-                            <ReduxDevToolsContainer>
+                            <ReduxLog>
                                 {state.messages.reduce((accum, message, i, messages) => {
                                     accum.push(
                                         <Inspector
@@ -304,13 +305,15 @@ class Playground extends Component {
 
                                     if (i < messages.length - 1) {
                                         accum.push(
-                                            <LogDivider />
+                                            <LogDivider
+                                                key={`$divider-${i}`}
+                                            />
                                         );
                                     }
 
                                     return accum;
                                 }, [])}
-                            </ReduxDevToolsContainer>
+                            </ReduxLog>
                         }
                         {state.devTool === 'CLIENT_CODE' &&
                             this.renderCode('clientCode')

@@ -16,14 +16,17 @@ class ResultFrame extends Component {
     componentDidUpdate(prevProps) {
         const { props } = this;
 
-        if (prevProps.code !== props.code) {
+        if (
+            prevProps.clientCode !== props.clientCode ||
+            prevProps.serverCode !== props.serverCode
+        ) {
             this.update();
         }
     }
 
     update() {
         const { props } = this;
-        const transformed = transform(props.code, {
+        const transformed = transform(props.clientCode, {
             presets: ['es2015', 'stage-2', 'react'],
             plugins: [
                 [
@@ -38,6 +41,12 @@ class ResultFrame extends Component {
                     },
                 ],
             ],
+            moduleId: 'Demo',
+        });
+        const transformedServer = transform(props.serverCode, {
+            presets: ['es2015', 'stage-2'],
+            plugins: ['transform-es2015-modules-umd'],
+            moduleId: 'Server',
         });
 
         const srcs = [
@@ -54,13 +63,13 @@ class ResultFrame extends Component {
         srcs.forEach((src) => {
             contentWindow.document.write(`<script src="${src}"></script>`);
         });
+        contentWindow.document.write(`<script type="text/javascript">${transformedServer.code}</script>`);
         contentWindow.document.write(`<script type="text/javascript">
-            var mockAdapter = function() {
-                var execute = function(cb) {
-                    var response = { message: 'World' };
-                    setTimeout(function() {
-                        cb(null, 200, response, JSON.stringify(response));
-                    }, 1000);
+            var mockAdapter = function(url, method, config) {
+                var execute = function(callback) {
+                    window.Server.default(url, method, config, function(status, response) {
+                        callback(null, status, response, JSON.stringify(response));
+                    });
                 };
                 var abort = function() {};
 
@@ -97,7 +106,7 @@ class ResultFrame extends Component {
         contentWindow.document.write(`<script type="text/javascript">${transformed.code}</script>`);
         contentWindow.document.write(`<div id="app"></div>`);
         contentWindow.document.write(`<script type="text/javascript">
-            ReactDOM.render(React.createElement(window.unknown.default), document.getElementById('app'));
+            ReactDOM.render(React.createElement(window.Demo.default), document.getElementById('app'));
         </script>`);
         contentWindow.document.write('</body>');
         contentWindow.document.close();

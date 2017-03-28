@@ -24,6 +24,8 @@ const Container = styled.div`
 
 const Navigation = styled.div`
     flex-basis: 200px;
+    flex-shrink: 0;
+    flex-grow: 0;
     background-color: whitesmoke;
     border-right: 1px solid #ccc;
     padding: 12px;
@@ -135,34 +137,44 @@ const LogDivider = styled.hr`
     border: 0;
     margin: 6px 0 4px 0;
     padding: 0 !important;
+    flex-shrink: 0;
 `;
+
+const parseCode = (input) => {
+    try {
+        const parsed = atob(input.slice('data:text/plain;base64,'.length));
+        const prettified = prettier.format(parsed, {
+            printWidth: 80,
+            tabWidth: 2,
+            bracketSpacing: true,
+            jsxBracketSameLine: true,
+        });
+
+        return prettified;
+    } catch (e) {
+        console.warn('Unable to parse initial code', e);
+    }
+
+    return null;
+};
 
 class Playground extends Component {
     state = {
-        code: '',
-        devTool: 'code',
+        clientCode: '',
+        devTool: 'CLIENT_CODE',
         messages: [],
+        serverCode: '',
     };
 
     constructor(props) {
         super(props);
-        let code = null;
-
-        try {
-            code = atob(props.demo.code.slice('data:text/plain;base64,'.length));
-            code = prettier.format(code, {
-                printWidth: 80,
-                tabWidth: 2,
-                bracketSpacing: true,
-                jsxBracketSameLine: true,
-            });
-        } catch (e) {
-            console.warn(e);
-        }
+        const clientCode = parseCode(props.demo.clientCode) || '';
+        const serverCode = parseCode(props.demo.serverCode) || '';
 
         this.state = {
             ...this.state,
-            code: code || '',
+            clientCode,
+            serverCode,
         };
     }
 
@@ -171,22 +183,23 @@ class Playground extends Component {
     }
 
     onMessage = (e) => {
-        const message = JSON.parse(e.data);
-        this.setState((prevState) => ({
-            messages: [...prevState.messages, message],
-        }));
+        try {
+            const message = JSON.parse(e.data);
+            if (message.type === 'dispatch') {
+                this.setState((prevState) => ({
+                    messages: [...prevState.messages, message],
+                }));
+            }
+        } catch (e) {
+            // Ignoring other messages
+        }
     };
 
-    onCodeChange = (newValue) => {
-        this.setState({
-            code: newValue,
-        });
-    };
-
-    renderCode() {
+    renderCode(stateKey) {
         const { state } = this;
+        const code = state[stateKey];
 
-        if (state.code) {
+        if (code) {
             return (
                 <Code>
                     <CodeMirror
@@ -200,8 +213,12 @@ class Playground extends Component {
                             lineNumbers: true,
                             mode: 'jsx',
                         }}
-                        onChange={this.onCodeChange}
-                        value={state.code}
+                        onChange={(newValue) => {
+                            this.setState({
+                                [stateKey]: newValue,
+                            });
+                        }}
+                        value={code}
                     />
                 </Code>
             );
@@ -222,78 +239,90 @@ class Playground extends Component {
                     <DevToolsContainer>
                         <Toolbar>
                             <ToolbarButton
-                                isSelected={state.devTool === 'code'}
+                                isSelected={state.devTool === 'CLIENT_CODE'}
                                 onClick={() => {
                                     this.setState({
-                                        devTool: 'code',
+                                        devTool: 'CLIENT_CODE',
                                     });
                                 }}
                             >
-                                Client Source
+                                Client
                             </ToolbarButton>
                             <ToolbarButton
-                                isSelected={state.devTool === 'redux'}
+                                isSelected={state.devTool === 'SERVER_CODE'}
                                 onClick={() => {
                                     this.setState({
-                                        devTool: 'redux',
+                                        devTool: 'SERVER_CODE',
+                                    });
+                                }}
+                            >
+                                Server
+                            </ToolbarButton>
+                            <ToolbarButton
+                                isSelected={state.devTool === 'REDUX_LOG'}
+                                onClick={() => {
+                                    this.setState({
+                                        devTool: 'REDUX_LOG',
                                     });
                                 }}
                             >
                                 Redux Log
                             </ToolbarButton>
                         </Toolbar>
-                        {state.devTool === 'redux' &&
+                        {state.devTool === 'REDUX_LOG' &&
                             <ReduxDevToolsContainer>
-                                {state.messages.filter((message) => message.type === 'dispatch')
-                                    .reduce((accum, message, i, messages) => {
+                                {state.messages.reduce((accum, message, i, messages) => {
+                                    accum.push(
+                                        <Inspector
+                                            key={`$prevState-${i}`}
+                                            showNonenumerable={true}
+                                            name="prev state"
+                                            data={message.prevState}
+                                            expandLevel={1}
+                                        />
+                                    );
+
+                                    accum.push(
+                                        <Inspector
+                                            key={`$action-${i}`}
+                                            showNonenumerable={true}
+                                            name={`action (${message.action.type})`}
+                                            data={message.action}
+                                            expandLevel={1}
+                                        />
+                                    );
+
+                                    accum.push(
+                                        <Inspector
+                                            key={`$nextState-${i}`}
+                                            showNonenumerable={true}
+                                            name={"next state"}
+                                            data={message.nextState}
+                                            expandLevel={1}
+                                        />
+                                    );
+
+                                    if (i < messages.length - 1) {
                                         accum.push(
-                                            <Inspector
-                                                key={`$prevState-${i}`}
-                                                showNonenumerable={true}
-                                                name="prev state"
-                                                data={message.prevState}
-                                                expandLevel={1}
-                                            />
+                                            <LogDivider />
                                         );
+                                    }
 
-                                        accum.push(
-                                            <Inspector
-                                                key={`$action-${i}`}
-                                                showNonenumerable={true}
-                                                name={`action (${message.action.type})`}
-                                                data={message.action}
-                                                expandLevel={1}
-                                            />
-                                        );
-
-                                        accum.push(
-                                            <Inspector
-                                                key={`$nextState-${i}`}
-                                                showNonenumerable={true}
-                                                name={"next state"}
-                                                data={message.nextState}
-                                                expandLevel={1}
-                                            />
-                                        );
-
-                                        if (i < messages.length - 1) {
-                                            accum.push(
-                                                <LogDivider />
-                                            );
-                                        }
-
-                                        return accum;
-                                    }, [])
-                                }
+                                    return accum;
+                                }, [])}
                             </ReduxDevToolsContainer>
                         }
-                        {state.devTool === 'code' &&
-                            this.renderCode()
+                        {state.devTool === 'CLIENT_CODE' &&
+                            this.renderCode('clientCode')
+                        }
+                        {state.devTool === 'SERVER_CODE' &&
+                            this.renderCode('serverCode')
                         }
                     </DevToolsContainer>
                     <DemoContainer>
                         <ResultFrame
-                            code={state.code}
+                            clientCode={state.clientCode}
+                            serverCode={state.serverCode}
                         />
                     </DemoContainer>
                 </Browser>

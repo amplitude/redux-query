@@ -1,0 +1,9 @@
+const Server = (url, method, { body, headers }, callback) => {
+    var response = { message: 'World' };
+
+    setTimeout(function() {
+        callback(200, response);
+    }, 1000);
+};
+
+export default Server;

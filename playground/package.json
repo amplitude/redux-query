@@ -12,7 +12,7 @@
     "redux": "^3.6.0",
     "redux-devtools": "^3.3.2",
     "redux-devtools-log-monitor": "^1.2.0",
-    "redux-query": "^1.2.0",
+    "redux-query": "..",
     "styled-components": "^1.4.4",
     "todomvc-app-css": "^2.0.6"
   },
@@ -26,6 +26,6 @@
     "build": "npm run build-raw-demo-code && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "build-raw-demo-code": "cp ./src/demos/connect-request/App.js ./src/demos/connect-request/App.txt"
+    "build-raw-demo-code": "cp ./src/demos/hello-world/App.js ./src/demos/hello-world/App.txt"
   }
 }

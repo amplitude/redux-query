@@ -6,71 +6,101 @@ import styled from 'styled-components';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/jsx/jsx';
 
-import DevTools from '../containers/dev-tools';
+import ReduxDevTools from '../containers/dev-tools';
+
+import './codemirror-overrides.css';
 
 const Container = styled.div`
     display: flex;
     flex-grow: 1;
-    align-items: center;
+    height: 100vh;
+    min-width: 960px;
+    align-items: stretch;
     justify-content: center;
-`;
-
-const Browser = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex-grow: 0;
-    width: 960px;
-    height: 600px;
     overflow: hidden;
-    margin: 12px;
-    border: 1px solid rgb(204, 204, 204);
-    border-radius: 3px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    background-color: #eee;
 `;
 
-const BrowserToolbar = styled.div`
+const Navigation = styled.div`
+    flex-basis: 200px;
+    background-color: whitesmoke;
+    border-right: 1px solid #ddd;
+    padding: 12px;
+`;
+
+const ProjectTitle = styled.h1`
+    color: #222;
+    margin: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #ccc;
+    font-size: 18px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+`;
+
+const Toolbar = styled.div`
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     flex-grow: 0;
     flex-shrink: 0;
-    flex-basis: 36px;
+    flex-basis: 30px;
     padding: 0 6px;
     background-color: rgb(242, 242, 242);
     border-bottom: 1px solid rgb(204, 204, 204);
 `;
 
 const ToolbarButton = styled.button`
-    background-color: ${(props) => props.isSelected ? 'white' : 'transparent'};
-    color: ${(props) => props.isSelected ? '#222' : '#666'};
-    border: 1px solid rgb(204, 204, 204);
-    border-radius: 3px;
-    margin-right: 4px;
+    position: relative;
+    background-color: transparent;
+    border: 0;
+    margin: 0 4px 0 0;
     outline: 0;
+    font-size: 12px;
+    cursor: pointer;
+
+    &::after {
+        visibility: ${(props) => props.isSelected ? 'visible' : 'hidden'};
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 100%;
+        height: 2px;
+        background-color: #27d;
+    }
+
+    &:hover {
+        color: #222;
+        background-color: #ddd;
+    }
 
     &:last-child {
         margin-right: 0;
     }
 `;
 
-const BrowserViewport = styled.div`
-    display: flex;
-    flex-grow: 1;
-    overflow: auto;
-`;
-
 const DemoContainer = styled.div`
     display: flex;
     flex-grow: 1;
     overflow: auto;
-    padding: 8px;
+    font-family: reset;
+    background-color: white;
+    border-left: 1px solid #bbb;
+`;
+
+const Browser = styled.div`
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+    background-color: white;
 `;
 
 const DevToolsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    border-left: 1px solid rgb(204, 204, 204);
-    flex-basis: 470px;
+    flex-basis: 450px;
     flex-grow: 0;
     flex-shrink: 0;
     overflow: auto;
@@ -81,20 +111,31 @@ const Code = styled.div`
     flex-grow: 1;
     display: flex;
     overflow: auto;
+    font-family: Menlo, monospace;
 
     > * {
         width: 100%;
     }
 `;
 
+const ReduxDevToolsContainer = styled.div`
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    > * {
+        flex-grow: 1;
+    }
+`;
+
 class Playground extends Component {
     state = {
-        devTool: 'redux',
+        devTool: 'code',
     };
 
     constructor(props) {
         super(props);
-        this._store = props.demo.createStore(DevTools.instrument());
+        this._store = props.demo.createStore(ReduxDevTools.instrument());
     }
 
     renderCode() {
@@ -136,42 +177,47 @@ class Playground extends Component {
         return (
             <Provider store={this._store}>
                 <Container>
+                    <Navigation>
+                        <ProjectTitle>
+                            redux-query
+                        </ProjectTitle>
+                    </Navigation>
                     <Browser>
-                        <BrowserViewport>
-                            <DemoContainer>
-                                <Demo />
-                            </DemoContainer>
-                            <DevToolsContainer>
-                                <BrowserToolbar>
-                                    <ToolbarButton
-                                        isSelected={state.devTool === 'redux'}
-                                        onClick={() => {
-                                            this.setState({
-                                                devTool: 'redux',
-                                            });
-                                        }}
-                                    >
-                                        Redux
-                                    </ToolbarButton>
-                                    <ToolbarButton
-                                        isSelected={state.devTool === 'code'}
-                                        onClick={() => {
-                                            this.setState({
-                                                devTool: 'code',
-                                            });
-                                        }}
-                                    >
-                                        Code
-                                    </ToolbarButton>
-                                </BrowserToolbar>
-                                {state.devTool === 'redux' &&
-                                    <DevTools />
-                                }
-                                {state.devTool === 'code' &&
-                                    this.renderCode()
-                                }
-                            </DevToolsContainer>
-                        </BrowserViewport>
+                        <DevToolsContainer>
+                            <Toolbar>
+                                <ToolbarButton
+                                    isSelected={state.devTool === 'redux'}
+                                    onClick={() => {
+                                        this.setState({
+                                            devTool: 'redux',
+                                        });
+                                    }}
+                                >
+                                    Redux
+                                </ToolbarButton>
+                                <ToolbarButton
+                                    isSelected={state.devTool === 'code'}
+                                    onClick={() => {
+                                        this.setState({
+                                            devTool: 'code',
+                                        });
+                                    }}
+                                >
+                                    Sources
+                                </ToolbarButton>
+                            </Toolbar>
+                            {state.devTool === 'redux' &&
+                                <ReduxDevToolsContainer>
+                                    <ReduxDevTools />
+                                </ReduxDevToolsContainer>
+                            }
+                            {state.devTool === 'code' &&
+                                this.renderCode()
+                            }
+                        </DevToolsContainer>
+                        <DemoContainer>
+                            <Demo />
+                        </DemoContainer>
                     </Browser>
                 </Container>
             </Provider>

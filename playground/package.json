@@ -3,14 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-standalone": "^6.24.0",
     "classnames": "^2.2.5",
+    "prettier": "0.21.0",
     "react": "^15.4.2",
     "react-codemirror": "^0.3.0",
     "react-dom": "^15.4.2",
+    "react-inspector": "^1.1.2",
     "react-redux": "^5.0.3",
     "react-syntax-highlighter": "^5.0.0",
     "redux": "^3.6.0",
     "redux-devtools": "^3.3.2",
+    "redux-devtools-instrument": "^1.8.0",
     "redux-devtools-log-monitor": "^1.2.0",
     "redux-query": "..",
     "styled-components": "^1.4.4",
@@ -22,10 +26,9 @@
     "react-scripts": "0.9.3"
   },
   "scripts": {
-    "start": "npm run build-raw-demo-code && react-scripts start",
-    "build": "npm run build-raw-demo-code && react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "build-raw-demo-code": "cp ./src/demos/hello-world/App.js ./src/demos/hello-world/App.txt"
+    "eject": "react-scripts eject"
   }
 }

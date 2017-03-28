@@ -1,12 +1,13 @@
+import prettier from 'prettier';
 import React, { Component } from 'react';
-import { Provider } from 'react-redux';
 import CodeMirror from 'react-codemirror';
+import Inspector from 'react-inspector';
 import styled from 'styled-components';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/jsx/jsx';
 
-import ReduxDevTools from '../containers/dev-tools';
+import ResultFrame from './ResultFrame';
 
 import './codemirror-overrides.css';
 
@@ -24,7 +25,7 @@ const Container = styled.div`
 const Navigation = styled.div`
     flex-basis: 200px;
     background-color: whitesmoke;
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #ccc;
     padding: 12px;
 `;
 
@@ -47,7 +48,7 @@ const Toolbar = styled.div`
     flex-basis: 30px;
     padding: 0 6px;
     background-color: rgb(242, 242, 242);
-    border-bottom: 1px solid rgb(204, 204, 204);
+    border-bottom: 1px solid #ccc;
 `;
 
 const ToolbarButton = styled.button`
@@ -87,7 +88,7 @@ const DemoContainer = styled.div`
     overflow: auto;
     font-family: reset;
     background-color: white;
-    border-left: 1px solid #bbb;
+    border-left: 1px solid #ccc;
 `;
 
 const Browser = styled.div`
@@ -100,7 +101,7 @@ const Browser = styled.div`
 const DevToolsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    flex-basis: 450px;
+    flex-basis: 50%;
     flex-grow: 0;
     flex-shrink: 0;
     overflow: auto;
@@ -123,32 +124,69 @@ const ReduxDevToolsContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    > * {
-        flex-grow: 1;
+    > li {
+        padding: 4px 8px 2px;
     }
+`;
+
+const LogDivider = styled.hr`
+    height: 1px;
+    background-color: #ddd;
+    border: 0;
+    margin: 6px 0 4px 0;
+    padding: 0 !important;
 `;
 
 class Playground extends Component {
     state = {
+        code: '',
         devTool: 'code',
+        messages: [],
     };
 
     constructor(props) {
         super(props);
-        this._store = props.demo.createStore(ReduxDevTools.instrument());
-    }
-
-    renderCode() {
-        const { props } = this;
-        let code;
+        let code = null;
 
         try {
             code = atob(props.demo.code.slice('data:text/plain;base64,'.length));
+            code = prettier.format(code, {
+                printWidth: 80,
+                tabWidth: 2,
+                bracketSpacing: true,
+                jsxBracketSameLine: true,
+            });
         } catch (e) {
             console.warn(e);
         }
 
-        if (code) {
+        this.state = {
+            ...this.state,
+            code: code || '',
+        };
+    }
+
+    componentDidMount() {
+        window.addEventListener('message', this.onMessage);
+    }
+
+    onMessage = (e) => {
+        const message = JSON.parse(e.data);
+        this.setState((prevState) => ({
+            messages: [...prevState.messages, message],
+        }));
+    };
+
+    onCodeChange = (newValue) => {
+        this.setState({
+            code: newValue,
+        });
+    };
+
+    renderCode() {
+        const { state } = this;
+
+        if (state.code) {
             return (
                 <Code>
                     <CodeMirror
@@ -161,9 +199,9 @@ class Playground extends Component {
                         options={{
                             lineNumbers: true,
                             mode: 'jsx',
-                            readOnly: true,
                         }}
-                        value={code}
+                        onChange={this.onCodeChange}
+                        value={state.code}
                     />
                 </Code>
             );
@@ -171,56 +209,95 @@ class Playground extends Component {
     }
 
     render() {
-        const { props, state } = this;
-        const Demo = props.demo.component;
+        const { state } = this;
 
         return (
-            <Provider store={this._store}>
-                <Container>
-                    <Navigation>
-                        <ProjectTitle>
-                            redux-query
-                        </ProjectTitle>
-                    </Navigation>
-                    <Browser>
-                        <DevToolsContainer>
-                            <Toolbar>
-                                <ToolbarButton
-                                    isSelected={state.devTool === 'redux'}
-                                    onClick={() => {
-                                        this.setState({
-                                            devTool: 'redux',
-                                        });
-                                    }}
-                                >
-                                    Redux
-                                </ToolbarButton>
-                                <ToolbarButton
-                                    isSelected={state.devTool === 'code'}
-                                    onClick={() => {
-                                        this.setState({
-                                            devTool: 'code',
-                                        });
-                                    }}
-                                >
-                                    Sources
-                                </ToolbarButton>
-                            </Toolbar>
-                            {state.devTool === 'redux' &&
-                                <ReduxDevToolsContainer>
-                                    <ReduxDevTools />
-                                </ReduxDevToolsContainer>
-                            }
-                            {state.devTool === 'code' &&
-                                this.renderCode()
-                            }
-                        </DevToolsContainer>
-                        <DemoContainer>
-                            <Demo />
-                        </DemoContainer>
-                    </Browser>
-                </Container>
-            </Provider>
+            <Container>
+                <Navigation>
+                    <ProjectTitle>
+                        redux-query
+                    </ProjectTitle>
+                </Navigation>
+                <Browser>
+                    <DevToolsContainer>
+                        <Toolbar>
+                            <ToolbarButton
+                                isSelected={state.devTool === 'code'}
+                                onClick={() => {
+                                    this.setState({
+                                        devTool: 'code',
+                                    });
+                                }}
+                            >
+                                Client Source
+                            </ToolbarButton>
+                            <ToolbarButton
+                                isSelected={state.devTool === 'redux'}
+                                onClick={() => {
+                                    this.setState({
+                                        devTool: 'redux',
+                                    });
+                                }}
+                            >
+                                Redux Log
+                            </ToolbarButton>
+                        </Toolbar>
+                        {state.devTool === 'redux' &&
+                            <ReduxDevToolsContainer>
+                                {state.messages.filter((message) => message.type === 'dispatch')
+                                    .reduce((accum, message, i, messages) => {
+                                        accum.push(
+                                            <Inspector
+                                                key={`$prevState-${i}`}
+                                                showNonenumerable={true}
+                                                name="prev state"
+                                                data={message.prevState}
+                                                expandLevel={1}
+                                            />
+                                        );
+
+                                        accum.push(
+                                            <Inspector
+                                                key={`$action-${i}`}
+                                                showNonenumerable={true}
+                                                name={`action (${message.action.type})`}
+                                                data={message.action}
+                                                expandLevel={1}
+                                            />
+                                        );
+
+                                        accum.push(
+                                            <Inspector
+                                                key={`$nextState-${i}`}
+                                                showNonenumerable={true}
+                                                name={"next state"}
+                                                data={message.nextState}
+                                                expandLevel={1}
+                                            />
+                                        );
+
+                                        if (i < messages.length - 1) {
+                                            accum.push(
+                                                <LogDivider />
+                                            );
+                                        }
+
+                                        return accum;
+                                    }, [])
+                                }
+                            </ReduxDevToolsContainer>
+                        }
+                        {state.devTool === 'code' &&
+                            this.renderCode()
+                        }
+                    </DevToolsContainer>
+                    <DemoContainer>
+                        <ResultFrame
+                            code={state.code}
+                        />
+                    </DemoContainer>
+                </Browser>
+            </Container>
         );
     }
 }

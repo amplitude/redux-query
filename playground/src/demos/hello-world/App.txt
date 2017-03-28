@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { connectRequest } from 'redux-query';
+import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
+import { connect, Provider } from 'react-redux';
+import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
+
+/* Redux Setup */
+
+const reducer = combineReducers({
+    entities: entitiesReducer,
+    queries: queriesReducer,
+});
+
+const middleware = queryMiddleware((state) => state.entities, (state) => state.queries);
+
+const store = createStore(reducer, compose(applyMiddleware(middleware)));
+
+/* Application Code */
 
 const helloQuery = () => ({
   url: '/api/hello',
@@ -36,7 +49,9 @@ const HelloWorldContainer = compose(
 class App extends Component {
   render() {
     return (
-      <HelloWorldContainer />
+      <Provider store={store}>
+        <HelloWorldContainer />
+      </Provider>
     );
   }
 }

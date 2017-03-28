@@ -44,13 +44,18 @@ const ProjectTitle = styled.h1`
 const Toolbar = styled.div`
     display: flex;
     align-items: stretch;
-    justify-content: center;
+    justify-content: space-between;
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: 30px;
     padding: 0 6px;
     background-color: rgb(242, 242, 242);
     border-bottom: 1px solid #ccc;
+`;
+
+const ToolbarSection = styled.div`
+    display: flex;
+    align-items: stretch;
 `;
 
 const ToolbarButton = styled.button`
@@ -84,7 +89,20 @@ const ToolbarButton = styled.button`
     }
 `;
 
-const DemoContainer = styled.div`
+const RunButton = styled.button`
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover:not([disabled]) {
+        color: #222;
+        background-color: #ddd;
+    }
+`;
+
+const ResultContainer = styled.div`
     display: flex;
     flex-grow: 1;
     overflow: auto;
@@ -93,7 +111,7 @@ const DemoContainer = styled.div`
     border-left: 1px solid #ccc;
 `;
 
-const Browser = styled.div`
+const Main = styled.div`
     display: flex;
     flex-grow: 1;
     overflow: hidden;
@@ -164,7 +182,10 @@ class Playground extends Component {
         clientCode: '',
         devTool: 'CLIENT_CODE',
         messages: [],
+        pendingClientCode: '',
+        pendingServerCode: '',
         serverCode: '',
+        version: 0,
     };
 
     constructor(props) {
@@ -175,6 +196,8 @@ class Playground extends Component {
         this.state = {
             ...this.state,
             clientCode,
+            pendingClientCode: clientCode,
+            pendingServerCode: serverCode,
             serverCode,
         };
     }
@@ -196,7 +219,19 @@ class Playground extends Component {
         }
     };
 
-    renderCode(stateKey) {
+    run = () => {
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                clientCode: prevState.pendingClientCode,
+                messages: [],
+                serverCode: prevState.pendingServerCode,
+                version: prevState.version + 1,
+            };
+        });
+    };
+
+    renderCode = (stateKey) => {
         const { state } = this;
         const code = state[stateKey];
 
@@ -224,7 +259,7 @@ class Playground extends Component {
                 </Code>
             );
         }
-    }
+    };
 
     render() {
         const { state } = this;
@@ -236,39 +271,48 @@ class Playground extends Component {
                         redux-query
                     </ProjectTitle>
                 </Navigation>
-                <Browser>
+                <Main>
                     <DevToolsContainer>
                         <Toolbar>
-                            <ToolbarButton
-                                isSelected={state.devTool === 'CLIENT_CODE'}
-                                onClick={() => {
-                                    this.setState({
-                                        devTool: 'CLIENT_CODE',
-                                    });
-                                }}
-                            >
-                                Client
-                            </ToolbarButton>
-                            <ToolbarButton
-                                isSelected={state.devTool === 'SERVER_CODE'}
-                                onClick={() => {
-                                    this.setState({
-                                        devTool: 'SERVER_CODE',
-                                    });
-                                }}
-                            >
-                                Server
-                            </ToolbarButton>
-                            <ToolbarButton
-                                isSelected={state.devTool === 'REDUX_LOG'}
-                                onClick={() => {
-                                    this.setState({
-                                        devTool: 'REDUX_LOG',
-                                    });
-                                }}
-                            >
-                                Redux Log
-                            </ToolbarButton>
+                            <ToolbarSection>
+                                <ToolbarButton
+                                    isSelected={state.devTool === 'CLIENT_CODE'}
+                                    onClick={() => {
+                                        this.setState({
+                                            devTool: 'CLIENT_CODE',
+                                        });
+                                    }}
+                                >
+                                    Client
+                                </ToolbarButton>
+                                <ToolbarButton
+                                    isSelected={state.devTool === 'SERVER_CODE'}
+                                    onClick={() => {
+                                        this.setState({
+                                            devTool: 'SERVER_CODE',
+                                        });
+                                    }}
+                                >
+                                    Server
+                                </ToolbarButton>
+                                <ToolbarButton
+                                    isSelected={state.devTool === 'REDUX_LOG'}
+                                    onClick={() => {
+                                        this.setState({
+                                            devTool: 'REDUX_LOG',
+                                        });
+                                    }}
+                                >
+                                    Redux Log
+                                </ToolbarButton>
+                            </ToolbarSection>
+                            <ToolbarSection>
+                                <RunButton
+                                    onClick={this.run}
+                                >
+                                    Run
+                                </RunButton>
+                            </ToolbarSection>
                         </Toolbar>
                         {state.devTool === 'REDUX_LOG' &&
                             <ReduxLog>
@@ -316,19 +360,20 @@ class Playground extends Component {
                             </ReduxLog>
                         }
                         {state.devTool === 'CLIENT_CODE' &&
-                            this.renderCode('clientCode')
+                            this.renderCode('pendingClientCode')
                         }
                         {state.devTool === 'SERVER_CODE' &&
-                            this.renderCode('serverCode')
+                            this.renderCode('pendingServerCode')
                         }
                     </DevToolsContainer>
-                    <DemoContainer>
+                    <ResultContainer>
                         <ResultFrame
+                            key={`resultFrame-${state.version}`}
                             clientCode={state.clientCode}
                             serverCode={state.serverCode}
                         />
-                    </DemoContainer>
-                </Browser>
+                    </ResultContainer>
+                </Main>
             </Container>
         );
     }

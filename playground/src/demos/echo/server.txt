@@ -1,0 +1,13 @@
+const Server = (url, method, { body, headers }, callback) => {
+    if (url === '/api/echo' && method.toUpperCase() === 'POST') {
+        var response = { message: 'World' };
+
+        setTimeout(function() {
+            callback(200, body.name);
+        }, 1000);
+    } else {
+        callback(404);
+    }
+};
+
+export default Server;

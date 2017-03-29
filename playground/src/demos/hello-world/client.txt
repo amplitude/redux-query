@@ -1,22 +1,25 @@
+// Imports
+// Available packages: react, redux, react-redux, and redux-query
+
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
 import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 
-/* Redux Setup */
+// Redux setup
 
 const reducer = combineReducers({
-    entities: entitiesReducer,
-    queries: queriesReducer,
+  entities: entitiesReducer,
+  queries: queriesReducer,
 });
 
 const middleware = queryMiddleware((state) => state.entities, (state) => state.queries);
 
 const store = createStore(reducer, compose(applyMiddleware(middleware)));
 
-/* Application Code */
+// Application code
 
-const helloQuery = () => ({
+const helloRequest = () => ({
   url: '/api/hello',
   update: {
     message: (prev, next) => next,
@@ -43,7 +46,7 @@ const mapStateToProps = (state) => ({
 
 const HelloWorldContainer = compose(
   connect(mapStateToProps),
-  connectRequest(() => helloQuery())
+  connectRequest(() => helloRequest())
 )(HelloWorld);
 
 class App extends Component {
@@ -55,5 +58,7 @@ class App extends Component {
     );
   }
 }
+
+// The default export should be the main React component
 
 export default App;

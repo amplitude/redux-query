@@ -1,0 +1,97 @@
+// Imports
+// Available packages: react, redux, react-redux, and redux-query
+
+import React, { Component } from 'react';
+import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
+import { connect, Provider } from 'react-redux';
+import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
+
+// Redux setup
+
+const nameReducer = (state = '', action) => {
+  if (action.type === 'CHANGE_NAME') {
+    return action.name;
+  }
+
+  return state;
+};
+
+const reducer = combineReducers({
+  entities: entitiesReducer,
+  queries: queriesReducer,
+  name: nameReducer,
+});
+
+const middleware = queryMiddleware((state) => state.entities, (state) => state.queries);
+
+const store = createStore(reducer, compose(applyMiddleware(middleware)));
+
+// Application code
+
+const echoRequest = (name) => {
+  return {
+    url: '/api/echo',
+    options: {
+      method: 'POST',
+    },
+    body: {
+      name,
+    },
+    transform: (data) => ({
+      message: data,
+    }),
+    update: {
+      message: (prev, next) => next,
+    },
+  };
+};
+
+class Echo extends Component {
+  render() {
+    const { props } = this;
+
+    return (
+      <div>
+        <label>
+          input:
+          {' '}
+          <input type="text" value={props.name} onChange={(e) => props.changeName(e.target.value)} />
+        </label>
+        <div>response: {this.props.message}</div>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state) => ({
+  name: state.name,
+  message: state.entities.message,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  changeName: (name) => dispatch({
+    type: 'CHANGE_NAME',
+    name,
+  }),
+});
+
+const mapPropsToConfig = (props) => echoRequest(props.name);
+
+const EchoContainer = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  connectRequest(mapPropsToConfig)
+)(Echo);
+
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <EchoContainer />
+      </Provider>
+    );
+  }
+}
+
+// The default export should be the main React component
+
+export default App;

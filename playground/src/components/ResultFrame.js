@@ -8,64 +8,67 @@ const Frame = styled.iframe`
 `;
 
 class ResultFrame extends Component {
-    _iframeRef = null;
+  _iframeRef = null;
 
-    componentDidMount() {
-        this.update();
+  componentDidMount() {
+    this.update();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { props } = this;
+
+    if (
+      prevProps.clientCode !== props.clientCode ||
+      prevProps.serverCode !== props.serverCode
+    ) {
+      this.update();
     }
+  }
 
-    componentDidUpdate(prevProps) {
-        const { props } = this;
+  update() {
+    const { props } = this;
+    const transformed = transform(props.clientCode, {
+      presets: ['es2015', 'stage-2', 'react'],
+      plugins: [
+        [
+          'transform-es2015-modules-umd',
+          {
+            globals: {
+              react: 'React',
+              redux: 'Redux',
+              'react-redux': 'React-Redux',
+              'redux-query': 'ReduxQuery',
+            },
+          },
+        ],
+      ],
+      moduleId: 'Demo',
+    });
+    const transformedServer = transform(props.serverCode, {
+      presets: ['es2015', 'stage-2'],
+      plugins: ['transform-es2015-modules-umd'],
+      moduleId: 'Server',
+    });
 
-        if (
-            prevProps.clientCode !== props.clientCode ||
-            prevProps.serverCode !== props.serverCode
-        ) {
-            this.update();
-        }
-    }
+    const srcs = [
+      'https://unpkg.com/react@15/dist/react.min.js',
+      'https://unpkg.com/react-dom@15/dist/react-dom.min.js',
+      'https://unpkg.com/redux@3.6.0/dist/redux.min.js',
+      'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
+      'https://unpkg.com/redux-query@1.3.0/dist/umd/redux-query/advanced.js',
+    ];
 
-    update() {
-        const { props } = this;
-        const transformed = transform(props.clientCode, {
-            presets: ['es2015', 'stage-2', 'react'],
-            plugins: [
-                [
-                    'transform-es2015-modules-umd',
-                    {
-                        globals: {
-                            'react': 'React',
-                            'redux': 'Redux',
-                            'react-redux': 'React-Redux',
-                            'redux-query': 'ReduxQuery',
-                        },
-                    },
-                ],
-            ],
-            moduleId: 'Demo',
-        });
-        const transformedServer = transform(props.serverCode, {
-            presets: ['es2015', 'stage-2'],
-            plugins: ['transform-es2015-modules-umd'],
-            moduleId: 'Server',
-        });
-
-        const srcs = [
-            'https://unpkg.com/react@15/dist/react.min.js',
-            'https://unpkg.com/react-dom@15/dist/react-dom.min.js',
-            'https://unpkg.com/redux@3.6.0/dist/redux.min.js',
-            'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
-            'https://unpkg.com/redux-query@1.3.0/dist/umd/redux-query/advanced.js',
-        ];
-
-        const contentWindow = this._iframeRef.contentWindow;
-        contentWindow.document.open();
-        contentWindow.document.write('<body>');
-        srcs.forEach((src) => {
-            contentWindow.document.write(`<script src="${src}"></script>`);
-        });
-        contentWindow.document.write(`<script type="text/javascript">${transformedServer.code}</script>`);
-        contentWindow.document.write(`<script type="text/javascript">
+    const contentWindow = this._iframeRef.contentWindow;
+    contentWindow.document.open();
+    contentWindow.document.write('<body>');
+    srcs.forEach(src => {
+      contentWindow.document.write(`<script src="${src}"></script>`);
+    });
+    contentWindow.document.write(
+      `<script type="text/javascript">${transformedServer.code}</script>`
+    );
+    contentWindow.document.write(
+      `<script type="text/javascript">
             var mockAdapter = function(url, method, config) {
                 var aborted = false;
 
@@ -104,8 +107,10 @@ class ResultFrame extends Component {
             };
 
             ReduxQuery.queryMiddleware = ReduxQuery.queryMiddlewareAdvanced(mockAdapter);
-        </script>`);
-        contentWindow.document.write(`<script type="text/javascript">
+        </script>`
+    );
+    contentWindow.document.write(
+      `<script type="text/javascript">
             var postMessageMiddleware = function(store) {
                 return function(next) {
                     return function(action) {
@@ -128,27 +133,28 @@ class ResultFrame extends Component {
                 var modifiedMiddleware = Array.prototype.slice.call(arguments).concat([postMessageMiddleware]);
                 return applyMiddleware.apply(applyMiddleware, modifiedMiddleware);
             };
-        </script>`);
-        contentWindow.document.write(`<script type="text/javascript">${transformed.code}</script>`);
-        contentWindow.document.write(`<div id="app"></div>`);
-        contentWindow.document.write(`<script type="text/javascript">
+        </script>`
+    );
+    contentWindow.document.write(
+      `<script type="text/javascript">${transformed.code}</script>`
+    );
+    contentWindow.document.write(`<div id="app"></div>`);
+    contentWindow.document.write(
+      `<script type="text/javascript">
             ReactDOM.render(React.createElement(window.Demo.default), document.getElementById('app'));
-        </script>`);
-        contentWindow.document.write('</body>');
-        contentWindow.document.close();
-    }
+        </script>`
+    );
+    contentWindow.document.write('</body>');
+    contentWindow.document.close();
+  }
 
-    setIframeRef = (ref) => {
-        this._iframeRef = ref;
-    };
+  setIframeRef = ref => {
+    this._iframeRef = ref;
+  };
 
-    render() {
-        return (
-            <Frame
-                innerRef={this.setIframeRef}
-            />
-        );
-    }
+  render() {
+    return <Frame innerRef={this.setIframeRef} />;
+  }
 }
 
 export default ResultFrame;

@@ -1,10 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Playground from './components/Playground';
@@ -19,12 +15,15 @@ const Main = styled.div`
 `;
 
 ReactDOM.render(
-    <Router>
-        <Main>
-            <Route exact path="/" render={() => <Redirect to="/hello-world" />} />
-            <Route path="/hello-world" render={() => <Playground demo={helloWorld} />} />
-            <Route path="/echo" render={() => <Playground demo={echo} />} />
-        </Main>
-    </Router>,
-    document.getElementById('root')
+  <Router>
+    <Main>
+      <Route exact path="/" render={() => <Redirect to="/hello-world" />} />
+      <Route
+        path="/hello-world"
+        render={() => <Playground demo={helloWorld} />}
+      />
+      <Route path="/echo" render={() => <Playground demo={echo} />} />
+    </Main>
+  </Router>,
+  document.getElementById('root')
 );

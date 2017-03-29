@@ -53,10 +53,10 @@ const NavigationLink = styled(NavLink)`
         text-decoration: underline;
     }
 
-    &.${(props) => props.activeClassName} {
+    &.${props => props.activeClassName} {
         color: #27d;
     }
-`
+`;
 
 const ProjectTitle = styled.h1`
     color: #222;
@@ -94,10 +94,10 @@ const ToolbarButton = styled.button`
     outline: 0;
     font-size: 12px;
     cursor: pointer;
-    color: ${(props) => props.isSelected ? '#222' : '#444'};
+    color: ${props => props.isSelected ? '#222' : '#444'};
 
     &::after {
-        visibility: ${(props) => props.isSelected ? 'visible' : 'hidden'};
+        visibility: ${props => props.isSelected ? 'visible' : 'hidden'};
         content: '';
         display: block;
         position: absolute;
@@ -176,199 +176,191 @@ const Code = styled.div`
     }
 `;
 
-const parseCode = (input) => {
-    try {
-        const parsed = atob(input.slice('data:text/plain;base64,'.length));
-        const prettified = prettier.format(parsed, {
-            printWidth: 80,
-            tabWidth: 2,
-            bracketSpacing: true,
-            jsxBracketSameLine: true,
-        });
+const parseCode = input => {
+  try {
+    const parsed = atob(input.slice('data:text/plain;base64,'.length));
+    const prettified = prettier.format(parsed, {
+      printWidth: 80,
+      tabWidth: 2,
+      bracketSpacing: true,
+      jsxBracketSameLine: true,
+    });
 
-        return prettified;
-    } catch (e) {
-        console.warn('Unable to parse initial code', e);
-    }
+    return prettified;
+  } catch (e) {
+    console.warn('Unable to parse initial code', e);
+  }
 
-    return null;
+  return null;
 };
 
 class Playground extends Component {
-    state = {
-        clientCode: '',
-        devTool: 'CLIENT_CODE',
+  state = {
+    clientCode: '',
+    devTool: 'CLIENT_CODE',
+    messages: [],
+    pendingClientCode: '',
+    pendingServerCode: '',
+    serverCode: '',
+    version: 0,
+  };
+
+  constructor(props) {
+    super(props);
+
+    if (props.demo) {
+      const clientCode = parseCode(props.demo.clientCode) || '';
+      const serverCode = parseCode(props.demo.serverCode) || '';
+
+      this.state = {
+        ...this.state,
+        clientCode,
+        pendingClientCode: clientCode,
+        pendingServerCode: serverCode,
+        serverCode,
+      };
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('message', this.onMessage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', this.onMessage);
+  }
+
+  onMessage = e => {
+    try {
+      const message = JSON.parse(e.data);
+      if (message.type === 'dispatch') {
+        this.setState(prevState => ({
+          messages: [...prevState.messages, message],
+        }));
+      }
+    } catch (e) {
+      // Ignoring other messages
+    }
+  };
+
+  run = () => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        clientCode: prevState.pendingClientCode,
         messages: [],
-        pendingClientCode: '',
-        pendingServerCode: '',
-        serverCode: '',
-        version: 0,
-    };
+        serverCode: prevState.pendingServerCode,
+        version: prevState.version + 1,
+      };
+    });
+  };
 
-    constructor(props) {
-        super(props);
+  renderCode = stateKey => {
+    const { state } = this;
+    const code = state[stateKey];
 
-        if (props.demo) { 
-            const clientCode = parseCode(props.demo.clientCode) || '';
-            const serverCode = parseCode(props.demo.serverCode) || '';
-
-            this.state = {
-                ...this.state,
-                clientCode,
-                pendingClientCode: clientCode,
-                pendingServerCode: serverCode,
-                serverCode,
-            };
-        }
-    }
-
-    componentDidMount() {
-        window.addEventListener('message', this.onMessage);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('message', this.onMessage);
-    }
-
-    onMessage = (e) => {
-        try {
-            const message = JSON.parse(e.data);
-            if (message.type === 'dispatch') {
-                this.setState((prevState) => ({
-                    messages: [...prevState.messages, message],
-                }));
+    return (
+      <Code>
+        <CodeMirror
+          ref={ref => {
+            if (ref) {
+              const cm = ref.getCodeMirror();
+              cm.setSize('100%', '100%');
             }
-        } catch (e) {
-            // Ignoring other messages
-        }
-    };
+          }}
+          options={{
+            lineNumbers: true,
+            mode: 'jsx',
+          }}
+          onChange={newValue => {
+            this.setState({
+              [stateKey]: newValue,
+            });
+          }}
+          value={code}
+        />
+      </Code>
+    );
+  };
 
-    run = () => {
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                clientCode: prevState.pendingClientCode,
-                messages: [],
-                serverCode: prevState.pendingServerCode,
-                version: prevState.version + 1,
-            };
-        });
-    };
+  render() {
+    const { state } = this;
 
-    renderCode = (stateKey) => {
-        const { state } = this;
-        const code = state[stateKey];
-
-        return (
-            <Code>
-                <CodeMirror
-                    ref={(ref) => {
-                        if (ref) {
-                            const cm = ref.getCodeMirror();
-                            cm.setSize('100%', '100%');
-                        }
-                    }}
-                    options={{
-                        lineNumbers: true,
-                        mode: 'jsx',
-                    }}
-                    onChange={(newValue) => {
-                        this.setState({
-                            [stateKey]: newValue,
-                        });
-                    }}
-                    value={code}
-                />
-            </Code>
-        );
-    };
-
-    render() {
-        const { state } = this;
-
-        return (
-            <Container>
-                <Navigation>
-                    <ProjectTitle>
-                        redux-query
-                    </ProjectTitle>
-                    <NavigationSection>
-                        <NavigationItem>
-                            <NavigationLink to="/hello-world" activeClassName="active">
-                                Hello World
-                            </NavigationLink>
-                        </NavigationItem>
-                        <NavigationItem>
-                            <NavigationLink to="/echo" activeClassName="active">
-                                Echo
-                            </NavigationLink>
-                        </NavigationItem>
-                    </NavigationSection>
-                </Navigation>
-                <Main>
-                    <DevToolsContainer>
-                        <Toolbar>
-                            <ToolbarSection>
-                                <ToolbarButton
-                                    isSelected={state.devTool === 'CLIENT_CODE'}
-                                    onClick={() => {
-                                        this.setState({
-                                            devTool: 'CLIENT_CODE',
-                                        });
-                                    }}
-                                >
-                                    Client
-                                </ToolbarButton>
-                                <ToolbarButton
-                                    isSelected={state.devTool === 'SERVER_CODE'}
-                                    onClick={() => {
-                                        this.setState({
-                                            devTool: 'SERVER_CODE',
-                                        });
-                                    }}
-                                >
-                                    Server
-                                </ToolbarButton>
-                                <ToolbarButton
-                                    isSelected={state.devTool === 'REDUX_LOG'}
-                                    onClick={() => {
-                                        this.setState({
-                                            devTool: 'REDUX_LOG',
-                                        });
-                                    }}
-                                >
-                                    Redux Log
-                                </ToolbarButton>
-                            </ToolbarSection>
-                            <ToolbarSection>
-                                <RunButton
-                                    onClick={this.run}
-                                >
-                                    Run
-                                </RunButton>
-                            </ToolbarSection>
-                        </Toolbar>
-                        {state.devTool === 'REDUX_LOG' &&
-                            <ReduxLog messages={state.messages} />
-                        }
-                        {state.devTool === 'CLIENT_CODE' &&
-                            this.renderCode('pendingClientCode')
-                        }
-                        {state.devTool === 'SERVER_CODE' &&
-                            this.renderCode('pendingServerCode')
-                        }
-                    </DevToolsContainer>
-                    <ResultContainer>
-                        <ResultFrame
-                            key={`resultFrame-${state.version}`}
-                            clientCode={state.clientCode}
-                            serverCode={state.serverCode}
-                        />
-                    </ResultContainer>
-                </Main>
-            </Container>
-        );
-    }
+    return (
+      <Container>
+        <Navigation>
+          <ProjectTitle>
+            redux-query
+          </ProjectTitle>
+          <NavigationSection>
+            <NavigationItem>
+              <NavigationLink to="/hello-world" activeClassName="active">
+                Hello World
+              </NavigationLink>
+            </NavigationItem>
+            <NavigationItem>
+              <NavigationLink to="/echo" activeClassName="active">
+                Echo
+              </NavigationLink>
+            </NavigationItem>
+          </NavigationSection>
+        </Navigation>
+        <Main>
+          <DevToolsContainer>
+            <Toolbar>
+              <ToolbarSection>
+                <ToolbarButton
+                  isSelected={state.devTool === 'CLIENT_CODE'}
+                  onClick={() => {
+                    this.setState({
+                      devTool: 'CLIENT_CODE',
+                    });
+                  }}>
+                  Client
+                </ToolbarButton>
+                <ToolbarButton
+                  isSelected={state.devTool === 'SERVER_CODE'}
+                  onClick={() => {
+                    this.setState({
+                      devTool: 'SERVER_CODE',
+                    });
+                  }}>
+                  Server
+                </ToolbarButton>
+                <ToolbarButton
+                  isSelected={state.devTool === 'REDUX_LOG'}
+                  onClick={() => {
+                    this.setState({
+                      devTool: 'REDUX_LOG',
+                    });
+                  }}>
+                  Redux Log
+                </ToolbarButton>
+              </ToolbarSection>
+              <ToolbarSection>
+                <RunButton onClick={this.run}>
+                  Run
+                </RunButton>
+              </ToolbarSection>
+            </Toolbar>
+            {state.devTool === 'REDUX_LOG' &&
+              <ReduxLog messages={state.messages} />}
+            {state.devTool === 'CLIENT_CODE' &&
+              this.renderCode('pendingClientCode')}
+            {state.devTool === 'SERVER_CODE' &&
+              this.renderCode('pendingServerCode')}
+          </DevToolsContainer>
+          <ResultContainer>
+            <ResultFrame
+              key={`resultFrame-${state.version}`}
+              clientCode={state.clientCode}
+              serverCode={state.serverCode}
+            />
+          </ResultContainer>
+        </Main>
+      </Container>
+    );
+  }
 }
 
 export default Playground;

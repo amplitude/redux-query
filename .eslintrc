@@ -78,6 +78,7 @@
         "prettier/prettier": ["error", { "trailingComma": "es5", "singleQuote": true, "jsxBracketSameLine": true }],
         "quote-props": [2, "as-needed"],
         "radix": 2,
+        "react/prop-types": 0,
         "space-infix-ops": 2,
         "spaced-comment": [2, "always"],
         "strict": [2, "safe"],

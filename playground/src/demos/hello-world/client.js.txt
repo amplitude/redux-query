@@ -12,7 +12,7 @@ const reducer = combineReducers({
   queries: queriesReducer,
 });
 
-const middleware = queryMiddleware((state) => state.entities, (state) => state.queries);
+const middleware = queryMiddleware((state) => state.queries, (state) => state.entities);
 
 const store = createStore(reducer, applyMiddleware(middleware));
 

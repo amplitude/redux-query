@@ -66,9 +66,15 @@ class ResultFrame extends Component {
         contentWindow.document.write(`<script type="text/javascript">${transformedServer.code}</script>`);
         contentWindow.document.write(`<script type="text/javascript">
             var mockAdapter = function(url, method, config) {
+                var aborted = false;
+
                 var execute = function(callback) {
                     setTimeout(function() {
                         window.Server.default(url, method, config, function(status, response, headers) {
+                            if (aborted) {
+                                return;
+                            }
+
                             if (typeof response === 'object') {
                                 callback(null, status, response, JSON.stringify(response), headers);
                             } else {
@@ -85,7 +91,10 @@ class ResultFrame extends Component {
                         });
                     }, 0);
                 };
-                var abort = function() {};
+
+                var abort = function() {
+                    aborted = true;
+                };
 
                 return {
                     abort: abort,

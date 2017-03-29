@@ -1,43 +1,62 @@
+// This is a mock server. All requests from the client will be handled by this
+// function, regardless of hostname.
+//
+// This server has one route: "/api/echo".
+// It will respond with the value of the "input" query param after a 500ms delay.
+
 /**
- * This is a mock server. All requests from the client will be handled by this
- * function, regardless of hostname.
+ * The response callback function type (passed to and called by `serveRequest` below).
  *
- * This server has one route: "/api/echo".
- * It will respond with the value of the "input" query param after a 500ms delay.
+ * @callback responseCallback
+ * @param {number} response status
+ * @param {string} response body
+ * @param {Object} response headers
+ */
+
+/**
+ * This is the server's main function that handles all requests.
  *
- * @param url The url being requested
- * @param method The HTTP request method ("GET", "POST", "PUT", PATCH", or "DELETE")
- * @param options An object with the request body and request headers
- * @param callback Function to call with response status code, body, and headers
+ * @param {string} url The url being requested
+ * @param {string} method The HTTP request method ("GET", "POST", "PUT", PATCH", or "DELETE")
+ * @param {Object} options An object with the request body and request headers
+ * @param {responseCallback} callback Function to call with response status code, body, and headers
+ * @returns {void}
  */
 const serveRequest = (url, method, { body, headers }, callback) => {
-    if (!!url.match(/^\/api\/echo/) && method.toUpperCase() === 'GET') {
-        const params = getQueryParams(url);
-        const headers = [];
+  if (!!url.match(/^\/api\/echo/) && method.toUpperCase() === 'GET') {
+    const params = getQueryParams(url);
+    const headers = [];
 
-        // Respond with the request URL's "input" query param after an
-        // artificial timeout
-        setTimeout(() => {
-            callback(200, params.input, headers);
-        }, 500);
-    } else {
-        callback(404);
-    }
+    // Respond with the request URL's "input" query param after an
+    // artificial timeout
+    setTimeout(
+      () => {
+        callback(200, params.input, headers);
+      },
+      500
+    );
+  } else {
+    callback(404);
+  }
 };
 
-const getQueryParams = (url) => {
-    if (url.indexOf('?') !== -1) {
-        return url.substring(url.indexOf('?') + 1)
-            .split('&')
-            .map((v) => v.split('='))
-            .reduce((accum, [key, value]) => {
-                accum[key] = decodeURIComponent(value);
+const getQueryParams = url => {
+  if (url.indexOf('?') !== -1) {
+    return url
+      .substring(url.indexOf('?') + 1)
+      .split('&')
+      .map(v => v.split('='))
+      .reduce(
+        (accum, [key, value]) => {
+          accum[key] = decodeURIComponent(value);
 
-                return accum;
-            }, {});
-    } else {
-        return {};
-    }
+          return accum;
+        },
+        {}
+      );
+  } else {
+    return {};
+  }
 };
 
 export default serveRequest;

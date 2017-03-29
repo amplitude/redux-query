@@ -3,7 +3,12 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
+import {
+  connectRequest,
+  entitiesReducer,
+  queriesReducer,
+  queryMiddleware,
+} from 'redux-query';
 
 // Set up redux and redux-query
 
@@ -21,13 +26,16 @@ const reducer = combineReducers({
   input: inputReducer,
 });
 
-const middleware = queryMiddleware((state) => state.queries, (state) => state.entities);
+const middleware = queryMiddleware(
+  state => state.queries,
+  state => state.entities
+);
 
 const store = createStore(reducer, applyMiddleware(middleware));
 
 // Application code
 
-const echoRequest = (input) => {
+const echoRequest = input => {
   return {
     url: `/api/echo?input=${input}`,
     transform: (body, text) => ({
@@ -48,7 +56,11 @@ class Echo extends Component {
         <label>
           Input:
           {' '}
-          <input type="text" value={props.input} onChange={(e) => props.changeInput(e.target.value)} />
+          <input
+            type="text"
+            value={props.input}
+            onChange={e => props.changeInput(e.target.value)}
+          />
         </label>
         <div>Response: {this.props.response}</div>
         <hr />
@@ -56,26 +68,28 @@ class Echo extends Component {
           Note: if you type into the input field fast enough, pending requests will be cancelled.
         </div>
         <div>
-          Look for "<span style={{ fontFamily: 'monospace' }}>@@query/CANCEL_QUERY</span>"" actions in the "Redux Log" tab.
+          Look for "
+          <span style={{ fontFamily: 'monospace' }}>@@query/CANCEL_QUERY</span>
+          "" actions in the "Redux Log" tab.
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   input: state.input,
   response: state.entities.response,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  changeInput: (input) => dispatch({
+const mapDispatchToProps = dispatch => ({
+  changeInput: input => dispatch({
     type: 'CHANGE_INPUT',
     input,
   }),
 });
 
-const mapPropsToConfig = (props) => echoRequest(props.input);
+const mapPropsToConfig = props => echoRequest(props.input);
 
 const EchoContainer = compose(
   connect(mapStateToProps, mapDispatchToProps),

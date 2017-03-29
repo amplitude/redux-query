@@ -3,7 +3,12 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
+import {
+  connectRequest,
+  entitiesReducer,
+  queriesReducer,
+  queryMiddleware,
+} from 'redux-query';
 
 // Set up redux and redux-query
 
@@ -12,7 +17,10 @@ const reducer = combineReducers({
   queries: queriesReducer,
 });
 
-const middleware = queryMiddleware((state) => state.queries, (state) => state.entities);
+const middleware = queryMiddleware(
+  state => state.queries,
+  state => state.entities
+);
 
 const store = createStore(reducer, applyMiddleware(middleware));
 
@@ -29,17 +37,15 @@ class HelloWorld extends Component {
   render() {
     return (
       <h1>
-        {this.props.message ?
-          <span>Hello, {this.props.message}!</span>
-          :
-          <span>Hello?</span>
-        }
+        {this.props.message
+          ? <span>Hello, {this.props.message}!</span>
+          : <span>Hello?</span>}
       </h1>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   message: state.entities.message,
 });
 

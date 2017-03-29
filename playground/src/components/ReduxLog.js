@@ -22,8 +22,12 @@ const LogDivider = styled.hr`
     flex-shrink: 0;
 `;
 
+// If within 10 pixels of max scrollTop, then pin to bottom
+const pinScrollToBottomTolerance = 10;
+
 class ReduxLog extends Component {
     _containerRef = null;
+    _shouldPinScrollToBottom = false;
 
     setContainerRef = (ref) => {
         const previousRef = this._containerRef;
@@ -31,9 +35,30 @@ class ReduxLog extends Component {
         this._containerRef = ref;
 
         if (!previousRef && this._containerRef) {
-            this._containerRef.scrollTop = this._containerRef.scrollHeight;
+            this._containerRef.scrollTop = this._containerRef.scrollHeight - this._containerRef.offsetHeight;
         }
     };
+
+    componentWillUpdate(nextProps) {
+        const { props } = this;
+
+        if (this._containerRef && props.messages !== nextProps.messages) {
+            const { scrollTop, offsetHeight, scrollHeight } = this._containerRef;
+
+            if (scrollTop + offsetHeight >= scrollHeight - pinScrollToBottomTolerance) {
+                this._shouldPinScrollToBottom = true;
+            }
+        }
+    }
+
+    componentDidUpdate() {
+        if (this._shouldPinScrollToBottom && this._containerRef) {
+            const { offsetHeight, scrollHeight } = this._containerRef;
+
+            this._containerRef.scrollTop = scrollHeight - offsetHeight;
+            this._shouldPinScrollToBottom = false;
+        }
+    }
 
     render() {
         const { props } = this;
@@ -55,7 +80,7 @@ class ReduxLog extends Component {
                         <Inspector
                             key={`$action-${i}`}
                             showNonenumerable={true}
-                            name={`action (${message.action.type})`}
+                            name="action"
                             data={message.action}
                             expandLevel={1}
                         />

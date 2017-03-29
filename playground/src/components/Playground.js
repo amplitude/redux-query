@@ -90,6 +90,7 @@ const ToolbarButton = styled.button`
     background-color: transparent;
     border: 0;
     margin: 0 4px 0 0;
+    padding: 0 8px;
     outline: 0;
     font-size: 12px;
     cursor: pointer;
@@ -122,6 +123,7 @@ const RunButton = styled.button`
     border: 0;
     outline: 0;
     margin: 0;
+    padding: 0 8px;
     font-size: 12px;
     cursor: pointer;
     color: #444;
@@ -170,6 +172,7 @@ const Code = styled.div`
 
     > * {
         width: 100%;
+        flex-grow: 1;
     }
 `;
 

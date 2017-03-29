@@ -1,5 +1,6 @@
 html {
     height: 100%;
+    box-sizing: border-box;
 }
 
 body {
@@ -17,4 +18,25 @@ body {
     display: flex;
     min-height: 100%;
     flex-grow: 1;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+button,
+ul,
+ol,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
 }

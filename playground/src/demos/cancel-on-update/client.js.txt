@@ -1,6 +1,6 @@
 /**
- * Echo
- * ====
+ * Cancel On Update
+ * ================
  *
  * This example demos `connectRequest` cancellation when its props update.
  *
@@ -96,16 +96,6 @@ class Echo extends Component {
           />
         </label>
         <div>Response: {this.props.response}</div>
-        <hr />
-        <div>
-          Note: if you type into the input field fast enough,
-          pending requests will be cancelled.
-        </div>
-        <div>
-          Look for "
-          <span style={{ fontFamily: 'monospace' }}>@@query/CANCEL_QUERY</span>
-          " actions in the "Redux Log" tab.
-        </div>
       </div>
     );
   }

@@ -1,29 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import styled from 'styled-components';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from 'react-router-dom';
 
 import Playground from './components/Playground';
-import echo from './demos/echo';
+import cancelOnUnmount from './demos/cancel-on-unmount';
+import cancelOnUpdate from './demos/cancel-on-update';
 import helloWorld from './demos/hello-world';
 
 import './index.css';
 
-const Main = styled.div`
-    display: flex;
-    flex-grow: 1;
-`;
-
 ReactDOM.render(
   <Router>
-    <Main>
+    <Switch>
       <Route exact path="/" render={() => <Redirect to="/hello-world" />} />
       <Route
         path="/hello-world"
-        render={() => <Playground demo={helloWorld} />}
+        component={() => <Playground demo={helloWorld} />}
       />
-      <Route path="/echo" render={() => <Playground demo={echo} />} />
-    </Main>
+      <Route
+        path="/cancel-on-update"
+        component={() => <Playground demo={cancelOnUpdate} />}
+      />
+      <Route
+        path="/cancel-on-unmount"
+        component={() => <Playground demo={cancelOnUnmount} />}
+      />
+      <Route render={() => <Redirect to="/hello-world" />} />
+    </Switch>
   </Router>,
   document.getElementById('root')
 );

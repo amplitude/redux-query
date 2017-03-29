@@ -58,6 +58,10 @@ const NavigationLink = styled(NavLink)`
     }
 `;
 
+NavigationLink.defaultProps = {
+  activeClassName: 'active',
+};
+
 const ProjectTitle = styled.h1`
     color: #222;
     margin: 0;
@@ -294,13 +298,18 @@ class Playground extends Component {
           </ProjectTitle>
           <NavigationSection>
             <NavigationItem>
-              <NavigationLink to="/hello-world" activeClassName="active">
+              <NavigationLink to="/hello-world">
                 Hello World
               </NavigationLink>
             </NavigationItem>
             <NavigationItem>
-              <NavigationLink to="/echo" activeClassName="active">
-                Echo
+              <NavigationLink to="/cancel-on-unmount">
+                Cancel On Unmount
+              </NavigationLink>
+            </NavigationItem>
+            <NavigationItem>
+              <NavigationLink to="/cancel-on-update">
+                Cancel On Update
               </NavigationLink>
             </NavigationItem>
           </NavigationSection>

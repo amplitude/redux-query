@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const Frame = styled.iframe`
-    border: 0;
-    flex-grow: 1;
+  border: 0;
+  flex-grow: 1;
 `;
 
 class ResultFrame extends Component {
@@ -60,91 +60,99 @@ class ResultFrame extends Component {
 
     const contentWindow = this._iframeRef.contentWindow;
     contentWindow.document.open();
+    contentWindow.document.write('<!doctype html>');
+    contentWindow.document.write('<html lang="en">');
+    contentWindow.document.write('<head><meta charset="utf-8"></head>');
     contentWindow.document.write('<body>');
     srcs.forEach(src => {
       contentWindow.document.write(`<script src="${src}"></script>`);
     });
     contentWindow.document.write(
-      `<script type="text/javascript">${transformedServer.code}</script>`
+      `<script type="text/javascript">
+        ${transformedServer.code}
+      </script>`
     );
     contentWindow.document.write(
       `<script type="text/javascript">
-            var mockAdapter = function(url, method, config) {
-                var aborted = false;
+        var mockAdapter = function(url, method, config) {
+        var aborted = false;
 
-                var execute = function(callback) {
-                    setTimeout(function() {
-                        window.Server.default(url, method, config, function(status, response, headers) {
-                            if (aborted) {
-                                return;
-                            }
+        var execute = function(callback) {
+            setTimeout(function() {
+              window.Server.default(url, method, config, function(status, response, headers) {
+                if (aborted) {
+                  return;
+                }
 
-                            if (typeof response === 'object') {
-                                callback(null, status, response, JSON.stringify(response), headers);
-                            } else {
-                                let body = null;
+                if (typeof response === 'object') {
+                  callback(null, status, response, JSON.stringify(response), headers);
+                } else {
+                  let body = null;
 
-                                try {
-                                    body = JSON.parse(response);
-                                } catch (e) {
-                                    // Ignoring non-JSON response
-                                }
+                  try {
+                      body = JSON.parse(response);
+                  } catch (e) {
+                      // Ignoring non-JSON response
+                  }
 
-                                callback(null, status, body, String(response), headers);
-                            }
-                        });
-                    }, 0);
-                };
+                  callback(null, status, body, String(response), headers);
+                }
+              });
+            }, 0);
+          };
 
-                var abort = function() {
-                    aborted = true;
-                };
+          var abort = function() {
+            aborted = true;
+          };
 
-                return {
-                    abort: abort,
-                    execute: execute
-                };
-            };
+          return {
+            abort: abort,
+            execute: execute
+          };
+        };
 
-            ReduxQuery.queryMiddleware = ReduxQuery.queryMiddlewareAdvanced(mockAdapter);
-        </script>`
+        ReduxQuery.queryMiddleware = ReduxQuery.queryMiddlewareAdvanced(mockAdapter);
+      </script>`
     );
     contentWindow.document.write(
       `<script type="text/javascript">
-            var postMessageMiddleware = function(store) {
-                return function(next) {
-                    return function(action) {
-                        var prevState = store.getState();
-                        var result = next(action);
-                        var nextState = store.getState();
-                        parent.postMessage(JSON.stringify({
-                            type: 'dispatch',
-                            action: action,
-                            prevState: prevState,
-                            nextState: nextState
-                        }), '*');
+        var postMessageMiddleware = function(store) {
+          return function(next) {
+            return function(action) {
+              var prevState = store.getState();
+              var result = next(action);
+              var nextState = store.getState();
+              parent.postMessage(JSON.stringify({
+                type: 'dispatch',
+                action: action,
+                prevState: prevState,
+                nextState: nextState
+              }), '*');
 
-                        return result;
-                    };
-                };
+              return result;
             };
-            var applyMiddleware = Redux.applyMiddleware;
-            Redux.applyMiddleware = function() {
-                var modifiedMiddleware = Array.prototype.slice.call(arguments).concat([postMessageMiddleware]);
-                return applyMiddleware.apply(applyMiddleware, modifiedMiddleware);
-            };
-        </script>`
+          };
+        };
+        var applyMiddleware = Redux.applyMiddleware;
+        Redux.applyMiddleware = function() {
+          var modifiedMiddleware = Array.prototype.slice.call(arguments).concat([postMessageMiddleware]);
+          return applyMiddleware.apply(applyMiddleware, modifiedMiddleware);
+        };
+      </script>`
     );
     contentWindow.document.write(
-      `<script type="text/javascript">${transformed.code}</script>`
+      `<script type="text/javascript">
+        ${transformed.code}
+      </script>`
     );
     contentWindow.document.write(`<div id="app"></div>`);
     contentWindow.document.write(
       `<script type="text/javascript">
-            ReactDOM.render(React.createElement(window.Demo.default), document.getElementById('app'));
-        </script>`
+        ReactDOM.render(React.createElement(window.Demo.default), document.getElementById('app'));
+      </script>`
     );
     contentWindow.document.write('</body>');
+    contentWindow.document.write('</html>');
     contentWindow.document.close();
   }
 

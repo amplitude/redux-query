@@ -5,7 +5,7 @@ import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
 import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 
-// Redux setup
+// Set up redux and redux-query
 
 const reducer = combineReducers({
   entities: entitiesReducer,
@@ -43,9 +43,11 @@ const mapStateToProps = (state) => ({
   message: state.entities.message,
 });
 
+const mapPropsToConfig = () => helloRequest();
+
 const HelloWorldContainer = compose(
   connect(mapStateToProps),
-  connectRequest(() => helloRequest())
+  connectRequest(mapPropsToConfig)
 )(HelloWorld);
 
 class App extends Component {

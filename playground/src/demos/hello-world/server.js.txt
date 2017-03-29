@@ -1,0 +1,27 @@
+/**
+ * This is a mock server. All requests from the client will be handled by this
+ * function, regardless of hostname.
+ *
+ * This server has one route, "/api/hello", that responds with a JSON response
+ * after a 500ms delay.
+ *
+ * @param url The url being requested
+ * @param method The HTTP request method ("GET", "POST", "PUT", PATCH", or "DELETE")
+ * @param options An object with the request body and request headers
+ * @param callback Function to call with response status code and body
+ */
+const serveRequest = (url, method, { body, headers }, callback) => {
+    if (url === '/api/hello' && method.toUpperCase() === 'GET') {
+        const response = { message: 'World' };
+        const headers = [];
+
+        // Respond after an artificial timeout
+        setTimeout(() => {
+            callback(200, response, headers);
+        }, 500);
+    } else {
+        callback(404);
+    }
+};
+
+export default serveRequest;

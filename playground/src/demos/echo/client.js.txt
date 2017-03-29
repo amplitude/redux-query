@@ -5,11 +5,11 @@ import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
 import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 
-// Redux setup
+// Set up redux and redux-query
 
-const nameReducer = (state = '', action) => {
-  if (action.type === 'CHANGE_NAME') {
-    return action.name;
+const inputReducer = (state = '', action) => {
+  if (action.type === 'CHANGE_INPUT') {
+    return action.input;
   }
 
   return state;
@@ -18,7 +18,7 @@ const nameReducer = (state = '', action) => {
 const reducer = combineReducers({
   entities: entitiesReducer,
   queries: queriesReducer,
-  name: nameReducer,
+  input: inputReducer,
 });
 
 const middleware = queryMiddleware((state) => state.entities, (state) => state.queries);
@@ -27,20 +27,14 @@ const store = createStore(reducer, applyMiddleware(middleware));
 
 // Application code
 
-const echoRequest = (name) => {
+const echoRequest = (input) => {
   return {
-    url: '/api/echo',
-    options: {
-      method: 'POST',
-    },
-    body: {
-      name,
-    },
-    transform: (data) => ({
-      message: data,
+    url: `/api/echo?input=${input}`,
+    transform: (body, text) => ({
+      response: text,
     }),
     update: {
-      message: (prev, next) => next,
+      response: (prev, next) => next,
     },
   };
 };
@@ -54,27 +48,27 @@ class Echo extends Component {
         <label>
           input:
           {' '}
-          <input type="text" value={props.name} onChange={(e) => props.changeName(e.target.value)} />
+          <input type="text" value={props.input} onChange={(e) => props.changeInput(e.target.value)} />
         </label>
-        <div>response: {this.props.message}</div>
+        <div>response: {this.props.response}</div>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  name: state.name,
-  message: state.entities.message,
+  input: state.input,
+  response: state.entities.response,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeName: (name) => dispatch({
-    type: 'CHANGE_NAME',
-    name,
+  changeInput: (input) => dispatch({
+    type: 'CHANGE_INPUT',
+    input,
   }),
 });
 
-const mapPropsToConfig = (props) => echoRequest(props.name);
+const mapPropsToConfig = (props) => echoRequest(props.input);
 
 const EchoContainer = compose(
   connect(mapStateToProps, mapDispatchToProps),

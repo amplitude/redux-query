@@ -67,9 +67,23 @@ class ResultFrame extends Component {
         contentWindow.document.write(`<script type="text/javascript">
             var mockAdapter = function(url, method, config) {
                 var execute = function(callback) {
-                    window.Server.default(url, method, config, function(status, response) {
-                        callback(null, status, response, JSON.stringify(response));
-                    });
+                    setTimeout(function() {
+                        window.Server.default(url, method, config, function(status, response, headers) {
+                            if (typeof response === 'object') {
+                                callback(null, status, response, JSON.stringify(response), headers);
+                            } else {
+                                let body = null;
+
+                                try {
+                                    body = JSON.parse(response);
+                                } catch (e) {
+                                    // Ignoring non-JSON response
+                                }
+
+                                callback(null, status, body, String(response), headers);
+                            }
+                        });
+                    }, 0);
                 };
                 var abort = function() {};
 

@@ -1,5 +1,6 @@
 import prettier from 'prettier';
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import CodeMirror from 'react-codemirror';
 import Inspector from 'react-inspector';
 import styled from 'styled-components';
@@ -30,6 +31,32 @@ const Navigation = styled.div`
     border-right: 1px solid #ccc;
     padding: 12px;
 `;
+
+const NavigationSection = styled.ul`
+    list-style: none;
+    margin: 0;
+    padding: 8px 0;
+`;
+
+const NavigationItem = styled.li`
+    display: flex;
+    font-size: 14px;
+`;
+
+const NavigationLink = styled(NavLink)`
+    flex-grow: 1;
+    text-decoration: none;
+    color: #666;
+    padding: 8px 0;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &.${(props) => props.activeClassName} {
+        color: #27d;
+    }
+`
 
 const ProjectTitle = styled.h1`
     color: #222;
@@ -190,20 +217,27 @@ class Playground extends Component {
 
     constructor(props) {
         super(props);
-        const clientCode = parseCode(props.demo.clientCode) || '';
-        const serverCode = parseCode(props.demo.serverCode) || '';
 
-        this.state = {
-            ...this.state,
-            clientCode,
-            pendingClientCode: clientCode,
-            pendingServerCode: serverCode,
-            serverCode,
-        };
+        if (props.demo) { 
+            const clientCode = parseCode(props.demo.clientCode) || '';
+            const serverCode = parseCode(props.demo.serverCode) || '';
+
+            this.state = {
+                ...this.state,
+                clientCode,
+                pendingClientCode: clientCode,
+                pendingServerCode: serverCode,
+                serverCode,
+            };
+        }
     }
 
     componentDidMount() {
         window.addEventListener('message', this.onMessage);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('message', this.onMessage);
     }
 
     onMessage = (e) => {
@@ -235,30 +269,28 @@ class Playground extends Component {
         const { state } = this;
         const code = state[stateKey];
 
-        if (code) {
-            return (
-                <Code>
-                    <CodeMirror
-                        ref={(ref) => {
-                            if (ref) {
-                                const cm = ref.getCodeMirror();
-                                cm.setSize('100%', '100%');
-                            }
-                        }}
-                        options={{
-                            lineNumbers: true,
-                            mode: 'jsx',
-                        }}
-                        onChange={(newValue) => {
-                            this.setState({
-                                [stateKey]: newValue,
-                            });
-                        }}
-                        value={code}
-                    />
-                </Code>
-            );
-        }
+        return (
+            <Code>
+                <CodeMirror
+                    ref={(ref) => {
+                        if (ref) {
+                            const cm = ref.getCodeMirror();
+                            cm.setSize('100%', '100%');
+                        }
+                    }}
+                    options={{
+                        lineNumbers: true,
+                        mode: 'jsx',
+                    }}
+                    onChange={(newValue) => {
+                        this.setState({
+                            [stateKey]: newValue,
+                        });
+                    }}
+                    value={code}
+                />
+            </Code>
+        );
     };
 
     render() {
@@ -270,6 +302,18 @@ class Playground extends Component {
                     <ProjectTitle>
                         redux-query
                     </ProjectTitle>
+                    <NavigationSection>
+                        <NavigationItem>
+                            <NavigationLink to="/hello-world" activeClassName="active">
+                                Hello World
+                            </NavigationLink>
+                        </NavigationItem>
+                        <NavigationItem>
+                            <NavigationLink to="/echo" activeClassName="active">
+                                Echo
+                            </NavigationLink>
+                        </NavigationItem>
+                    </NavigationSection>
                 </Navigation>
                 <Main>
                     <DevToolsContainer>

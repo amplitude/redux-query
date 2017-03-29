@@ -1,4 +1,23 @@
-// Available packages: react, redux, react-redux, and redux-query
+/**
+ * Echo
+ * ====
+ *
+ * This example demos `connectRequest` cancellation when its props update.
+ *
+ * Type into the input field. If you type faster than the server is able to
+ * keep up (it's artificially slowed down), then requests will get cancelled.
+ *
+ * View the "Redux Log" tab to see the actions that are dispatched.
+ * Notice the "@@query/CANCEL_QUERY" actions that are dispatched when
+ * redux-query cancels requests.
+ */
+
+/**
+ * Imports
+ * -------
+ *
+ * Available packages: react, redux, react-redux, and redux-query.
+ */
 
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
@@ -10,8 +29,12 @@ import {
   queryMiddleware,
 } from 'redux-query';
 
-// Set up redux and redux-query
+/**
+ * Set up redux and redux-query
+ * ----------------------------
+ */
 
+// A simple reducer for this application to manage input state.
 const inputReducer = (state = '', action) => {
   if (action.type === 'CHANGE_INPUT') {
     return action.input;
@@ -20,12 +43,14 @@ const inputReducer = (state = '', action) => {
   return state;
 };
 
+// Include the queries and entities reducer with your other reducers.
 const reducer = combineReducers({
   entities: entitiesReducer,
   queries: queriesReducer,
   input: inputReducer,
 });
 
+// Tell redux-query where the queries and entities reducers are.
 const middleware = queryMiddleware(
   state => state.queries,
   state => state.entities
@@ -33,16 +58,24 @@ const middleware = queryMiddleware(
 
 const store = createStore(reducer, applyMiddleware(middleware));
 
-// Application code
+/**
+ * Application code
+ * ----------------
+ */
 
 const echoRequest = input => {
   return {
     url: `/api/echo?input=${input}`,
     transform: (body, text) => ({
+      // The server responds with raw text, not JSON, so need a transform step
+      // here to map the text to an entity.
       response: text,
     }),
     update: {
-      response: (prev, next) => next,
+      response: (prev, next) => {
+        // Discard previous `response` value (we don't need it anymore).
+        return next;
+      },
     },
   };
 };
@@ -65,23 +98,27 @@ class Echo extends Component {
         <div>Response: {this.props.response}</div>
         <hr />
         <div>
-          Note: if you type into the input field fast enough, pending requests will be cancelled.
+          Note: if you type into the input field fast enough,
+          pending requests will be cancelled.
         </div>
         <div>
           Look for "
           <span style={{ fontFamily: 'monospace' }}>@@query/CANCEL_QUERY</span>
-          "" actions in the "Redux Log" tab.
+          " actions in the "Redux Log" tab.
         </div>
       </div>
     );
   }
 }
 
+// Map redux state to props. This is ordinary react-redux usage – we're just
+// also reading from the entities state.
 const mapStateToProps = state => ({
   input: state.input,
   response: state.entities.response,
 });
 
+// Map dispatch to props. This is ordinary react-redux usage.
 const mapDispatchToProps = dispatch => ({
   changeInput: input => dispatch({
     type: 'CHANGE_INPUT',
@@ -89,6 +126,7 @@ const mapDispatchToProps = dispatch => ({
   }),
 });
 
+// Map props from `mapStateToProps` to a request query config.
 const mapPropsToConfig = props => echoRequest(props.input);
 
 const EchoContainer = compose(
@@ -106,6 +144,5 @@ class App extends Component {
   }
 }
 
-// The default export should be the main React component
-
+// The default export should be the main React component.
 export default App;

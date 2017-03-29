@@ -325,7 +325,7 @@ class Playground extends Component {
                       devTool: 'SERVER_CODE',
                     });
                   }}>
-                  Server
+                  Mock Server
                 </ToolbarButton>
                 <ToolbarButton
                   isSelected={state.devTool === 'REDUX_LOG'}

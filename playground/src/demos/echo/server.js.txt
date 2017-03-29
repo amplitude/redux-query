@@ -1,25 +1,32 @@
-// This is a mock server. All requests from the client will be handled by this
-// function, regardless of hostname.
-//
-// This server has one route: "/api/echo".
-// It will respond with the value of the "input" query param after a 500ms delay.
+/**
+ * Echo
+ * ====
+ *
+ * This is a mock server for demonstration purposes. redux-query is purely a
+ * client-side library and is completely ambivalent to the server's
+ * architecture.
+ *
+ * This server has one route: "/api/echo".
+ *
+ * It will respond with the value of the "input" query param after a 500ms delay.
+ */
 
 /**
- * The response callback function type (passed to and called by `serveRequest` below).
+ * The response callback function type (called by `serveRequest` below).
  *
  * @callback responseCallback
  * @param {number} response status
- * @param {string} response body
- * @param {Object} response headers
+ * @param {string|Object} response body
+ * @param {Object=} response headers
  */
 
 /**
  * This is the server's main function that handles all requests.
  *
  * @param {string} url The url being requested
- * @param {string} method The HTTP request method ("GET", "POST", "PUT", PATCH", or "DELETE")
+ * @param {string} method The HTTP request method
  * @param {Object} options An object with the request body and request headers
- * @param {responseCallback} callback Function to call with response status code, body, and headers
+ * @param {responseCallback} callback Function to call with response data
  * @returns {void}
  */
 const serveRequest = (url, method, { body, headers }, callback) => {
@@ -40,6 +47,8 @@ const serveRequest = (url, method, { body, headers }, callback) => {
   }
 };
 
+// For simplicity just inlining this helper function here, but it'd probably be
+// better to use a battle-tested library function to do this.
 const getQueryParams = url => {
   if (url.indexOf('?') !== -1) {
     return url

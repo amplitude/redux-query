@@ -5,7 +5,7 @@
  * This example demos `connectRequest` cancellation when its props update.
  *
  * Type into the input field. If you type faster than the server is able to
- * keep up (it's artificially slowed down), then requests will get cancelled.
+ * keep up (it's artificially slowed down), then requests will be cancelled.
  *
  * View the "Redux Log" tab to see the actions that are dispatched.
  * Notice the "@@query/CANCEL_QUERY" actions that are dispatched when

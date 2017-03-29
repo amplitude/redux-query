@@ -1,4 +1,3 @@
-// Imports
 // Available packages: react, redux, react-redux, and redux-query
 
 import React, { Component } from 'react';
@@ -24,7 +23,7 @@ const reducer = combineReducers({
 
 const middleware = queryMiddleware((state) => state.entities, (state) => state.queries);
 
-const store = createStore(reducer, compose(applyMiddleware(middleware)));
+const store = createStore(reducer, applyMiddleware(middleware));
 
 // Application code
 

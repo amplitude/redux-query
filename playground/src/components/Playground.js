@@ -93,6 +93,7 @@ const ToolbarButton = styled.button`
     outline: 0;
     font-size: 12px;
     cursor: pointer;
+    color: ${(props) => props.isSelected ? '#222' : '#444'};
 
     &::after {
         visibility: ${(props) => props.isSelected ? 'visible' : 'hidden'};
@@ -123,10 +124,15 @@ const RunButton = styled.button`
     margin: 0;
     font-size: 12px;
     cursor: pointer;
+    color: #444;
 
     &:hover:not([disabled]) {
         color: #222;
         background-color: #ddd;
+    }
+
+    &::before {
+        content: '▶ ';
     }
 `;
 

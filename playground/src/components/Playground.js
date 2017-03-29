@@ -2,12 +2,12 @@ import prettier from 'prettier';
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import CodeMirror from 'react-codemirror';
-import Inspector from 'react-inspector';
 import styled from 'styled-components';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/jsx/jsx';
 
+import ReduxLog from './ReduxLog';
 import ResultFrame from './ResultFrame';
 
 import './codemirror-overrides.css';
@@ -120,6 +120,7 @@ const RunButton = styled.button`
     background-color: transparent;
     border: 0;
     outline: 0;
+    margin: 0;
     font-size: 12px;
     cursor: pointer;
 
@@ -164,26 +165,6 @@ const Code = styled.div`
     > * {
         width: 100%;
     }
-`;
-
-const ReduxLog = styled.div`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-
-    > li {
-        padding: 4px 8px 2px;
-    }
-`;
-
-const LogDivider = styled.hr`
-    height: 1px;
-    background-color: #ddd;
-    border: 0;
-    margin: 6px 0 4px 0;
-    padding: 0 !important;
-    flex-shrink: 0;
 `;
 
 const parseCode = (input) => {
@@ -359,49 +340,7 @@ class Playground extends Component {
                             </ToolbarSection>
                         </Toolbar>
                         {state.devTool === 'REDUX_LOG' &&
-                            <ReduxLog>
-                                {state.messages.reduce((accum, message, i, messages) => {
-                                    accum.push(
-                                        <Inspector
-                                            key={`$prevState-${i}`}
-                                            showNonenumerable={true}
-                                            name="prev state"
-                                            data={message.prevState}
-                                            expandLevel={1}
-                                        />
-                                    );
-
-                                    accum.push(
-                                        <Inspector
-                                            key={`$action-${i}`}
-                                            showNonenumerable={true}
-                                            name={`action (${message.action.type})`}
-                                            data={message.action}
-                                            expandLevel={1}
-                                        />
-                                    );
-
-                                    accum.push(
-                                        <Inspector
-                                            key={`$nextState-${i}`}
-                                            showNonenumerable={true}
-                                            name={"next state"}
-                                            data={message.nextState}
-                                            expandLevel={1}
-                                        />
-                                    );
-
-                                    if (i < messages.length - 1) {
-                                        accum.push(
-                                            <LogDivider
-                                                key={`$divider-${i}`}
-                                            />
-                                        );
-                                    }
-
-                                    return accum;
-                                }, [])}
-                            </ReduxLog>
+                            <ReduxLog messages={state.messages} />
                         }
                         {state.devTool === 'CLIENT_CODE' &&
                             this.renderCode('pendingClientCode')

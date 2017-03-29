@@ -46,11 +46,18 @@ class Echo extends Component {
     return (
       <div>
         <label>
-          input:
+          Input:
           {' '}
           <input type="text" value={props.input} onChange={(e) => props.changeInput(e.target.value)} />
         </label>
-        <div>response: {this.props.response}</div>
+        <div>Response: {this.props.response}</div>
+        <hr />
+        <div>
+          Note: if you type into the input field fast enough, pending requests will be cancelled.
+        </div>
+        <div>
+          Look for "<span style={{ fontFamily: 'monospace' }}>@@query/CANCEL_QUERY</span>"" actions in the "Redux Log" tab.
+        </div>
       </div>
     );
   }

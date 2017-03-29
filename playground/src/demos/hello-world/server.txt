@@ -1,9 +1,14 @@
-const Server = (url, method, { body, headers }, callback) => {
-    var response = { message: 'World' };
+const serveRequest = (url, method, { body, headers }, callback) => {
+    if (url === '/api/hello' && method.toUpperCase() === 'GET') {
+        var response = { message: 'World' };
 
-    setTimeout(function() {
-        callback(200, response);
-    }, 1000);
+        // Respond after an artificial timeout
+        setTimeout(function() {
+            callback(200, response);
+        }, 1000);
+    } else {
+        callback(404);
+    }
 };
 
-export default Server;
+export default serveRequest;

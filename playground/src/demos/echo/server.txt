@@ -1,7 +1,6 @@
-const Server = (url, method, { body, headers }, callback) => {
+const serveRequest = (url, method, { body, headers }, callback) => {
     if (url === '/api/echo' && method.toUpperCase() === 'POST') {
-        var response = { message: 'World' };
-
+        // Respond with the request body's "name" field after an artificial timeout
         setTimeout(function() {
             callback(200, body.name);
         }, 1000);
@@ -10,4 +9,4 @@ const Server = (url, method, { body, headers }, callback) => {
     }
 };
 
-export default Server;
+export default serveRequest;

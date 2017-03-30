@@ -75,9 +75,15 @@ class ResultFrame extends Component {
     contentWindow.document.write(
       `<script type="text/javascript">
         var mockAdapter = function(url, method, config) {
-        var aborted = false;
+          var isExternalUrl = url.indexOf('://') > 0 || url.indexOf('//') === 0;
 
-        var execute = function(callback) {
+          if (isExternalUrl) {
+            return ReduxQuery.superagentAdapter.apply(ReduxQuery.superagentAdapter, arguments);
+          }
+
+          var aborted = false;
+
+          var execute = function(callback) {
             setTimeout(function() {
               window.Server.default(url, method, config, function(status, response, headers) {
                 if (aborted) {

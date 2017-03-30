@@ -47,7 +47,6 @@
     "lodash.partial": "^4.2.1",
     "lodash.pickby": "^4.6.0",
     "lodash.values": "^4.3.0",
-    "react": "^15.0.1",
     "react-addons-shallow-compare": "^15.4.2",
     "superagent": "^1.6.1"
   },
@@ -71,6 +70,7 @@
     "eslint-plugin-react": "^6.1.1",
     "mocha": "^2.4.5",
     "nyc": "^10.0.0",
+    "react": "^15.0.1",
     "rimraf": "^2.4.3",
     "superagent-mock": "^1.10.0",
     "webpack": "^1.9.6"

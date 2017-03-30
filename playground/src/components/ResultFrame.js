@@ -55,7 +55,7 @@ class ResultFrame extends Component {
       'https://unpkg.com/react-dom@15/dist/react-dom.min.js',
       'https://unpkg.com/redux@3.6.0/dist/redux.min.js',
       'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
-      'https://unpkg.com/redux-query@1.3.0/dist/umd/redux-query/advanced.js',
+      '/vendor/redux-query.js',
     ];
 
     const contentWindow = this._iframeRef.contentWindow;
@@ -111,7 +111,9 @@ class ResultFrame extends Component {
           };
         };
 
-        ReduxQuery.queryMiddleware = ReduxQuery.queryMiddlewareAdvanced(mockAdapter);
+        ReduxQuery = Object.assign({}, ReduxQuery, {
+          queryMiddleware: ReduxQuery.queryMiddlewareAdvanced(mockAdapter),
+        });
       </script>`
     );
     contentWindow.document.write(

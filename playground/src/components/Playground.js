@@ -130,11 +130,11 @@ const RunButton = styled.button`
     padding: 0 8px;
     font-size: 12px;
     cursor: pointer;
-    color: #444;
+    color: ${props => props.highlight ? '#27d' : '#444'};
 
     &:hover:not([disabled]) {
-        color: #222;
         background-color: #ddd;
+        color: ${props => props.highlight ? '#27d' : '#222'};
     }
 
     &::before {
@@ -202,6 +202,7 @@ class Playground extends Component {
   state = {
     clientCode: '',
     devTool: 'CLIENT_CODE',
+    isDirty: false,
     messages: [],
     pendingClientCode: '',
     pendingServerCode: null,
@@ -257,6 +258,7 @@ class Playground extends Component {
         messages: [],
         serverCode: prevState.pendingServerCode,
         version: prevState.version + 1,
+        isDirty: false,
       };
     });
   };
@@ -281,6 +283,7 @@ class Playground extends Component {
           onChange={newValue => {
             this.setState({
               [stateKey]: newValue,
+              isDirty: true,
             });
           }}
           value={code}
@@ -355,7 +358,7 @@ class Playground extends Component {
                 </ToolbarButton>
               </ToolbarSection>
               <ToolbarSection>
-                <RunButton onClick={this.run}>
+                <RunButton onClick={this.run} highlight={state.isDirty}>
                   Run
                 </RunButton>
               </ToolbarSection>

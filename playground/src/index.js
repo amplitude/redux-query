@@ -8,8 +8,8 @@ import {
 } from 'react-router-dom';
 
 import Playground from './components/Playground';
-import cancelOnUnmount from './demos/cancel-on-unmount';
-import cancelOnUpdate from './demos/cancel-on-update';
+import mounting from './demos/mounting';
+import updating from './demos/updating';
 import helloWorld from './demos/hello-world';
 import hackerNews from './demos/hacker-news';
 
@@ -24,12 +24,12 @@ ReactDOM.render(
         component={() => <Playground demo={helloWorld} />}
       />
       <Route
-        path="/cancel-on-update"
-        component={() => <Playground demo={cancelOnUpdate} />}
+        path="/mounting"
+        component={() => <Playground demo={mounting} />}
       />
       <Route
-        path="/cancel-on-unmount"
-        component={() => <Playground demo={cancelOnUnmount} />}
+        path="/updating"
+        component={() => <Playground demo={updating} />}
       />
       <Route
         path="/hacker-news"

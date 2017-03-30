@@ -1,17 +1,10 @@
 /**
- * Hello World
- * ===========
- *
  * This is a mock server for demonstration purposes. redux-query is purely a
  * client-side library and is completely ambivalent to the server's
  * architecture.
  *
- * All requests from the client will be handled by this function, regardless of
- * hostname.
- *
- * This server has one route: "/api/hello".
- *
- * It will respond with a JSON response after a 500ms delay.
+ * This server has one route: "/api/hello". It will respond with a JSON
+ * response after a 500ms delay.
  */
 
 /**

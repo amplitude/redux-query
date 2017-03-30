@@ -1,6 +1,6 @@
 /**
- * Cancel On Update
- * ================
+ * Updating from Props
+ * ===================
  *
  * This example demos `connectRequest` cancellation when its props update.
  *

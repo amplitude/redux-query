@@ -308,13 +308,13 @@ class Playground extends Component {
               </NavigationLink>
             </NavigationItem>
             <NavigationItem>
-              <NavigationLink to="/cancel-on-unmount">
-                Cancel On Unmount
+              <NavigationLink to="/mounting">
+                Mounting and Unmounting
               </NavigationLink>
             </NavigationItem>
             <NavigationItem>
-              <NavigationLink to="/cancel-on-update">
-                Cancel On Update
+              <NavigationLink to="/updating">
+                Updating from Props
               </NavigationLink>
             </NavigationItem>
             <NavigationItem>

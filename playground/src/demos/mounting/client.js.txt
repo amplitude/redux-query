@@ -1,6 +1,6 @@
 /**
- * Cancel On Unmount
- * =================
+ * Mounting and Unmounting
+ * =======================
  *
  * This example extends the "Hello World" example to demo `connectRequest`
  * cancellation when the component unmounts.

@@ -318,6 +318,11 @@ class Playground extends Component {
               </NavigationLink>
             </NavigationItem>
             <NavigationItem>
+              <NavigationLink to="/mutations">
+                Mutations
+              </NavigationLink>
+            </NavigationItem>
+            <NavigationItem>
               <NavigationLink to="/hacker-news">
                 Hacker News
               </NavigationLink>

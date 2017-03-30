@@ -1,0 +1,179 @@
+/**
+ * Mutations
+ * =========
+ *
+ * This example demos making mutations with `mutateAsync`.
+ *
+ * Type into the input field and press the submit button to trigger the
+ * mutation to change your name.
+ *
+ * The server does basic input validation - if you don't provide a name then
+ * it will reply with a 400 status code and an error message.
+ *
+ * This example takes advantage of mutateAsync's promise interface to update
+ * the UI to reflect the status of the mutation.
+ */
+
+/**
+ * Imports
+ * -------
+ *
+ * Available packages: react, redux, react-redux, and redux-query.
+ */
+
+import React, { Component } from 'react';
+import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
+import { connect, Provider } from 'react-redux';
+import {
+  connectRequest,
+  entitiesReducer,
+  queriesReducer,
+  queryMiddleware,
+  mutateAsync,
+} from 'redux-query';
+
+/**
+ * Set up redux and redux-query
+ * ----------------------------
+ */
+
+// Include the queries and entities reducer with your other reducers.
+const reducer = combineReducers({
+  entities: entitiesReducer,
+  queries: queriesReducer,
+});
+
+// Tell redux-query where the queries and entities reducers are.
+const middleware = queryMiddleware(
+  state => state.queries,
+  state => state.entities
+);
+
+const store = createStore(reducer, applyMiddleware(middleware));
+
+/**
+ * Application code
+ * ----------------
+ */
+
+const queries = {
+  nameRequest: () => {
+    return {
+      url: `/api/name`,
+      update: {
+        name: (prev, next) => next,
+      },
+    };
+  },
+  changeNameMutation: name => {
+    return {
+      url: `/api/change-name`,
+      body: {
+        name,
+      },
+      update: {
+        name: (prev, next) => next,
+      },
+    };
+  },
+};
+
+const actions = {
+  changeName: name => mutateAsync(queries.changeNameMutation(name)),
+};
+
+class NameForm extends Component {
+  state = {
+    inputValue: '',
+    isLoading: false,
+    result: null,
+    error: null,
+  };
+
+  render() {
+    const { props, state } = this;
+
+    return (
+      <div>
+        <h3>Your Name</h3>
+        <p>{props.name || <em>(no name)</em>}</p>
+        <hr />
+        <h3>Change Name</h3>
+        <form
+          onSubmit={e => {
+            // Prevent default form behavior.
+            e.preventDefault();
+
+            // Set a loading state so we can show a loading indicator.
+            this.setState({
+              isLoading: true,
+            });
+
+            // This will lead to a mutation being dispatched (configured by
+            // `mapDispatchToProps` below).
+            props.changeName(state.inputValue).then(result => {
+              // We can promise-chain on the mutation action to trigger state
+              // transitions when it succeeds or fails.
+              if (result.status >= 200 && result.status < 300) {
+                this.setState({
+                  isLoading: false,
+                  result: 'success',
+                });
+              } else {
+                this.setState({
+                  isLoading: false,
+                  result: 'failure',
+                  error: result.text,
+                });
+              }
+            });
+          }}>
+          <input
+            type="text"
+            value={state.inputValue}
+            placeholder="Michael Scott"
+            onChange={e => {
+              this.setState({
+                inputValue: e.target.value,
+              });
+            }}
+          />
+          <input type="submit" value="Submit" />
+          {state.isLoading === true && 'Loading...'}
+          {!state.isLoading && state.result === 'success' && 'Success!'}
+          {!state.isLoading &&
+            state.result === 'failure' &&
+            <span>An error occurred: "{state.error}".</span>}
+        </form>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  name: state.entities.name,
+});
+
+const mapDispatchToProps = {
+  changeName: actions.changeName,
+};
+
+const mapPropsToConfig = () => queries.nameRequest();
+
+const NameFormContainer = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  connectRequest(mapPropsToConfig)
+)(NameForm);
+
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <NameFormContainer />
+      </Provider>
+    );
+  }
+}
+
+// The default export should be the main React component.
+export default App;

@@ -8,10 +8,11 @@ import {
 } from 'react-router-dom';
 
 import Playground from './components/Playground';
-import mounting from './demos/mounting';
-import updating from './demos/updating';
-import helloWorld from './demos/hello-world';
 import hackerNews from './demos/hacker-news';
+import helloWorld from './demos/hello-world';
+import mounting from './demos/mounting';
+import mutations from './demos/mutations';
+import updating from './demos/updating';
 
 import './index.css';
 
@@ -30,6 +31,10 @@ ReactDOM.render(
       <Route
         path="/updating"
         component={() => <Playground demo={updating} />}
+      />
+      <Route
+        path="/mutations"
+        component={() => <Playground demo={mutations} />}
       />
       <Route
         path="/hacker-news"

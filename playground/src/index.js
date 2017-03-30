@@ -11,6 +11,7 @@ import Playground from './components/Playground';
 import cancelOnUnmount from './demos/cancel-on-unmount';
 import cancelOnUpdate from './demos/cancel-on-update';
 import helloWorld from './demos/hello-world';
+import hackerNews from './demos/hacker-news';
 
 import './index.css';
 
@@ -29,6 +30,10 @@ ReactDOM.render(
       <Route
         path="/cancel-on-unmount"
         component={() => <Playground demo={cancelOnUnmount} />}
+      />
+      <Route
+        path="/hacker-news"
+        component={() => <Playground demo={hackerNews} />}
       />
       <Route render={() => <Redirect to="/hello-world" />} />
     </Switch>

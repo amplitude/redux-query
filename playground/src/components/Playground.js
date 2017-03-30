@@ -204,8 +204,8 @@ class Playground extends Component {
     devTool: 'CLIENT_CODE',
     messages: [],
     pendingClientCode: '',
-    pendingServerCode: '',
-    serverCode: '',
+    pendingServerCode: null,
+    serverCode: null,
     version: 0,
   };
 
@@ -214,7 +214,9 @@ class Playground extends Component {
 
     if (props.demo) {
       const clientCode = parseCode(props.demo.clientCode) || '';
-      const serverCode = parseCode(props.demo.serverCode) || '';
+      const serverCode = props.demo.serverCode
+        ? parseCode(props.demo.serverCode)
+        : null;
 
       this.state = {
         ...this.state,
@@ -288,7 +290,7 @@ class Playground extends Component {
   };
 
   render() {
-    const { state } = this;
+    const { props, state } = this;
 
     return (
       <Container>
@@ -312,6 +314,11 @@ class Playground extends Component {
                 Cancel On Update
               </NavigationLink>
             </NavigationItem>
+            <NavigationItem>
+              <NavigationLink to="/hacker-news">
+                Hacker News
+              </NavigationLink>
+            </NavigationItem>
           </NavigationSection>
         </Navigation>
         <Main>
@@ -327,15 +334,16 @@ class Playground extends Component {
                   }}>
                   Client
                 </ToolbarButton>
-                <ToolbarButton
-                  isSelected={state.devTool === 'SERVER_CODE'}
-                  onClick={() => {
-                    this.setState({
-                      devTool: 'SERVER_CODE',
-                    });
-                  }}>
-                  Mock Server
-                </ToolbarButton>
+                {!!props.demo.serverCode &&
+                  <ToolbarButton
+                    isSelected={state.devTool === 'SERVER_CODE'}
+                    onClick={() => {
+                      this.setState({
+                        devTool: 'SERVER_CODE',
+                      });
+                    }}>
+                    Mock Server
+                  </ToolbarButton>}
                 <ToolbarButton
                   isSelected={state.devTool === 'REDUX_LOG'}
                   onClick={() => {

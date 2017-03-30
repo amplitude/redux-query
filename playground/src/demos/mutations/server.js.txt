@@ -29,6 +29,8 @@ const memoryDb = {
  */
 const serveRequest = (url, method, { body, headers }, callback) => {
   if (url.match(/^\/api\/name/)) {
+    // Endpoint for getting the current name
+
     if (method.toUpperCase() === 'GET') {
       setTimeout(
         () => {
@@ -42,30 +44,33 @@ const serveRequest = (url, method, { body, headers }, callback) => {
       callback(405);
     }
   } else if (url.match(/^\/api\/change-name/)) {
-    if (method.toUpperCase() === 'POST') {
-      if (!body.name || body.name.trim().length === 0) {
-        setTimeout(
-          () => {
-            callback(400, 'A valid name must be provided');
-          },
-          artificialDelayDuration
-        );
-        return;
-      }
+    // Endpoint for changing the name
 
-      memoryDb.name = body.name;
+    if (method.toUpperCase() !== 'POST') {
+      callback(405);
+      return;
+    }
 
+    if (!body.name || body.name.trim().length === 0) {
       setTimeout(
         () => {
-          callback(200, {
-            name: memoryDb.name,
-          });
+          callback(400, 'A valid name must be provided');
         },
         artificialDelayDuration
       );
-    } else {
-      callback(405);
+      return;
     }
+
+    memoryDb.name = body.name;
+
+    setTimeout(
+      () => {
+        callback(200, {
+          name: memoryDb.name,
+        });
+      },
+      artificialDelayDuration
+    );
   } else {
     callback(404);
   }

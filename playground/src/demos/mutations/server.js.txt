@@ -4,7 +4,7 @@
  * architecture.
  */
 
-const artificialDelayDuration = 300;
+const artificialDelayDuration = 1000;
 const memoryDb = {
   name: '',
 };
@@ -51,10 +51,17 @@ const serveRequest = (url, method, { body, headers }, callback) => {
       return;
     }
 
-    if (!body.name || body.name.trim().length === 0) {
+    if (
+      !body.name ||
+      body.name.trim().length === 0 ||
+      body.name.trim() !== body.name
+    ) {
       setTimeout(
         () => {
-          callback(400, 'A valid name must be provided');
+          callback(
+            400,
+            'A valid name must be provided with no leading or trailing spaces'
+          );
         },
         artificialDelayDuration
       );

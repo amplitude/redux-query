@@ -4,11 +4,17 @@
  *
  * This example demos making mutations with `mutateAsync`.
  *
- * Type into the input field and press the submit button to trigger the
+ * Mutations are used for destructive actions, like changing some persistent
+ * data on the server or in a database.
+ *
+ * Type into the input field and press the "Submit" button to trigger the
  * mutation to change your name.
  *
- * The server does basic input validation - if you don't provide a name then
- * it will reply with a 400 status code and an error message.
+ * Click "I'm Feeling Optimistic" to how optimistic updates behave.
+ *
+ * The server does basic input validation - if you don't provide a name, or if
+ * the name has leading or trailing spaces then it will reply with a 400 status
+ * code and an error message.
  *
  * This example takes advantage of mutateAsync's promise interface to update
  * the UI to reflect the status of the mutation.
@@ -65,8 +71,8 @@ const queries = {
       },
     };
   },
-  changeNameMutation: name => {
-    return {
+  changeNameMutation: (name, optimistic) => {
+    const queryConfig = {
       url: `/api/change-name`,
       body: {
         name,
@@ -75,11 +81,20 @@ const queries = {
         name: (prev, next) => next,
       },
     };
+
+    if (optimistic) {
+      queryConfig.optimisticUpdate = {
+        name: () => name,
+      };
+    }
+
+    return queryConfig;
   },
 };
 
 const actions = {
-  changeName: name => mutateAsync(queries.changeNameMutation(name)),
+  changeName: (name, optimistic) =>
+    mutateAsync(queries.changeNameMutation(name, optimistic)),
 };
 
 class NameForm extends Component {
@@ -89,6 +104,35 @@ class NameForm extends Component {
     result: null,
     error: null,
   };
+
+  submit(options = {}) {
+    const { props, state } = this;
+
+    // Set a loading state so we can show a loading indicator.
+    this.setState({
+      isLoading: true,
+    });
+
+    // This will lead to a mutation being dispatched (configured by
+    // `mapDispatchToProps` below).
+    props.changeName(state.inputValue, options.optimistic).then(result => {
+      // We can promise-chain on the mutation action to trigger state
+      // transitions when it succeeds or fails.
+      if (result.status >= 200 && result.status < 300) {
+        this.setState({
+          inputValue: '',
+          isLoading: false,
+          result: 'success',
+        });
+      } else {
+        this.setState({
+          isLoading: false,
+          result: 'failure',
+          error: result.text,
+        });
+      }
+    });
+  }
 
   render() {
     const { props, state } = this;
@@ -103,47 +147,35 @@ class NameForm extends Component {
           onSubmit={e => {
             // Prevent default form behavior.
             e.preventDefault();
-
-            // Set a loading state so we can show a loading indicator.
-            this.setState({
-              isLoading: true,
-            });
-
-            // This will lead to a mutation being dispatched (configured by
-            // `mapDispatchToProps` below).
-            props.changeName(state.inputValue).then(result => {
-              // We can promise-chain on the mutation action to trigger state
-              // transitions when it succeeds or fails.
-              if (result.status >= 200 && result.status < 300) {
-                this.setState({
-                  isLoading: false,
-                  result: 'success',
-                });
-              } else {
-                this.setState({
-                  isLoading: false,
-                  result: 'failure',
-                  error: result.text,
-                });
-              }
-            });
           }}>
           <input
             type="text"
             value={state.inputValue}
-            placeholder="Michael Scott"
+            placeholder="Enter a name"
+            disabled={state.isLoading}
             onChange={e => {
               this.setState({
                 inputValue: e.target.value,
               });
             }}
           />
-          <input type="submit" value="Submit" />
-          {state.isLoading === true && 'Loading...'}
-          {!state.isLoading && state.result === 'success' && 'Success!'}
+          <input
+            type="submit"
+            value="Submit"
+            onClick={() => this.submit()}
+            disabled={state.isLoading}
+          />
+          <input
+            type="submit"
+            value="I'm Feeling Optimistic"
+            onClick={() => this.submit({ optimistic: true })}
+            disabled={state.isLoading}
+          />
+          {state.isLoading === true && <p>Loading...</p>}
+          {!state.isLoading && state.result === 'success' && <p>Success!</p>}
           {!state.isLoading &&
             state.result === 'failure' &&
-            <span>An error occurred: "{state.error}".</span>}
+            <p>An error occurred: "{state.error}".</p>}
         </form>
       </div>
     );

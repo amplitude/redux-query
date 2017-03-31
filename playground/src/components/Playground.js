@@ -1,183 +1,134 @@
 import prettier from 'prettier';
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 import CodeMirror from 'react-codemirror';
 import styled from 'styled-components';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/jsx/jsx';
 
+import Navigation from './Navigation';
 import ReduxLog from './ReduxLog';
 import ResultFrame from './ResultFrame';
 
 import './codemirror-overrides.css';
 
 const Container = styled.div`
-    display: flex;
-    flex-grow: 1;
-    height: 100vh;
-    min-width: 960px;
-    align-items: stretch;
-    justify-content: center;
-    overflow: hidden;
-    background-color: #eee;
-`;
-
-const Navigation = styled.div`
-    flex-basis: 200px;
-    flex-shrink: 0;
-    flex-grow: 0;
-    background-color: whitesmoke;
-    border-right: 1px solid #ccc;
-    padding: 12px;
-`;
-
-const NavigationSection = styled.ul`
-    list-style: none;
-    margin: 0;
-    padding: 8px 0;
-`;
-
-const NavigationItem = styled.li`
-    display: flex;
-    font-size: 14px;
-`;
-
-const NavigationLink = styled(NavLink)`
-    flex-grow: 1;
-    text-decoration: none;
-    color: #666;
-    padding: 8px 0;
-
-    &:hover {
-        text-decoration: underline;
-    }
-
-    &.${props => props.activeClassName} {
-        color: #27d;
-    }
-`;
-
-NavigationLink.defaultProps = {
-  activeClassName: 'active',
-};
-
-const ProjectTitle = styled.h1`
-    color: #222;
-    margin: 0;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #ccc;
-    font-size: 18px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 500;
+  display: flex;
+  flex-grow: 1;
+  height: 100vh;
+  min-width: 960px;
+  align-items: stretch;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #eee;
 `;
 
 const Toolbar = styled.div`
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: 30px;
-    padding: 0 6px;
-    background-color: rgb(242, 242, 242);
-    border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 30px;
+  padding: 0 6px;
+  background-color: rgb(242, 242, 242);
+  border-bottom: 1px solid #ccc;
 `;
 
 const ToolbarSection = styled.div`
-    display: flex;
-    align-items: stretch;
+  display: flex;
+  align-items: stretch;
 `;
 
 const ToolbarButton = styled.button`
-    position: relative;
-    background-color: transparent;
-    border: 0;
-    margin: 0 4px 0 0;
-    padding: 0 8px;
-    outline: 0;
-    font-size: 12px;
-    cursor: pointer;
-    color: ${props => props.isSelected ? '#222' : '#444'};
+  position: relative;
+  background-color: transparent;
+  border: 0;
+  margin: 0 4px 0 0;
+  padding: 0 8px;
+  outline: 0;
+  font-size: 12px;
+  cursor: pointer;
+  color: ${props => props.isSelected ? '#222' : '#444'};
 
-    &::after {
-        visibility: ${props => props.isSelected ? 'visible' : 'hidden'};
-        content: '';
-        display: block;
-        position: absolute;
-        left: 0;
-        bottom: -1px;
-        width: 100%;
-        height: 2px;
-        background-color: #27d;
-    }
+  &::after {
+    visibility: ${props => props.isSelected ? 'visible' : 'hidden'};
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 2px;
+    background-color: #27d;
+  }
 
-    &:hover {
-        color: #222;
-        background-color: #ddd;
-    }
+  &:hover {
+    color: #222;
+    background-color: #ddd;
+  }
 
-    &:last-child {
-        margin-right: 0;
-    }
+  &:last-child {
+    margin-right: 0;
+  }
 `;
 
 const RunButton = styled.button`
-    background-color: transparent;
-    border: 0;
-    outline: 0;
-    margin: 0;
-    padding: 0 8px;
-    font-size: 12px;
-    cursor: pointer;
-    color: ${props => props.highlight ? '#27d' : '#444'};
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  margin: 0;
+  padding: 0 8px;
+  font-size: 12px;
+  cursor: pointer;
+  color: ${props => props.highlight ? '#27d' : '#444'};
 
-    &:hover:not([disabled]) {
-        background-color: #ddd;
-        color: ${props => props.highlight ? '#27d' : '#222'};
-    }
+  &:hover:not([disabled]) {
+    background-color: #ddd;
+    color: ${props => props.highlight ? '#27d' : '#222'};
+  }
 
-    &::before {
-        content: '▶ ';
-    }
+  &::before {
+    content: '▶ ';
+  }
 `;
 
 const ResultContainer = styled.div`
-    display: flex;
-    flex-grow: 1;
-    overflow: auto;
-    font-family: reset;
-    background-color: white;
-    border-left: 1px solid #ccc;
+  display: flex;
+  flex-grow: 1;
+  overflow: auto;
+  font-family: reset;
+  background-color: white;
+  border-left: 1px solid #ccc;
 `;
 
 const Main = styled.div`
-    display: flex;
-    flex-grow: 1;
-    overflow: hidden;
-    background-color: white;
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  background-color: white;
 `;
 
 const DevToolsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex-basis: 50%;
-    flex-grow: 0;
-    flex-shrink: 0;
-    overflow: auto;
-    font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 50%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: auto;
+  font-size: 12px;
 `;
 
 const Code = styled.div`
-    flex-grow: 1;
-    display: flex;
-    overflow: auto;
-    font-family: Menlo, monospace;
+  flex-grow: 1;
+  display: flex;
+  overflow: auto;
+  font-family: Menlo, monospace;
 
-    > * {
-        width: 100%;
-        flex-grow: 1;
-    }
+  > * {
+    width: 100%;
+    flex-grow: 1;
+  }
 `;
 
 const parseCode = input => {
@@ -297,38 +248,7 @@ class Playground extends Component {
 
     return (
       <Container>
-        <Navigation>
-          <ProjectTitle>
-            redux-query
-          </ProjectTitle>
-          <NavigationSection>
-            <NavigationItem>
-              <NavigationLink to="/hello-world">
-                Hello World
-              </NavigationLink>
-            </NavigationItem>
-            <NavigationItem>
-              <NavigationLink to="/mounting">
-                Mounting and Unmounting
-              </NavigationLink>
-            </NavigationItem>
-            <NavigationItem>
-              <NavigationLink to="/updating">
-                Updating from Props
-              </NavigationLink>
-            </NavigationItem>
-            <NavigationItem>
-              <NavigationLink to="/mutations">
-                Mutations
-              </NavigationLink>
-            </NavigationItem>
-            <NavigationItem>
-              <NavigationLink to="/hacker-news">
-                Hacker News
-              </NavigationLink>
-            </NavigationItem>
-          </NavigationSection>
-        </Navigation>
+        <Navigation />
         <Main>
           <DevToolsContainer>
             <Toolbar>

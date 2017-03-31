@@ -1,3 +1,9 @@
+## 1.4.0
+
+- Move react from dependencies to devDependencies (jeanregisser [#56](https://github.com/amplitude/redux-query/pull/56))
+- Fix regression from 1.3.0 with the `request` field in start actions (ryanashcraft [#54](https://github.com/amplitude/redux-query/pull/54))
+- Add meta field to mutate actions (ryanashcraft [#54](https://github.com/amplitude/redux-query/pull/54))
+
 ## 1.3.0
 
 - Support for custom network adapters with `redux-query/advanced` to enable usage without superagent and support other advanced use cases (iamlacroix [#23](https://github.com/amplitude/redux-query/pull/23))

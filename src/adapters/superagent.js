@@ -1,29 +1,25 @@
 import superagent from 'superagent';
 import * as httpMethods from '../constants/http-methods';
 
-export const createRequest = (url, method) => {
+export const createRequest = (url, method, body) => {
     switch (method) {
         case httpMethods.GET:
-            return superagent.get(url);
+            return superagent.get(url, body);
         case httpMethods.POST:
-            return superagent.post(url);
+            return superagent.post(url, body);
         case httpMethods.PUT:
-            return superagent.put(url);
+            return superagent.put(url, body);
         case httpMethods.PATCH:
-            return superagent.patch(url);
+            return superagent.patch(url, body);
         case httpMethods.DELETE:
-            return superagent.del(url);
+            return superagent.del(url, body);
         default:
             throw new Error(`Unsupported HTTP method: ${method}`);
     }
 };
 
 const superagentNetworkAdapter = (url, method, { body, headers, credentials } = {}) => {
-    const request = createRequest(url, method);
-
-    if (body) {
-        request.send(body);
-    }
+    const request = createRequest(url, method, body);
 
     if (headers) {
         request.set(headers);

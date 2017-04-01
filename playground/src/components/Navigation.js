@@ -94,6 +94,9 @@ class Navigation extends Component {
             <Item to="/mutations">
               Mutations
             </Item>
+            <Item to="/redux-saga">
+              Usage with redux-saga
+            </Item>
             <Item to="/hacker-news">
               Hacker News
             </Item>

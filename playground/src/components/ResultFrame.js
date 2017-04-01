@@ -36,9 +36,12 @@ class ResultFrame extends Component {
             globals: {
               react: 'React',
               redux: 'Redux',
-              'react-redux': 'React-Redux',
+              'react-redux': 'ReactRedux',
               'redux-query': 'ReduxQuery',
+              'redux-saga': 'ReduxSaga',
+              'redux-saga/effects': 'ReduxSaga.effects',
             },
+            exactGlobals: true,
           },
         ],
       ],
@@ -55,6 +58,8 @@ class ResultFrame extends Component {
       'https://unpkg.com/react-dom@15/dist/react-dom.min.js',
       'https://unpkg.com/redux@3.6.0/dist/redux.min.js',
       'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js',
+      'https://unpkg.com/redux-saga@0.14/dist/redux-saga.min.js',
       '/vendor/redux-query.js',
     ];
 

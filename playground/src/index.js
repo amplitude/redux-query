@@ -16,6 +16,7 @@ import hackerNews from './demos/hacker-news';
 import helloWorld from './demos/hello-world';
 import mounting from './demos/mounting';
 import mutations from './demos/mutations';
+import reduxSaga from './demos/redux-saga';
 import updating from './demos/updating';
 
 import './index.css';
@@ -47,6 +48,10 @@ ReactDOM.render(
       <Route
         path="/hacker-news"
         component={() => <Playground demo={hackerNews} />}
+      />
+      <Route
+        path="/redux-saga"
+        component={() => <Playground demo={reduxSaga} />}
       />
       <Route render={() => <Redirect to="/hello-world" />} />
     </Switch>

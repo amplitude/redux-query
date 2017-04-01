@@ -5,6 +5,8 @@
   "dependencies": {
     "babel-standalone": "^6.24.0",
     "classnames": "^2.2.5",
+    "github-markdown-css": "^2.5.0",
+    "marked": "^0.3.6",
     "prettier": "0.21.0",
     "react": "^15.4.2",
     "react-codemirror": "^0.3.0",

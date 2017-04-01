@@ -6,22 +6,11 @@ import styled from 'styled-components';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/jsx/jsx';
 
-import Navigation from './Navigation';
+import CoreLayout from './CoreLayout';
 import ReduxLog from './ReduxLog';
 import ResultFrame from './ResultFrame';
 
 import './codemirror-overrides.css';
-
-const Container = styled.div`
-  display: flex;
-  flex-grow: 1;
-  height: 100vh;
-  min-width: 960px;
-  align-items: stretch;
-  justify-content: center;
-  overflow: hidden;
-  background-color: #eee;
-`;
 
 const Toolbar = styled.div`
   display: flex;
@@ -100,13 +89,6 @@ const ResultContainer = styled.div`
   font-family: reset;
   background-color: white;
   border-left: 1px solid #ccc;
-`;
-
-const Main = styled.div`
-  display: flex;
-  flex-grow: 1;
-  overflow: hidden;
-  background-color: white;
 `;
 
 const DevToolsContainer = styled.div`
@@ -247,63 +229,60 @@ class Playground extends Component {
     const { props, state } = this;
 
     return (
-      <Container>
-        <Navigation />
-        <Main>
-          <DevToolsContainer>
-            <Toolbar>
-              <ToolbarSection>
+      <CoreLayout disableBodyScroll={true}>
+        <DevToolsContainer>
+          <Toolbar>
+            <ToolbarSection>
+              <ToolbarButton
+                isSelected={state.devTool === 'CLIENT_CODE'}
+                onClick={() => {
+                  this.setState({
+                    devTool: 'CLIENT_CODE',
+                  });
+                }}>
+                Client
+              </ToolbarButton>
+              {!!props.demo.serverCode &&
                 <ToolbarButton
-                  isSelected={state.devTool === 'CLIENT_CODE'}
+                  isSelected={state.devTool === 'SERVER_CODE'}
                   onClick={() => {
                     this.setState({
-                      devTool: 'CLIENT_CODE',
+                      devTool: 'SERVER_CODE',
                     });
                   }}>
-                  Client
-                </ToolbarButton>
-                {!!props.demo.serverCode &&
-                  <ToolbarButton
-                    isSelected={state.devTool === 'SERVER_CODE'}
-                    onClick={() => {
-                      this.setState({
-                        devTool: 'SERVER_CODE',
-                      });
-                    }}>
-                    Mock Server
-                  </ToolbarButton>}
-                <ToolbarButton
-                  isSelected={state.devTool === 'REDUX_LOG'}
-                  onClick={() => {
-                    this.setState({
-                      devTool: 'REDUX_LOG',
-                    });
-                  }}>
-                  Redux Log
-                </ToolbarButton>
-              </ToolbarSection>
-              <ToolbarSection>
-                <RunButton onClick={this.run} highlight={state.isDirty}>
-                  Run
-                </RunButton>
-              </ToolbarSection>
-            </Toolbar>
-            {state.devTool === 'REDUX_LOG' &&
-              <ReduxLog messages={state.messages} />}
-            {state.devTool === 'CLIENT_CODE' &&
-              this.renderCode('pendingClientCode')}
-            {state.devTool === 'SERVER_CODE' &&
-              this.renderCode('pendingServerCode')}
-          </DevToolsContainer>
-          <ResultContainer>
-            <ResultFrame
-              key={`resultFrame-${state.version}`}
-              clientCode={state.clientCode}
-              serverCode={state.serverCode}
-            />
-          </ResultContainer>
-        </Main>
-      </Container>
+                  Mock Server
+                </ToolbarButton>}
+              <ToolbarButton
+                isSelected={state.devTool === 'REDUX_LOG'}
+                onClick={() => {
+                  this.setState({
+                    devTool: 'REDUX_LOG',
+                  });
+                }}>
+                Redux Log
+              </ToolbarButton>
+            </ToolbarSection>
+            <ToolbarSection>
+              <RunButton onClick={this.run} highlight={state.isDirty}>
+                Run
+              </RunButton>
+            </ToolbarSection>
+          </Toolbar>
+          {state.devTool === 'REDUX_LOG' &&
+            <ReduxLog messages={state.messages} />}
+          {state.devTool === 'CLIENT_CODE' &&
+            this.renderCode('pendingClientCode')}
+          {state.devTool === 'SERVER_CODE' &&
+            this.renderCode('pendingServerCode')}
+        </DevToolsContainer>
+        <ResultContainer>
+          <ResultFrame
+            key={`resultFrame-${state.version}`}
+            clientCode={state.clientCode}
+            serverCode={state.serverCode}
+          />
+        </ResultContainer>
+      </CoreLayout>
     );
   }
 }

@@ -7,7 +7,11 @@ import {
   Switch,
 } from 'react-router-dom';
 
+import DocViewer from './components/DocViewer';
 import Playground from './components/Playground';
+
+import readme from '../../README.md';
+
 import hackerNews from './demos/hacker-news';
 import helloWorld from './demos/hello-world';
 import mounting from './demos/mounting';
@@ -19,7 +23,11 @@ import './index.css';
 ReactDOM.render(
   <Router>
     <Switch>
-      <Route exact path="/" render={() => <Redirect to="/hello-world" />} />
+      <Route
+        path="/"
+        exact={true}
+        component={() => <DocViewer doc={readme} />}
+      />
       <Route
         path="/hello-world"
         component={() => <Playground demo={helloWorld} />}

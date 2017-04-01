@@ -18,7 +18,6 @@ body {
     display: flex;
     min-height: 100%;
     flex-grow: 1;
-    overflow: hidden;
 }
 
 *,

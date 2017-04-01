@@ -10,6 +10,7 @@ import {
 import DocViewer from './components/DocViewer';
 import Playground from './components/Playground';
 
+import changelog from '../../CHANGELOG.md';
 import readme from '../../README.md';
 
 import hackerNews from './demos/hacker-news';
@@ -28,6 +29,10 @@ ReactDOM.render(
         path="/"
         exact={true}
         component={() => <DocViewer doc={readme} />}
+      />
+      <Route
+        path="/changelog"
+        component={() => <DocViewer doc={changelog} />}
       />
       <Route
         path="/hello-world"

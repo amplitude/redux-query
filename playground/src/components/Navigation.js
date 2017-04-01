@@ -79,6 +79,9 @@ class Navigation extends Component {
             <Item to="/" exact={true}>
               Read Me
             </Item>
+            <Item to="/changelog">
+              Change Log
+            </Item>
           </Section>
           <Section>
             <SectionTitle>Demos</SectionTitle>

@@ -20,11 +20,17 @@ class DocViewer extends Component {
   componentDidMount() {
     const { props } = this;
 
-    fetch(props.doc).then(resp => resp.text()).then(data => {
+    if (props.doc.indexOf('data:') === 0) {
       this.setState({
-        content: data,
+        content: atob(props.doc.split(';base64,')[1]),
       });
-    });
+    } else {
+      fetch(props.doc).then(resp => resp.text()).then(data => {
+        this.setState({
+          content: data,
+        });
+      });
+    }
   }
 
   render() {

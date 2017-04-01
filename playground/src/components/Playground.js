@@ -1,4 +1,3 @@
-import prettier from 'prettier';
 import React, { Component } from 'react';
 import CodeMirror from 'react-codemirror';
 import styled from 'styled-components';
@@ -115,15 +114,7 @@ const ResultContainer = styled.div`
 
 const parseCode = input => {
   try {
-    const parsed = atob(input.slice('data:text/plain;base64,'.length));
-    const prettified = prettier.format(parsed, {
-      printWidth: 80,
-      tabWidth: 2,
-      bracketSpacing: true,
-      jsxBracketSameLine: true,
-    });
-
-    return prettified;
+    return atob(input.slice('data:text/plain;base64,'.length));
   } catch (e) {
     console.warn('Unable to parse initial code', e);
   }

@@ -60,7 +60,7 @@ class ResultFrame extends Component {
       'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
       'https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js',
       'https://unpkg.com/redux-saga@0.14/dist/redux-saga.min.js',
-      '/vendor/redux-query.js',
+      process.env.NODE_ENV === 'development' ? '/vendor/redux-query.js' : '/redux-query/vendor/redux-query.js', // eslint-disable-line
     ];
 
     const contentWindow = this._iframeRef.contentWindow;

@@ -2,6 +2,7 @@
   "name": "playground",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://amplitude.github.io/redux-query",
   "dependencies": {
     "babel-standalone": "^6.24.0",
     "classnames": "^2.2.5",
@@ -15,7 +16,7 @@
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.0.0",
     "redux": "^3.6.0",
-    "redux-query": "1.3.1-alpha.0",
+    "redux-query": "..",
     "styled-components": "^1.4.4"
   },
   "devDependencies": {

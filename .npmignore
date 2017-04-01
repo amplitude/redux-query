@@ -2,6 +2,7 @@
 .nyc_output
 coverage
 examples
+playground
 node_modules
 npm-debug.log
 test

@@ -12,6 +12,28 @@ import ResultFrame from './ResultFrame';
 
 import './codemirror-overrides.css';
 
+const DevToolsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-basis: 50%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow: auto;
+  font-size: 12px;
+`;
+
+const Code = styled.div`
+  flex-grow: 1;
+  display: flex;
+  overflow: auto;
+  font-family: Menlo, monospace;
+
+  > * {
+    width: 100%;
+    flex-grow: 1;
+  }
+`;
+
 const Toolbar = styled.div`
   display: flex;
   align-items: stretch;
@@ -89,28 +111,6 @@ const ResultContainer = styled.div`
   font-family: reset;
   background-color: white;
   border-left: 1px solid #ccc;
-`;
-
-const DevToolsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-basis: 50%;
-  flex-grow: 0;
-  flex-shrink: 0;
-  overflow: auto;
-  font-size: 12px;
-`;
-
-const Code = styled.div`
-  flex-grow: 1;
-  display: flex;
-  overflow: auto;
-  font-family: Menlo, monospace;
-
-  > * {
-    width: 100%;
-    flex-grow: 1;
-  }
 `;
 
 const parseCode = input => {

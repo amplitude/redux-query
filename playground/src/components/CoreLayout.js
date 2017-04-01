@@ -8,6 +8,8 @@ const Container = styled.div`
   flex-grow: 1;
 
   ${props => props.disableBodyScroll ? 'height' : 'min-height'}: 100vh;
+  ${props => props.disableBodyScroll && 'max-width: 100vw;'};
+  ${props => props.disableBodyScroll && 'overflow-x: hidden;'};
 
   min-width: 960px;
   align-items: stretch;

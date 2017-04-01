@@ -91,6 +91,7 @@ Query configs are objects used to describe how redux-query should handle the req
 | `optimisticUpdate` | object |  | Object where keys are entity IDs and values are functions that provide the current entity value. The return values are used to update the `entities` store until the mutation finishes. |
 | `body` | object |  | The HTTP request body. |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
+| `meta` | object |  | Various metadata for the query. Can be used to update other reducers when queries succeed or fail. |
 | `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, `options.headers` to set any headers and `options.credentials = 'include'` for CORS. |
 
 ### `transform` functions
@@ -256,7 +257,7 @@ The result of the promise returned by `mutateAsync` will be the following object
 
 Similarly to how mutations are triggered by dispatching `mutateAsync` actions, you can trigger requests by dispatching `requestAsync` actions with a request query config.
 
-### Usage without superagent with `redux-query/advanced`
+### `redux-query/advanced` and custom network adapters
 
 By default, `redux-query` makes XHR requests using the [superagent](https://github.com/visionmedia/superagent) library. If you'd rather use a different library for making requests, you can use the `redux-query`'s "advanced" mode by importing from `redux-query/advanced` instead of `redux-query`.
 
@@ -295,11 +296,12 @@ type NetworkAdapter = (
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     config?: { body?: string | Object, headers?: Object, credentials?: 'omit' | 'include' } = {},
-) => Adapter;
+) => NetworkRequest;
 
 type NetworkRequest = {
-    execute: (callback: (err: any, resStatus: number, resBody: ?Object, resText: string) => void) => void,
+    execute: (callback: (err: any, resStatus: number, resBody: ?Object, resText: string, resHeaders: Object) => void) => void,
     abort: () => void,
+    instance: any,
 };
 ```
 

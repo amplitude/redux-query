@@ -1,3 +1,17 @@
+## 1.4.0
+
+- Move react from dependencies to devDependencies (jeanregisser [#56](https://github.com/amplitude/redux-query/pull/56))
+- Fix regression from 1.3.0 with the `request` field in start actions (ryanashcraft [#54](https://github.com/amplitude/redux-query/pull/54))
+- Add meta field to mutate actions (ryanashcraft [#54](https://github.com/amplitude/redux-query/pull/54))
+
+## 1.3.0
+
+- Support for custom network adapters with `redux-query/advanced` to enable usage without superagent and support other advanced use cases (iamlacroix [#23](https://github.com/amplitude/redux-query/pull/23))
+- Support for PATCH verb (jnutter [#35](https://github.com/amplitude/redux-query/pull/35))
+- Include response text and body in all Redux success and failure actions (ryanashcraft [#39](https://github.com/amplitude/redux-query/pull/39) and [#40](https://github.com/amplitude/redux-query/pull/40))
+- Include response headers in resolved Promise values and all Redux success and failure actions (jnutter [#42](https://github.com/amplitude/redux-query/pull/42))
+- Allow retries on successful requests (lozlow [#26](https://github.com/amplitude/redux-query/pull/26))
+
 ## 1.2.0
 
 - CORS support (rogovdm [#27](https://github.com/amplitude/redux-query/pull/29))

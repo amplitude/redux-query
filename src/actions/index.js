@@ -11,7 +11,17 @@ export const requestStart = (url, body, request, meta, queryKey) => {
     };
 };
 
-export const requestSuccess = (url, body, status, entities, meta, queryKey, responseBody, responseText) => {
+export const requestSuccess = (
+    url,
+    body,
+    status,
+    entities,
+    meta,
+    queryKey,
+    responseBody,
+    responseText,
+    responseHeaders
+) => {
     return {
         type: actionTypes.REQUEST_SUCCESS,
         url,
@@ -20,13 +30,14 @@ export const requestSuccess = (url, body, status, entities, meta, queryKey, resp
         entities,
         responseBody,
         responseText,
+        responseHeaders,
         meta,
         queryKey,
         time: Date.now(),
     };
 };
 
-export const requestFailure = (url, body, status, responseBody, meta, queryKey, responseText) => {
+export const requestFailure = (url, body, status, responseBody, meta, queryKey, responseText, responseHeaders) => {
     return {
         type: actionTypes.REQUEST_FAILURE,
         url,
@@ -34,13 +45,14 @@ export const requestFailure = (url, body, status, responseBody, meta, queryKey, 
         status,
         responseBody,
         responseText,
+        responseHeaders,
         meta,
         queryKey,
         time: Date.now(),
     };
 };
 
-export const mutateStart = (url, body, request, optimisticEntities, queryKey) => {
+export const mutateStart = (url, body, request, optimisticEntities, queryKey, meta) => {
     return {
         type: actionTypes.MUTATE_START,
         url,
@@ -48,10 +60,21 @@ export const mutateStart = (url, body, request, optimisticEntities, queryKey) =>
         request,
         optimisticEntities,
         queryKey,
+        meta,
     };
 };
 
-export const mutateSuccess = (url, body, status, entities, queryKey, responseBody, responseText) => {
+export const mutateSuccess = (
+    url,
+    body,
+    status,
+    entities,
+    queryKey,
+    responseBody,
+    responseText,
+    responseHeaders,
+    meta
+) => {
     return {
         type: actionTypes.MUTATE_SUCCESS,
         url,
@@ -59,13 +82,25 @@ export const mutateSuccess = (url, body, status, entities, queryKey, responseBod
         status,
         responseBody,
         responseText,
+        responseHeaders,
         entities,
         queryKey,
         time: Date.now(),
+        meta,
     };
 };
 
-export const mutateFailure = (url, body, status, originalEntities, queryKey, responseBody, responseText) => {
+export const mutateFailure = (
+    url,
+    body,
+    status,
+    originalEntities,
+    queryKey,
+    responseBody,
+    responseText,
+    responseHeaders,
+    meta
+) => {
     return {
         type: actionTypes.MUTATE_FAILURE,
         url,
@@ -73,18 +108,20 @@ export const mutateFailure = (url, body, status, originalEntities, queryKey, res
         status,
         responseBody,
         responseText,
+        responseHeaders,
         originalEntities,
         queryKey,
         time: Date.now(),
+        meta,
     };
 };
 
 export const requestAsync = ({
     body,
     force,
-    queryKey,
     meta,
     options,
+    queryKey,
     retry,
     transform,
     update,
@@ -106,6 +143,7 @@ export const requestAsync = ({
 
 export const mutateAsync = ({
     body,
+    meta,
     optimisticUpdate,
     options,
     queryKey,
@@ -116,6 +154,7 @@ export const mutateAsync = ({
     return {
         type: actionTypes.MUTATE_ASYNC,
         body,
+        meta,
         optimisticUpdate,
         options,
         queryKey,

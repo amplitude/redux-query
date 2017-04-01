@@ -110,11 +110,11 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                         });
 
                         const attemptRequest = () => {
-                            dispatch(requestStart(url, body, request, meta, queryKey));
+                            dispatch(requestStart(url, body, request.instance, meta, queryKey));
 
                             attempts += 1;
 
-                            request.execute((err, resStatus, resBody, resText) => {
+                            request.execute((err, resStatus, resBody, resText, resHeaders) => {
                                 if (
                                     includes(config.retryableStatusCodes, resStatus) &&
                                     attempts < config.backoff.maxAttempts
@@ -135,7 +135,8 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                         resBody,
                                         meta,
                                         queryKey,
-                                        resText
+                                        resText,
+                                        resHeaders
                                     ));
                                 } else {
                                     const callbackState = getState();
@@ -150,7 +151,8 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                         meta,
                                         queryKey,
                                         resBody,
-                                        resText
+                                        resText,
+                                        resHeaders
                                     ));
                                 }
 
@@ -163,6 +165,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                     text: resText,
                                     transformed,
                                     entities: newEntities,
+                                    headers: resHeaders,
                                 });
                             });
                         };
@@ -181,6 +184,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                     body,
                     optimisticUpdate,
                     options = {},
+                    meta,
                 } = action;
                 invariant(!!url, 'Missing required `url` field in action handler');
 
@@ -205,9 +209,9 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
 
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
                     // `mutateStart` action as `optimisticEntities`
-                    dispatch(mutateStart(url, body, request, optimisticEntities, queryKey));
+                    dispatch(mutateStart(url, body, request.instance, optimisticEntities, queryKey, meta));
 
-                    request.execute((err, resStatus, resBody, resText) => {
+                    request.execute((err, resStatus, resBody, resText, resHeaders) => {
                         let transformed;
                         let newEntities;
 
@@ -219,7 +223,9 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                 entities,
                                 queryKey,
                                 resBody,
-                                resText
+                                resText,
+                                resHeaders,
+                                meta
                             ));
                         } else {
                             transformed = transform(resBody, resText);
@@ -231,7 +237,9 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                                 newEntities,
                                 queryKey,
                                 resBody,
-                                resText
+                                resText,
+                                resHeaders,
+                                meta
                             ));
                         }
 
@@ -244,6 +252,7 @@ const queryMiddlewareAdvanced = (networkAdapter) => (queriesSelector, entitiesSe
                             text: resText,
                             transformed,
                             entities: newEntities,
+                            headers: resHeaders,
                         });
                     });
                 });

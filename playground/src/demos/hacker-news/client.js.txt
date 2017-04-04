@@ -2,6 +2,8 @@
  * Hacker News
  * ===========
  *
+ * This example uses Hacker New's Firebase REST API
+ * (https://github.com/HackerNews/API) to render the top 30 stories.
  */
 
 /**

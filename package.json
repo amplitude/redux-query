@@ -19,6 +19,7 @@
     "clean": "npm run clean:commonjs && npm run clean:es && npm run clean:umd",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "deploy": "gh-pages -d site/build",
+    "prebuild": "npm run lint",
     "predeploy": "npm run build:site",
     "lint": "eslint src test --fix && npm run lint:site",
     "lint:site": "pushd site && npm run lint && popd",

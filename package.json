@@ -10,7 +10,7 @@
     "build:commonjs": "npm run clean:commonjs && cross-env NODE_ENV=production cross-env BABEL_ENV=commonjs babel src --out-dir dist/commonjs --ignore test/",
     "build:es": "npm run clean:es && cross-env NODE_ENV=production cross-env BABEL_ENV=es babel src --out-dir dist/es --ignore test/",
     "build:umd": "npm run clean:umd && cross-env NODE_ENV=production webpack --config webpack.config.js --bail",
-    "build:site": "pushd site && npm run build && popd",
+    "build:site": "cd site && npm run build && cd ..",
     "build": "npm run build:commonjs && npm run build:es && npm run build:umd",
     "clean:commonjs": "rimraf dist/commonjs",
     "clean:coverage": "rimraf coverage",
@@ -22,7 +22,7 @@
     "prebuild": "npm run lint",
     "predeploy": "npm run build:site",
     "lint": "eslint src test --fix && npm run lint:site",
-    "lint:site": "pushd site && npm run lint && popd",
+    "lint:site": "cd site && npm run lint && cd ..",
     "test:cov": "cross-env NODE_ENV=test nyc npm test",
     "test": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js"
   },

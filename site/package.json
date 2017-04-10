@@ -26,12 +26,13 @@
     "react-scripts": "0.9.3"
   },
   "scripts": {
-    "clean": "rimraf build",
-    "lint": "eslint src --fix --ext .js && npm run lint:demos",
-    "lint:demos": "eslint src --fix --ext .js.txt",
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "clean": "rimraf build",
+    "eject": "react-scripts eject",
+    "lint:demos": "eslint src --fix --ext .js.txt",
+    "lint": "eslint src --fix --ext .js && npm run lint:demos",
+    "prebuild": "npm run lint",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom"
   }
 }

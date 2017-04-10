@@ -21,8 +21,7 @@
     "deploy": "gh-pages -d site/build",
     "prebuild": "npm run lint",
     "predeploy": "npm run build:site",
-    "lint": "eslint src test --fix && npm run lint:site",
-    "lint:site": "cd site && npm run lint && cd ..",
+    "lint": "eslint src test --fix",
     "test:cov": "cross-env NODE_ENV=test nyc npm test",
     "test": "mocha --compilers js:babel-core/register --reporter spec test/**/*.test.js"
   },

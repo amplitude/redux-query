@@ -1,3 +1,11 @@
+## 1.5.0
+
+- Use prop-types to avoid React 15.5.0 deprecation warnings (ryanashcraft)
+- Transform `body` into query params for GET requests (acontreras89 [#57](https://github.com/amplitude/redux-query/pull/57))
+- Fix error with React Native's Packager (jeanregisser [#58](https://github.com/amplitude/redux-query/pull/58))
+- Use prettier for automatic code formatting (ryanashcraft [#60](https://github.com/amplitude/redux-query/pull/60))
+- New site (see https://amplitude.github.io/redux-query) with interactive demos (ryanashcraft [#60](https://github.com/amplitude/redux-query/pull/60))
+
 ## 1.4.0
 
 - Move react from dependencies to devDependencies (jeanregisser [#56](https://github.com/amplitude/redux-query/pull/56))

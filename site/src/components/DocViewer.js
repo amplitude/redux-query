@@ -31,6 +31,8 @@ class DocViewer extends Component {
                 });
             });
         }
+
+        window.amplitude.getInstance().logEvent(`view ${props.name}`);
     }
 
     render() {

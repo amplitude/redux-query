@@ -152,6 +152,7 @@ class Playground extends Component {
     }
 
     componentDidMount() {
+        this.logEvent('view demo');
         window.addEventListener('message', this.onMessage);
     }
 
@@ -173,6 +174,7 @@ class Playground extends Component {
     };
 
     run = () => {
+        this.logEvent('run');
         this.setState(prevState => {
             return {
                 ...prevState,
@@ -182,6 +184,15 @@ class Playground extends Component {
                 version: prevState.version + 1,
                 isDirty: false,
             };
+        });
+    };
+
+    logEvent = (name, eventProps) => {
+        const { props } = this;
+
+        window.amplitude.getInstance().logEvent(name, {
+            ...eventProps,
+            demo: props.name,
         });
     };
 
@@ -225,6 +236,9 @@ class Playground extends Component {
                             <ToolbarButton
                                 isSelected={state.devTool === 'CLIENT_CODE'}
                                 onClick={() => {
+                                    this.logEvent('change devtool', {
+                                        devTool: 'client code',
+                                    });
                                     this.setState({
                                         devTool: 'CLIENT_CODE',
                                     });
@@ -235,6 +249,9 @@ class Playground extends Component {
                                 <ToolbarButton
                                     isSelected={state.devTool === 'SERVER_CODE'}
                                     onClick={() => {
+                                        this.logEvent('change devtool', {
+                                            devTool: 'server code',
+                                        });
                                         this.setState({
                                             devTool: 'SERVER_CODE',
                                         });
@@ -244,6 +261,9 @@ class Playground extends Component {
                             <ToolbarButton
                                 isSelected={state.devTool === 'REDUX_LOG'}
                                 onClick={() => {
+                                    this.logEvent('change devtool', {
+                                        devTool: 'redux log',
+                                    });
                                     this.setState({
                                         devTool: 'REDUX_LOG',
                                     });

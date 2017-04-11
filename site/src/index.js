@@ -20,14 +20,14 @@ import './index.css';
 ReactDOM.render(
     <Router>
         <Switch>
-            <Route path="/" exact={true} component={() => <DocViewer doc={readme} />} />
-            <Route path="/changelog" component={() => <DocViewer doc={changelog} />} />
-            <Route path="/hello-world" component={() => <Playground demo={helloWorld} />} />
-            <Route path="/mounting" component={() => <Playground demo={mounting} />} />
-            <Route path="/updating" component={() => <Playground demo={updating} />} />
-            <Route path="/mutations" component={() => <Playground demo={mutations} />} />
-            <Route path="/hacker-news" component={() => <Playground demo={hackerNews} />} />
-            <Route path="/redux-saga" component={() => <Playground demo={reduxSaga} />} />
+            <Route path="/" exact={true} component={() => <DocViewer name="readme" doc={readme} />} />
+            <Route path="/changelog" component={() => <DocViewer name="changelog" doc={changelog} />} />
+            <Route path="/hello-world" component={() => <Playground name="hello world" demo={helloWorld} />} />
+            <Route path="/mounting" component={() => <Playground name="mounting" demo={mounting} />} />
+            <Route path="/updating" component={() => <Playground name="updating" demo={updating} />} />
+            <Route path="/mutations" component={() => <Playground name="mutations" demo={mutations} />} />
+            <Route path="/hacker-news" component={() => <Playground name="hacker news" demo={hackerNews} />} />
+            <Route path="/redux-saga" component={() => <Playground name="redux-saga" demo={reduxSaga} />} />
             <Route render={() => <Redirect to="/hello-world" />} />
         </Switch>
     </Router>,

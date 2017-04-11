@@ -10,6 +10,11 @@ describe('superagent adapter', () => {
         assert(adapter.instance);
     });
 
+    it('must return a HEAD request when supplied a HEAD method', () => {
+        const { instance } = superagentAdapter('http://localhost', HTTPMethods.HEAD);
+        assert.equal(instance.method, HTTPMethods.HEAD);
+    });
+
     it('must return a DELETE request when supplied a DELETE method', () => {
         const { instance } = superagentAdapter('http://localhost', HTTPMethods.DELETE);
         assert.equal(instance.method, HTTPMethods.DELETE);

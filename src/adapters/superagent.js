@@ -3,6 +3,8 @@ import * as httpMethods from '../constants/http-methods';
 
 const createRequest = (url, method, body) => {
     switch (method) {
+        case httpMethods.HEAD:
+            return superagent.head(url, body);
         case httpMethods.GET:
             return superagent.get(url, body);
         case httpMethods.POST:

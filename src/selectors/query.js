@@ -2,7 +2,7 @@ import get from 'lodash.get';
 
 import { reconcileQueryKey } from '../lib/query-key';
 
-export const isFinished = (urlOrConfig, body) => (queriesState) => {
+export const isFinished = (urlOrConfig, body) => queriesState => {
     let queryKey;
 
     if (typeof urlOrConfig === 'string') {
@@ -14,7 +14,7 @@ export const isFinished = (urlOrConfig, body) => (queriesState) => {
     return get(queriesState, [queryKey, 'isFinished']);
 };
 
-export const isPending = (urlOrConfig, body) => (queriesState) => {
+export const isPending = (urlOrConfig, body) => queriesState => {
     let queryKey;
 
     if (typeof urlOrConfig === 'string') {
@@ -26,7 +26,7 @@ export const isPending = (urlOrConfig, body) => (queriesState) => {
     return get(queriesState, [queryKey, 'isPending']);
 };
 
-export const status = (urlOrConfig, body) => (queriesState) => {
+export const status = (urlOrConfig, body) => queriesState => {
     let queryKey;
 
     if (typeof urlOrConfig === 'string') {
@@ -38,7 +38,7 @@ export const status = (urlOrConfig, body) => (queriesState) => {
     return get(queriesState, [queryKey, 'status']);
 };
 
-export const lastUpdated = (urlOrConfig, body) => (queriesState) => {
+export const lastUpdated = (urlOrConfig, body) => queriesState => {
     let queryKey;
 
     if (typeof urlOrConfig === 'string') {
@@ -50,7 +50,7 @@ export const lastUpdated = (urlOrConfig, body) => (queriesState) => {
     return get(queriesState, [queryKey, 'lastUpdated']);
 };
 
-export const queryCount = (urlOrConfig, body) => (queriesState) => {
+export const queryCount = (urlOrConfig, body) => queriesState => {
     let queryKey;
 
     if (typeof urlOrConfig === 'string') {

@@ -115,10 +115,7 @@ describe('entities reducer', () => {
     it('should handle REMOVE_ENTITIES', () => {
         const action = {
             type: actionTypes.REMOVE_ENTITIES,
-            paths: [
-                ['some', 'thing', 'gone'],
-                ['something', 'else', 'gone'],
-            ],
+            paths: [['some', 'thing', 'gone'], ['something', 'else', 'gone']],
         };
         const prevState = {
             some: {

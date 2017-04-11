@@ -116,17 +116,19 @@ export const mutateFailure = (
     };
 };
 
-export const requestAsync = ({
-    body,
-    force,
-    meta,
-    options,
-    queryKey,
-    retry,
-    transform,
-    update,
-    url,
-}) => {
+export const requestAsync = (
+    {
+        body,
+        force,
+        meta,
+        options,
+        queryKey,
+        retry,
+        transform,
+        update,
+        url,
+    }
+) => {
     return {
         type: actionTypes.REQUEST_ASYNC,
         body,
@@ -141,16 +143,18 @@ export const requestAsync = ({
     };
 };
 
-export const mutateAsync = ({
-    body,
-    meta,
-    optimisticUpdate,
-    options,
-    queryKey,
-    transform,
-    update,
-    url,
-}) => {
+export const mutateAsync = (
+    {
+        body,
+        meta,
+        optimisticUpdate,
+        options,
+        queryKey,
+        transform,
+        update,
+        url,
+    }
+) => {
     return {
         type: actionTypes.MUTATE_ASYNC,
         body,
@@ -164,21 +168,21 @@ export const mutateAsync = ({
     };
 };
 
-export const cancelQuery = (queryKey) => {
+export const cancelQuery = queryKey => {
     return {
         type: actionTypes.CANCEL_QUERY,
         queryKey,
     };
 };
 
-export const removeEntity = (path) => {
+export const removeEntity = path => {
     return {
         type: actionTypes.REMOVE_ENTITY,
         path,
     };
 };
 
-export const removeEntities = (paths) => {
+export const removeEntities = paths => {
     return {
         type: actionTypes.REMOVE_ENTITIES,
         paths,

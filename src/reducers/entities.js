@@ -44,9 +44,12 @@ const entities = (state = initialState, action) => {
             ...action.entities,
         };
     } else if (action.type === REMOVE_ENTITIES) {
-        return action.paths.reduce((accum, path) => {
-            return withoutPath(accum, path);
-        }, state);
+        return action.paths.reduce(
+            (accum, path) => {
+                return withoutPath(accum, path);
+            },
+            state
+        );
     } else if (action.type === REMOVE_ENTITY) {
         return withoutPath(state, action.path);
     } else {

@@ -9,7 +9,7 @@ import { requestAsync, cancelQuery } from '../actions';
 import { reconcileQueryKey } from '../lib/query-key';
 import storeShape from '../lib/store-shape';
 
-const ensureArray = (maybe) => {
+const ensureArray = maybe => {
     return Array.isArray(maybe) ? maybe : [maybe];
 };
 
@@ -24,7 +24,7 @@ const diffConfigs = (prevConfigs, configs) => {
     return { cancelKeys, requestKeys };
 };
 
-const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) => {
+const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => {
     const { pure = true, withRef = false } = options;
 
     class ConnectRequest extends React.Component {
@@ -54,7 +54,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
             const configs = ensureArray(mapPropsToConfigs(this.props)).filter(Boolean);
 
             const { cancelKeys, requestKeys } = diffConfigs(prevConfigs, configs);
-            const requestConfigs = configs.filter((config) => {
+            const requestConfigs = configs.filter(config => {
                 return includes(requestKeys, reconcileQueryKey(config));
             });
 
@@ -80,13 +80,13 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
             const pendingKeys = Object.keys(this._pendingRequests);
 
             ensureArray(cancelKeys)
-            .filter((key) => includes(pendingKeys, key))
-            .forEach((queryKey) => dispatch(cancelQuery(queryKey)));
+                .filter(key => includes(pendingKeys, key))
+                .forEach(queryKey => dispatch(cancelQuery(queryKey)));
         }
 
         requestAsync(configs, force = false, retry = false) {
             // propsToConfig mapping has happened already
-            ensureArray(configs).filter(Boolean).forEach((c) => {
+            ensureArray(configs).filter(Boolean).forEach(c => {
                 this.makeRequest(c, force, retry);
             });
         }
@@ -95,11 +95,13 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
             const { dispatch } = this.context.store;
 
             if (config.url) {
-                const requestPromise = dispatch(requestAsync({
-                    force,
-                    retry,
-                    ...config,
-                }));
+                const requestPromise = dispatch(
+                    requestAsync({
+                        force,
+                        retry,
+                        ...config,
+                    })
+                );
 
                 if (requestPromise) {
                     // Record pending request since a promise was returned
@@ -122,18 +124,13 @@ const connectRequest = (mapPropsToConfigs, options = {}) => (WrappedComponent) =
                     <WrappedComponent
                         {...this.props}
                         forceRequest={forceRequest}
-                        ref={(ref) => {
+                        ref={ref => {
                             this._wrappedInstance = ref;
                         }}
                     />
                 );
             } else {
-                return (
-                    <WrappedComponent
-                        {...this.props}
-                        forceRequest={forceRequest}
-                    />
-                );
+                return <WrappedComponent {...this.props} forceRequest={forceRequest} />;
             }
         }
     }

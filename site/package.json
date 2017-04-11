@@ -1,0 +1,38 @@
+{
+  "name": "redux-query-site",
+  "private": true,
+  "version": "1.0.0",
+  "homepage": "https://amplitude.github.io/redux-query",
+  "dependencies": {
+    "babel-standalone": "^6.24.0",
+    "classnames": "^2.2.5",
+    "github-markdown-css": "^2.5.0",
+    "marked": "^0.3.6",
+    "prettier": "0.21.0",
+    "react": "^15.4.2",
+    "react-codemirror": "^0.3.0",
+    "react-dom": "^15.4.2",
+    "react-inspector": "^1.1.2",
+    "react-redux": "^5.0.3",
+    "react-router-dom": "^4.0.0",
+    "redux": "^3.6.0",
+    "redux-query": "..",
+    "rimraf": "^2.4.3",
+    "styled-components": "^1.4.4"
+  },
+  "devDependencies": {
+    "eslint": "^3.3.1",
+    "eslint-plugin-prettier": "^2.0.1",
+    "react-scripts": "0.9.3"
+  },
+  "scripts": {
+    "build": "react-scripts build",
+    "clean": "rimraf build",
+    "eject": "react-scripts eject",
+    "lint:demos": "eslint src --fix --ext .js.txt",
+    "lint": "eslint src --fix --ext .js && npm run lint:demos",
+    "prebuild": "npm run lint",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom"
+  }
+}

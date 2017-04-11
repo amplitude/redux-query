@@ -31,7 +31,7 @@ const superagentNetworkAdapter = (url, method, { body, headers, credentials } = 
         request.withCredentials();
     }
 
-    const execute = (cb) => request.end((err, response) => {
+    const execute = cb => request.end((err, response) => {
         const resStatus = (response && response.status) || 0;
         const resBody = (response && response.body) || undefined;
         const resText = (response && response.text) || undefined;

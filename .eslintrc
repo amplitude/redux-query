@@ -75,7 +75,13 @@
         "prefer-const": 2,
         "prefer-spread": 2,
         "prefer-template": 2,
-        "prettier/prettier": ["error", { "trailingComma": "es5", "singleQuote": true, "jsxBracketSameLine": true }],
+        "prettier/prettier": ["error", {
+            "tabWidth": 4,
+            "printWidth": 120,
+            "trailingComma": "es5",
+            "singleQuote": true,
+            "jsxBracketSameLine": true
+        }],
         "quote-props": [2, "as-needed"],
         "radix": 2,
         "react/prop-types": 0,

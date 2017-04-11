@@ -25,13 +25,13 @@ import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { connect, Provider } from 'react-redux';
 import {
-  entitiesReducer,
-  queriesReducer,
-  queryMiddleware,
-  mutateAsync,
-  requestAsync,
-  cancelQuery,
-  reconcileQueryKey,
+    entitiesReducer,
+    queriesReducer,
+    queryMiddleware,
+    mutateAsync,
+    requestAsync,
+    cancelQuery,
+    reconcileQueryKey,
 } from 'redux-query';
 import createSagaMiddleware, { takeLatest } from 'redux-saga';
 import { cancelled, put } from 'redux-saga/effects';
@@ -42,35 +42,32 @@ import { cancelled, put } from 'redux-saga/effects';
  */
 
 const nameReducer = (state = {}, action) => {
-  switch (action.type) {
-    case 'CHANGE_NAME':
-      return { ...state, isLoading: true, error: null, result: null };
-    case 'CHANGE_NAME_FAILED':
-      return {
-        ...state,
-        isLoading: false,
-        error: action.error,
-        result: 'failure',
-      };
-    case 'CHANGE_NAME_SUCCEEDED':
-      return { ...state, isLoading: false, error: null, result: 'success' };
-  }
+    switch (action.type) {
+        case 'CHANGE_NAME':
+            return { ...state, isLoading: true, error: null, result: null };
+        case 'CHANGE_NAME_FAILED':
+            return {
+                ...state,
+                isLoading: false,
+                error: action.error,
+                result: 'failure',
+            };
+        case 'CHANGE_NAME_SUCCEEDED':
+            return { ...state, isLoading: false, error: null, result: 'success' };
+    }
 
-  return state;
+    return state;
 };
 
 // Include the queries and entities reducer with your other reducers.
 const reducer = combineReducers({
-  entities: entitiesReducer,
-  queries: queriesReducer,
-  name: nameReducer,
+    entities: entitiesReducer,
+    queries: queriesReducer,
+    name: nameReducer,
 });
 
 // Tell redux-query where the queries and entities reducers are.
-const middleware = queryMiddleware(
-  state => state.queries,
-  state => state.entities
-);
+const middleware = queryMiddleware(state => state.queries, state => state.entities);
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -82,33 +79,33 @@ const store = createStore(reducer, applyMiddleware(middleware, sagaMiddleware));
  */
 
 const queries = {
-  nameRequest: () => {
-    return {
-      url: `/api/name`,
-      update: {
-        name: (prev, next) => next,
-      },
-    };
-  },
-  changeNameMutation: (name, optimistic) => {
-    const queryConfig = {
-      url: `/api/change-name`,
-      body: {
-        name,
-      },
-      update: {
-        name: (prev, next) => next,
-      },
-    };
+    nameRequest: () => {
+        return {
+            url: `/api/name`,
+            update: {
+                name: (prev, next) => next,
+            },
+        };
+    },
+    changeNameMutation: (name, optimistic) => {
+        const queryConfig = {
+            url: `/api/change-name`,
+            body: {
+                name,
+            },
+            update: {
+                name: (prev, next) => next,
+            },
+        };
 
-    if (optimistic) {
-      queryConfig.optimisticUpdate = {
-        name: () => name,
-      };
-    }
+        if (optimistic) {
+            queryConfig.optimisticUpdate = {
+                name: () => name,
+            };
+        }
 
-    return queryConfig;
-  },
+        return queryConfig;
+    },
 };
 
 /**
@@ -117,24 +114,24 @@ const queries = {
  */
 
 const actions = {
-  changeName: (name, optimistic) => {
-    return {
-      type: 'CHANGE_NAME',
-      name,
-      optimistic,
-    };
-  },
-  nameChangeSucceeded: () => {
-    return {
-      type: 'CHANGE_NAME_SUCCEEDED',
-    };
-  },
-  nameChangeFailed: error => {
-    return {
-      type: 'CHANGE_NAME_FAILED',
-      error,
-    };
-  },
+    changeName: (name, optimistic) => {
+        return {
+            type: 'CHANGE_NAME',
+            name,
+            optimistic,
+        };
+    },
+    nameChangeSucceeded: () => {
+        return {
+            type: 'CHANGE_NAME_SUCCEEDED',
+        };
+    },
+    nameChangeFailed: error => {
+        return {
+            type: 'CHANGE_NAME_FAILED',
+            error,
+        };
+    },
 };
 
 /**
@@ -143,36 +140,33 @@ const actions = {
  */
 
 function* requestName() {
-  // Request the name when the root saga runs.
-  yield put.sync(requestAsync(queries.nameRequest()));
+    // Request the name when the root saga runs.
+    yield put.sync(requestAsync(queries.nameRequest()));
 }
 
 function* changeName(action) {
-  const query = queries.changeNameMutation(action.name, action.optimistic);
+    const query = queries.changeNameMutation(action.name, action.optimistic);
 
-  try {
-    // We can capture the result from the mutateAsync promise using `put.sync`.
-    const result = yield put.sync(mutateAsync(query));
+    try {
+        // We can capture the result from the mutateAsync promise using `put.sync`.
+        const result = yield put.sync(mutateAsync(query));
 
-    if (result.status >= 200 && result.status < 300) {
-      yield put(actions.nameChangeSucceeded());
-    } else {
-      yield put(actions.nameChangeFailed(result.text));
+        if (result.status >= 200 && result.status < 300) {
+            yield put(actions.nameChangeSucceeded());
+        } else {
+            yield put(actions.nameChangeFailed(result.text));
+        }
+    } finally {
+        if (yield cancelled()) {
+            // When this saga is cancelled because another CHANGE_NAME action was
+            // dispatched, we can cancel the in-flight query here.
+            yield put(cancelQuery(reconcileQueryKey(query)));
+        }
     }
-  } finally {
-    if (yield cancelled()) {
-      // When this saga is cancelled because another CHANGE_NAME action was
-      // dispatched, we can cancel the in-flight query here.
-      yield put(cancelQuery(reconcileQueryKey(query)));
-    }
-  }
 }
 
 function* rootSaga() {
-  yield [
-    requestName(),
-    takeLatest(action => action.type === 'CHANGE_NAME', changeName),
-  ];
+    yield [requestName(), takeLatest(action => action.type === 'CHANGE_NAME', changeName)];
 }
 
 sagaMiddleware.run(rootSaga);
@@ -183,73 +177,69 @@ sagaMiddleware.run(rootSaga);
  */
 
 class NameForm extends Component {
-  state = {
-    inputValue: '',
-  };
+    state = {
+        inputValue: '',
+    };
 
-  submit(options = {}) {
-    const { props, state } = this;
+    submit(options = {}) {
+        const { props, state } = this;
 
-    // This will lead to a mutation being dispatched (configured by
-    // `mapDispatchToProps` below).
-    props.changeName(state.inputValue, options.optimistic);
-  }
+        // This will lead to a mutation being dispatched (configured by
+        // `mapDispatchToProps` below).
+        props.changeName(state.inputValue, options.optimistic);
+    }
 
-  render() {
-    const { props, state } = this;
+    render() {
+        const { props, state } = this;
 
-    return (
-      <div>
-        <h3>Your Name</h3>
-        <p>{props.name || <em>(no name)</em>}</p>
-        <hr />
-        <h3>Change Name</h3>
-        <form
-          onSubmit={e => {
-            // Prevent default form behavior.
-            e.preventDefault();
-          }}>
-          <input
-            type="text"
-            value={state.inputValue}
-            placeholder="Enter a name"
-            onChange={e => {
-              this.setState({
-                inputValue: e.target.value,
-              });
-            }}
-          />
-          <input type="submit" value="Submit" onClick={() => this.submit()} />
-          <input
-            type="submit"
-            value="I'm Feeling Optimistic"
-            onClick={() => this.submit({ optimistic: true })}
-          />
-          {props.isLoading === true && <p>Loading...</p>}
-          {!props.isLoading && props.result === 'success' && <p>Success!</p>}
-          {!props.isLoading &&
-            props.result === 'failure' &&
-            <p>An error occurred: "{props.error}".</p>}
-        </form>
-      </div>
-    );
-  }
+        return (
+            <div>
+                <h3>Your Name</h3>
+                <p>{props.name || <em>(no name)</em>}</p>
+                <hr />
+                <h3>Change Name</h3>
+                <form
+                    onSubmit={e => {
+                        // Prevent default form behavior.
+                        e.preventDefault();
+                    }}>
+                    <input
+                        type="text"
+                        value={state.inputValue}
+                        placeholder="Enter a name"
+                        onChange={e => {
+                            this.setState({
+                                inputValue: e.target.value,
+                            });
+                        }}
+                    />
+                    <input type="submit" value="Submit" onClick={() => this.submit()} />
+                    <input
+                        type="submit"
+                        value="I'm Feeling Optimistic"
+                        onClick={() => this.submit({ optimistic: true })}
+                    />
+                    {props.isLoading === true && <p>Loading...</p>}
+                    {!props.isLoading && props.result === 'success' && <p>Success!</p>}
+                    {!props.isLoading && props.result === 'failure' && <p>An error occurred: "{props.error}".</p>}
+                </form>
+            </div>
+        );
+    }
 }
 
 const mapStateToProps = state => ({
-  error: state.name.error,
-  isLoading: state.name.isLoading,
-  name: state.entities.name,
-  result: state.name.result,
+    error: state.name.error,
+    isLoading: state.name.isLoading,
+    name: state.entities.name,
+    result: state.name.result,
 });
 
 const mapDispatchToProps = {
-  changeName: actions.changeName,
+    changeName: actions.changeName,
 };
 
-const NameFormContainer = connect(mapStateToProps, mapDispatchToProps)(
-  NameForm
-);
+const NameFormContainer = connect(mapStateToProps, mapDispatchToProps)(NameForm);
 
 /**
  * The main app component
@@ -257,13 +247,13 @@ const NameFormContainer = connect(mapStateToProps, mapDispatchToProps)(
  */
 
 class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <NameFormContainer />
-      </Provider>
-    );
-  }
+    render() {
+        return (
+            <Provider store={store}>
+                <NameFormContainer />
+            </Provider>
+        );
+    }
 }
 
 // The default export should be the main React component.

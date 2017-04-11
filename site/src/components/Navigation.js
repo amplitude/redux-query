@@ -57,7 +57,7 @@ const Item = styled(NavLink)`
 `;
 
 Item.defaultProps = {
-  activeClassName: 'active',
+    activeClassName: 'active',
 };
 
 const ExternalLink = styled.a`
@@ -85,60 +85,59 @@ const ProjectTitle = styled.h1`
 `;
 
 class Navigation extends Component {
-  render() {
-    return (
-      <Container>
-        <FixedContainer>
-          <ProjectTitle>
-            redux-query
-          </ProjectTitle>
-          <Section>
-            <ExternalLink href="https://github.com/amplitude/redux-query">
-              <i className="fa fa-github" aria-hidden="true" />
-              {' '}
-              <span>Source</span>
-            </ExternalLink>
-            <ExternalLink
-              href="https://github.com/amplitude/redux-query/issues">
-              <i className="fa fa-exclamation-circle" aria-hidden="true" />
-              {' '}
-              <span>Issues</span>
-            </ExternalLink>
-          </Section>
-          <Section>
-            <SectionTitle>Docs</SectionTitle>
-            <Item to="/" exact={true}>
-              Read Me
-            </Item>
-            <Item to="/changelog">
-              Change Log
-            </Item>
-          </Section>
-          <Section>
-            <SectionTitle>Demos</SectionTitle>
-            <Item to="/hello-world">
-              Hello World
-            </Item>
-            <Item to="/mounting">
-              Mounting and Unmounting
-            </Item>
-            <Item to="/updating">
-              Updating from Props
-            </Item>
-            <Item to="/mutations">
-              Mutations
-            </Item>
-            <Item to="/redux-saga">
-              Usage with redux-saga
-            </Item>
-            <Item to="/hacker-news">
-              Hacker News
-            </Item>
-          </Section>
-        </FixedContainer>
-      </Container>
-    );
-  }
+    render() {
+        return (
+            <Container>
+                <FixedContainer>
+                    <ProjectTitle>
+                        redux-query
+                    </ProjectTitle>
+                    <Section>
+                        <ExternalLink href="https://github.com/amplitude/redux-query">
+                            <i className="fa fa-github" aria-hidden="true" />
+                            {' '}
+                            <span>Source</span>
+                        </ExternalLink>
+                        <ExternalLink href="https://github.com/amplitude/redux-query/issues">
+                            <i className="fa fa-exclamation-circle" aria-hidden="true" />
+                            {' '}
+                            <span>Issues</span>
+                        </ExternalLink>
+                    </Section>
+                    <Section>
+                        <SectionTitle>Docs</SectionTitle>
+                        <Item to="/" exact={true}>
+                            Read Me
+                        </Item>
+                        <Item to="/changelog">
+                            Change Log
+                        </Item>
+                    </Section>
+                    <Section>
+                        <SectionTitle>Demos</SectionTitle>
+                        <Item to="/hello-world">
+                            Hello World
+                        </Item>
+                        <Item to="/mounting">
+                            Mounting and Unmounting
+                        </Item>
+                        <Item to="/updating">
+                            Updating from Props
+                        </Item>
+                        <Item to="/mutations">
+                            Mutations
+                        </Item>
+                        <Item to="/redux-saga">
+                            Usage with redux-saga
+                        </Item>
+                        <Item to="/hacker-news">
+                            Hacker News
+                        </Item>
+                    </Section>
+                </FixedContainer>
+            </Container>
+        );
+    }
 }
 
 export default Navigation;

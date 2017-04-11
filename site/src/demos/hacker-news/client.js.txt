@@ -16,13 +16,7 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import {
-  connectRequest,
-  entitiesReducer,
-  queriesReducer,
-  queryMiddleware,
-  querySelectors,
-} from 'redux-query';
+import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware, querySelectors } from 'redux-query';
 
 /**
  * Set up redux and redux-query
@@ -31,15 +25,12 @@ import {
 
 // Include the queries and entities reducer with your other reducers.
 const reducer = combineReducers({
-  entities: entitiesReducer,
-  queries: queriesReducer,
+    entities: entitiesReducer,
+    queries: queriesReducer,
 });
 
 // Tell redux-query where the queries and entities reducers are.
-const middleware = queryMiddleware(
-  state => state.queries,
-  state => state.entities
-);
+const middleware = queryMiddleware(state => state.queries, state => state.entities);
 
 const store = createStore(reducer, applyMiddleware(middleware));
 
@@ -49,39 +40,39 @@ const store = createStore(reducer, applyMiddleware(middleware));
  */
 
 const topStoriesRequest = () => {
-  return {
-    url: `https://hacker-news.firebaseio.com/v0/topstories.json`,
-    transform: body => ({
-      // The server responds with an array of IDs
-      topStoryIds: body,
-    }),
-    update: {
-      topStoryIds: (prev, next) => {
-        // Discard previous `response` value (we don't need it anymore).
-        return next;
-      },
-    },
-  };
+    return {
+        url: `https://hacker-news.firebaseio.com/v0/topstories.json`,
+        transform: body => ({
+            // The server responds with an array of IDs
+            topStoryIds: body,
+        }),
+        update: {
+            topStoryIds: (prev, next) => {
+                // Discard previous `response` value (we don't need it anymore).
+                return next;
+            },
+        },
+    };
 };
 
 const itemRequest = itemId => {
-  return {
-    url: `https://hacker-news.firebaseio.com/v0/item/${itemId}.json`,
-    transform: body => ({
-      // The server responds with the metadata for that item
-      itemsById: {
-        [itemId]: body,
-      },
-    }),
-    update: {
-      itemsById: (prev, next) => {
-        return {
-          ...prev,
-          ...next,
-        };
-      },
-    },
-  };
+    return {
+        url: `https://hacker-news.firebaseio.com/v0/item/${itemId}.json`,
+        transform: body => ({
+            // The server responds with the metadata for that item
+            itemsById: {
+                [itemId]: body,
+            },
+        }),
+        update: {
+            itemsById: (prev, next) => {
+                return {
+                    ...prev,
+                    ...next,
+                };
+            },
+        },
+    };
 };
 
 /**
@@ -90,11 +81,11 @@ const itemRequest = itemId => {
  */
 
 const selectTopStoryIds = state => {
-  return state.entities.topStoryIds || [];
+    return state.entities.topStoryIds || [];
 };
 
 const selectItem = (state, props) => {
-  return (state.entities.itemsById || {})[props.itemId];
+    return (state.entities.itemsById || {})[props.itemId];
 };
 
 /**
@@ -103,44 +94,42 @@ const selectItem = (state, props) => {
  */
 
 class Item extends Component {
-  render() {
-    const { props } = this;
+    render() {
+        const { props } = this;
 
-    return (
-      <li>
-        {props.isLoading && '...'}
-        {props.item &&
-          <div>
-            <div>
-              <a href={props.item.url} target="_blank">{props.item.title}</a>
-            </div>
-            <div>
-              {props.item.score}
-              {' '}
-              points by
-              {' '}
-              <a
-                href={`https://news.ycombinator.com/user?id=${props.item.by}`}
-                target="_blank">
-                {props.item.by}
-              </a>
-            </div>
-          </div>}
-      </li>
-    );
-  }
+        return (
+            <li>
+                {props.isLoading && '...'}
+                {props.item &&
+                    <div>
+                        <div>
+                            <a href={props.item.url} target="_blank">{props.item.title}</a>
+                        </div>
+                        <div>
+                            {props.item.score}
+                            {' '}
+                            points by
+                            {' '}
+                            <a href={`https://news.ycombinator.com/user?id=${props.item.by}`} target="_blank">
+                                {props.item.by}
+                            </a>
+                        </div>
+                    </div>}
+            </li>
+        );
+    }
 }
 
 const ItemContainer = compose(
-  connect((state, props) => {
-    const query = itemRequest(props.itemId);
-    return {
-      isLoading: querySelectors.isPending(query)(state.queries),
-      item: selectItem(state, props),
-      query,
-    };
-  }),
-  connectRequest(props => props.query)
+    connect((state, props) => {
+        const query = itemRequest(props.itemId);
+        return {
+            isLoading: querySelectors.isPending(query)(state.queries),
+            item: selectItem(state, props),
+            query,
+        };
+    }),
+    connectRequest(props => props.query)
 )(Item);
 
 /**
@@ -149,24 +138,22 @@ const ItemContainer = compose(
  */
 
 class TopStories extends Component {
-  render() {
-    const { props } = this;
+    render() {
+        const { props } = this;
 
-    return (
-      <ol>
-        {props.topStoryIds
-          .slice(0, 30)
-          .map(itemId => <ItemContainer itemId={itemId} />)}
-      </ol>
-    );
-  }
+        return (
+            <ol>
+                {props.topStoryIds.slice(0, 30).map(itemId => <ItemContainer itemId={itemId} />)}
+            </ol>
+        );
+    }
 }
 
 const TopStoriesContainer = compose(
-  connect(state => ({
-    topStoryIds: selectTopStoryIds(state),
-  })),
-  connectRequest(() => topStoriesRequest())
+    connect(state => ({
+        topStoryIds: selectTopStoryIds(state),
+    })),
+    connectRequest(() => topStoriesRequest())
 )(TopStories);
 
 /**
@@ -175,16 +162,16 @@ const TopStoriesContainer = compose(
  */
 
 class HackerNews extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <div>
-          <h1>Hacker News</h1>
-          <TopStoriesContainer />
-        </div>
-      </Provider>
-    );
-  }
+    render() {
+        return (
+            <Provider store={store}>
+                <div>
+                    <h1>Hacker News</h1>
+                    <TopStoriesContainer />
+                </div>
+            </Provider>
+        );
+    }
 }
 
 // The default export should be the main React component.

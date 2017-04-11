@@ -6,7 +6,7 @@
 
 const artificialDelayDuration = 1000;
 const memoryDb = {
-  name: '',
+    name: '',
 };
 
 /**
@@ -28,59 +28,52 @@ const memoryDb = {
  * @returns {void}
  */
 const serveRequest = (url, method, { body, headers }, callback) => {
-  if (url.match(/^\/api\/name/)) {
-    // Endpoint for getting the current name
+    if (url.match(/^\/api\/name/)) {
+        // Endpoint for getting the current name
 
-    if (method.toUpperCase() === 'GET') {
-      setTimeout(
-        () => {
-          callback(200, {
-            name: memoryDb.name,
-          });
-        },
-        artificialDelayDuration
-      );
+        if (method.toUpperCase() === 'GET') {
+            setTimeout(
+                () => {
+                    callback(200, {
+                        name: memoryDb.name,
+                    });
+                },
+                artificialDelayDuration
+            );
+        } else {
+            callback(405);
+        }
+    } else if (url.match(/^\/api\/change-name/)) {
+        // Endpoint for changing the name
+
+        if (method.toUpperCase() !== 'POST') {
+            callback(405);
+            return;
+        }
+
+        if (!body.name || body.name.trim().length === 0 || body.name.trim() !== body.name) {
+            setTimeout(
+                () => {
+                    callback(400, 'A valid name must be provided with no leading or trailing spaces');
+                },
+                artificialDelayDuration
+            );
+            return;
+        }
+
+        memoryDb.name = body.name;
+
+        setTimeout(
+            () => {
+                callback(200, {
+                    name: memoryDb.name,
+                });
+            },
+            artificialDelayDuration
+        );
     } else {
-      callback(405);
+        callback(404);
     }
-  } else if (url.match(/^\/api\/change-name/)) {
-    // Endpoint for changing the name
-
-    if (method.toUpperCase() !== 'POST') {
-      callback(405);
-      return;
-    }
-
-    if (
-      !body.name ||
-      body.name.trim().length === 0 ||
-      body.name.trim() !== body.name
-    ) {
-      setTimeout(
-        () => {
-          callback(
-            400,
-            'A valid name must be provided with no leading or trailing spaces'
-          );
-        },
-        artificialDelayDuration
-      );
-      return;
-    }
-
-    memoryDb.name = body.name;
-
-    setTimeout(
-      () => {
-        callback(200, {
-          name: memoryDb.name,
-        });
-      },
-      artificialDelayDuration
-    );
-  } else {
-    callback(404);
-  }
 };
 
 export default serveRequest;

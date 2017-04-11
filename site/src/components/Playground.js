@@ -113,169 +113,164 @@ const ResultContainer = styled.div`
 `;
 
 const parseCode = input => {
-  try {
-    return atob(input.slice('data:text/plain;base64,'.length));
-  } catch (e) {
-    console.warn('Unable to parse initial code', e);
-  }
+    try {
+        return atob(input.slice('data:text/plain;base64,'.length));
+    } catch (e) {
+        console.warn('Unable to parse initial code', e);
+    }
 
-  return null;
+    return null;
 };
 
 class Playground extends Component {
-  state = {
-    clientCode: '',
-    devTool: 'CLIENT_CODE',
-    isDirty: false,
-    messages: [],
-    pendingClientCode: '',
-    pendingServerCode: null,
-    serverCode: null,
-    version: 0,
-  };
-
-  constructor(props) {
-    super(props);
-
-    if (props.demo) {
-      const clientCode = parseCode(props.demo.clientCode) || '';
-      const serverCode = props.demo.serverCode
-        ? parseCode(props.demo.serverCode)
-        : null;
-
-      this.state = {
-        ...this.state,
-        clientCode,
-        pendingClientCode: clientCode,
-        pendingServerCode: serverCode,
-        serverCode,
-      };
-    }
-  }
-
-  componentDidMount() {
-    window.addEventListener('message', this.onMessage);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('message', this.onMessage);
-  }
-
-  onMessage = e => {
-    try {
-      const message = JSON.parse(e.data);
-      if (message.type === 'dispatch') {
-        this.setState(prevState => ({
-          messages: [...prevState.messages, message],
-        }));
-      }
-    } catch (e) {
-      // Ignoring other messages
-    }
-  };
-
-  run = () => {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        clientCode: prevState.pendingClientCode,
-        messages: [],
-        serverCode: prevState.pendingServerCode,
-        version: prevState.version + 1,
+    state = {
+        clientCode: '',
+        devTool: 'CLIENT_CODE',
         isDirty: false,
-      };
-    });
-  };
+        messages: [],
+        pendingClientCode: '',
+        pendingServerCode: null,
+        serverCode: null,
+        version: 0,
+    };
 
-  renderCode = stateKey => {
-    const { state } = this;
-    const code = state[stateKey];
+    constructor(props) {
+        super(props);
 
-    return (
-      <Code>
-        <CodeMirror
-          ref={ref => {
-            if (ref) {
-              const cm = ref.getCodeMirror();
-              cm.setSize('100%', '100%');
+        if (props.demo) {
+            const clientCode = parseCode(props.demo.clientCode) || '';
+            const serverCode = props.demo.serverCode ? parseCode(props.demo.serverCode) : null;
+
+            this.state = {
+                ...this.state,
+                clientCode,
+                pendingClientCode: clientCode,
+                pendingServerCode: serverCode,
+                serverCode,
+            };
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('message', this.onMessage);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('message', this.onMessage);
+    }
+
+    onMessage = e => {
+        try {
+            const message = JSON.parse(e.data);
+            if (message.type === 'dispatch') {
+                this.setState(prevState => ({
+                    messages: [...prevState.messages, message],
+                }));
             }
-          }}
-          options={{
-            lineNumbers: true,
-            mode: 'jsx',
-          }}
-          onChange={newValue => {
-            this.setState({
-              [stateKey]: newValue,
-              isDirty: true,
-            });
-          }}
-          value={code}
-        />
-      </Code>
-    );
-  };
+        } catch (e) {
+            // Ignoring other messages
+        }
+    };
 
-  render() {
-    const { props, state } = this;
+    run = () => {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                clientCode: prevState.pendingClientCode,
+                messages: [],
+                serverCode: prevState.pendingServerCode,
+                version: prevState.version + 1,
+                isDirty: false,
+            };
+        });
+    };
 
-    return (
-      <CoreLayout disableBodyScroll={true}>
-        <DevToolsContainer>
-          <Toolbar>
-            <ToolbarSection>
-              <ToolbarButton
-                isSelected={state.devTool === 'CLIENT_CODE'}
-                onClick={() => {
-                  this.setState({
-                    devTool: 'CLIENT_CODE',
-                  });
-                }}>
-                Client
-              </ToolbarButton>
-              {!!props.demo.serverCode &&
-                <ToolbarButton
-                  isSelected={state.devTool === 'SERVER_CODE'}
-                  onClick={() => {
-                    this.setState({
-                      devTool: 'SERVER_CODE',
-                    });
-                  }}>
-                  Mock Server
-                </ToolbarButton>}
-              <ToolbarButton
-                isSelected={state.devTool === 'REDUX_LOG'}
-                onClick={() => {
-                  this.setState({
-                    devTool: 'REDUX_LOG',
-                  });
-                }}>
-                Redux Log
-              </ToolbarButton>
-            </ToolbarSection>
-            <ToolbarSection>
-              <RunButton onClick={this.run} highlight={state.isDirty}>
-                Run
-              </RunButton>
-            </ToolbarSection>
-          </Toolbar>
-          {state.devTool === 'REDUX_LOG' &&
-            <ReduxLog messages={state.messages} />}
-          {state.devTool === 'CLIENT_CODE' &&
-            this.renderCode('pendingClientCode')}
-          {state.devTool === 'SERVER_CODE' &&
-            this.renderCode('pendingServerCode')}
-        </DevToolsContainer>
-        <ResultContainer>
-          <ResultFrame
-            key={`resultFrame-${state.version}`}
-            clientCode={state.clientCode}
-            serverCode={state.serverCode}
-          />
-        </ResultContainer>
-      </CoreLayout>
-    );
-  }
+    renderCode = stateKey => {
+        const { state } = this;
+        const code = state[stateKey];
+
+        return (
+            <Code>
+                <CodeMirror
+                    ref={ref => {
+                        if (ref) {
+                            const cm = ref.getCodeMirror();
+                            cm.setSize('100%', '100%');
+                        }
+                    }}
+                    options={{
+                        lineNumbers: true,
+                        mode: 'jsx',
+                    }}
+                    onChange={newValue => {
+                        this.setState({
+                            [stateKey]: newValue,
+                            isDirty: true,
+                        });
+                    }}
+                    value={code}
+                />
+            </Code>
+        );
+    };
+
+    render() {
+        const { props, state } = this;
+
+        return (
+            <CoreLayout disableBodyScroll={true}>
+                <DevToolsContainer>
+                    <Toolbar>
+                        <ToolbarSection>
+                            <ToolbarButton
+                                isSelected={state.devTool === 'CLIENT_CODE'}
+                                onClick={() => {
+                                    this.setState({
+                                        devTool: 'CLIENT_CODE',
+                                    });
+                                }}>
+                                Client
+                            </ToolbarButton>
+                            {!!props.demo.serverCode &&
+                                <ToolbarButton
+                                    isSelected={state.devTool === 'SERVER_CODE'}
+                                    onClick={() => {
+                                        this.setState({
+                                            devTool: 'SERVER_CODE',
+                                        });
+                                    }}>
+                                    Mock Server
+                                </ToolbarButton>}
+                            <ToolbarButton
+                                isSelected={state.devTool === 'REDUX_LOG'}
+                                onClick={() => {
+                                    this.setState({
+                                        devTool: 'REDUX_LOG',
+                                    });
+                                }}>
+                                Redux Log
+                            </ToolbarButton>
+                        </ToolbarSection>
+                        <ToolbarSection>
+                            <RunButton onClick={this.run} highlight={state.isDirty}>
+                                Run
+                            </RunButton>
+                        </ToolbarSection>
+                    </Toolbar>
+                    {state.devTool === 'REDUX_LOG' && <ReduxLog messages={state.messages} />}
+                    {state.devTool === 'CLIENT_CODE' && this.renderCode('pendingClientCode')}
+                    {state.devTool === 'SERVER_CODE' && this.renderCode('pendingServerCode')}
+                </DevToolsContainer>
+                <ResultContainer>
+                    <ResultFrame
+                        key={`resultFrame-${state.version}`}
+                        clientCode={state.clientCode}
+                        serverCode={state.serverCode}
+                    />
+                </ResultContainer>
+            </CoreLayout>
+        );
+    }
 }
 
 export default Playground;

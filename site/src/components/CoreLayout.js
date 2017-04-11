@@ -26,18 +26,18 @@ const Main = styled.div`
 `;
 
 class CoreLayout extends Component {
-  render() {
-    const { props } = this;
+    render() {
+        const { props } = this;
 
-    return (
-      <Container disableBodyScroll={props.disableBodyScroll}>
-        <Navigation />
-        <Main disableBodyScroll={props.disableBodyScroll}>
-          {this.props.children}
-        </Main>
-      </Container>
-    );
-  }
+        return (
+            <Container disableBodyScroll={props.disableBodyScroll}>
+                <Navigation />
+                <Main disableBodyScroll={props.disableBodyScroll}>
+                    {this.props.children}
+                </Main>
+            </Container>
+        );
+    }
 }
 
 export default CoreLayout;

@@ -22,12 +22,7 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import {
-  connectRequest,
-  entitiesReducer,
-  queriesReducer,
-  queryMiddleware,
-} from 'redux-query';
+import { connectRequest, entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 
 /**
  * Set up redux and redux-query
@@ -36,25 +31,22 @@ import {
 
 // A simple reducer for this application to manage input state.
 const inputReducer = (state = '', action) => {
-  if (action.type === 'CHANGE_INPUT') {
-    return action.input;
-  }
+    if (action.type === 'CHANGE_INPUT') {
+        return action.input;
+    }
 
-  return state;
+    return state;
 };
 
 // Include the queries and entities reducer with your other reducers.
 const reducer = combineReducers({
-  entities: entitiesReducer,
-  queries: queriesReducer,
-  input: inputReducer,
+    entities: entitiesReducer,
+    queries: queriesReducer,
+    input: inputReducer,
 });
 
 // Tell redux-query where the queries and entities reducers are.
-const middleware = queryMiddleware(
-  state => state.queries,
-  state => state.entities
-);
+const middleware = queryMiddleware(state => state.queries, state => state.entities);
 
 const store = createStore(reducer, applyMiddleware(middleware));
 
@@ -64,74 +56,67 @@ const store = createStore(reducer, applyMiddleware(middleware));
  */
 
 const echoRequest = input => {
-  return {
-    url: `/api/echo?input=${input}`,
-    transform: (body, text) => ({
-      // The server responds with raw text, not JSON, so need a transform step
-      // here to map the text to an entity.
-      response: text,
-    }),
-    update: {
-      response: (prev, next) => {
-        // Discard previous `response` value (we don't need it anymore).
-        return next;
-      },
-    },
-  };
+    return {
+        url: `/api/echo?input=${input}`,
+        transform: (body, text) => ({
+            // The server responds with raw text, not JSON, so need a transform step
+            // here to map the text to an entity.
+            response: text,
+        }),
+        update: {
+            response: (prev, next) => {
+                // Discard previous `response` value (we don't need it anymore).
+                return next;
+            },
+        },
+    };
 };
 
 class Echo extends Component {
-  render() {
-    const { props } = this;
+    render() {
+        const { props } = this;
 
-    return (
-      <div>
-        <label>
-          Input:
-          {' '}
-          <input
-            type="text"
-            value={props.input}
-            onChange={e => props.changeInput(e.target.value)}
-          />
-        </label>
-        <div>Response: {this.props.response}</div>
-      </div>
-    );
-  }
+        return (
+            <div>
+                <label>
+                    Input:
+                    {' '}
+                    <input type="text" value={props.input} onChange={e => props.changeInput(e.target.value)} />
+                </label>
+                <div>Response: {this.props.response}</div>
+            </div>
+        );
+    }
 }
 
 // Map redux state to props. This is ordinary react-redux usage – we're just
 // also reading from the entities state.
 const mapStateToProps = state => ({
-  input: state.input,
-  response: state.entities.response,
+    input: state.input,
+    response: state.entities.response,
 });
 
 // Map dispatch to props. This is ordinary react-redux usage.
 const mapDispatchToProps = dispatch => ({
-  changeInput: input => dispatch({
-    type: 'CHANGE_INPUT',
-    input,
-  }),
+    changeInput: input => dispatch({
+        type: 'CHANGE_INPUT',
+        input,
+    }),
 });
 
 // Map props from `mapStateToProps` to a request query config.
 const mapPropsToConfig = props => echoRequest(props.input);
 
-const EchoContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  connectRequest(mapPropsToConfig)
-)(Echo);
+const EchoContainer = compose(connect(mapStateToProps, mapDispatchToProps), connectRequest(mapPropsToConfig))(Echo);
 
 class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <EchoContainer />
-      </Provider>
-    );
-  }
+    render() {
+        return (
+            <Provider store={store}>
+                <EchoContainer />
+            </Provider>
+        );
+    }
 }
 
 // The default export should be the main React component.

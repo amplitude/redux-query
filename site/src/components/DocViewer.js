@@ -13,41 +13,38 @@ const Container = styled.div`
 `;
 
 class DocViewer extends Component {
-  state = {
-    content: null,
-  };
+    state = {
+        content: null,
+    };
 
-  componentDidMount() {
-    const { props } = this;
+    componentDidMount() {
+        const { props } = this;
 
-    if (props.doc.indexOf('data:') === 0) {
-      this.setState({
-        content: atob(props.doc.split(';base64,')[1]),
-      });
-    } else {
-      fetch(props.doc).then(resp => resp.text()).then(data => {
-        this.setState({
-          content: data,
-        });
-      });
+        if (props.doc.indexOf('data:') === 0) {
+            this.setState({
+                content: atob(props.doc.split(';base64,')[1]),
+            });
+        } else {
+            fetch(props.doc).then(resp => resp.text()).then(data => {
+                this.setState({
+                    content: data,
+                });
+            });
+        }
     }
-  }
 
-  render() {
-    const { state } = this;
+    render() {
+        const { state } = this;
 
-    return (
-      <CoreLayout>
-        <Container>
-          {!!state.content &&
-            <div
-              className="markdown-body"
-              dangerouslySetInnerHTML={{ __html: marked(state.content) }}
-            />}
-        </Container>
-      </CoreLayout>
-    );
-  }
+        return (
+            <CoreLayout>
+                <Container>
+                    {!!state.content &&
+                        <div className="markdown-body" dangerouslySetInnerHTML={{ __html: marked(state.content) }} />}
+                </Container>
+            </CoreLayout>
+        );
+    }
 }
 
 export default DocViewer;

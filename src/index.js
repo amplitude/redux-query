@@ -9,14 +9,6 @@ export { getQueryKey, reconcileQueryKey } from './lib/query-key';
 export { default as queriesReducer } from './reducers/queries';
 export { default as entitiesReducer } from './reducers/entities';
 export { default as queryMiddleware } from './middleware/query';
-export {
-  default as queryMiddlewareAdvanced,
-} from './middleware/query-advanced';
-export {
-  cancelQuery,
-  mutateAsync,
-  requestAsync,
-  removeEntities,
-  removeEntity,
-} from './actions';
+export { default as queryMiddlewareAdvanced } from './middleware/query-advanced';
+export { cancelQuery, mutateAsync, requestAsync, removeEntities, removeEntity } from './actions';
 export { actions, actionTypes, httpMethods, querySelectors };

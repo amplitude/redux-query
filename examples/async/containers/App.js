@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import { Schema, arrayOf, normalize } from 'normalizr';
+import React, { Component, PropTypes } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { connectRequest, querySelectors } from 'redux-query';
 import get from 'lodash.get';
 import { selectReddit } from '../actions';
@@ -107,7 +108,7 @@ function getSchema(reddit) {
     return subreddit;
 }
 
-const AppContainer = connectRequest((props) => ({
+const mapPropsToConfig = (props) => ({
     url: getRedditUrl(props.selectedReddit),
     transform: (response) => normalize(response, getSchema(props.selectedReddit)).entities,
     options: {
@@ -129,6 +130,9 @@ const AppContainer = connectRequest((props) => ({
       };
     },
   },
-}))(App);
+});
 
-export default connect(mapStateToProps)(AppContainer);
+export default compose(
+    connect(mapStateToProps),
+    connectRequest(mapPropsToConfig)
+)(App);

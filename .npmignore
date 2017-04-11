@@ -1,4 +1,5 @@
 *.lcov
+.babelrc
 .nyc_output
 coverage
 examples

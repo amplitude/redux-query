@@ -1,7 +1,7 @@
 import superagent from 'superagent';
 import * as httpMethods from '../constants/http-methods';
 
-export const createRequest = (url, method, body) => {
+const createRequest = (url, method, body) => {
     switch (method) {
         case httpMethods.GET:
             return superagent.get(url, body);

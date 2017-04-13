@@ -2,8 +2,8 @@
     "extends": "../.eslintrc",
     "rules": {
         "prettier/prettier": ["error", {
-            "tabWidth": 4,
-            "printWidth": 120,
+            "tabWidth": 2,
+            "printWidth": 80,
             "trailingComma": "es5",
             "singleQuote": true,
             "jsxBracketSameLine": true

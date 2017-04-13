@@ -26,39 +26,46 @@
  * @returns {void}
  */
 const serveRequest = (url, method, { body, headers }, callback) => {
-    if (url.match(/^\/api\/echo/)) {
-        if (method.toUpperCase() !== 'GET') {
-            callback(405);
-            return;
-        }
-
-        const params = getQueryParams(url);
-
-        // Respond with the request URL's "input" query param after an
-        // artificial timeout
-        setTimeout(
-            () => {
-                callback(200, params.input);
-            },
-            500
-        );
-    } else {
-        callback(404);
+  if (url.match(/^\/api\/echo/)) {
+    if (method.toUpperCase() !== 'GET') {
+      callback(405);
+      return;
     }
+
+    const params = getQueryParams(url);
+
+    // Respond with the request URL's "input" query param after an
+    // artificial timeout
+    setTimeout(
+      () => {
+        callback(200, params.input);
+      },
+      500
+    );
+  } else {
+    callback(404);
+  }
 };
 
 // For simplicity just inlining this helper function here, but it'd probably be
 // better to use a battle-tested library function to do this.
 const getQueryParams = url => {
-    if (url.indexOf('?') !== -1) {
-        return url.substring(url.indexOf('?') + 1).split('&').map(v => v.split('=')).reduce((accum, [key, value]) => {
-            accum[key] = decodeURIComponent(value);
+  if (url.indexOf('?') !== -1) {
+    return url
+      .substring(url.indexOf('?') + 1)
+      .split('&')
+      .map(v => v.split('='))
+      .reduce(
+        (accum, [key, value]) => {
+          accum[key] = decodeURIComponent(value);
 
-            return accum;
-        }, {});
-    } else {
-        return {};
-    }
+          return accum;
+        },
+        {}
+      );
+  } else {
+    return {};
+  }
 };
 
 export default serveRequest;

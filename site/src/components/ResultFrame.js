@@ -8,74 +8,77 @@ const Frame = styled.iframe`
 `;
 
 class ResultFrame extends Component {
-    _iframeRef = null;
+  _iframeRef = null;
 
-    componentDidMount() {
-        this.update();
+  componentDidMount() {
+    this.update();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { props } = this;
+
+    if (
+      prevProps.clientCode !== props.clientCode ||
+      prevProps.serverCode !== props.serverCode
+    ) {
+      this.update();
     }
+  }
 
-    componentDidUpdate(prevProps) {
-        const { props } = this;
+  update() {
+    const { props } = this;
+    const transformed = transform(props.clientCode, {
+      presets: ['es2015', 'stage-2', 'react'],
+      plugins: [
+        [
+          'transform-es2015-modules-umd',
+          {
+            globals: {
+              react: 'React',
+              redux: 'Redux',
+              'react-redux': 'ReactRedux',
+              'redux-query': 'ReduxQuery',
+              'redux-saga': 'ReduxSaga',
+              'redux-saga/effects': 'ReduxSaga.effects',
+            },
+            exactGlobals: true,
+          },
+        ],
+      ],
+      moduleId: 'Demo',
+    });
+    const transformedServer = transform(props.serverCode, {
+      presets: ['es2015', 'stage-2'],
+      plugins: ['transform-es2015-modules-umd'],
+      moduleId: 'Server',
+    });
 
-        if (prevProps.clientCode !== props.clientCode || prevProps.serverCode !== props.serverCode) {
-            this.update();
-        }
-    }
+    const srcs = [
+      'https://unpkg.com/react@15/dist/react.min.js',
+      'https://unpkg.com/react-dom@15/dist/react-dom.min.js',
+      'https://unpkg.com/redux@3.6.0/dist/redux.min.js',
+      'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js',
+      'https://unpkg.com/redux-saga@0.14/dist/redux-saga.min.js',
+      'https://unpkg.com/redux-query@1.5.0-alpha.1/dist/umd/redux-query.js',
+    ];
 
-    update() {
-        const { props } = this;
-        const transformed = transform(props.clientCode, {
-            presets: ['es2015', 'stage-2', 'react'],
-            plugins: [
-                [
-                    'transform-es2015-modules-umd',
-                    {
-                        globals: {
-                            react: 'React',
-                            redux: 'Redux',
-                            'react-redux': 'ReactRedux',
-                            'redux-query': 'ReduxQuery',
-                            'redux-saga': 'ReduxSaga',
-                            'redux-saga/effects': 'ReduxSaga.effects',
-                        },
-                        exactGlobals: true,
-                    },
-                ],
-            ],
-            moduleId: 'Demo',
-        });
-        const transformedServer = transform(props.serverCode, {
-            presets: ['es2015', 'stage-2'],
-            plugins: ['transform-es2015-modules-umd'],
-            moduleId: 'Server',
-        });
-
-        const srcs = [
-            'https://unpkg.com/react@15/dist/react.min.js',
-            'https://unpkg.com/react-dom@15/dist/react-dom.min.js',
-            'https://unpkg.com/redux@3.6.0/dist/redux.min.js',
-            'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
-            'https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js',
-            'https://unpkg.com/redux-saga@0.14/dist/redux-saga.min.js',
-            process.env.NODE_ENV === 'development' ? '/vendor/redux-query.js' : '/redux-query/vendor/redux-query.js', // eslint-disable-line
-        ];
-
-        const contentWindow = this._iframeRef.contentWindow;
-        contentWindow.document.open();
-        contentWindow.document.write('<!doctype html>');
-        contentWindow.document.write('<html lang="en">');
-        contentWindow.document.write('<head><meta charset="utf-8"></head>');
-        contentWindow.document.write('<body>');
-        srcs.forEach(src => {
-            contentWindow.document.write(`<script src="${src}"></script>`);
-        });
-        contentWindow.document.write(
-            `<script type="text/javascript">
+    const contentWindow = this._iframeRef.contentWindow;
+    contentWindow.document.open();
+    contentWindow.document.write('<!doctype html>');
+    contentWindow.document.write('<html lang="en">');
+    contentWindow.document.write('<head><meta charset="utf-8"></head>');
+    contentWindow.document.write('<body>');
+    srcs.forEach(src => {
+      contentWindow.document.write(`<script src="${src}"></script>`);
+    });
+    contentWindow.document.write(
+      `<script type="text/javascript">
         ${transformedServer.code}
       </script>`
-        );
-        contentWindow.document.write(
-            `<script type="text/javascript">
+    );
+    contentWindow.document.write(
+      `<script type="text/javascript">
         var mockAdapter = function(url, method, config) {
           var isExternalUrl = url.indexOf('://') > 0 || url.indexOf('//') === 0;
 
@@ -123,9 +126,9 @@ class ResultFrame extends Component {
           queryMiddleware: ReduxQuery.queryMiddlewareAdvanced(mockAdapter),
         });
       </script>`
-        );
-        contentWindow.document.write(
-            `<script type="text/javascript">
+    );
+    contentWindow.document.write(
+      `<script type="text/javascript">
         var postMessageMiddleware = function(store) {
           return function(next) {
             return function(action) {
@@ -149,30 +152,30 @@ class ResultFrame extends Component {
           return applyMiddleware.apply(applyMiddleware, modifiedMiddleware);
         };
       </script>`
-        );
-        contentWindow.document.write(
-            `<script type="text/javascript">
+    );
+    contentWindow.document.write(
+      `<script type="text/javascript">
         ${transformed.code}
       </script>`
-        );
-        contentWindow.document.write(`<div id="app"></div>`);
-        contentWindow.document.write(
-            `<script type="text/javascript">
+    );
+    contentWindow.document.write(`<div id="app"></div>`);
+    contentWindow.document.write(
+      `<script type="text/javascript">
         ReactDOM.render(React.createElement(window.Demo.default), document.getElementById('app'));
       </script>`
-        );
-        contentWindow.document.write('</body>');
-        contentWindow.document.write('</html>');
-        contentWindow.document.close();
-    }
+    );
+    contentWindow.document.write('</body>');
+    contentWindow.document.write('</html>');
+    contentWindow.document.close();
+  }
 
-    setIframeRef = ref => {
-        this._iframeRef = ref;
-    };
+  setIframeRef = ref => {
+    this._iframeRef = ref;
+  };
 
-    render() {
-        return <Frame innerRef={this.setIframeRef} />;
-    }
+  render() {
+    return <Frame innerRef={this.setIframeRef} />;
+  }
 }
 
 export default ResultFrame;

@@ -26,24 +26,24 @@
  * @returns {void}
  */
 const serveRequest = (url, method, { body, headers }, callback) => {
-    if (url === '/api/hello') {
-        if (method.toUpperCase() !== 'GET') {
-            callback(405);
-            return;
-        }
-
-        const response = { message: 'World' };
-
-        // Respond after an artificial timeout
-        setTimeout(
-            () => {
-                callback(200, response);
-            },
-            1000
-        );
-    } else {
-        callback(404);
+  if (url === '/api/hello') {
+    if (method.toUpperCase() !== 'GET') {
+      callback(405);
+      return;
     }
+
+    const response = { message: 'World' };
+
+    // Respond after an artificial timeout
+    setTimeout(
+      () => {
+        callback(200, response);
+      },
+      1000
+    );
+  } else {
+    callback(404);
+  }
 };
 
 export default serveRequest;

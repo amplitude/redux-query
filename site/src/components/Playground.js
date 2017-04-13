@@ -214,6 +214,14 @@ class Playground extends Component {
           options={{
             lineNumbers: true,
             mode: 'jsx',
+            tabSize: 2,
+            indentWithTabs: false,
+            extraKeys: {
+              Tab(cm) {
+                const spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+                cm.replaceSelection(spaces);
+              },
+            },
           }}
           onChange={newValue => {
             this.setState({

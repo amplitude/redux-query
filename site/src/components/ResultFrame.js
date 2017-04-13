@@ -60,6 +60,7 @@ class ResultFrame extends Component {
       'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
       'https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js',
       'https://unpkg.com/redux-saga@0.14/dist/redux-saga.min.js',
+      'https://unpkg.com/qs@6.0.4/dist/qs.js',
       'https://unpkg.com/redux-query@1.5.0-alpha.1/dist/umd/redux-query.js',
     ];
 
@@ -90,6 +91,10 @@ class ResultFrame extends Component {
 
           var execute = function(callback) {
             setTimeout(function() {
+              if (method === 'GET' && config.body) {
+                url = url + '?' + window.Qs.stringify(config.body);
+              }
+
               window.Server.default(url, method, config, function(status, response, headers) {
                 if (aborted) {
                   return;

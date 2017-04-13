@@ -50,6 +50,21 @@ const store = createStore(
 );
 ```
 
+## Interactive Demos
+
+There are several interactive demos at [https://amplitude.github.io/redux-query](https://amplitude.github.io/redux-query):
+
+- [Hello World](https://amplitude.github.io/redux-query/#/hello-world)
+- [Mounting and Unmounting](https://amplitude.github.io/redux-query/#/mounting)
+- [Updating from Props](https://amplitude.github.io/redux-query/#/updating)
+- [Mutations](https://amplitude.github.io/redux-query/#/mutations)
+- [Usage with redux-saga](https://amplitude.github.io/redux-query/#/redux-saga)
+- [Hacker News](https://amplitude.github.io/redux-query/#/hacker-news)
+
+After making code changes, click the "Run" button above the code editor to view your changes.
+
+Most of these demos use a mock server, which lets you also experiment with different server logic. Click on the "Mock Server" tab above the code editor to view and modify the mock server logic. In addition, you can view the log of redux actions and states by clicking on the "Redux Log" tab.
+
 ## Dependencies
 
 All dependencies are listed in [`package.json`](./package.json). Redux and React are peer dependencies. HTTP requests are made using [superagent](https://github.com/visionmedia/superagent).

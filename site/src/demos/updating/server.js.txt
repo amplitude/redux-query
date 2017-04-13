@@ -27,7 +27,7 @@
  */
 const serveRequest = (url, method, { body, headers }, callback) => {
   if (url.match(/^\/api\/echo/)) {
-    if (method.toUpperCase() !== 'GET') {
+    if (method !== 'GET') {
       callback(405);
       return;
     }

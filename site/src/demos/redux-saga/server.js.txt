@@ -46,7 +46,7 @@ const serveRequest = (url, method, { body, headers }, callback) => {
   } else if (url.match(/^\/api\/change-name/)) {
     // Endpoint for changing the name
 
-    if (method.toUpperCase() !== 'POST') {
+    if (method !== 'POST') {
       callback(405);
       return;
     }

@@ -27,7 +27,7 @@
  */
 const serveRequest = (url, method, { body, headers }, callback) => {
   if (url === '/api/hello') {
-    if (method.toUpperCase() !== 'GET') {
+    if (method !== 'GET') {
       callback(405);
       return;
     }

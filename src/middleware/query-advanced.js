@@ -41,7 +41,7 @@ const optimisticUpdateEntities = (optimisticUpdate, entities) => {
 };
 
 const rollbackEntities = (rollback = {}, initialEntities, entities) => {
-    return Object.keys(rollback).reduce(
+    return Object.keys(initialEntities).reduce(
         (accum, key) => {
             if (rollback[key]) {
                 accum[key] = rollback[key](initialEntities[key], entities[key]);

@@ -152,8 +152,6 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                         duration,
                                         status: resStatus,
                                         text: resText,
-                                        transformed,
-                                        entities: newEntities,
                                         headers: resHeaders,
                                     });
 
@@ -254,19 +252,14 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                         let newEntities;
 
                         if (err || !resOk(resStatus)) {
+                            let rolledBackEntities;
+
                             if (optimisticUpdate) {
-                                const rolledBackEntities = rollbackEntities(
+                                rolledBackEntities = rollbackEntities(
                                     rollback,
                                     pick(initialEntities, Object.keys(optimisticEntities)),
                                     pick(entities, Object.keys(optimisticEntities))
                                 );
-
-                                newEntities = {
-                                    ...entities,
-                                    ...rolledBackEntities,
-                                };
-                            } else {
-                                newEntities = entities;
                             }
 
                             resolve({
@@ -274,8 +267,7 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                 duration,
                                 status: resStatus,
                                 text: resText,
-                                transformed,
-                                entities: newEntities,
+                                rolledBackEntities,
                                 headers: resHeaders,
                             });
 
@@ -290,7 +282,7 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                     resText,
                                     resHeaders,
                                     meta,
-                                    newEntities
+                                    rolledBackEntities
                                 )
                             );
                         } else {

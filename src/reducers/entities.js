@@ -33,10 +33,10 @@ const entities = (state = initialState, action) => {
             ...state,
             ...action.optimisticEntities,
         };
-    } else if (action.type === MUTATE_FAILURE && action.entities) {
+    } else if (action.type === MUTATE_FAILURE && action.rolledBackEntities) {
         return {
             ...state,
-            ...action.entities,
+            ...action.rolledBackEntities,
         };
     } else if (action.type === REQUEST_SUCCESS || action.type === MUTATE_SUCCESS) {
         return {

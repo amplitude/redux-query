@@ -555,7 +555,7 @@ describe('query middleware', () => {
                     originalEntities: {
                         message: apiMessage,
                     },
-                    entities: {
+                    rolledBackEntities: {
                         message: apiMessage,
                     },
                 },
@@ -605,7 +605,7 @@ describe('query middleware', () => {
                             hello: null,
                         },
                     },
-                    entities: {
+                    rolledBackEntities: {
                         messagesById: {
                             hello: null,
                         },

@@ -50,6 +50,7 @@
     "lodash.intersection": "^4.4.0",
     "lodash.omit": "^4.5.0",
     "lodash.partial": "^4.2.1",
+    "lodash.pick": "^4.4.0",
     "lodash.pickby": "^4.6.0",
     "lodash.values": "^4.3.0",
     "prop-types": "^15.5.6",

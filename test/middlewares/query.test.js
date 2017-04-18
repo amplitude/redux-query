@@ -555,6 +555,9 @@ describe('query middleware', () => {
                     originalEntities: {
                         message: apiMessage,
                     },
+                    entities: {
+                        message: apiMessage,
+                    },
                 },
             ];
             const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
@@ -577,6 +580,72 @@ describe('query middleware', () => {
                 },
                 update: {
                     message: (prevMessage, message) => message,
+                },
+            });
+        });
+
+        it('by reverting optimistic updates with rollback in case of failure', done => {
+            const url = '/message/hello/update';
+            const actionsToDispatch = [
+                {
+                    type: actionTypes.MUTATE_START,
+                    url,
+                    optimisticEntities: {
+                        messagesById: {
+                            hello: 'world',
+                        },
+                    },
+                },
+                {
+                    type: actionTypes.MUTATE_FAILURE,
+                    url,
+                    status: 404,
+                    originalEntities: {
+                        messagesById: {
+                            hello: null,
+                        },
+                    },
+                    entities: {
+                        messagesById: {
+                            hello: null,
+                        },
+                    },
+                },
+            ];
+            const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+            const getState = () => ({
+                entities: {
+                    messagesById: {
+                        hello: null,
+                    },
+                },
+                queries: {},
+            });
+            const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({
+                dispatch,
+                getState,
+            });
+            const actionHandler = nextHandler();
+            actionHandler({
+                type: actionTypes.MUTATE_ASYNC,
+                url,
+                optimisticUpdate: {
+                    messagesById: messagesById => ({
+                        ...messagesById,
+                        hello: 'world',
+                    }),
+                },
+                update: {
+                    messagesById: (prevMessagesById, messagesById) => ({
+                        ...messagesById,
+                        hello: messagesById.hello,
+                    }),
+                },
+                rollback: {
+                    messagesById: (originalMessagesById, currentMessagesById) => ({
+                        ...currentMessagesById,
+                        hello: originalMessagesById.hello,
+                    }),
                 },
             });
         });

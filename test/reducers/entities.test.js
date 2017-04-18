@@ -65,6 +65,9 @@ describe('entities reducer', () => {
             originalEntities: {
                 message: 'hello, world!',
             },
+            entities: {
+                message: 'hello, world!',
+            },
         };
         const prevState = {
             message: 'hello, optimistic world!',

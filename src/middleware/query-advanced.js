@@ -141,10 +141,22 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                     return;
                                 }
 
+                                const end = new Date();
+                                const duration = end - start;
                                 let transformed;
                                 let newEntities;
 
                                 if (err || !resOk(resStatus)) {
+                                    resolve({
+                                        body: resBody,
+                                        duration,
+                                        status: resStatus,
+                                        text: resText,
+                                        transformed,
+                                        entities: newEntities,
+                                        headers: resHeaders,
+                                    });
+
                                     dispatch(
                                         requestFailure(
                                             url,
@@ -162,6 +174,17 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                     const entities = entitiesSelector(callbackState);
                                     transformed = transform(resBody, resText);
                                     newEntities = updateEntities(update, entities, transformed);
+
+                                    resolve({
+                                        body: resBody,
+                                        duration,
+                                        status: resStatus,
+                                        text: resText,
+                                        transformed,
+                                        entities: newEntities,
+                                        headers: resHeaders,
+                                    });
+
                                     dispatch(
                                         requestSuccess(
                                             url,
@@ -176,18 +199,6 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                         )
                                     );
                                 }
-
-                                const end = new Date();
-                                const duration = end - start;
-                                resolve({
-                                    body: resBody,
-                                    duration,
-                                    status: resStatus,
-                                    text: resText,
-                                    transformed,
-                                    entities: newEntities,
-                                    headers: resHeaders,
-                                });
                             });
                         };
 
@@ -235,6 +246,8 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                     dispatch(mutateStart(url, body, request, optimisticEntities, queryKey, meta));
 
                     request.execute((err, resStatus, resBody, resText, resHeaders) => {
+                        const end = new Date();
+                        const duration = end - start;
                         const state = getState();
                         const entities = entitiesSelector(state);
                         let transformed;
@@ -256,6 +269,16 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                 newEntities = entities;
                             }
 
+                            resolve({
+                                body: resBody,
+                                duration,
+                                status: resStatus,
+                                text: resText,
+                                transformed,
+                                entities: newEntities,
+                                headers: resHeaders,
+                            });
+
                             dispatch(
                                 mutateFailure(
                                     url,
@@ -274,6 +297,16 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                             transformed = transform(resBody, resText);
                             newEntities = updateEntities(update, entities, transformed);
 
+                            resolve({
+                                body: resBody,
+                                duration,
+                                status: resStatus,
+                                text: resText,
+                                transformed,
+                                entities: newEntities,
+                                headers: resHeaders,
+                            });
+
                             dispatch(
                                 mutateSuccess(
                                     url,
@@ -288,18 +321,6 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                 )
                             );
                         }
-
-                        const end = new Date();
-                        const duration = end - start;
-                        resolve({
-                            body: resBody,
-                            duration,
-                            status: resStatus,
-                            text: resText,
-                            transformed,
-                            entities: newEntities,
-                            headers: resHeaders,
-                        });
                     });
                 });
 

@@ -3,6 +3,7 @@ import invariant from 'invariant';
 import get from 'lodash.get';
 import identity from 'lodash.identity';
 import includes from 'lodash.includes';
+import pick from 'lodash.pick';
 import pickBy from 'lodash.pickby';
 
 import { requestStart, requestFailure, requestSuccess, mutateStart, mutateFailure, mutateSuccess } from '../actions';
@@ -31,6 +32,23 @@ const optimisticUpdateEntities = (optimisticUpdate, entities) => {
                 accum[key] = optimisticUpdate[key](entities[key]);
             } else {
                 accum[key] = entities[key];
+            }
+
+            return accum;
+        },
+        {}
+    );
+};
+
+const rollbackEntities = (rollback = {}, initialEntities, entities) => {
+    return Object.keys(rollback).reduce(
+        (accum, key) => {
+            if (rollback[key]) {
+                accum[key] = rollback[key](initialEntities[key], entities[key]);
+            } else {
+                // Default to just reverting to the initial state for that
+                // entity (before the optimistic update)
+                accum[key] = initialEntities[key];
             }
 
             return accum;
@@ -184,6 +202,7 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                     url,
                     transform = identity,
                     update,
+                    rollback,
                     body,
                     optimisticUpdate,
                     options = {},
@@ -191,11 +210,12 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                 } = action;
                 invariant(!!url, 'Missing required `url` field in action handler');
 
-                const state = getState();
-                const entities = entitiesSelector(state);
+                const initialState = getState();
+                const initialEntities = entitiesSelector(initialState);
                 let optimisticEntities;
+
                 if (optimisticUpdate) {
-                    optimisticEntities = optimisticUpdateEntities(optimisticUpdate, entities);
+                    optimisticEntities = optimisticUpdateEntities(optimisticUpdate, initialEntities);
                 }
 
                 const queryKey = reconcileQueryKey(action);
@@ -215,26 +235,45 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                     dispatch(mutateStart(url, body, request, optimisticEntities, queryKey, meta));
 
                     request.execute((err, resStatus, resBody, resText, resHeaders) => {
+                        const state = getState();
+                        const entities = entitiesSelector(state);
                         let transformed;
                         let newEntities;
 
                         if (err || !resOk(resStatus)) {
+                            if (optimisticUpdate) {
+                                const rolledBackEntities = rollbackEntities(
+                                    rollback,
+                                    pick(initialEntities, Object.keys(optimisticEntities)),
+                                    pick(entities, Object.keys(optimisticEntities))
+                                );
+
+                                newEntities = {
+                                    ...entities,
+                                    ...rolledBackEntities,
+                                };
+                            } else {
+                                newEntities = entities;
+                            }
+
                             dispatch(
                                 mutateFailure(
                                     url,
                                     body,
                                     resStatus,
-                                    entities,
+                                    initialEntities,
                                     queryKey,
                                     resBody,
                                     resText,
                                     resHeaders,
-                                    meta
+                                    meta,
+                                    newEntities
                                 )
                             );
                         } else {
                             transformed = transform(resBody, resText);
                             newEntities = updateEntities(update, entities, transformed);
+
                             dispatch(
                                 mutateSuccess(
                                     url,

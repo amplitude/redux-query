@@ -65,7 +65,7 @@ describe('entities reducer', () => {
             originalEntities: {
                 message: 'hello, world!',
             },
-            entities: {
+            rolledBackEntities: {
                 message: 'hello, world!',
             },
         };

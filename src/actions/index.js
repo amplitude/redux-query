@@ -100,7 +100,7 @@ export const mutateFailure = (
     responseText,
     responseHeaders,
     meta,
-    entities
+    rolledBackEntities
 ) => {
     return {
         type: actionTypes.MUTATE_FAILURE,
@@ -111,7 +111,7 @@ export const mutateFailure = (
         responseText,
         responseHeaders,
         originalEntities,
-        entities,
+        rolledBackEntities,
         queryKey,
         time: Date.now(),
         meta,

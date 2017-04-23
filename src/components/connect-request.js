@@ -1,4 +1,3 @@
-import partial from 'lodash.partial';
 import difference from 'lodash.difference';
 import includes from 'lodash.includes';
 import intersection from 'lodash.intersection';
@@ -30,6 +29,8 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
     class ConnectRequest extends React.Component {
         constructor() {
             super();
+
+            this.forceRequest = this.forceRequest.bind(this);
 
             // A set of URLs that identify all pending requests
             this._pendingRequests = {};
@@ -115,22 +116,23 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
             }
         }
 
-        render() {
-            const configs = mapPropsToConfigs(this.props);
-            const forceRequest = partial(this.requestAsync.bind(this), configs, true, false);
+        forceRequest() {
+            this.requestAsync(mapPropsToConfigs(this.props), true, false);
+        }
 
+        render() {
             if (withRef) {
                 return (
                     <WrappedComponent
                         {...this.props}
-                        forceRequest={forceRequest}
+                        forceRequest={this.forceRequest}
                         ref={ref => {
                             this._wrappedInstance = ref;
                         }}
                     />
                 );
             } else {
-                return <WrappedComponent {...this.props} forceRequest={forceRequest} />;
+                return <WrappedComponent {...this.props} forceRequest={this.forceRequest} />;
             }
         }
     }

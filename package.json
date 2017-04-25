@@ -40,6 +40,7 @@
   "author": "Ryan Ashcraft <ryan@amplitude.com>",
   "license": "MIT",
   "dependencies": {
+    "asap": "^2.0.5",
     "backo": "^1.1.0",
     "invariant": "^2.2.0",
     "json-stable-stringify": "^1.0.0",
@@ -54,7 +55,6 @@
     "lodash.values": "^4.3.0",
     "prop-types": "^15.5.6",
     "react-addons-shallow-compare": "^15.4.2",
-    "setimmediate": "^1.0.5",
     "superagent": "^1.6.1"
   },
   "peerDependencies": {

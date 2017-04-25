@@ -1,9 +1,9 @@
+import asap from 'asap';
 import difference from 'lodash.difference';
 import includes from 'lodash.includes';
 import intersection from 'lodash.intersection';
 import React from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
-import setImmediate from 'setimmediate';
 
 import { requestAsync, cancelQuery } from '../actions';
 import { reconcileQueryKey } from '../lib/query-key';
@@ -78,14 +78,18 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
         }
 
         cancelPendingRequests(cancelKeys) {
-            setImmediate(() => {
-                const { dispatch } = this.context.store;
-                const pendingKeys = Object.keys(this._pendingRequests);
+            const cancelKeysArray = ensureArray(cancelKeys);
 
-                ensureArray(cancelKeys)
-                    .filter(key => includes(pendingKeys, key))
-                    .forEach(queryKey => dispatch(cancelQuery(queryKey)));
-            });
+            if (cancelKeysArray.length > 0) {
+                asap(() => {
+                    const { dispatch } = this.context.store;
+                    const pendingKeys = Object.keys(this._pendingRequests);
+
+                    cancelKeysArray
+                        .filter(key => includes(pendingKeys, key))
+                        .forEach(queryKey => dispatch(cancelQuery(queryKey)));
+                });
+            }
         }
 
         requestAsync(configs, force = false, retry = false) {

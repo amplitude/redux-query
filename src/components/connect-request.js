@@ -3,6 +3,7 @@ import includes from 'lodash.includes';
 import intersection from 'lodash.intersection';
 import React from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
+import setImmediate from 'setimmediate';
 
 import { requestAsync, cancelQuery } from '../actions';
 import { reconcileQueryKey } from '../lib/query-key';
@@ -77,12 +78,14 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
         }
 
         cancelPendingRequests(cancelKeys) {
-            const { dispatch } = this.context.store;
-            const pendingKeys = Object.keys(this._pendingRequests);
+            setImmediate(() => {
+                const { dispatch } = this.context.store;
+                const pendingKeys = Object.keys(this._pendingRequests);
 
-            ensureArray(cancelKeys)
-                .filter(key => includes(pendingKeys, key))
-                .forEach(queryKey => dispatch(cancelQuery(queryKey)));
+                ensureArray(cancelKeys)
+                    .filter(key => includes(pendingKeys, key))
+                    .forEach(queryKey => dispatch(cancelQuery(queryKey)));
+            });
         }
 
         requestAsync(configs, force = false, retry = false) {

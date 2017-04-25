@@ -55,6 +55,7 @@
     "lodash.values": "^4.3.0",
     "prop-types": "^15.5.6",
     "react-addons-shallow-compare": "^15.4.2",
+    "setimmediate": "^1.0.5",
     "superagent": "^1.6.1"
   },
   "peerDependencies": {

@@ -26,13 +26,14 @@
     "react-scripts": "0.9.3"
   },
   "scripts": {
-    "build": "react-scripts build",
+    "build": "npm run vendor && react-scripts build",
     "clean": "rimraf build",
     "eject": "react-scripts eject",
     "lint:demos": "eslint src --fix --ext .js.txt",
     "lint": "eslint src --fix --ext .js && npm run lint:demos",
     "prebuild": "npm run lint",
-    "start": "react-scripts start",
-    "test": "react-scripts test --env=jsdom"
+    "start": "npm run vendor && react-scripts start",
+    "test": "react-scripts test --env=jsdom",
+    "vendor": "mkdir -p public/vendor && cp node_modules/redux-query/dist/umd/redux-query.js public/vendor/redux-query.js"
   }
 }

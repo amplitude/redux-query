@@ -62,6 +62,7 @@ class ResultFrame extends Component {
       'https://unpkg.com/redux-saga@0.14/dist/redux-saga.min.js',
       'https://unpkg.com/qs@6.0.4/dist/qs.js',
       'https://unpkg.com/redux-query@1.5.0-alpha.1/dist/umd/redux-query.js',
+      '/vendor/redux-query.js',
     ];
 
     const contentWindow = this._iframeRef.contentWindow;

@@ -147,14 +147,6 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                 let newEntities;
 
                                 if (err || !resOk(resStatus)) {
-                                    resolve({
-                                        body: resBody,
-                                        duration,
-                                        status: resStatus,
-                                        text: resText,
-                                        headers: resHeaders,
-                                    });
-
                                     dispatch(
                                         requestFailure(
                                             url,
@@ -167,21 +159,19 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                             resHeaders
                                         )
                                     );
-                                } else {
-                                    const callbackState = getState();
-                                    const entities = entitiesSelector(callbackState);
-                                    transformed = transform(resBody, resText);
-                                    newEntities = updateEntities(update, entities, transformed);
 
                                     resolve({
                                         body: resBody,
                                         duration,
                                         status: resStatus,
                                         text: resText,
-                                        transformed,
-                                        entities: newEntities,
                                         headers: resHeaders,
                                     });
+                                } else {
+                                    const callbackState = getState();
+                                    const entities = entitiesSelector(callbackState);
+                                    transformed = transform(resBody, resText);
+                                    newEntities = updateEntities(update, entities, transformed);
 
                                     dispatch(
                                         requestSuccess(
@@ -196,6 +186,16 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                             resHeaders
                                         )
                                     );
+
+                                    resolve({
+                                        body: resBody,
+                                        duration,
+                                        status: resStatus,
+                                        text: resText,
+                                        transformed,
+                                        entities: newEntities,
+                                        headers: resHeaders,
+                                    });
                                 }
                             });
                         };
@@ -262,15 +262,6 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                 );
                             }
 
-                            resolve({
-                                body: resBody,
-                                duration,
-                                status: resStatus,
-                                text: resText,
-                                rolledBackEntities,
-                                headers: resHeaders,
-                            });
-
                             dispatch(
                                 mutateFailure(
                                     url,
@@ -285,19 +276,18 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                     rolledBackEntities
                                 )
                             );
-                        } else {
-                            transformed = transform(resBody, resText);
-                            newEntities = updateEntities(update, entities, transformed);
 
                             resolve({
                                 body: resBody,
                                 duration,
                                 status: resStatus,
                                 text: resText,
-                                transformed,
-                                entities: newEntities,
+                                rolledBackEntities,
                                 headers: resHeaders,
                             });
+                        } else {
+                            transformed = transform(resBody, resText);
+                            newEntities = updateEntities(update, entities, transformed);
 
                             dispatch(
                                 mutateSuccess(
@@ -312,6 +302,16 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                                     meta
                                 )
                             );
+
+                            resolve({
+                                body: resBody,
+                                duration,
+                                status: resStatus,
+                                text: resText,
+                                transformed,
+                                entities: newEntities,
+                                headers: resHeaders,
+                            });
                         }
                     });
                 });

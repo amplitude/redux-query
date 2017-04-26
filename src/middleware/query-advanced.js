@@ -78,7 +78,7 @@ const getPendingQueries = queries => {
 
 const resOk = status => Math.floor(status / 100) === 2;
 
-const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSelector, config = defaultConfig) => {
+const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSelector, config = defaultConfig) => {
     return ({ dispatch, getState }) => next => action => {
         // TODO(ryan): add warnings when there are simultaneous requests and mutation queries for the same entities
         let returnValue;
@@ -114,7 +114,7 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                         const start = new Date();
                         const { method = httpMethods.GET } = options;
 
-                        const request = networkAdapter(url, method, {
+                        const networkHandler = networkInterface(url, method, {
                             body,
                             headers: options.headers,
                             credentials: options.credentials,
@@ -127,11 +127,11 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                         });
 
                         const attemptRequest = () => {
-                            dispatch(requestStart(url, body, request, meta, queryKey));
+                            dispatch(requestStart(url, body, networkHandler, meta, queryKey));
 
                             attempts += 1;
 
-                            request.execute((err, resStatus, resBody, resText, resHeaders) => {
+                            networkHandler.execute((err, resStatus, resBody, resText, resHeaders) => {
                                 if (
                                     includes(config.retryableStatusCodes, resStatus) &&
                                     attempts < config.backoff.maxAttempts
@@ -233,7 +233,7 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                     const start = new Date();
                     const { method = httpMethods.POST } = options;
 
-                    const request = networkAdapter(url, method, {
+                    const networkHandler = networkInterface(url, method, {
                         body,
                         headers: options.headers,
                         credentials: options.credentials,
@@ -241,9 +241,9 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
 
                     // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
                     // `mutateStart` action as `optimisticEntities`
-                    dispatch(mutateStart(url, body, request, optimisticEntities, queryKey, meta));
+                    dispatch(mutateStart(url, body, networkHandler, optimisticEntities, queryKey, meta));
 
-                    request.execute((err, resStatus, resBody, resText, resHeaders) => {
+                    networkHandler.execute((err, resStatus, resBody, resText, resHeaders) => {
                         const end = new Date();
                         const duration = end - start;
                         const state = getState();
@@ -327,7 +327,7 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
                 const pendingQueries = getPendingQueries(queries);
 
                 if (queryKey in pendingQueries) {
-                    pendingQueries[queryKey].request.abort();
+                    pendingQueries[queryKey].networkHandler.abort();
                     returnValue = next(action);
                 } else {
                     console.warn('Trying to cancel a request that is not in flight: ', queryKey);
@@ -343,7 +343,7 @@ const queryMiddlewareAdvanced = networkAdapter => (queriesSelector, entitiesSele
 
                 for (const queryKey in pendingQueries) {
                     if (pendingQueries.hasOwnProperty(queryKey)) {
-                        pendingQueries[queryKey].request.abort();
+                        pendingQueries[queryKey].networkHandler.abort();
                     }
                 }
 

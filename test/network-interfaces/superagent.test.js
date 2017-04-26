@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import * as HTTPMethods from '../../src/constants/http-methods';
-import superagentAdapter from '../../src/adapters/superagent';
+import superagentAdapter from '../../src/network-interfaces/superagent';
 
 describe('superagent adapter', () => {
     it('must return an object with both execute and abort functions, as well as the request instance', () => {

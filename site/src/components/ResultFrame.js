@@ -81,11 +81,11 @@ class ResultFrame extends Component {
     );
     contentWindow.document.write(
       `<script type="text/javascript">
-        var mockAdapter = function(url, method, config) {
+        var mockNetworkInterface = function(url, method, config) {
           var isExternalUrl = url.indexOf('://') > 0 || url.indexOf('//') === 0;
 
           if (isExternalUrl) {
-            return ReduxQuery.superagentAdapter.apply(ReduxQuery.superagentAdapter, arguments);
+            return ReduxQuery.superagentNetworkInterface.apply(ReduxQuery.networkInterfaces.superagent, arguments);
           }
 
           var aborted = false;
@@ -129,7 +129,7 @@ class ResultFrame extends Component {
         };
 
         ReduxQuery = Object.assign({}, ReduxQuery, {
-          queryMiddleware: ReduxQuery.queryMiddlewareAdvanced(mockAdapter),
+          queryMiddleware: ReduxQuery.queryMiddlewareAdvanced(mockNetworkInterface),
         });
       </script>`
     );

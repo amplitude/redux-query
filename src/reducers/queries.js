@@ -17,7 +17,7 @@ const queries = (state = initialState, action) => {
                     url: action.url,
                     isFinished: false,
                     isPending: true,
-                    request: action.request,
+                    networkHandler: action.networkHandler,
                     isMutation: action.type === actionTypes.MUTATE_START,
                     queryCount: state[queryKey] ? state[queryKey].queryCount + 1 : 1,
                 },
@@ -44,7 +44,7 @@ const queries = (state = initialState, action) => {
             const { queryKey } = action;
 
             if (state[queryKey].isPending) {
-                // Make sure request is actually pending
+                // Make sure query is actually pending
 
                 return {
                     ...state,

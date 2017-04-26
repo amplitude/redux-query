@@ -272,11 +272,11 @@ The result of the promise returned by `mutateAsync` will be the following object
 
 Similarly to how mutations are triggered by dispatching `mutateAsync` actions, you can trigger requests by dispatching `requestAsync` actions with a request query config.
 
-### `redux-query/advanced` and custom network adapters
+### `redux-query/advanced` and custom network interfaces
 
 By default, `redux-query` makes XHR requests using the [superagent](https://github.com/visionmedia/superagent) library. If you'd rather use a different library for making requests, you can use the `redux-query`'s "advanced" mode by importing from `redux-query/advanced` instead of `redux-query`.
 
-Note: The default [`queryMiddleware`](./src/middleware/query.js) exported from the main `redux-query` entry point is simply a [superagent adapter](./src/adapters/superagent.js) bound to `queryMiddlewareAdvanced`.
+Note: The default [`queryMiddleware`](./src/middleware/query.js) exported from the main `redux-query` entry point is simply a [superagent network interface](./src/network-interfaces/superagent.js) bound to `queryMiddlewareAdvanced`.
 
 Example `queryMiddlewareAdvanced` usage:
 
@@ -286,7 +286,7 @@ import { entitiesReducer, queriesReducer, queryMiddlewareAdvanced } from 'redux-
 
 // A function that takes a url, method, and other options. This function should return an object
 // with two required properties: execute and abort.
-import myNetworkAdapter from './network-adapter';
+import myNetworkInterface from './network-interface';
 
 export const getQueries = (state) => state.queries;
 export const getEntities = (state) => state.entities;
@@ -298,25 +298,24 @@ const reducer = combineReducers({
 
 const store = createStore(
     reducer,
-    applyMiddleware(queryMiddlewareAdvanced(myNetworkAdapter)(getQueries, getEntities))
+    applyMiddleware(queryMiddlewareAdvanced(myNetworkInterface)(getQueries, getEntities))
 );
 ```
 
-#### Network adapters
+#### Network interfaces
 
-You must provide a function to `queryMiddlewareAdvanced` that adheres to the following `NetworkAdapter` interface:
+You must provide a function to `queryMiddlewareAdvanced` that adheres to the following interface:
 
 ```javascript
-type NetworkAdapter = (
+type NetworkInterface = (
     url: string,
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     config?: { body?: string | Object, headers?: Object, credentials?: 'omit' | 'include' } = {},
-) => NetworkRequest;
+) => NetworkHandler;
 
-type NetworkRequest = {
+type NetworkHandler = {
     execute: (callback: (err: any, resStatus: number, resBody: ?Object, resText: string, resHeaders: Object) => void) => void,
     abort: () => void,
-    instance: any,
 };
 ```
 

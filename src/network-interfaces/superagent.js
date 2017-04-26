@@ -20,7 +20,7 @@ const createRequest = (url, method, body) => {
     }
 };
 
-const superagentNetworkAdapter = (url, method, { body, headers, credentials } = {}) => {
+const superagentNetworkInterface = (url, method, { body, headers, credentials } = {}) => {
     const request = createRequest(url, method, body);
 
     if (headers) {
@@ -49,4 +49,4 @@ const superagentNetworkAdapter = (url, method, { body, headers, credentials } = 
     };
 };
 
-export default superagentNetworkAdapter;
+export default superagentNetworkInterface;

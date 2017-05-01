@@ -272,6 +272,40 @@ The result of the promise returned by `mutateAsync` will be the following object
 
 Similarly to how mutations are triggered by dispatching `mutateAsync` actions, you can trigger requests by dispatching `requestAsync` actions with a request query config.
 
+### Queries selectors
+
+`redux-query` provides some useful selectors for reading from the queries reducer state:
+
+| Selector Name | Return Type | Description |
+|:-----|:-----|:-----|
+| isFinished | ?boolean | Returns `true` if the query was resolved or cancelled.
+| isPending | ?boolean | Returns `true` if the query is in-flight – not resolved and not cancelled.
+| status | ?number | Response HTTP status code.
+| lastUpdated | ?number | Time at which the query was resolved.
+| queryCount | ?number | Number of times a query was started with the same query key.
+
+All of the query selectors have the following signature:
+
+`(queryConfig) => (queriesReducerState) => mixed`
+
+### Errors reducer and selectors
+
+`redux-query` provides another reducer for applications that want to track response body, text, and headers in redux state. Unlike the entities and queries reducers, `errorsReducer` is totally optional. If you include this reducer in your application's combined reducer, all responses from requests and mutations with non-2xx status codes will be recorded in this state.
+
+Note: If your application has many queries that could potentially error and is used for long periods of time, you should avoid using this reducer as it could potentially accumulate a lot of memory usage. You can alternatively build your own reducer to track a subset of queries, or rely on the promise interface to handle error responses in an ad-hoc manor.
+
+You can query from this state using the provided `errorSelectors`:
+
+| Selector Name | Return Type | Description |
+|:-----|:-----|:-----|
+| responseBody | ?Object | Parsed response body (if query failed).
+| responseText | ?string | Unparsed response body string (if query failed).
+| responseHeaders | ?Object | Response headers (if query failed).
+
+All of the query selectors have the following signature:
+
+`(queryConfig) => (errorsReducerState) => mixed`
+
 ### Custom network interfaces
 
 By default, `redux-query` makes XHR requests using the [superagent](https://github.com/visionmedia/superagent) library. If you'd rather use a different library for making requests, you can use `redux-query`'s `queryMiddlewareAdvanced` middleware.

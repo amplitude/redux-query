@@ -282,7 +282,6 @@ const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSe
                                 duration,
                                 status: resStatus,
                                 text: resText,
-                                rolledBackEntities,
                                 headers: resHeaders,
                             });
                         } else {

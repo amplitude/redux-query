@@ -1,6 +1,7 @@
 import { assert } from 'chai';
 import superagent from 'superagent';
 import superagentMock from 'superagent-mock';
+import omit from 'lodash.omit';
 
 import * as actionTypes from '../../src/constants/action-types';
 import { getQueryKey } from '../../src/lib/query-key';
@@ -42,7 +43,9 @@ const superagentMockConfig = [
     {
         pattern: '/echo-headers',
         fixtures: (match, params, headers) => {
-            return headers;
+            // Remove the User-Agent header automatically added by superagent
+
+            return omit(headers, 'User-Agent');
         },
         get: mockEndpointForHeaders,
         post: mockEndpointForHeaders,

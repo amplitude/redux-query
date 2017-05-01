@@ -552,9 +552,6 @@ describe('query middleware', () => {
                     type: actionTypes.MUTATE_FAILURE,
                     url,
                     status: 404,
-                    originalEntities: {
-                        message: apiMessage,
-                    },
                     rolledBackEntities: {
                         message: apiMessage,
                     },
@@ -600,11 +597,6 @@ describe('query middleware', () => {
                     type: actionTypes.MUTATE_FAILURE,
                     url,
                     status: 404,
-                    originalEntities: {
-                        messagesById: {
-                            hello: null,
-                        },
-                    },
                     rolledBackEntities: {
                         messagesById: {
                             hello: null,

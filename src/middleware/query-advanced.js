@@ -267,13 +267,12 @@ const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSe
                                     url,
                                     body,
                                     resStatus,
-                                    initialEntities,
+                                    rolledBackEntities,
                                     queryKey,
                                     resBody,
                                     resText,
                                     resHeaders,
-                                    meta,
-                                    rolledBackEntities
+                                    meta
                                 )
                             );
 

@@ -62,9 +62,6 @@ describe('entities reducer', () => {
     it('should handle MUTATE_FAILURE and original entities', () => {
         const action = {
             type: actionTypes.MUTATE_FAILURE,
-            originalEntities: {
-                message: 'hello, world!',
-            },
             rolledBackEntities: {
                 message: 'hello, world!',
             },

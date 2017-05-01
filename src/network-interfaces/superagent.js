@@ -14,7 +14,7 @@ const createRequest = (url, method, body) => {
         case httpMethods.PATCH:
             return superagent.patch(url, body);
         case httpMethods.DELETE:
-            return superagent.del(url, body);
+            return superagent.delete(url, body);
         default:
             throw new Error(`Unsupported HTTP method: ${method}`);
     }

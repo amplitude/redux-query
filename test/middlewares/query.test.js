@@ -671,7 +671,7 @@ describe('query middleware', () => {
                 queries: {
                     [queryKey]: {
                         isPending: true,
-                        request: mockRequestObject,
+                        networkHandler: mockRequestObject,
                     },
                 },
             });
@@ -704,7 +704,7 @@ describe('query middleware', () => {
                     [queryKey]: {
                         isPending: true,
                         isMutation: true,
-                        request: mockRequestObject,
+                        networkHandler: mockRequestObject,
                     },
                 },
             });
@@ -744,11 +744,11 @@ describe('query middleware', () => {
                 queries: {
                     '/api1': {
                         isPending: true,
-                        request: mockRequestObject,
+                        networkHandler: mockRequestObject,
                     },
                     '/api2': {
                         isPending: true,
-                        request: mockRequestObject,
+                        networkHandler: mockRequestObject,
                     },
                 },
             });

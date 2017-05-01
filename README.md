@@ -265,6 +265,11 @@ The result of the promise returned by `mutateAsync` will be the following object
 | body | object or null | Parsed response body.
 | text | string | Unparsed response body string.
 | duration | number | The total duration from the start of the query to receiving the full response.
+
+When the mutation succeeds, it will also include the following fields:
+
+| Name | Type | Description |
+|:-----|:-----|:-----|
 | transformed | any | Result from the transform function. Will be identical to body if transform is unprovided in the query config.
 | entities | object | The new, updated entities that have been affected by the query.
 

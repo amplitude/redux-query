@@ -85,7 +85,7 @@ class ResultFrame extends Component {
           var isExternalUrl = url.indexOf('://') > 0 || url.indexOf('//') === 0;
 
           if (isExternalUrl) {
-            return ReduxQuery.superagentNetworkInterface.apply(ReduxQuery.networkInterfaces.superagent, arguments);
+            return ReduxQuery.networkInterfaces.superagent.apply(ReduxQuery.networkInterfaces.superagent, arguments);
           }
 
           var aborted = false;

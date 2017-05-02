@@ -1,4 +1,3 @@
-import * as actions from './actions';
 import * as actionTypes from './constants/action-types';
 import * as httpMethods from './constants/http-methods';
 import * as networkInterfaces from './network-interfaces';
@@ -13,4 +12,4 @@ export { default as errorsReducer } from './reducers/errors';
 export { default as queryMiddleware } from './middleware/query';
 export { default as queryMiddlewareAdvanced } from './middleware/query-advanced';
 export { cancelQuery, mutateAsync, requestAsync, updateEntities } from './actions';
-export { actions, actionTypes, errorSelectors, httpMethods, networkInterfaces, querySelectors };
+export { actionTypes, errorSelectors, httpMethods, networkInterfaces, querySelectors };

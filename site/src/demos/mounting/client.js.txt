@@ -92,7 +92,7 @@ class HelloWorld extends Component {
 // Map redux state to props. This is ordinary react-redux usage – we're just
 // reading from the entities state.
 const mapStateToProps = state => ({
-  isLoading: querySelectors.isPending(helloRequest())(state.queries),
+  isLoading: querySelectors.isPending(state.queries, helloRequest()),
   message: state.entities.message,
 });
 

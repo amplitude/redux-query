@@ -277,7 +277,7 @@ When the mutation succeeds, it will also include the following fields:
 
 Similarly to how mutations are triggered by dispatching `mutateAsync` actions, you can trigger requests by dispatching `requestAsync` actions with a request query config.
 
-You can also Promise-chain on dispatched `requestAsync` actions, but a Promise will only be returned if `redux-query` determines it will make a network request. For example, if the query config not have `force` set to `true` and a previous request with the same query key previously succeeded, then a Promise will not be returned. So be sure to always check that the returned value from a dispatched `requestAsync` is a Promise before interacting with it.
+You can also Promise-chain on dispatched `requestAsync` actions, but a Promise will only be returned if `redux-query` determines it will make a network request. For example, if the query config does not have `force` set to `true` and a previous request with the same query key previously succeeded, then a Promise will not be returned. So be sure to always check that the returned value from a dispatched `requestAsync` is a Promise before interacting with it.
 
 ### Queries selectors
 

@@ -14,11 +14,7 @@ export const updateEntities = (update, entities, transformed) => {
 export const optimisticUpdateEntities = (optimisticUpdate, entities) => {
     return Object.keys(optimisticUpdate).reduce(
         (accum, key) => {
-            if (optimisticUpdate[key]) {
-                accum[key] = optimisticUpdate[key](entities[key]);
-            } else {
-                accum[key] = entities[key];
-            }
+            accum[key] = optimisticUpdate[key](entities[key]);
 
             return accum;
         },

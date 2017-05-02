@@ -11,51 +11,7 @@ import * as actionTypes from '../constants/action-types';
 import * as httpMethods from '../constants/http-methods';
 import * as statusCodes from '../constants/status-codes';
 import { reconcileQueryKey } from '../lib/query-key';
-
-const updateEntities = (update, entities, transformed) => {
-    // If update, not supplied, then no change to entities should be made
-
-    return Object.keys(update || {}).reduce(
-        (accum, key) => {
-            accum[key] = update[key]((entities || {})[key], (transformed || {})[key]);
-
-            return accum;
-        },
-        {}
-    );
-};
-
-const optimisticUpdateEntities = (optimisticUpdate, entities) => {
-    return Object.keys(optimisticUpdate).reduce(
-        (accum, key) => {
-            if (optimisticUpdate[key]) {
-                accum[key] = optimisticUpdate[key](entities[key]);
-            } else {
-                accum[key] = entities[key];
-            }
-
-            return accum;
-        },
-        {}
-    );
-};
-
-const rollbackEntities = (rollback = {}, initialEntities, entities) => {
-    return Object.keys(initialEntities).reduce(
-        (accum, key) => {
-            if (rollback[key]) {
-                accum[key] = rollback[key](initialEntities[key], entities[key]);
-            } else {
-                // Default to just reverting to the initial state for that
-                // entity (before the optimistic update)
-                accum[key] = initialEntities[key];
-            }
-
-            return accum;
-        },
-        {}
-    );
-};
+import { updateEntities, optimisticUpdateEntities, rollbackEntities } from '../lib/update';
 
 const defaultConfig = {
     backoff: {

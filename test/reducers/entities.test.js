@@ -91,10 +91,15 @@ describe('entities reducer', () => {
         assert.deepEqual(newEntities, expectedEntities);
     });
 
-    it('should handle REMOVE_ENTITY', () => {
+    it('should handle UPDATE_ENTITIES', () => {
         const action = {
-            type: actionTypes.REMOVE_ENTITY,
-            path: ['some', 'thing', 'gone'],
+            type: actionTypes.UPDATE_ENTITIES,
+            update: {
+                some: value => ({
+                    ...value,
+                    thing: {},
+                }),
+            },
         };
         const prevState = {
             some: {
@@ -112,10 +117,19 @@ describe('entities reducer', () => {
         assert.deepEqual(newEntities, expectedEntities);
     });
 
-    it('should handle REMOVE_ENTITIES', () => {
+    it('should handle UPDATE_ENTITIES with multiple entities', () => {
         const action = {
-            type: actionTypes.REMOVE_ENTITIES,
-            paths: [['some', 'thing', 'gone'], ['something', 'else', 'gone']],
+            type: actionTypes.UPDATE_ENTITIES,
+            update: {
+                some: value => ({
+                    ...value,
+                    thing: {},
+                }),
+                something: value => ({
+                    ...value,
+                    else: {},
+                }),
+            },
         };
         const prevState = {
             some: {
@@ -128,6 +142,11 @@ describe('entities reducer', () => {
                     gone: {},
                 },
             },
+            dont: {
+                touch: {
+                    this: {},
+                },
+            },
         };
         const newEntities = entities(prevState, action);
         const expectedEntities = {
@@ -136,6 +155,11 @@ describe('entities reducer', () => {
             },
             something: {
                 else: {},
+            },
+            dont: {
+                touch: {
+                    this: {},
+                },
             },
         };
         assert.deepEqual(newEntities, expectedEntities);

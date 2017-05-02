@@ -6,9 +6,9 @@ import {
     MUTATE_SUCCESS,
     REQUEST_SUCCESS,
     RESET,
-    REMOVE_ENTITIES,
-    REMOVE_ENTITY,
+    UPDATE_ENTITIES,
 } from '../constants/action-types';
+import { optimisticUpdateEntities } from '../lib/update';
 
 const initialState = {};
 
@@ -43,15 +43,11 @@ const entities = (state = initialState, action) => {
             ...state,
             ...action.entities,
         };
-    } else if (action.type === REMOVE_ENTITIES) {
-        return action.paths.reduce(
-            (accum, path) => {
-                return withoutPath(accum, path);
-            },
-            state
-        );
-    } else if (action.type === REMOVE_ENTITY) {
-        return withoutPath(state, action.path);
+    } else if (action.type === UPDATE_ENTITIES) {
+        return {
+            ...state,
+            ...optimisticUpdateEntities(action.update, state),
+        };
     } else {
         return state;
     }

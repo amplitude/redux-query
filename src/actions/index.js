@@ -177,16 +177,9 @@ export const cancelQuery = queryKey => {
     };
 };
 
-export const removeEntity = path => {
+export const updateEntities = update => {
     return {
-        type: actionTypes.REMOVE_ENTITY,
-        path,
-    };
-};
-
-export const removeEntities = paths => {
-    return {
-        type: actionTypes.REMOVE_ENTITIES,
-        paths,
+        type: actionTypes.UPDATE_ENTITIES,
+        update,
     };
 };

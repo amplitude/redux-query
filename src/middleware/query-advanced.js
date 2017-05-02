@@ -10,7 +10,7 @@ import { requestStart, requestFailure, requestSuccess, mutateStart, mutateFailur
 import * as actionTypes from '../constants/action-types';
 import * as httpMethods from '../constants/http-methods';
 import * as statusCodes from '../constants/status-codes';
-import { reconcileQueryKey } from '../lib/query-key';
+import { getQueryKey } from '../lib/query-key';
 import { updateEntities, optimisticUpdateEntities, rollbackEntities } from '../lib/update';
 
 const defaultConfig = {
@@ -55,7 +55,7 @@ const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSe
                 invariant(!!url, 'Missing required `url` field in action handler');
                 invariant(!!update, 'Missing required `update` field in action handler');
 
-                const queryKey = reconcileQueryKey(action);
+                const queryKey = getQueryKey(action);
 
                 const state = getState();
                 const queries = queriesSelector(state);
@@ -191,7 +191,7 @@ const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSe
                     optimisticEntities = optimisticUpdateEntities(optimisticUpdate, initialEntities);
                 }
 
-                const queryKey = reconcileQueryKey(action);
+                const queryKey = getQueryKey(action);
 
                 returnValue = new Promise(resolve => {
                     const start = new Date();

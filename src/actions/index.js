@@ -1,6 +1,14 @@
 import * as actionTypes from '../constants/action-types';
 
-export const requestStart = (url, body, networkHandler, meta, queryKey) => {
+export const requestStart = (
+    {
+        body,
+        meta,
+        networkHandler,
+        queryKey,
+        url,
+    }
+) => {
     return {
         type: actionTypes.REQUEST_START,
         url,
@@ -12,15 +20,17 @@ export const requestStart = (url, body, networkHandler, meta, queryKey) => {
 };
 
 export const requestSuccess = (
-    url,
-    body,
-    status,
-    entities,
-    meta,
-    queryKey,
-    responseBody,
-    responseText,
-    responseHeaders
+    {
+        body,
+        entities,
+        meta,
+        queryKey,
+        responseBody,
+        responseHeaders,
+        responseText,
+        status,
+        url,
+    }
 ) => {
     return {
         type: actionTypes.REQUEST_SUCCESS,
@@ -37,7 +47,18 @@ export const requestSuccess = (
     };
 };
 
-export const requestFailure = (url, body, status, responseBody, meta, queryKey, responseText, responseHeaders) => {
+export const requestFailure = (
+    {
+        body,
+        meta,
+        queryKey,
+        responseBody,
+        responseHeaders,
+        responseText,
+        status,
+        url,
+    }
+) => {
     return {
         type: actionTypes.REQUEST_FAILURE,
         url,
@@ -52,7 +73,16 @@ export const requestFailure = (url, body, status, responseBody, meta, queryKey, 
     };
 };
 
-export const mutateStart = (url, body, networkHandler, optimisticEntities, queryKey, meta) => {
+export const mutateStart = (
+    {
+        body,
+        meta,
+        networkHandler,
+        optimisticEntities,
+        queryKey,
+        url,
+    }
+) => {
     return {
         type: actionTypes.MUTATE_START,
         url,
@@ -65,15 +95,17 @@ export const mutateStart = (url, body, networkHandler, optimisticEntities, query
 };
 
 export const mutateSuccess = (
-    url,
-    body,
-    status,
-    entities,
-    queryKey,
-    responseBody,
-    responseText,
-    responseHeaders,
-    meta
+    {
+        body,
+        entities,
+        meta,
+        queryKey,
+        responseBody,
+        responseHeaders,
+        responseText,
+        status,
+        url,
+    }
 ) => {
     return {
         type: actionTypes.MUTATE_SUCCESS,
@@ -91,15 +123,17 @@ export const mutateSuccess = (
 };
 
 export const mutateFailure = (
-    url,
-    body,
-    status,
-    rolledBackEntities,
-    queryKey,
-    responseBody,
-    responseText,
-    responseHeaders,
-    meta
+    {
+        body,
+        meta,
+        queryKey,
+        responseBody,
+        responseHeaders,
+        responseText,
+        rolledBackEntities,
+        status,
+        url,
+    }
 ) => {
     return {
         type: actionTypes.MUTATE_FAILURE,

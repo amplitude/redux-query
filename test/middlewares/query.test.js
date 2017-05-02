@@ -239,7 +239,7 @@ describe('query middleware', () => {
             const dispatch = () => {
                 assert.fail();
             };
-            const queryKey = getQueryKey(url);
+            const queryKey = getQueryKey({ url });
             const getState = () => ({
                 entities: {},
                 queries: {
@@ -269,7 +269,7 @@ describe('query middleware', () => {
             const dispatch = () => {
                 assert.fail();
             };
-            const queryKey = getQueryKey(url);
+            const queryKey = getQueryKey({ url });
             const getState = () => ({
                 entities: {},
                 queries: {
@@ -311,7 +311,7 @@ describe('query middleware', () => {
                 },
             ];
             const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
-            const queryKey = getQueryKey(url);
+            const queryKey = getQueryKey({ url });
             const getState = () => ({
                 entities: {},
                 queries: {
@@ -353,7 +353,7 @@ describe('query middleware', () => {
                 },
             ];
             const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
-            const queryKey = getQueryKey(url);
+            const queryKey = getQueryKey({ url });
             const getState = () => ({
                 entities: {},
                 queries: {
@@ -660,7 +660,7 @@ describe('query middleware', () => {
                     done();
                 },
             };
-            const queryKey = getQueryKey(url);
+            const queryKey = getQueryKey({ url });
             const getState = () => ({
                 entities: {},
                 queries: {
@@ -692,7 +692,7 @@ describe('query middleware', () => {
                     done();
                 },
             };
-            const queryKey = getQueryKey(url);
+            const queryKey = getQueryKey({ url });
             const getState = () => ({
                 entities: {},
                 queries: {

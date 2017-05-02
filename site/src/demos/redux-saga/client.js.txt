@@ -31,7 +31,7 @@ import {
   mutateAsync,
   requestAsync,
   cancelQuery,
-  reconcileQueryKey,
+  getQueryKey,
 } from 'redux-query';
 import createSagaMiddleware, { takeLatest } from 'redux-saga';
 import { cancelled, put } from 'redux-saga/effects';
@@ -163,7 +163,7 @@ function* changeName(action) {
     if (yield cancelled()) {
       // When this saga is cancelled because another CHANGE_NAME action was
       // dispatched, we can cancel the in-flight query here.
-      yield put(cancelQuery(reconcileQueryKey(query)));
+      yield put(cancelQuery(getQueryKey(query)));
     }
   }
 }

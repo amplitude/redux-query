@@ -6,7 +6,7 @@ import React from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 
 import { requestAsync, cancelQuery } from '../actions';
-import { reconcileQueryKey } from '../lib/query-key';
+import { getQueryKey } from '../lib/query-key';
 import storeShape from '../lib/store-shape';
 
 const ensureArray = maybe => {
@@ -14,8 +14,8 @@ const ensureArray = maybe => {
 };
 
 const diffConfigs = (prevConfigs, configs) => {
-    const prevQueryKeys = prevConfigs.map(reconcileQueryKey);
-    const queryKeys = configs.map(reconcileQueryKey);
+    const prevQueryKeys = prevConfigs.map(getQueryKey);
+    const queryKeys = configs.map(getQueryKey);
 
     const intersect = intersection(prevQueryKeys, queryKeys);
     const cancelKeys = difference(prevQueryKeys, intersect);
@@ -57,7 +57,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
             const { cancelKeys, requestKeys } = diffConfigs(prevConfigs, configs);
             const requestConfigs = configs.filter(config => {
-                return includes(requestKeys, reconcileQueryKey(config));
+                return includes(requestKeys, getQueryKey(config));
             });
 
             if (cancelKeys.length) {
@@ -113,7 +113,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
                 if (requestPromise) {
                     // Record pending request since a promise was returned
-                    const queryKey = reconcileQueryKey(config);
+                    const queryKey = getQueryKey(config);
                     this._pendingRequests[queryKey] = null;
 
                     requestPromise.then(() => {

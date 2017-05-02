@@ -10,5 +10,5 @@ export { default as queriesReducer } from './reducers/queries';
 export { default as entitiesReducer } from './reducers/entities';
 export { default as errorsReducer } from './reducers/errors';
 export { default as queryMiddlewareAdvanced } from './middleware/query-advanced';
-export { cancelQuery, mutateAsync, requestAsync, removeEntities, removeEntity } from './actions';
+export { cancelQuery, mutateAsync, requestAsync, updateEntities } from './actions';
 export { actions, actionTypes, errorSelectors, httpMethods, querySelectors };

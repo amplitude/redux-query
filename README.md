@@ -293,7 +293,7 @@ You can also Promise-chain on dispatched `requestAsync` actions, but a Promise w
 
 All of the query selectors have the following signature:
 
-`(queryConfig) => (queriesReducerState) => mixed`
+`(queriesReducerState, queryConfig) => mixed`
 
 ### Errors reducer and selectors
 
@@ -311,7 +311,7 @@ You can query from this state using the provided `errorSelectors`:
 
 All of the query selectors have the following signature:
 
-`(queryConfig) => (errorsReducerState) => mixed`
+`(errorsReducerState, queryConfig) => mixed`
 
 ### Custom network interfaces
 

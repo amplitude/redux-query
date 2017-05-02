@@ -135,7 +135,7 @@ const ItemContainer = compose(
   connect((state, props) => {
     const query = itemRequest(props.itemId);
     return {
-      isLoading: querySelectors.isPending(query)(state.queries),
+      isLoading: querySelectors.isPending(state.queries, query),
       item: selectItem(state, props),
       query,
     };

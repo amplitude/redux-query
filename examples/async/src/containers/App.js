@@ -69,8 +69,8 @@ const mapStateToProps = state => {
   const { selectedReddit } = state;
   const url = getRedditUrl(selectedReddit);
   const queriesState = get(state, 'queries');
-  const isFetching = querySelectors.isPending(url)(queriesState) || false;
-  const lastUpdated = querySelectors.lastUpdated(url)(queriesState);
+  const isFetching = querySelectors.isPending(queriesState, { url }) || false;
+  const lastUpdated = querySelectors.lastUpdated(queriesState, { url });
   const postIds = get(
     state,
     ['entities', 'reddits', selectedReddit, 'data', 'children'],

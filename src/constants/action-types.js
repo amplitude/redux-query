@@ -11,5 +11,4 @@ export const MUTATE_SUCCESS = '@@query/MUTATE_SUCCESS';
 export const MUTATE_FAILURE = '@@query/MUTATE_FAILURE';
 
 export const RESET = '@@query/RESET';
-export const REMOVE_ENTITIES = '@@query/REMOVE_ENTITIES';
-export const REMOVE_ENTITY = '@@query/REMOVE_ENTITY';
+export const UPDATE_ENTITIES = '@@query/UPDATE_ENTITIES';

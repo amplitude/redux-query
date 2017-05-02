@@ -36,7 +36,6 @@ const resOk = status => Math.floor(status / 100) === 2;
 
 const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSelector, config = defaultConfig) => {
     return ({ dispatch, getState }) => next => action => {
-        // TODO(ryan): add warnings when there are simultaneous requests and mutation queries for the same entities
         let returnValue;
 
         switch (action.type) {

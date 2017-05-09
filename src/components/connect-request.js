@@ -106,7 +106,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
                         force,
                         retry,
                         ...config,
-                        unstable_preDispatchCallback() {
+                        unstable_preDispatchCallback: () => {
                             delete this._pendingRequests[queryKey];
                         },
                     })

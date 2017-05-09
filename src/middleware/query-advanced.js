@@ -109,6 +109,10 @@ const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSe
                                 let transformed;
                                 let newEntities;
 
+                                if (action.unstable_preDispatchCallback) {
+                                    action.unstable_preDispatchCallback();
+                                }
+
                                 if (err || !resOk(status)) {
                                     dispatch(
                                         requestFailure({

@@ -40,7 +40,6 @@
   "author": "Ryan Ashcraft <ryan@amplitude.com>",
   "license": "MIT",
   "dependencies": {
-    "asap": "^2.0.5",
     "backo": "^1.1.0",
     "invariant": "^2.2.0",
     "json-stable-stringify": "^1.0.0",

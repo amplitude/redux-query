@@ -161,6 +161,7 @@ export const requestAsync = (
         transform,
         update,
         url,
+        unstable_preDispatchCallback,
     }
 ) => {
     return {
@@ -174,6 +175,7 @@ export const requestAsync = (
         transform,
         update,
         url,
+        unstable_preDispatchCallback,
     };
 };
 

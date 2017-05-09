@@ -1,4 +1,3 @@
-import asap from 'asap';
 import difference from 'lodash.difference';
 import includes from 'lodash.includes';
 import intersection from 'lodash.intersection';
@@ -81,14 +80,12 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
             const cancelKeysArray = ensureArray(cancelKeys);
 
             if (cancelKeysArray.length > 0) {
-                asap(() => {
-                    const { dispatch } = this.context.store;
-                    const pendingKeys = Object.keys(this._pendingRequests);
+                const { dispatch } = this.context.store;
+                const pendingKeys = Object.keys(this._pendingRequests);
 
-                    cancelKeysArray
-                        .filter(key => includes(pendingKeys, key))
-                        .forEach(queryKey => dispatch(cancelQuery(queryKey)));
-                });
+                cancelKeysArray
+                    .filter(key => includes(pendingKeys, key))
+                    .forEach(queryKey => dispatch(cancelQuery(queryKey)));
             }
         }
 
@@ -103,22 +100,21 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
             const { dispatch } = this.context.store;
 
             if (config.url) {
+                const queryKey = getQueryKey(config);
                 const requestPromise = dispatch(
                     requestAsync({
                         force,
                         retry,
                         ...config,
+                        unstable_preDispatchCallback() {
+                            delete this._pendingRequests[queryKey];
+                        },
                     })
                 );
 
                 if (requestPromise) {
                     // Record pending request since a promise was returned
-                    const queryKey = getQueryKey(config);
-                    this._pendingRequests[queryKey] = null;
-
-                    requestPromise.then(() => {
-                        delete this._pendingRequests[queryKey];
-                    });
+                    this._pendingRequests[queryKey] = requestPromise;
                 }
             }
         }

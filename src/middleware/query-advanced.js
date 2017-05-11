@@ -40,16 +40,7 @@ const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSe
 
         switch (action.type) {
             case actionTypes.REQUEST_ASYNC: {
-                const {
-                    url,
-                    body,
-                    force,
-                    retry,
-                    transform = identity,
-                    update,
-                    options = {},
-                    meta,
-                } = action;
+                const { url, body, force, retry, transform = identity, update, options = {}, meta } = action;
 
                 invariant(!!url, 'Missing required `url` field in action handler');
                 invariant(!!update, 'Missing required `update` field in action handler');

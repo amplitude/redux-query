@@ -68,13 +68,6 @@ const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSe
                     returnValue = new Promise(resolve => {
                         const start = new Date();
                         const { method = httpMethods.GET } = options;
-
-                        const networkHandler = networkInterface(url, method, {
-                            body,
-                            headers: options.headers,
-                            credentials: options.credentials,
-                        });
-
                         let attempts = 0;
                         const backoff = new Backoff({
                             min: config.backoff.minDuration,
@@ -82,6 +75,12 @@ const queryMiddlewareAdvanced = networkInterface => (queriesSelector, entitiesSe
                         });
 
                         const attemptRequest = () => {
+                            const networkHandler = networkInterface(url, method, {
+                                body,
+                                headers: options.headers,
+                                credentials: options.credentials,
+                            });
+
                             dispatch(
                                 requestStart({
                                     body,

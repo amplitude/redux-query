@@ -1,14 +1,6 @@
 import * as actionTypes from '../constants/action-types';
 
-export const requestStart = (
-    {
-        body,
-        meta,
-        networkHandler,
-        queryKey,
-        url,
-    }
-) => {
+export const requestStart = ({ body, meta, networkHandler, queryKey, url }) => {
     return {
         type: actionTypes.REQUEST_START,
         url,
@@ -19,19 +11,17 @@ export const requestStart = (
     };
 };
 
-export const requestSuccess = (
-    {
-        body,
-        entities,
-        meta,
-        queryKey,
-        responseBody,
-        responseHeaders,
-        responseText,
-        status,
-        url,
-    }
-) => {
+export const requestSuccess = ({
+    body,
+    entities,
+    meta,
+    queryKey,
+    responseBody,
+    responseHeaders,
+    responseText,
+    status,
+    url,
+}) => {
     return {
         type: actionTypes.REQUEST_SUCCESS,
         url,
@@ -47,18 +37,7 @@ export const requestSuccess = (
     };
 };
 
-export const requestFailure = (
-    {
-        body,
-        meta,
-        queryKey,
-        responseBody,
-        responseHeaders,
-        responseText,
-        status,
-        url,
-    }
-) => {
+export const requestFailure = ({ body, meta, queryKey, responseBody, responseHeaders, responseText, status, url }) => {
     return {
         type: actionTypes.REQUEST_FAILURE,
         url,
@@ -73,16 +52,7 @@ export const requestFailure = (
     };
 };
 
-export const mutateStart = (
-    {
-        body,
-        meta,
-        networkHandler,
-        optimisticEntities,
-        queryKey,
-        url,
-    }
-) => {
+export const mutateStart = ({ body, meta, networkHandler, optimisticEntities, queryKey, url }) => {
     return {
         type: actionTypes.MUTATE_START,
         url,
@@ -94,19 +64,17 @@ export const mutateStart = (
     };
 };
 
-export const mutateSuccess = (
-    {
-        body,
-        entities,
-        meta,
-        queryKey,
-        responseBody,
-        responseHeaders,
-        responseText,
-        status,
-        url,
-    }
-) => {
+export const mutateSuccess = ({
+    body,
+    entities,
+    meta,
+    queryKey,
+    responseBody,
+    responseHeaders,
+    responseText,
+    status,
+    url,
+}) => {
     return {
         type: actionTypes.MUTATE_SUCCESS,
         url,
@@ -122,19 +90,17 @@ export const mutateSuccess = (
     };
 };
 
-export const mutateFailure = (
-    {
-        body,
-        meta,
-        queryKey,
-        responseBody,
-        responseHeaders,
-        responseText,
-        rolledBackEntities,
-        status,
-        url,
-    }
-) => {
+export const mutateFailure = ({
+    body,
+    meta,
+    queryKey,
+    responseBody,
+    responseHeaders,
+    responseText,
+    rolledBackEntities,
+    status,
+    url,
+}) => {
     return {
         type: actionTypes.MUTATE_FAILURE,
         url,
@@ -150,20 +116,18 @@ export const mutateFailure = (
     };
 };
 
-export const requestAsync = (
-    {
-        body,
-        force,
-        meta,
-        options,
-        queryKey,
-        retry,
-        transform,
-        update,
-        url,
-        unstable_preDispatchCallback,
-    }
-) => {
+export const requestAsync = ({
+    body,
+    force,
+    meta,
+    options,
+    queryKey,
+    retry,
+    transform,
+    update,
+    url,
+    unstable_preDispatchCallback,
+}) => {
     return {
         type: actionTypes.REQUEST_ASYNC,
         body,
@@ -179,19 +143,7 @@ export const requestAsync = (
     };
 };
 
-export const mutateAsync = (
-    {
-        body,
-        meta,
-        optimisticUpdate,
-        options,
-        queryKey,
-        rollback,
-        transform,
-        update,
-        url,
-    }
-) => {
+export const mutateAsync = ({ body, meta, optimisticUpdate, options, queryKey, rollback, transform, update, url }) => {
     return {
         type: actionTypes.MUTATE_ASYNC,
         body,

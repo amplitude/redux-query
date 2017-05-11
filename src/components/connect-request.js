@@ -2,10 +2,10 @@ import difference from 'lodash.difference';
 import includes from 'lodash.includes';
 import intersection from 'lodash.intersection';
 import React from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
 
 import { requestAsync, cancelQuery } from '../actions';
 import { getQueryKey } from '../lib/query-key';
+import shallowEqual from '../lib/shallow-equal';
 import storeShape from '../lib/store-shape';
 
 const ensureArray = maybe => {
@@ -39,7 +39,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
         shouldComponentUpdate(nextProps, nextState) {
             if (pure) {
-                return shallowCompare(this, nextProps, nextState);
+                return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
             } else {
                 return true;
             }

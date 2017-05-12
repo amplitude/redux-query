@@ -1,3 +1,21 @@
+## 2.0.0
+
+Refer to the [v2 transition guide](https://github.com/amplitude/redux-query/blob/master/docs/transition-guides/v2.md) for instructions on how to upgrade from redux-query 1.x to 2.x.
+
+- Use the latest entities state when the network request finishes for mutations
+- Replace `request` fields in queries reducer and relevant actions with `networkHandler`
+- New, safer rollback behavior when mutations fail
+- New `rollback` option in query configs to handle reverting optimistic updates 
+- New, optional reducer, `errorsReducer`, for tracking response bodies, text, and headers for failed queries
+- Change `connectRequest` to work around a race condition resulting in invalid warnings
+- Update to superagent 3.x
+- Avoid creating new functions in connectRequest's render function (acontreras89 [#67](https://github.com/amplitude/redux-query/pull/67))
+- Replace `removeEntity` and `removeEntities` actions with a more generic `updateEntities` action
+- Remove `reconcileQueryKey` and change `getQueryKey` to only accept query config objects as a parameter
+- Replace usage of deprecated `react-addons-shallow-compare`
+- Renamed "network adapters" to "network interfaces"
+- Some top-level exports have been removed or renamed (see v2 transition guide for more information)
+
 ## 1.5.0
 
 - Use prop-types to avoid React 15.5.0 deprecation warnings (ryanashcraft)

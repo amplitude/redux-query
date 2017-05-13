@@ -88,10 +88,10 @@ Query configs are objects used to describe how redux-query should handle the req
 | Name | Type | Required? | Description |
 |:---|:---|:---:|:---|
 | `url` | string | yes | The URL for the HTTP request. |
-| `transform` | function |  | Function that transforms the response data to an entities object where keys are entity IDs and values are entity data. Can be used to normalize data. |
-| `update` | object | yes | Object where keys are entity IDs and values are update functions. |
+| `transform` | function |  | A function that transforms the response data to an entities object where keys are entity IDs and values are entity data. Can be used to normalize data. |
+| `update` | object | yes | An object where keys are entity IDs and values are "update functions" (see below). |
 | `body` | object |  | The request body. For GETs, this object is stringified and appended to the URL as query params. |
-| `force` | boolean |  | Perform the request even if we've already successfully requested it. |
+| `force` | boolean |  | A flag to indicate that the request should be performed even if a previous query with the same query key succeeded. |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
 | `meta` | object |  | Various metadata for the query. Can be used to update other reducers when queries succeed or fail. |
 | `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, `options.headers` to set any headers and `options.credentials = 'include'` for CORS. |
@@ -101,9 +101,10 @@ Query configs are objects used to describe how redux-query should handle the req
 | Name | Type | Required? | Description |
 |:---|:---|:---:|:---|
 | `url` | string | yes | The URL for the HTTP request. |
-| `transform` | function |  | Function that transforms the response data to an entities object where keys are entity IDs and values are entity data. Can be used to normalize data. |
-| `update` | object | yes | Object where keys are entity IDs and values are update functions. |
-| `optimisticUpdate` | object |  | Object where keys are entity IDs and values are functions that provide the current entity value. The return values are used to update the `entities` store until the mutation finishes. |
+| `transform` | function |  | A function that transforms the response data to an entities object where keys are entity IDs and values are entity data. Can be used to normalize data. |
+| `update` | object | yes | An object where keys are entity IDs and values are "update functions" (see below). |
+| `optimisticUpdate` | object |  | An object where keys are entity IDs and values are "optimisticUpdate functions" (see below). Used to update entities immediately when the mutation starts. |
+| `rollback` | object |  | An object where keys are entity IDs and values are "rollback functions" (see below). Used to reverse the effects of `optimisticUpdate` when the mutation fails. If not provided, the entity will simply be reverted to its value before the `optimisticUpdate` was performed. |
 | `body` | object |  | The HTTP request body. For GETs, this object is stringified and appended to the URL as query params. |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
 | `meta` | object |  | Various metadata for the query. Can be used to update other reducers when queries succeed or fail. |
@@ -135,6 +136,20 @@ The `prevValue` is the whatever value is selected from the `entities` reducer fo
 
 ```javascript
 (prevValue: any) => any
+```
+
+### `rollback` functions
+
+`rollback` functions are used to reverse the effect of `optimisticUpdate`s when the mutation fails. They are provided two parameters: the state of the entity before the optimistic update and the current state of the entity:
+
+```javascript
+(initialValue: any, currentValue: any) => any
+```
+
+Specifying `rollback` functions are not required. However, it is recommended for entities that are partially updated (e.g. an object collection of items keyed by IDs). The default `rollback` behavior is equivalent to the following:
+
+```javascript
+(initialValue, currentValue) => initialValue
 ```
 
 ### `connectRequest`

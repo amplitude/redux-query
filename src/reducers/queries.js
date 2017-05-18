@@ -37,6 +37,7 @@ const queries = (state = initialState, action) => {
                     isPending: false,
                     lastUpdated: action.time,
                     status: action.status,
+                    responseBody: action.responseBody,
                 },
             };
         }

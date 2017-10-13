@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)
 [![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
 
-`redux-query` is a library for querying and managing network state in React/Redux applications.
+`redux-query` is a library for querying and managing network state in React/Redux applications. Brought to you by [Amplitude](https://amplitude.com/engineering).
 
 With `redux-query` you can:
 

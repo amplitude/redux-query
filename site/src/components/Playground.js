@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CodeMirror from 'react-codemirror';
+import CodeMirror from 'react-codemirror2';
 import styled from 'styled-components';
 
 import 'codemirror/lib/codemirror.css';
@@ -205,11 +205,8 @@ class Playground extends Component {
     return (
       <Code>
         <CodeMirror
-          ref={ref => {
-            if (ref) {
-              const cm = ref.getCodeMirror();
-              cm.setSize('100%', '100%');
-            }
+          editorDidMount={editor => {
+            editor.setSize('100%', '100%');
           }}
           options={{
             lineNumbers: true,
@@ -223,9 +220,9 @@ class Playground extends Component {
               },
             },
           }}
-          onChange={newValue => {
+          onChange={(editor, metadata, value) => {
             this.setState({
-              [stateKey]: newValue,
+              [stateKey]: value,
               isDirty: true,
             });
           }}

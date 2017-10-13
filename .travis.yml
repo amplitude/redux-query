@@ -3,8 +3,11 @@ node_js:
       - "5"
       - "6"
       - "7"
+cache: yarn
 script:
-      - npm run build
-      - npm run test:cov
+      - yarn install --cwd examples/async
+      - yarn install --cwd site
+      - yarn run build
+      - yarn run test:cov
 after_success:
-      - npm run coverage
+      - yarn run coverage

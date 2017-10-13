@@ -1,3 +1,9 @@
+## 2.1.0
+
+- Support React 16 (ryanashcraft [#88](https://github.com/amplitude/redux-query/pull/88))
+- Switch to yarn (ryanashcraft [#88](https://github.com/amplitude/redux-query/pull/88))
+- Change Prettier settings (ryanashcraft [#88](https://github.com/amplitude/redux-query/pull/88))
+
 ## 2.0.0
 
 Refer to the [v2 transition guide](https://github.com/amplitude/redux-query/blob/master/docs/transition-guides/v2.md) for instructions on how to upgrade from redux-query 1.x to 2.x.
@@ -5,7 +11,7 @@ Refer to the [v2 transition guide](https://github.com/amplitude/redux-query/blob
 - Use the latest entities state when the network request finishes for mutations
 - Replace `request` fields in queries reducer and relevant actions with `networkHandler`
 - New, safer rollback behavior when mutations fail
-- New `rollback` option in query configs to handle reverting optimistic updates 
+- New `rollback` option in query configs to handle reverting optimistic updates
 - New, optional reducer, `errorsReducer`, for tracking response bodies, text, and headers for failed queries
 - Change `connectRequest` to work around a race condition resulting in invalid warnings
 - Update to superagent 3.x
@@ -21,7 +27,7 @@ Refer to the [v2 transition guide](https://github.com/amplitude/redux-query/blob
 - Use prop-types to avoid React 15.5.0 deprecation warnings (ryanashcraft)
 - Transform `body` into query params for GET requests (acontreras89 [#57](https://github.com/amplitude/redux-query/pull/57))
 - Fix error with React Native's Packager (jeanregisser [#58](https://github.com/amplitude/redux-query/pull/58))
-- Use prettier for automatic code formatting (ryanashcraft [#60](https://github.com/amplitude/redux-query/pull/60))
+- Use Prettier for automatic code formatting (ryanashcraft [#60](https://github.com/amplitude/redux-query/pull/60))
 - New site (see https://amplitude.github.io/redux-query) with interactive demos (ryanashcraft [#60](https://github.com/amplitude/redux-query/pull/60))
 
 ## 1.4.0

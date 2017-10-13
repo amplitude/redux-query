@@ -3,25 +3,25 @@ import get from 'lodash.get';
 import { getQueryKey } from '../lib/query-key';
 
 export const responseBody = (errorsState, queryConfig) => {
-    if (queryConfig) {
-        const queryKey = getQueryKey(queryConfig);
+  if (queryConfig) {
+    const queryKey = getQueryKey(queryConfig);
 
-        return get(errorsState, [queryKey, 'responseBody']);
-    }
+    return get(errorsState, [queryKey, 'responseBody']);
+  }
 };
 
 export const responseText = (errorsState, queryConfig) => {
-    if (queryConfig) {
-        const queryKey = getQueryKey(queryConfig);
+  if (queryConfig) {
+    const queryKey = getQueryKey(queryConfig);
 
-        return get(errorsState, [queryKey, 'responseText']);
-    }
+    return get(errorsState, [queryKey, 'responseText']);
+  }
 };
 
 export const responseHeaders = (errorsState, queryConfig) => {
-    if (queryConfig) {
-        const queryKey = getQueryKey(queryConfig);
+  if (queryConfig) {
+    const queryKey = getQueryKey(queryConfig);
 
-        return get(errorsState, [queryKey, 'responseHeaders']);
-    }
+    return get(errorsState, [queryKey, 'responseHeaders']);
+  }
 };

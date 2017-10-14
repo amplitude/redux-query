@@ -117,11 +117,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 // Map props from `mapStateToProps` to a request query config.
-const mapPropsToConfig = props => echoRequest(props.input);
+const mapPropsToConfigs = props => echoRequest(props.input);
 
 const EchoContainer = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  connectRequest(mapPropsToConfig)
+  connectRequest(mapPropsToConfigs)
 )(Echo);
 
 class App extends Component {

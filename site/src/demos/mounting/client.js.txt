@@ -97,11 +97,11 @@ const mapStateToProps = state => ({
 });
 
 // Map props from `mapStateToProps` to a request query config.
-const mapPropsToConfig = props => helloRequest(props.force);
+const mapPropsToConfigs = props => helloRequest(props.force);
 
 const HelloWorldContainer = compose(
   connect(mapStateToProps),
-  connectRequest(mapPropsToConfig)
+  connectRequest(mapPropsToConfigs)
 )(HelloWorld);
 
 class App extends Component {

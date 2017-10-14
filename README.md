@@ -39,14 +39,14 @@ export const getQueries = (state) => state.queries;
 export const getEntities = (state) => state.entities;
 
 const reducer = combineReducers({
-    entities: entitiesReducer,
-    queries: queriesReducer,
+  entities: entitiesReducer,
+  queries: queriesReducer,
 });
 
 const logger = createLogger();
 const store = createStore(
-    reducer,
-    applyMiddleware(queryMiddleware(getQueries, getEntities), logger)
+  reducer,
+  applyMiddleware(queryMiddleware(getQueries, getEntities), logger)
 );
 ```
 
@@ -154,37 +154,51 @@ Specifying `rollback` functions are not required. However, it is recommended for
 
 ### `connectRequest`
 
-Use the `connectRequest` higher-order component to declare network dependencies for a React component. `connectRequest` takes a function that transforms the component `props` to a request query config or an array of request query configs. Example usage:
+Use the `connectRequest` higher-order component to declare network dependencies for a React component.
+
+`connectRequest` takes a function, `mapPropsToConfigs`, that transforms the component `props` to a request query config or an array of request query configs. You can think of `mapPropsToConfigs` similarly to `react-redux`'s `mapStateToProps` and `mapDispatchToProps`.
+
+On mount, every query config returned from `mapPropsToConfigs` will result in a dispatched `requestAsync` Redux action. When the props update, `mapPropsToConfigs` is called again. All pending requests that were removed will be cancelled and all new configs will result in a dispatched `requestAsync` Redux action. On unmount, all pending requests will be cancelled.
+
+Please note, just because a `requestAsync `Redux action was dispatched, does not mean that an actual network request will occur. Requests that were previously successful will not result in another network request, unless the corresponding query config has `force` set to `true`.
+
+99% of the time you'll be using `react-redux`'s `connect` at the same time when you are using `connectRequest`. You might find using `redux`'s `compose` function makes this a bit more elegant.
+
+Example usage:
 
 ```javascript
+import { compose } from 'redux';
 import { connectRequest } from 'redux-query';
 import { connect } from 'react-redux';
 
 class Dashboard extends Component {
-    ...
+  ...
 }
 
-const DashboardContainer = connectRequest((props) => ({
+const mapStateToProps = (state, props) => ({
+  dashboard: getDashboard(state, props),
+});
+
+const mapPropsToConfigs = props => [
+  {
     url: `/api/dashboard/${props.dashboardId}`,
     update: {
-        chartsById: (prevCharts, dashboardCharts) => ({
-            ...prevCharts,
-            ...dashboardCharts,
-        }),
-        dashboardsById: (prevDashboards, dashboards) => ({
-            ...prevDashboards,
-            ...dashboards,
-        }),
+      chartsById: (prevCharts, dashboardCharts) => ({
+        ...prevCharts,
+        ...dashboardCharts,
+      }),
+      dashboardsById: (prevDashboards, dashboards) => ({
+        ...prevDashboards,
+        ...dashboards,
+      }),
     },
-}))(Dashboard);
+  }
+];
 
-const mapStateToProps = (state, props) => {
-    return {
-        dashboard: getDashboard(state, props),
-    };
-};
-
-export default connect(mapStateToProps)(DashboardContainer);
+export default compose(
+  connect(mapStateToProps),
+  connectRequest(mapPropsToConfigs)
+)(Dashboard);
 ```
 
 `connectRequest` passes an extra prop to the child component: `forceRequest`. Calling this function will cause the request(s) to be made again. This may be useful for polling or creating an interface to trigger refreshes.
@@ -197,16 +211,16 @@ Dispatch `mutateAsync` Redux actions to trigger mutations. `mutateAsync` takes a
 // src/queries/dashboard.js
 
 export const createUpdateDashboardQuery = (dashboardId, newName) => ({
-    url: `/api/${dashboardId}/update`,
-    body: {
-        name: newName,
-    },
-    update: {
-        dashboardsById: (prevDashboardsById, newDashboardsById) => ({
-            ...prevDashboardsById,
-            ...newDashboardsById,
-        }),
-    },
+  url: `/api/${dashboardId}/update`,
+  body: {
+    name: newName,
+  },
+  update: {
+    dashboardsById: (prevDashboardsById, newDashboardsById) => ({
+      ...prevDashboardsById,
+      ...newDashboardsById,
+    }),
+  },
 });
 
 // src/actions/dashboard.js
@@ -215,17 +229,17 @@ import { mutateAsync } from 'redux-query';
 import { createUpdateDashboardQuery } from '../queries/dashboard';
 
 export const updateDashboard = (dashboardId, newName) => {
-    return mutateAsync(createUpdateDashboardQuery(dashboardId, newName));
+  return mutateAsync(createUpdateDashboardQuery(dashboardId, newName));
 };
 
 // src/selectors/dashboard.js
 
 export const getDashboard = (state, { dashboardId }) => {
-    if (state.entities.dashboardsById) {
-        return state.entities.dashboardsById[dashboardId];
-    } else {
-        return null;
-    }
+  if (state.entities.dashboardsById) {
+    return state.entities.dashboardsById[dashboardId];
+  } else {
+    return null;
+  }
 };
 
 // src/components/Dashboard.jsx
@@ -236,21 +250,21 @@ import { updateDashboard } from '../actions/dashboard';
 import { getDashboard } from '../selectors/dashboard';
 
 class Dashboard extends Component {
-    ...
+  ...
 }
 
 const mapStateToProps = (state, props) => {
-    return {
-        dashboard: getDashboard(state, props),
-    };
+  return {
+    dashboard: getDashboard(state, props),
+  };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-    return {
-        changeName: (newName) => {
-            dispatch(updateDashboard(props.dashboardId, newName));
-        },
-    };
+  return {
+    changeName: (newName) => {
+      dispatch(updateDashboard(props.dashboardId, newName));
+    },
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
@@ -260,15 +274,15 @@ When dispatching a `mutateAsync` action, you can Promise-chain on the returned v
 
 ```javascript
 const mapDispatchToProps = (dispatch, props) => {
-    return {
-        changeName: (newName) => {
-            dispatch(updateDashboard(props.dashboardId, newName)).then((result) => {
-                if (result.status !== 200) {
-                    dispatch(showUpdateDashboardFailedNotification(props.dashboardId));
-                }
-            });
-        },
-    };
+  return {
+    changeName: (newName) => {
+      dispatch(updateDashboard(props.dashboardId, newName)).then((result) => {
+        if (result.status !== 200) {
+          dispatch(showUpdateDashboardFailedNotification(props.dashboardId));
+        }
+      });
+    },
+  };
 };
 ```
 
@@ -340,14 +354,14 @@ Network interfaces have the following interface:
 
 ```javascript
 type NetworkInterface = (
-    url: string,
-    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
-    config?: { body?: string | Object, headers?: Object, credentials?: 'omit' | 'include' } = {},
+  url: string,
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  config?: { body?: string | Object, headers?: Object, credentials?: 'omit' | 'include' } = {},
 ) => NetworkHandler;
 
 type NetworkHandler = {
-    execute: (callback: (err: any, resStatus: number, resBody: ?Object, resText: string, resHeaders: Object) => void) => void,
-    abort: () => void,
+  execute: (callback: (err: any, resStatus: number, resBody: ?Object, resText: string, resHeaders: Object) => void) => void,
+  abort: () => void,
 };
 ```
 
@@ -365,13 +379,13 @@ export const getQueries = (state) => state.queries;
 export const getEntities = (state) => state.entities;
 
 const reducer = combineReducers({
-    entities: entitiesReducer,
-    queries: queriesReducer,
+  entities: entitiesReducer,
+  queries: queriesReducer,
 });
 
 const store = createStore(
-    reducer,
-    applyMiddleware(queryMiddlewareAdvanced(myNetworkInterface)(getQueries, getEntities))
+  reducer,
+  applyMiddleware(queryMiddlewareAdvanced(myNetworkInterface)(getQueries, getEntities))
 );
 ```
 

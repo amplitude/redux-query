@@ -77,11 +77,11 @@ const mapStateToProps = state => ({
 
 // Map props from `mapStateToProps` to a request query config. In this case,
 // the query config is constant (i.e. not parameterized by props).
-const mapPropsToConfig = () => helloRequest();
+const mapPropsToConfigs = () => helloRequest();
 
 const HelloWorldContainer = compose(
   connect(mapStateToProps),
-  connectRequest(mapPropsToConfig)
+  connectRequest(mapPropsToConfigs)
 )(HelloWorld);
 
 class App extends Component {

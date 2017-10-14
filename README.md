@@ -380,14 +380,14 @@ const store = createStore(
 A fork of the `redux` [Async](https://github.com/reactjs/redux/tree/master/examples/async) example is included. To run, first build the package:
 
 ```sh
-$ npm install
-$ npm run build
+$ yarn install
+$ yarn run build
 ```
 
 Then you can run the example:
 
 ```sh
 $ cd examples/async
-$ npm install
-$ npm run start
+$ yarn install
+$ yarn run start
 ```

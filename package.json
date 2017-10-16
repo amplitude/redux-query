@@ -5,6 +5,7 @@
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
+  "typings": "./index.d.ts",
   "jsnext:main": "dist/es/index.js",
   "scripts": {
     "build:commonjs": "npm run clean:commonjs && cross-env NODE_ENV=production cross-env BABEL_ENV=commonjs babel src --out-dir dist/commonjs --ignore examples/,test/",

@@ -37,7 +37,7 @@ const queries = (state = initialState, action) => {
                     isPending: false,
                     lastUpdated: action.time,
                     status: action.status,
-                    headers: action.repsonseHeaders,
+                    headers: action.responseHeaders,
                 },
             };
         }

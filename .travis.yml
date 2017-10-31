@@ -1,10 +1,16 @@
 language: node_js
 node_js:
-      - "5"
-      - "6"
-      - "7"
+      - "node"
+cache:
+      yarn: true
+      directories:
+            - node_modules
+            - examples/async/node_modules
+            - site/node_modules
 script:
-      - npm run build
-      - npm run test:cov
+      - yarn install --cwd examples/async
+      - yarn install --cwd site
+      - yarn run build
+      - yarn run test:cov
 after_success:
-      - npm run coverage
+      - yarn run coverage

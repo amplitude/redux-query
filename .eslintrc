@@ -76,9 +76,9 @@
         "prefer-spread": 2,
         "prefer-template": 2,
         "prettier/prettier": ["error", {
-            "tabWidth": 4,
-            "printWidth": 120,
-            "trailingComma": "es5",
+            "tabWidth": 2,
+            "printWidth": 100,
+            "trailingComma": "all",
             "singleQuote": true,
             "jsxBracketSameLine": true
         }],

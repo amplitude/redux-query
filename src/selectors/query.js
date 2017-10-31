@@ -27,11 +27,11 @@ export const status = (queriesState, queryConfig) => {
 };
 
 export const headers = (queriesState, queryConfig) => {
-    if (queryConfig) {
-        const queryKey = getQueryKey(queryConfig);
+  if (queryConfig) {
+    const queryKey = getQueryKey(queryConfig);
 
-        return get(queriesState, [queryKey, 'headers']);
-    }
+    return get(queriesState, [queryKey, 'headers']);
+  }
 };
 
 export const lastUpdated = (queriesState, queryConfig) => {

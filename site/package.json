@@ -17,7 +17,6 @@
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.0.0",
     "redux": "^3.6.0",
-    "redux-query": "file:..",
     "rimraf": "^2.4.3",
     "styled-components": "^2.2.1"
   },
@@ -35,6 +34,6 @@
     "prebuild": "npm run lint",
     "start": "npm run vendor && react-scripts start",
     "test": "react-scripts test --env=jsdom",
-    "vendor": "rm -rf node_modules/redux-query && yarn install && mkdir -p public/vendor && cp node_modules/redux-query/dist/umd/redux-query.js public/vendor/redux-query.js"
+    "vendor": "mkdir -p public/vendor && cp ../dist/umd/redux-query.js public/vendor/redux-query.js"
   }
 }

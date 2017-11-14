@@ -1,6 +1,6 @@
 {
   "name": "redux-query",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "A library for querying and managing network state in React/Redux applications",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",

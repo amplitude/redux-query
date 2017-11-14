@@ -35,6 +35,6 @@
     "prebuild": "npm run lint",
     "start": "npm run vendor && react-scripts start",
     "test": "react-scripts test --env=jsdom",
-    "vendor": "npm i redux-query && mkdir -p public/vendor && cp node_modules/redux-query/dist/umd/redux-query.js public/vendor/redux-query.js"
+    "vendor": "rm -rf node_modules/redux-query && yarn install && mkdir -p public/vendor && cp node_modules/redux-query/dist/umd/redux-query.js public/vendor/redux-query.js"
   }
 }

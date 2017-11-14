@@ -4819,26 +4819,6 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-"redux-query@file:.":
-  version "1.0.0"
-  dependencies:
-    babel-standalone "^6.24.0"
-    classnames "^2.2.5"
-    codemirror "^5.30.0"
-    github-markdown-css "^2.5.0"
-    marked "^0.3.6"
-    prettier "0.21.0"
-    react "^16.0.0"
-    react-codemirror2 "^2.0.2"
-    react-dom "^16.0.0"
-    react-inspector "^2.2.0"
-    react-redux "^5.0.3"
-    react-router-dom "^4.0.0"
-    redux "^3.6.0"
-    redux-query "file:../../../Library/Caches/Yarn/v1"
-    rimraf "^2.4.3"
-    styled-components "^2.2.1"
-
 "redux-query@file:..":
   version "2.2.0"
   dependencies:

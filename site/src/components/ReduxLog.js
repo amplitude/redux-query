@@ -3,23 +3,23 @@ import Inspector from 'react-inspector';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 
-    > li {
-        padding: 4px 8px 2px;
-    }
+  > li {
+    padding: 4px 8px 2px;
+  }
 `;
 
 const LogDivider = styled.hr`
-    height: 1px;
-    background-color: #ddd;
-    border: 0;
-    margin: 6px 0 4px 0;
-    padding: 0 !important;
-    flex-shrink: 0;
+  height: 1px;
+  background-color: #ddd;
+  border: 0;
+  margin: 6px 0 4px 0;
+  padding: 0 !important;
+  flex-shrink: 0;
 `;
 
 // If within 10 pixels of max scrollTop, then pin to bottom

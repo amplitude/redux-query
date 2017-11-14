@@ -45,9 +45,7 @@ const commonLinkStyle = `
 `;
 
 const Item = styled(NavLink)`
-  ${commonLinkStyle}
-
-  &:hover {
+  ${commonLinkStyle} &:hover {
     text-decoration: underline;
   }
 
@@ -61,8 +59,7 @@ Item.defaultProps = {
 };
 
 const ExternalLink = styled.a`
-  ${commonLinkStyle}
-  display: flex;
+  ${commonLinkStyle} display: flex;
   align-items: center;
 
   .fa {
@@ -80,7 +77,7 @@ const ProjectTitle = styled.h1`
   padding-bottom: 12px;
   border-bottom: 1px solid #ccc;
   font-size: 18px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 500;
 `;
 
@@ -89,19 +86,15 @@ class Navigation extends Component {
     return (
       <Container>
         <FixedContainer>
-          <ProjectTitle>
-            redux-query
-          </ProjectTitle>
+          <ProjectTitle>redux-query</ProjectTitle>
           <Section>
             <ExternalLink href="https://github.com/amplitude/redux-query">
-              <i className="fa fa-github" aria-hidden="true" />
-              {' '}
+              <i className="fa fa-github" aria-hidden="true" />{' '}
               <span>Source</span>
             </ExternalLink>
             <ExternalLink
               href="https://github.com/amplitude/redux-query/issues">
-              <i className="fa fa-exclamation-circle" aria-hidden="true" />
-              {' '}
+              <i className="fa fa-exclamation-circle" aria-hidden="true" />{' '}
               <span>Issues</span>
             </ExternalLink>
           </Section>
@@ -110,30 +103,16 @@ class Navigation extends Component {
             <Item to="/" exact={true}>
               Read Me
             </Item>
-            <Item to="/changelog">
-              Change Log
-            </Item>
+            <Item to="/changelog">Change Log</Item>
           </Section>
           <Section>
             <SectionTitle>Demos</SectionTitle>
-            <Item to="/hello-world">
-              Hello World
-            </Item>
-            <Item to="/mounting">
-              Mounting and Unmounting
-            </Item>
-            <Item to="/updating">
-              Updating from Props
-            </Item>
-            <Item to="/mutations">
-              Mutations
-            </Item>
-            <Item to="/redux-saga">
-              Usage with redux-saga
-            </Item>
-            <Item to="/hacker-news">
-              Hacker News
-            </Item>
+            <Item to="/hello-world">Hello World</Item>
+            <Item to="/mounting">Mounting and Unmounting</Item>
+            <Item to="/updating">Updating from Props</Item>
+            <Item to="/mutations">Mutations</Item>
+            <Item to="/redux-saga">Usage with redux-saga</Item>
+            <Item to="/hacker-news">Hacker News</Item>
           </Section>
         </FixedContainer>
       </Container>

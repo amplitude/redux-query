@@ -22,7 +22,7 @@ const Main = styled.div`
   flex-grow: 1;
   background-color: white;
 
-  ${props => props.disableBodyScroll && 'overflow: hidden;'}
+  ${props => props.disableBodyScroll && 'overflow: hidden;'};
 `;
 
 class CoreLayout extends Component {

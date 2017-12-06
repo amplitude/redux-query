@@ -1,3 +1,7 @@
+## 2.3.0
+
+- Add `duration` to `_SUCCESS` and `_FAILURE` redux actions (blazzy [#92](https://github.com/amplitude/redux-query/pull/92))
+
 ## 2.2.0
 
 - Store the response headers in the queries state and add a selector (hobbeswalsh [#84](https://github.com/amplitude/redux-query/pull/84))

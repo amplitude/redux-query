@@ -13,6 +13,7 @@ export const requestStart = ({ body, meta, networkHandler, queryKey, url }) => {
 
 export const requestSuccess = ({
   body,
+  duration,
   entities,
   meta,
   queryKey,
@@ -26,6 +27,7 @@ export const requestSuccess = ({
     type: actionTypes.REQUEST_SUCCESS,
     url,
     body,
+    duration,
     status,
     entities,
     responseBody,
@@ -39,6 +41,7 @@ export const requestSuccess = ({
 
 export const requestFailure = ({
   body,
+  duration,
   meta,
   queryKey,
   responseBody,
@@ -51,6 +54,7 @@ export const requestFailure = ({
     type: actionTypes.REQUEST_FAILURE,
     url,
     body,
+    duration,
     status,
     responseBody,
     responseText,
@@ -75,6 +79,7 @@ export const mutateStart = ({ body, meta, networkHandler, optimisticEntities, qu
 
 export const mutateSuccess = ({
   body,
+  duration,
   entities,
   meta,
   queryKey,
@@ -88,6 +93,7 @@ export const mutateSuccess = ({
     type: actionTypes.MUTATE_SUCCESS,
     url,
     body,
+    duration,
     status,
     responseBody,
     responseText,
@@ -101,6 +107,7 @@ export const mutateSuccess = ({
 
 export const mutateFailure = ({
   body,
+  duration,
   meta,
   queryKey,
   responseBody,
@@ -114,6 +121,7 @@ export const mutateFailure = ({
     type: actionTypes.MUTATE_FAILURE,
     url,
     body,
+    duration,
     status,
     responseBody,
     responseText,

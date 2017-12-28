@@ -4,7 +4,6 @@ import * as networkInterfaces from './network-interfaces';
 import * as errorSelectors from './selectors/error';
 import * as querySelectors from './selectors/query';
 
-export { default as connectRequest } from './components/connect-request';
 export { getQueryKey } from './lib/query-key';
 export { default as queriesReducer } from './reducers/queries';
 export { default as entitiesReducer } from './reducers/entities';

@@ -29,6 +29,7 @@ module.exports = {
   entry: {
     'redux-query': './src/index.js',
     'redux-query/advanced': './src/advanced.js',
+    'redux-query/redux': './src/redux.js',
   },
   output: {
     path: path.join(__dirname, 'dist/umd'),

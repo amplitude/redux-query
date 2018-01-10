@@ -20,6 +20,7 @@
     "clean": "npm run clean:commonjs && npm run clean:es && npm run clean:umd",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "deploy": "gh-pages -d site/build",
+    "preinstall": "yarn install --cwd examples/async; yarn install --cwd site",
     "prebuild": "npm run lint",
     "predeploy": "npm run build:site",
     "lint": "eslint src test --fix",

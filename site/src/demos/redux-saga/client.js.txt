@@ -229,7 +229,8 @@ class NameForm extends Component {
           {!props.isLoading && props.result === 'success' && <p>Success!</p>}
           {!props.isLoading &&
             props.result === 'failure' &&
-            <p>An error occurred: "{props.error}".</p>}
+            <p>An error occurred: "{props.error}".</p> // eslint-disable-line
+          }
         </form>
       </div>
     );

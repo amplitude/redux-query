@@ -143,7 +143,7 @@ export const requestAsync = ({
   transform,
   update,
   url,
-  unstable_preDispatchCallback,
+  unstable_preDispatchCallback, // eslint-disable-line
 }) => {
   return {
     type: actionTypes.REQUEST_ASYNC,

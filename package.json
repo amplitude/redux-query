@@ -22,6 +22,7 @@
     "deploy": "gh-pages -d site/build",
     "prebuild": "yarn run lint",
     "predeploy": "yarn run build:site",
+    "preinstall": "yarn install --cwd examples/async; yarn install --cwd site",
     "lint": "eslint src test --fix",
     "test:cov": "cross-env NODE_ENV=test jest --coverage",
     "test": "jest"

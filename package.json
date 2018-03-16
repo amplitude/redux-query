@@ -1,5 +1,5 @@
 {
-  "name": "redux-query",
+  "name": "@pulse-platform/redux-query",
   "version": "2.3.1",
   "description": "A library for querying and managing network state in React/Redux applications",
   "homepage": "https://github.com/amplitude/redux-query",
@@ -20,6 +20,8 @@
     "clean": "yarn run clean:commonjs && yarn run clean:es && yarn run clean:umd",
     "coverage": "codecov",
     "deploy": "gh-pages -d site/build",
+    "package": "pwd && npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:site",
+    "prepublish": "yarn install --cwd site && pwd && yarn build:commonjs && yarn build:es && yarn build:umd && yarn build:site",
     "prebuild": "yarn run lint",
     "predeploy": "yarn run build:site",
     "preinstall": "yarn install --cwd examples/async; yarn install --cwd site",
@@ -29,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/amplitude/redux-query.git"
+    "url": "https://github.com/pulse-platform/redux-query.git"
   },
   "keywords": [
     "redux",
@@ -54,6 +56,7 @@
     "lodash.pickby": "^4.6.0",
     "lodash.values": "^4.3.0",
     "prop-types": "^15.5.6",
+    "semver": "^5.4.1",
     "superagent": "^3.5.1"
   },
   "peerDependencies": {

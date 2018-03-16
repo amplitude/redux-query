@@ -156,7 +156,7 @@ class TopStories extends Component {
       <ol>
         {props.topStoryIds
           .slice(0, 30)
-          .map(itemId => <ItemContainer itemId={itemId} />)}
+          .map(itemId => <ItemContainer itemId={itemId} key={itemId} />)}
       </ol>
     );
   }

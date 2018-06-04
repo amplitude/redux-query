@@ -11,6 +11,8 @@ script:
       - yarn install --cwd examples/async
       - yarn install --cwd site
       - yarn run build
+      - yarn run build:site
+      - yarn run build:examples
       - yarn run test:cov
 after_success:
       - yarn run coverage

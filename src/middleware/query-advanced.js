@@ -75,9 +75,8 @@ const queryMiddlewareAdvanced = networkInterface => (
         const isPending = get(queriesState, ['isPending']);
         const status = get(queriesState, ['status']);
         const hasSucceeded = status >= 200 && status < 300;
-        const expired = !!(
-          expires !== undefined && Date.now() - get(queriesState, ['lastUpdated']) > expires
-        );
+        const lastUpdated = get(queriesState, ['lastUpdated']);
+        const expired = !!(expires !== undefined && Date.now() - lastUpdated > expires);
 
         if (force || expired || !queriesState || (retry && !isPending && !hasSucceeded)) {
           returnValue = new Promise(resolve => {

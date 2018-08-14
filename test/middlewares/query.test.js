@@ -377,6 +377,126 @@ describe('query middleware', () => {
         force: true,
       });
     });
+
+    describe.only('expires', () => {
+      it('should fetch after expires time has passed', done => {
+        const url = '/api';
+        const actionsToDispatch = [
+          {
+            type: actionTypes.REQUEST_START,
+            url,
+          },
+          {
+            type: actionTypes.REQUEST_SUCCESS,
+            url,
+            status: 200,
+            entities: {
+              message: apiMessage,
+            },
+          },
+        ];
+        const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+
+        const queryKey = getQueryKey({ url });
+        const getState = () => ({
+          entities: {},
+          queries: {
+            [queryKey]: {
+              isPending: false,
+              status: 200,
+              lastUpdated: Date.now() - 1000,
+            },
+          },
+        });
+        const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({
+          dispatch,
+          getState,
+        });
+        const actionHandler = nextHandler();
+        actionHandler({
+          type: actionTypes.REQUEST_ASYNC,
+          expires: 20,
+          url,
+          update: {
+            message: (prevMessage, message) => message,
+          },
+        });
+      });
+
+      it('should NOT fetch if expires time has not passed', () => {
+        const url = '/api';
+        const dispatch = () => {
+          assert.fail();
+        };
+        const queryKey = getQueryKey({ url });
+        const getState = () => ({
+          entities: {},
+          queries: {
+            [queryKey]: {
+              isPending: false,
+              status: 200,
+              lastUpdated: Date.now() - 1000,
+            },
+          },
+        });
+        const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({
+          dispatch,
+          getState,
+        });
+        const actionHandler = nextHandler();
+        actionHandler({
+          type: actionTypes.REQUEST_ASYNC,
+          expires: 2000,
+          url,
+          update: {
+            message: (prevMessage, message) => message,
+          },
+        });
+      });
+
+      it('should always fetch if expires time is zero (same as force: true)', done => {
+        const url = '/api';
+        const actionsToDispatch = [
+          {
+            type: actionTypes.REQUEST_START,
+            url,
+          },
+          {
+            type: actionTypes.REQUEST_SUCCESS,
+            url,
+            status: 200,
+            entities: {
+              message: apiMessage,
+            },
+          },
+        ];
+        const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+        const queryKey = getQueryKey({ url });
+        const getState = () => ({
+          entities: {},
+          queries: {
+            [queryKey]: {
+              isPending: false,
+              status: 200,
+              lastUpdated: Date.now() - 1000,
+            },
+          },
+        });
+        const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({
+          dispatch,
+          getState,
+        });
+        const actionHandler = nextHandler();
+        actionHandler({
+          type: actionTypes.REQUEST_ASYNC,
+          expires: 0,
+          url,
+          update: {
+            message: (prevMessage, message) => message,
+          },
+        });
+      });
+    });
   });
 
   describe('must handle mutations', () => {

@@ -35,6 +35,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
       // A set of URLs that identify all pending requests
       this._pendingRequests = {};
       this._wrappedInstance = null;
+      this._resolvers = [];
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -91,11 +92,10 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
     requestAsync(configs, force = false, retry = false) {
       // propsToConfig mapping has happened already
-      ensureArray(configs)
+      return ensureArray(configs)
         .filter(Boolean)
-        .forEach(c => {
-          this.makeRequest(c, force, retry);
-        });
+        .map(c => this.makeRequest(c, force, retry))
+        .filter(Boolean);
     }
 
     makeRequest(config, force, retry) {
@@ -110,6 +110,10 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
             ...config,
             unstable_preDispatchCallback: () => {
               delete this._pendingRequests[queryKey];
+              if (Object.keys(this._pendingRequests).length === 0) {
+                this._resolvers.forEach(resolver => resolver());
+                this._resolvers = [];
+              }
             },
           }),
         );
@@ -118,11 +122,13 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
           // Record pending request since a promise was returned
           this._pendingRequests[queryKey] = requestPromise;
         }
+        return requestPromise;
       }
     }
 
     forceRequest() {
       this.requestAsync(mapPropsToConfigs(this.props), true, false);
+      return new Promise(resolve => this._resolvers.push(resolve));
     }
 
     render() {

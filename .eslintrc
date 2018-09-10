@@ -8,7 +8,8 @@
     "plugins": [
         "import",
         "prettier",
-        "react"
+        "react",
+        "jest"
     ],
     "parserOptions": {
         "ecmaVersion": 6,
@@ -22,23 +23,48 @@
         "browser": true,
         "es6": true,
         "mocha": true,
-        "node": true
+        "node": true,
+        "jest/globals": true,
     },
     "rules": {
         "accessor-pairs": 2,
-        "camelcase": [2, { "properties": "never" }],
-        "consistent-this": [0, "just_dont_do_it_at_all"],
+        "camelcase": [
+            2,
+            {
+                "properties": "never"
+            }
+        ],
+        "consistent-this": [
+            0,
+            "just_dont_do_it_at_all"
+        ],
         "constructor-super": 2,
         "curly": 2,
-        "dot-location": [2, "property"],
+        "dot-location": [
+            2,
+            "property"
+        ],
         "func-names": 2,
-        "func-style": [2, "expression"],
+        "func-style": [
+            2,
+            "expression"
+        ],
         "guard-for-in": 2,
-        "handle-callback-err": [2, "^(err|error)$" ],
-        "max-len": [2, 120, 4],
+        "handle-callback-err": [
+            2,
+            "^(err|error)$"
+        ],
+        "max-len": [
+            2,
+            120,
+            4
+        ],
         "no-bitwise": 2,
         "no-class-assign": 2,
-        "no-cond-assign": [2, "always"],
+        "no-cond-assign": [
+            2,
+            "always"
+        ],
         "no-console": 0,
         "no-const-assign": 2,
         "no-continue": 2,
@@ -62,34 +88,73 @@
         "no-undef": 2,
         "no-underscore-dangle": 0,
         "no-unneeded-ternary": 2,
-        "no-unused-vars": ["error", { "vars": "all", "args": "after-used" }],
+        "no-unused-vars": [
+            "error",
+            {
+                "vars": "all",
+                "args": "after-used"
+            }
+        ],
         "no-useless-call": 2,
         "no-useless-concat": 2,
         "no-var": 2,
         "no-void": 2,
         "no-with": 2,
-        "one-var": [2, "never"],
-        "operator-assignment": [2, "always"],
-        "operator-linebreak": [2, "after", { "overrides": { "?": "ignore", ":": "ignore"} }],
-        "padded-blocks": [2, "never"],
+        "one-var": [
+            2,
+            "never"
+        ],
+        "operator-assignment": [
+            2,
+            "always"
+        ],
+        "operator-linebreak": [
+            2,
+            "after",
+            {
+                "overrides": {
+                    "?": "ignore",
+                    ":": "ignore"
+                }
+            }
+        ],
+        "padded-blocks": [
+            2,
+            "never"
+        ],
         "prefer-const": 2,
         "prefer-spread": 2,
         "prefer-template": 2,
-        "prettier/prettier": ["error", {
-            "tabWidth": 2,
-            "printWidth": 100,
-            "trailingComma": "all",
-            "singleQuote": true,
-            "jsxBracketSameLine": true
-        }],
-        "quote-props": [2, "as-needed"],
+        "prettier/prettier": [
+            "error",
+            {
+                "tabWidth": 2,
+                "printWidth": 100,
+                "trailingComma": "all",
+                "singleQuote": true,
+                "jsxBracketSameLine": true
+            }
+        ],
+        "quote-props": [
+            2,
+            "as-needed"
+        ],
         "radix": 2,
         "react/prop-types": 0,
         "space-infix-ops": 2,
-        "spaced-comment": [2, "always"],
-        "strict": [2, "safe"],
+        "spaced-comment": [
+            2,
+            "always"
+        ],
+        "strict": [
+            2,
+            "safe"
+        ],
         "valid-jsdoc": 2,
         "wrap-iife": 2,
-        "yoda": [2, "never"]
+        "yoda": [
+            2,
+            "never"
+        ]
     }
 }

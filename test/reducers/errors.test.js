@@ -1,10 +1,8 @@
-import { assert } from 'chai';
-
 import * as actionTypes from '../../src/constants/action-types';
 import errors from '../../src/reducers/errors';
 
 describe('errors reducer', () => {
-  it('should record body, text, headers on REQUEST_FAILURE', () => {
+  test('should record body, text, headers on REQUEST_FAILURE', () => {
     const action = {
       type: actionTypes.REQUEST_FAILURE,
       queryKey: '{"url":"/hello"}',
@@ -44,10 +42,10 @@ describe('errors reducer', () => {
         responseHeaders: {},
       },
     };
-    assert.deepEqual(newState, expectedState);
+    expect(newState).toEqual(expectedState);
   });
 
-  it('should record body, text, headers on MUTATE_FAILURE', () => {
+  test('should record body, text, headers on MUTATE_FAILURE', () => {
     const action = {
       type: actionTypes.MUTATE_FAILURE,
       queryKey: '{"url":"/change-name","body":{"name":"Ryan"}}',
@@ -83,10 +81,10 @@ describe('errors reducer', () => {
         responseHeaders: {},
       },
     };
-    assert.deepEqual(newState, expectedState);
+    expect(newState).toEqual(expectedState);
   });
 
-  it('should remove state for query on REQUEST_START', () => {
+  test('should remove state for query on REQUEST_START', () => {
     const action = {
       type: actionTypes.REQUEST_START,
       queryKey: '{"url":"/hello"}',
@@ -119,10 +117,10 @@ describe('errors reducer', () => {
         responseHeaders: {},
       },
     };
-    assert.deepEqual(newState, expectedState);
+    expect(newState).toEqual(expectedState);
   });
 
-  it('should remove state for query on MUTATE_START', () => {
+  test('should remove state for query on MUTATE_START', () => {
     const action = {
       type: actionTypes.MUTATE_START,
       queryKey: '{"url":"/change-name","body":{"name":"Ryan"}}',
@@ -153,10 +151,10 @@ describe('errors reducer', () => {
         responseHeaders: {},
       },
     };
-    assert.deepEqual(newState, expectedState);
+    expect(newState).toEqual(expectedState);
   });
 
-  it('should handle RESET', () => {
+  test('should handle RESET', () => {
     const action = {
       type: actionTypes.RESET,
     };
@@ -173,6 +171,6 @@ describe('errors reducer', () => {
     };
     const newState = errors(prevState, action);
     const expectedState = {};
-    assert.deepEqual(newState, expectedState);
+    expect(newState).toEqual(expectedState);
   });
 });

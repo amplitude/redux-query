@@ -9,10 +9,10 @@ cache:
             - site/node_modules
 script:
       - yarn run build
-      - yarn run build:site
-      - yarn run build:examples
       - yarn run test:cov
       - yarn install --cwd examples/async
+      - yarn run build:examples
       - yarn install --cwd site
+      - yarn run build:site
 after_success:
       - yarn run coverage

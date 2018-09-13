@@ -8,9 +8,11 @@ cache:
             - examples/async/node_modules
             - site/node_modules
 script:
-      - yarn install --cwd examples/async
-      - yarn install --cwd site
       - yarn run build
       - yarn run test:cov
+      - yarn install --cwd examples/async
+      - yarn run build:examples
+      - yarn install --cwd site
+      - yarn run build:site
 after_success:
       - yarn run coverage

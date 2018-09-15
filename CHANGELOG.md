@@ -1,3 +1,7 @@
+## 2.3.1
+
+- Support redux v4 (karevn [#103](https://github.com/amplitude/redux-query/pull/103))
+
 ## 2.3.0
 
 - Add `duration` to `_SUCCESS` and `_FAILURE` redux actions (blazzy [#92](https://github.com/amplitude/redux-query/pull/92))

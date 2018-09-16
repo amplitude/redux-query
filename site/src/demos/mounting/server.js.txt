@@ -25,7 +25,7 @@
  * @param {responseCallback} callback Function to call with response data
  * @returns {void}
  */
-const serveRequest = (url, method, { body, headers }, callback) => {
+const serveRequest = (url, method, options, callback) => {
   if (url === '/api/hello') {
     if (method !== 'GET') {
       callback(405);
@@ -35,12 +35,9 @@ const serveRequest = (url, method, { body, headers }, callback) => {
     const response = { message: 'World' };
 
     // Respond after an artificial timeout
-    setTimeout(
-      () => {
-        callback(200, response);
-      },
-      1000
-    );
+    setTimeout(() => {
+      callback(200, response);
+    }, 1000);
   } else {
     callback(404);
   }

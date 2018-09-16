@@ -92,8 +92,7 @@ class Navigation extends Component {
               <i className="fa fa-github" aria-hidden="true" />{' '}
               <span>Source</span>
             </ExternalLink>
-            <ExternalLink
-              href="https://github.com/amplitude/redux-query/issues">
+            <ExternalLink href="https://github.com/amplitude/redux-query/issues">
               <i className="fa fa-exclamation-circle" aria-hidden="true" />{' '}
               <span>Issues</span>
             </ExternalLink>

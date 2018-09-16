@@ -2,17 +2,18 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-var env = process.env.NODE_ENV;
+const mode = process.env.NODE_ENV;
 
-var reactExternal = {
+const reactExternal = {
   root: 'React',
   commonjs2: 'react',
   commonjs: 'react',
   amd: 'react',
 };
 
-var reduxExternal = {
+const reduxExternal = {
   root: 'Redux',
   commonjs2: 'redux',
   commonjs: 'redux',
@@ -20,6 +21,7 @@ var reduxExternal = {
 };
 
 module.exports = {
+  mode,
   externals: {
     'react': reactExternal,
     'redux': reduxExternal,
@@ -29,30 +31,32 @@ module.exports = {
     'redux-query/advanced': './src/advanced.js',
   },
   output: {
-    path: 'dist/umd',
+    path: path.join(__dirname, 'dist/umd'),
     filename: '[name].js',
     libraryTarget: 'umd',
     library: 'ReduxQuery',
   },
+  optimization: {
+    minimize: true,
+    minimizer: [new UglifyJsPlugin({
+      uglifyOptions: {
+        pure_getters: true,
+        unsafe_comps: true,
+        warnings: false,
+        unsafe: true
+      }
+    })]
+  },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(env),
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        pure_getters: true,
-        unsafe: true,
-        unsafe_comps: true,
-        screw_ie8: true,
-        warnings: false
-      }
+      'process.env.NODE_ENV': JSON.stringify(mode),
     }),
   ],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loaders: ['babel'],
+        loader: 'babel-loader',
         include: path.join(__dirname, 'src'),
       },
     ]

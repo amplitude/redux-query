@@ -59,10 +59,10 @@ const ToolbarButton = styled.button`
   outline: 0;
   font-size: 12px;
   cursor: pointer;
-  color: ${props => props.isSelected ? '#222' : '#444'};
+  color: ${props => (props.isSelected ? '#222' : '#444')};
 
   &::after {
-    visibility: ${props => props.isSelected ? 'visible' : 'hidden'};
+    visibility: ${props => (props.isSelected ? 'visible' : 'hidden')};
     content: '';
     display: block;
     position: absolute;
@@ -91,11 +91,11 @@ const RunButton = styled.button`
   padding: 0 8px;
   font-size: 12px;
   cursor: pointer;
-  color: ${props => props.highlight ? '#27d' : '#444'};
+  color: ${props => (props.highlight ? '#27d' : '#444')};
 
   &:hover:not([disabled]) {
     background-color: #ddd;
-    color: ${props => props.highlight ? '#27d' : '#222'};
+    color: ${props => (props.highlight ? '#27d' : '#222')};
   }
 
   &::before {
@@ -252,7 +252,7 @@ class Playground extends Component {
                 }}>
                 Client
               </ToolbarButton>
-              {!!props.demo.serverCode &&
+              {!!props.demo.serverCode && (
                 <ToolbarButton
                   isSelected={state.devTool === 'SERVER_CODE'}
                   onClick={() => {
@@ -264,7 +264,8 @@ class Playground extends Component {
                     });
                   }}>
                   Mock Server
-                </ToolbarButton>}
+                </ToolbarButton>
+              )}
               <ToolbarButton
                 isSelected={state.devTool === 'REDUX_LOG'}
                 onClick={() => {
@@ -284,8 +285,9 @@ class Playground extends Component {
               </RunButton>
             </ToolbarSection>
           </Toolbar>
-          {state.devTool === 'REDUX_LOG' &&
-            <ReduxLog messages={state.messages} />}
+          {state.devTool === 'REDUX_LOG' && (
+            <ReduxLog messages={state.messages} />
+          )}
           {state.devTool === 'CLIENT_CODE' &&
             this.renderCode('pendingClientCode')}
           {state.devTool === 'SERVER_CODE' &&

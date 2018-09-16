@@ -35,8 +35,8 @@ class ReduxLog extends Component {
     this._containerRef = ref;
 
     if (!previousRef && this._containerRef) {
-      this._containerRef.scrollTop = this._containerRef.scrollHeight -
-        this._containerRef.offsetHeight;
+      this._containerRef.scrollTop =
+        this._containerRef.scrollHeight - this._containerRef.offsetHeight;
     }
   };
 
@@ -47,7 +47,8 @@ class ReduxLog extends Component {
       const { scrollTop, offsetHeight, scrollHeight } = this._containerRef;
 
       if (
-        scrollTop + offsetHeight >= scrollHeight - pinScrollToBottomTolerance
+        scrollTop + offsetHeight >=
+        scrollHeight - pinScrollToBottomTolerance
       ) {
         this._shouldPinScrollToBottom = true;
       }
@@ -68,46 +69,43 @@ class ReduxLog extends Component {
 
     return (
       <Container innerRef={this.setContainerRef}>
-        {props.messages.reduce(
-          (accum, message, i, messages) => {
-            accum.push(
-              <Inspector
-                key={`$prevState-${i}`}
-                showNonenumerable={true}
-                name="prev state"
-                data={message.prevState}
-                expandLevel={1}
-              />
-            );
+        {props.messages.reduce((accum, message, i, messages) => {
+          accum.push(
+            <Inspector
+              key={`$prevState-${i}`}
+              showNonenumerable={true}
+              name="prev state"
+              data={message.prevState}
+              expandLevel={1}
+            />
+          );
 
-            accum.push(
-              <Inspector
-                key={`$action-${i}`}
-                showNonenumerable={true}
-                name="action"
-                data={message.action}
-                expandLevel={1}
-              />
-            );
+          accum.push(
+            <Inspector
+              key={`$action-${i}`}
+              showNonenumerable={true}
+              name="action"
+              data={message.action}
+              expandLevel={1}
+            />
+          );
 
-            accum.push(
-              <Inspector
-                key={`$nextState-${i}`}
-                showNonenumerable={true}
-                name={'next state'}
-                data={message.nextState}
-                expandLevel={1}
-              />
-            );
+          accum.push(
+            <Inspector
+              key={`$nextState-${i}`}
+              showNonenumerable={true}
+              name={'next state'}
+              data={message.nextState}
+              expandLevel={1}
+            />
+          );
 
-            if (i < messages.length - 1) {
-              accum.push(<LogDivider key={`$divider-${i}`} />);
-            }
+          if (i < messages.length - 1) {
+            accum.push(<LogDivider key={`$divider-${i}`} />);
+          }
 
-            return accum;
-          },
-          []
-        )}
+          return accum;
+        }, [])}
       </Container>
     );
   }

@@ -61,9 +61,11 @@ class HelloWorld extends Component {
   render() {
     return (
       <h1>
-        {this.props.message
-          ? <span>Hello, {this.props.message}!</span>
-          : <span>Hello?</span>}
+        {this.props.message ? (
+          <span>Hello, {this.props.message}!</span>
+        ) : (
+          <span>Hello?</span>
+        )}
       </h1>
     );
   }

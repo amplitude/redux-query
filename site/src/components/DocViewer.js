@@ -25,11 +25,13 @@ class DocViewer extends Component {
         content: atob(props.doc.split(';base64,')[1]),
       });
     } else {
-      fetch(props.doc).then(resp => resp.text()).then(data => {
-        this.setState({
-          content: data,
+      fetch(props.doc)
+        .then(resp => resp.text())
+        .then(data => {
+          this.setState({
+            content: data,
+          });
         });
-      });
     }
 
     window.amplitude.getInstance().logEvent(`view ${props.name}`);
@@ -41,11 +43,12 @@ class DocViewer extends Component {
     return (
       <CoreLayout>
         <Container>
-          {!!state.content &&
+          {!!state.content && (
             <div
               className="markdown-body"
               dangerouslySetInnerHTML={{ __html: marked(state.content) }}
-            />}
+            />
+          )}
         </Container>
       </CoreLayout>
     );

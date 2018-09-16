@@ -143,6 +143,7 @@ export const requestAsync = ({
   transform,
   update,
   url,
+  /* eslint-disable-next-line camelcase */
   unstable_preDispatchCallback,
 }) => {
   return {

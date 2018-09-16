@@ -80,9 +80,11 @@ class HelloWorld extends Component {
       <div>
         <div>{props.isLoading && <em>Loading...</em>}</div>
         <h1>
-          {props.message
-            ? <span>Hello, {props.message}!</span>
-            : <span>Hello?</span>}
+          {props.message ? (
+            <span>Hello, {props.message}!</span>
+          ) : (
+            <span>Hello?</span>
+          )}
         </h1>
       </div>
     );
@@ -115,17 +117,25 @@ class App extends Component {
     return (
       <Provider store={store}>
         <div>
-          {state.componentMounted ? <button
-                onClick={() => {
-                  this.setState({
-                    componentMounted: false,
-                  });
-                }}>Unmount Hello World Component</button> : <button
-                onClick={() => {
-                  this.setState({
-                    componentMounted: true,
-                  });
-                }}>Mount Hello World Component</button>}
+          {state.componentMounted ? (
+            <button
+              onClick={() => {
+                this.setState({
+                  componentMounted: false,
+                });
+              }}>
+              Unmount Hello World Component
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                this.setState({
+                  componentMounted: true,
+                });
+              }}>
+              Mount Hello World Component
+            </button>
+          )}
           <label>
             <input
               type="checkbox"
@@ -135,11 +145,13 @@ class App extends Component {
                   isForceEnabled: e.target.checked,
                 });
               }}
-            />Force
+            />
+            Force
           </label>
           <hr />
-          {state.componentMounted &&
-            <HelloWorldContainer force={state.isForceEnabled} />}
+          {state.componentMounted && (
+            <HelloWorldContainer force={state.isForceEnabled} />
+          )}
         </div>
       </Provider>
     );

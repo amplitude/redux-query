@@ -1,12 +1,15 @@
 {
     "extends": "../.eslintrc",
     "rules": {
-        "prettier/prettier": ["error", {
-            "tabWidth": 2,
-            "printWidth": 80,
-            "trailingComma": "es5",
-            "singleQuote": true,
-            "jsxBracketSameLine": true
-        }]
+        "prettier/prettier": [
+            "error",
+            {
+                "tabWidth": 2,
+                "printWidth": 80,
+                "trailingComma": "es5",
+                "singleQuote": true,
+                "jsxBracketSameLine": true
+            }
+        ]
     }
 }

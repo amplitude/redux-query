@@ -228,8 +228,13 @@ class NameForm extends Component {
           {props.isLoading === true && <p>Loading...</p>}
           {!props.isLoading && props.result === 'success' && <p>Success!</p>}
           {!props.isLoading &&
-            props.result === 'failure' &&
-            <p>An error occurred: "{props.error}".</p>}
+            props.result === 'failure' && (
+              <p>
+                An error occurred: &quot;
+                {props.error}
+                &quot;.
+              </p>
+            )}
         </form>
       </div>
     );
@@ -247,9 +252,10 @@ const mapDispatchToProps = {
   changeName: actions.changeName,
 };
 
-const NameFormContainer = connect(mapStateToProps, mapDispatchToProps)(
-  NameForm
-);
+const NameFormContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NameForm);
 
 /**
  * The main app component

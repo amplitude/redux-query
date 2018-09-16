@@ -10,8 +10,8 @@ import {
 import DocViewer from './components/DocViewer';
 import Playground from './components/Playground';
 
-import changelog from '../../CHANGELOG.md';
-import readme from '../../README.md';
+import changelog from './CHANGELOG.md';
+import readme from './README.md';
 
 import hackerNews from './demos/hacker-news';
 import helloWorld from './demos/hello-world';

@@ -27,19 +27,16 @@ const memoryDb = {
  * @param {responseCallback} callback Function to call with response data
  * @returns {void}
  */
-const serveRequest = (url, method, { body, headers }, callback) => {
+const serveRequest = (url, method, { body }, callback) => {
   if (url.match(/^\/api\/name/)) {
     // Endpoint for getting the current name
 
     if (method.toUpperCase() === 'GET') {
-      setTimeout(
-        () => {
-          callback(200, {
-            name: memoryDb.name,
-          });
-        },
-        artificialDelayDuration
-      );
+      setTimeout(() => {
+        callback(200, {
+          name: memoryDb.name,
+        });
+      }, artificialDelayDuration);
     } else {
       callback(405);
     }
@@ -56,28 +53,22 @@ const serveRequest = (url, method, { body, headers }, callback) => {
       body.name.trim().length === 0 ||
       body.name.trim() !== body.name
     ) {
-      setTimeout(
-        () => {
-          callback(
-            400,
-            'A valid name must be provided with no leading or trailing spaces'
-          );
-        },
-        artificialDelayDuration
-      );
+      setTimeout(() => {
+        callback(
+          400,
+          'A valid name must be provided with no leading or trailing spaces'
+        );
+      }, artificialDelayDuration);
       return;
     }
 
     memoryDb.name = body.name;
 
-    setTimeout(
-      () => {
-        callback(200, {
-          name: memoryDb.name,
-        });
-      },
-      artificialDelayDuration
-    );
+    setTimeout(() => {
+      callback(200, {
+        name: memoryDb.name,
+      });
+    }, artificialDelayDuration);
   } else {
     callback(404);
   }

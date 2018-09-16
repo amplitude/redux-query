@@ -91,11 +91,10 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
     requestAsync(configs, force = false, retry = false) {
       // propsToConfig mapping has happened already
-      ensureArray(configs)
+      return ensureArray(configs)
         .filter(Boolean)
-        .forEach(c => {
-          this.makeRequest(c, force, retry);
-        });
+        .map(c => this.makeRequest(c, force, retry))
+        .filter(Boolean);
     }
 
     makeRequest(config, force, retry) {
@@ -118,11 +117,12 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
           // Record pending request since a promise was returned
           this._pendingRequests[queryKey] = requestPromise;
         }
+        return requestPromise;
       }
     }
 
     forceRequest() {
-      this.requestAsync(mapPropsToConfigs(this.props), true, false);
+      return this.requestAsync(mapPropsToConfigs(this.props), true, false);
     }
 
     render() {

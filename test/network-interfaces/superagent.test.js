@@ -1,47 +1,46 @@
-import { assert } from 'chai';
 import * as HTTPMethods from '../../src/constants/http-methods';
 import superagentInterface from '../../src/network-interfaces/superagent';
 
 describe('superagent interface', () => {
-  it('must return an object with both execute and abort functions, as well as the request instance', () => {
+  test('must return an object with both execute and abort functions, as well as the request instance', () => {
     const networkInterface = superagentInterface('http://localhost', HTTPMethods.GET);
-    assert.isFunction(networkInterface.execute);
-    assert.isFunction(networkInterface.abort);
-    assert(networkInterface.instance);
+    expect(typeof networkInterface.execute).toBe('function');
+    expect(typeof networkInterface.abort).toBe('function');
+    expect(networkInterface.instance).toBeTruthy();
   });
 
-  it('must return a HEAD request when supplied a HEAD method', () => {
+  test('must return a HEAD request when supplied a HEAD method', () => {
     const { instance } = superagentInterface('http://localhost', HTTPMethods.HEAD);
-    assert.equal(instance.method, HTTPMethods.HEAD);
+    expect(instance.method).toEqual(HTTPMethods.HEAD);
   });
 
-  it('must return a DELETE request when supplied a DELETE method', () => {
+  test('must return a DELETE request when supplied a DELETE method', () => {
     const { instance } = superagentInterface('http://localhost', HTTPMethods.DELETE);
-    assert.equal(instance.method, HTTPMethods.DELETE);
+    expect(instance.method).toEqual(HTTPMethods.DELETE);
   });
 
-  it('must return a GET request when supplied a GET method', () => {
+  test('must return a GET request when supplied a GET method', () => {
     const { instance } = superagentInterface('http://localhost', HTTPMethods.GET);
-    assert.equal(instance.method, HTTPMethods.GET);
+    expect(instance.method).toEqual(HTTPMethods.GET);
   });
 
-  it('must return a PATCH request when supplied a PATCH method', () => {
+  test('must return a PATCH request when supplied a PATCH method', () => {
     const { instance } = superagentInterface('http://localhost', HTTPMethods.PATCH);
-    assert.equal(instance.method, HTTPMethods.PATCH);
+    expect(instance.method).toEqual(HTTPMethods.PATCH);
   });
 
-  it('must return a POST request when supplied a POST method', () => {
+  test('must return a POST request when supplied a POST method', () => {
     const { instance } = superagentInterface('http://localhost', HTTPMethods.POST);
-    assert.equal(instance.method, HTTPMethods.POST);
+    expect(instance.method).toEqual(HTTPMethods.POST);
   });
 
-  it('must return a PUT request when supplied a PUT method', () => {
+  test('must return a PUT request when supplied a PUT method', () => {
     const { instance } = superagentInterface('http://localhost', HTTPMethods.PUT);
-    assert.equal(instance.method, HTTPMethods.PUT);
+    expect(instance.method).toEqual(HTTPMethods.PUT);
   });
 
-  it('must throw an error when supplied an invalid HTTP method', () => {
+  test('must throw an error when supplied an invalid HTTP method', () => {
     const invalid = () => superagentInterface('http://localhost', 'abc');
-    assert.throws(invalid, /Unsupported HTTP method/);
+    expect(invalid).toThrow();
   });
 });

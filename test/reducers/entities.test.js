@@ -1,10 +1,8 @@
-import { assert } from 'chai';
-
 import * as actionTypes from '../../src/constants/action-types';
 import entities from '../../src/reducers/entities';
 
 describe('entities reducer', () => {
-  it('should handle REQUEST_SUCCESS', () => {
+  test('should handle REQUEST_SUCCESS', () => {
     const action = {
       type: actionTypes.REQUEST_SUCCESS,
       entities: {
@@ -19,10 +17,10 @@ describe('entities reducer', () => {
       message: 'hello, world!',
       user: 'ryanashcraft',
     };
-    assert.deepEqual(newEntities, expectedEntities);
+    expect(newEntities).toEqual(expectedEntities);
   });
 
-  it('should handle MUTATE_SUCCESS', () => {
+  test('should handle MUTATE_SUCCESS', () => {
     const action = {
       type: actionTypes.MUTATE_SUCCESS,
       entities: {
@@ -37,10 +35,10 @@ describe('entities reducer', () => {
       message: 'hello, world!',
       user: 'ryanashcraft',
     };
-    assert.deepEqual(newEntities, expectedEntities);
+    expect(newEntities).toEqual(expectedEntities);
   });
 
-  it('should handle MUTATE_START and optimistic entities', () => {
+  test('should handle MUTATE_START and optimistic entities', () => {
     const action = {
       type: actionTypes.MUTATE_START,
       optimisticEntities: {
@@ -56,10 +54,10 @@ describe('entities reducer', () => {
       message: 'hello, optimistic world!',
       user: 'ryanashcraft',
     };
-    assert.deepEqual(newEntities, expectedEntities);
+    expect(newEntities).toEqual(expectedEntities);
   });
 
-  it('should handle MUTATE_FAILURE and original entities', () => {
+  test('should handle MUTATE_FAILURE and original entities', () => {
     const action = {
       type: actionTypes.MUTATE_FAILURE,
       rolledBackEntities: {
@@ -75,10 +73,10 @@ describe('entities reducer', () => {
       message: 'hello, world!',
       user: 'ryanashcraft',
     };
-    assert.deepEqual(newEntities, expectedEntities);
+    expect(newEntities).toEqual(expectedEntities);
   });
 
-  it('should handle RESET', () => {
+  test('should handle RESET', () => {
     const action = {
       type: actionTypes.RESET,
     };
@@ -88,10 +86,10 @@ describe('entities reducer', () => {
     };
     const newEntities = entities(prevState, action);
     const expectedEntities = {};
-    assert.deepEqual(newEntities, expectedEntities);
+    expect(newEntities).toEqual(expectedEntities);
   });
 
-  it('should handle UPDATE_ENTITIES', () => {
+  test('should handle UPDATE_ENTITIES', () => {
     const action = {
       type: actionTypes.UPDATE_ENTITIES,
       update: {
@@ -114,10 +112,10 @@ describe('entities reducer', () => {
         thing: {},
       },
     };
-    assert.deepEqual(newEntities, expectedEntities);
+    expect(newEntities).toEqual(expectedEntities);
   });
 
-  it('should handle UPDATE_ENTITIES with multiple entities', () => {
+  test('should handle UPDATE_ENTITIES with multiple entities', () => {
     const action = {
       type: actionTypes.UPDATE_ENTITIES,
       update: {
@@ -162,6 +160,6 @@ describe('entities reducer', () => {
         },
       },
     };
-    assert.deepEqual(newEntities, expectedEntities);
+    expect(newEntities).toEqual(expectedEntities);
   });
 });

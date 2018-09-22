@@ -39,7 +39,7 @@ const getPendingQueries = queries => {
   return pickBy(queries, query => query.isPending);
 };
 
-const resOk = status => Math.floor(status / 100) === 2;
+const isStatusOK = status => status >= 200 && status < 300;
 
 const queryMiddlewareAdvanced = networkInterface => (
   queriesSelector,
@@ -73,7 +73,7 @@ const queryMiddlewareAdvanced = networkInterface => (
         const queriesState = queries[queryKey];
         const isPending = get(queriesState, ['isPending']);
         const status = get(queriesState, ['status']);
-        const hasSucceeded = status >= 200 && status < 300;
+        const hasSucceeded = isStatusOK(status);
 
         if (force || !queriesState || (retry && !isPending && !hasSucceeded)) {
           returnValue = new Promise(resolve => {
@@ -123,7 +123,7 @@ const queryMiddlewareAdvanced = networkInterface => (
                   action.unstable_preDispatchCallback();
                 }
 
-                if (err || !resOk(status)) {
+                if (err || !isStatusOK(status)) {
                   dispatch(
                     requestFailure({
                       body,
@@ -239,7 +239,7 @@ const queryMiddlewareAdvanced = networkInterface => (
             let transformed;
             let newEntities;
 
-            if (err || !resOk(status)) {
+            if (err || !isStatusOK(status)) {
               let rolledBackEntities;
 
               if (optimisticUpdate) {

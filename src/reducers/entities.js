@@ -1,4 +1,4 @@
-import omit from 'lodash.omit';
+import { omit } from '../lib/object';
 
 import {
   MUTATE_FAILURE,

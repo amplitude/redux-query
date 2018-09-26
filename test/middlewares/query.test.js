@@ -1,6 +1,6 @@
 import superagent from 'superagent';
 import superagentMock from 'superagent-mock';
-import omit from 'lodash.omit';
+import { omit } from '../../src/lib/object';
 
 import * as actionTypes from '../../src/constants/action-types';
 import { getQueryKey } from '../../src/lib/query-key';

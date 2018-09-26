@@ -1,10 +1,6 @@
 import Backoff from 'backo';
 import invariant from 'invariant';
-import get from 'lodash.get';
-import identity from 'lodash.identity';
-import includes from 'lodash.includes';
-import pick from 'lodash.pick';
-import pickBy from 'lodash.pickby';
+import { pick, identity } from '../lib/object';
 
 import {
   requestStart,
@@ -36,9 +32,14 @@ const defaultConfig = {
   getQueryKey,
 };
 
-const getPendingQueries = queries => {
-  return pickBy(queries, query => query.isPending);
-};
+const getPendingQueries = queries =>
+  Object.keys(queries).reduce(
+    (pendingQueries, key) => ({
+      ...pendingQueries,
+      ...(queries[key].isPending ? { [key]: queries[key] } : {}),
+    }),
+    {},
+  );
 
 const isStatusOK = status => status >= 200 && status < 300;
 
@@ -72,8 +73,8 @@ const queryMiddlewareAdvanced = networkInterface => (
         const queries = queriesSelector(state);
 
         const queriesState = queries[queryKey];
-        const isPending = get(queriesState, ['isPending']);
-        const status = get(queriesState, ['status']);
+        const isPending = queriesState && queriesState.isPending;
+        const status = queriesState ? queriesState.status : null;
         const hasSucceeded = isStatusOK(status);
 
         if (force || !queriesState || (retry && !isPending && !hasSucceeded)) {
@@ -107,7 +108,7 @@ const queryMiddlewareAdvanced = networkInterface => (
 
               networkHandler.execute((err, status, responseBody, responseText, responseHeaders) => {
                 if (
-                  includes(config.retryableStatusCodes, status) &&
+                  config.retryableStatusCodes.includes(status) &&
                   attempts < config.backoff.maxAttempts
                 ) {
                   // TODO take into account Retry-After header if 503

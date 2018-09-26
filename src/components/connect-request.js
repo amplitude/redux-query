@@ -1,6 +1,4 @@
-import difference from 'lodash.difference';
-import includes from 'lodash.includes';
-import intersection from 'lodash.intersection';
+import { difference, intersection } from '../lib/array';
 import React from 'react';
 
 import { requestAsync, cancelQuery } from '../actions';
@@ -56,7 +54,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
       const { cancelKeys, requestKeys } = diffConfigs(prevConfigs, configs);
       const requestConfigs = configs.filter(config => {
-        return includes(requestKeys, getQueryKey(config));
+        return requestKeys.includes(getQueryKey(config));
       });
 
       if (cancelKeys.length) {
@@ -84,7 +82,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
         const pendingKeys = Object.keys(this._pendingRequests);
 
         cancelKeysArray
-          .filter(key => includes(pendingKeys, key))
+          .filter(key => pendingKeys.includes(key))
           .forEach(queryKey => dispatch(cancelQuery(queryKey)));
       }
     }

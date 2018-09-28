@@ -33,6 +33,7 @@ const defaultConfig = {
     statusCodes.SERVICE_UNAVAILABLE,
     statusCodes.GATEWAY_TIMEOUT,
   ],
+  getQueryKey,
 };
 
 const getPendingQueries = queries => {
@@ -44,11 +45,11 @@ const isStatusOK = status => status >= 200 && status < 300;
 const queryMiddlewareAdvanced = networkInterface => (
   queriesSelector,
   entitiesSelector,
-  config = defaultConfig,
+  customConfig,
 ) => {
   return ({ dispatch, getState }) => next => action => {
     let returnValue;
-
+    const { getQueryKey, ...config } = { ...defaultConfig, ...customConfig };
     switch (action.type) {
       case actionTypes.REQUEST_ASYNC: {
         const {

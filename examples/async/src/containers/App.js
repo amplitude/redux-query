@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Schema, arrayOf, normalize } from 'normalizr';
+import { schema, normalize } from 'normalizr';
 import { connectRequest, querySelectors } from 'redux-query';
 import get from 'lodash.get';
 import { selectReddit } from '../actions';
@@ -36,22 +36,18 @@ class App extends Component {
           options={['reactjs', 'frontend']}
         />
         <p>
-          {lastUpdated &&
-            <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-              {' '}
-            </span>}
-          {!isFetching &&
-            <a href="#" onClick={this.handleRefreshClick}>
-              Refresh
-            </a>}
+          {lastUpdated && (
+            <span>Last updated at {new Date(lastUpdated).toLocaleTimeString()}. </span>
+          )}
+          {!isFetching && <button onClick={this.handleRefreshClick}>Refresh</button>}
         </p>
         {isFetching && posts.length === 0 && <h2>Loading...</h2>}
         {!isFetching && posts.length === 0 && <h2>Empty.</h2>}
-        {posts.length > 0 &&
+        {posts.length > 0 && (
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
             <Posts posts={posts} />
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
@@ -71,11 +67,7 @@ const mapStateToProps = state => {
   const queriesState = get(state, 'queries');
   const isFetching = querySelectors.isPending(queriesState, { url }) || false;
   const lastUpdated = querySelectors.lastUpdated(queriesState, { url });
-  const postIds = get(
-    state,
-    ['entities', 'reddits', selectedReddit, 'data', 'children'],
-    []
-  );
+  const postIds = get(state, ['entities', 'reddits', selectedReddit, 'data', 'children'], []);
   const posts = postIds.map(id => get(state, ['entities', 'posts', id]));
 
   return {
@@ -87,19 +79,27 @@ const mapStateToProps = state => {
 };
 
 const getSchema = reddit => {
-  const subreddit = new Schema('reddits', {
-    idAttribute: () => reddit,
-  });
-
-  const post = new Schema('posts', {
-    idAttribute: entity => {
-      return entity.data.id;
+  const subreddit = new schema.Entity(
+    'reddits',
+    {},
+    {
+      idAttribute: () => reddit,
     },
-  });
+  );
+
+  const post = new schema.Entity(
+    'posts',
+    {},
+    {
+      idAttribute: entity => {
+        return entity.data.id;
+      },
+    },
+  );
 
   subreddit.define({
     data: {
-      children: arrayOf(post),
+      children: [post],
     },
   });
 
@@ -108,8 +108,7 @@ const getSchema = reddit => {
 
 const AppContainer = connectRequest(props => ({
   url: getRedditUrl(props.selectedReddit),
-  transform: response =>
-    normalize(response, getSchema(props.selectedReddit)).entities,
+  transform: response => normalize(response, getSchema(props.selectedReddit)).entities,
   options: {
     headers: {
       Accept: 'application/json',

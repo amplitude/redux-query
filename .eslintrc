@@ -1,163 +1,119 @@
 {
-    "parser": "babel-eslint",
-    "extends": [
-        "eslint:recommended",
-        "plugin:import/recommended",
-        "plugin:react/recommended"
-    ],
-    "plugins": [
-        "import",
-        "prettier",
-        "react"
-    ],
-    "settings": {
-        "react": {
-            "version": "16.0"
-        }
-    },
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "jsx": true,
-            "experimentalObjectRestSpread": true
-        }
-    },
-    "env": {
-        "browser": true,
-        "es6": true,
-        "mocha": true,
-        "node": true
-    },
-    "rules": {
-        "accessor-pairs": 2,
-        "camelcase": [
-            2,
-            {
-                "properties": "never"
-            }
-        ],
-        "consistent-this": [
-            0,
-            "just_dont_do_it_at_all"
-        ],
-        "constructor-super": 2,
-        "curly": 2,
-        "dot-location": [
-            2,
-            "property"
-        ],
-        "func-names": 2,
-        "func-style": [
-            2,
-            "expression"
-        ],
-        "guard-for-in": 2,
-        "handle-callback-err": [
-            2,
-            "^(err|error)$"
-        ],
-        "max-len": [
-            2,
-            120,
-            4
-        ],
-        "no-bitwise": 2,
-        "no-class-assign": 2,
-        "no-cond-assign": [
-            2,
-            "always"
-        ],
-        "no-console": 0,
-        "no-const-assign": 2,
-        "no-continue": 2,
-        "no-div-regex": 2,
-        "no-dupe-class-members": 2,
-        "no-floating-decimal": 2,
-        "no-multi-spaces": 2,
-        "no-multi-str": 2,
-        "no-native-reassign": 2,
-        "no-nested-ternary": 2,
-        "no-octal-escape": 2,
-        "no-param-reassign": 2,
-        "no-process-env": 2,
-        "no-return-assign": 2,
-        "no-script-url": 2,
-        "no-self-compare": 2,
-        "no-shadow": 0,
-        "no-this-before-super": 2,
-        "no-throw-literal": 2,
-        "no-trailing-spaces": 2,
-        "no-undef": 2,
-        "no-underscore-dangle": 0,
-        "no-unneeded-ternary": 2,
-        "no-unused-vars": [
-            "error",
-            {
-                "vars": "all",
-                "args": "after-used"
-            }
-        ],
-        "no-useless-call": 2,
-        "no-useless-concat": 2,
-        "no-var": 2,
-        "no-void": 2,
-        "no-with": 2,
-        "one-var": [
-            2,
-            "never"
-        ],
-        "operator-assignment": [
-            2,
-            "always"
-        ],
-        "operator-linebreak": [
-            2,
-            "after",
-            {
-                "overrides": {
-                    "?": "ignore",
-                    ":": "ignore"
-                }
-            }
-        ],
-        "padded-blocks": [
-            2,
-            "never"
-        ],
-        "prefer-const": 2,
-        "prefer-spread": 2,
-        "prefer-template": 2,
-        "prettier/prettier": [
-            "error",
-            {
-                "tabWidth": 2,
-                "printWidth": 100,
-                "trailingComma": "all",
-                "singleQuote": true,
-                "jsxBracketSameLine": true
-            }
-        ],
-        "quote-props": [
-            2,
-            "as-needed"
-        ],
-        "radix": 2,
-        "react/prop-types": 0,
-        "space-infix-ops": 2,
-        "spaced-comment": [
-            2,
-            "always"
-        ],
-        "strict": [
-            2,
-            "safe"
-        ],
-        "valid-jsdoc": 2,
-        "wrap-iife": 2,
-        "yoda": [
-            2,
-            "never"
-        ]
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/recommended",
+    "plugin:react/recommended"
+  ],
+  "plugins": ["import", "prettier", "react"],
+  "settings": {
+    "react": {
+      "version": "16.0"
     }
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "rules": {
+    "accessor-pairs": 2,
+    "camelcase": [
+      2,
+      {
+        "properties": "never"
+      }
+    ],
+    "consistent-this": [0, "just_dont_do_it_at_all"],
+    "constructor-super": 2,
+    "curly": 2,
+    "dot-location": [2, "property"],
+    "func-names": 2,
+    "func-style": [2, "expression"],
+    "guard-for-in": 2,
+    "handle-callback-err": [2, "^(err|error)$"],
+    "max-len": [2, 120, 4],
+    "no-bitwise": 2,
+    "no-class-assign": 2,
+    "no-cond-assign": [2, "always"],
+    "no-console": 0,
+    "no-const-assign": 2,
+    "no-continue": 2,
+    "no-div-regex": 2,
+    "no-dupe-class-members": 2,
+    "no-floating-decimal": 2,
+    "no-multi-spaces": 2,
+    "no-multi-str": 2,
+    "no-native-reassign": 2,
+    "no-nested-ternary": 2,
+    "no-octal-escape": 2,
+    "no-param-reassign": 2,
+    "no-process-env": 2,
+    "no-return-assign": 2,
+    "no-script-url": 2,
+    "no-self-compare": 2,
+    "no-shadow": 0,
+    "no-this-before-super": 2,
+    "no-throw-literal": 2,
+    "no-trailing-spaces": 2,
+    "no-undef": 2,
+    "no-underscore-dangle": 0,
+    "no-unneeded-ternary": 2,
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used"
+      }
+    ],
+    "no-useless-call": 2,
+    "no-useless-concat": 2,
+    "no-var": 2,
+    "no-void": 2,
+    "no-with": 2,
+    "one-var": [2, "never"],
+    "operator-assignment": [2, "always"],
+    "operator-linebreak": [
+      2,
+      "after",
+      {
+        "overrides": {
+          "?": "ignore",
+          ":": "ignore"
+        }
+      }
+    ],
+    "padded-blocks": [2, "never"],
+    "prefer-const": 2,
+    "prefer-spread": 2,
+    "prefer-template": 2,
+    "prettier/prettier": [
+      "error",
+      {
+        "tabWidth": 2,
+        "printWidth": 100,
+        "trailingComma": "all",
+        "singleQuote": true,
+        "jsxBracketSameLine": true
+      }
+    ],
+    "quote-props": [2, "as-needed"],
+    "radix": 2,
+    "react/prop-types": 0,
+    "space-infix-ops": 2,
+    "spaced-comment": [2, "always"],
+    "strict": [2, "safe"],
+    "valid-jsdoc": 2,
+    "wrap-iife": 2,
+    "yoda": [2, "never"]
+  }
 }

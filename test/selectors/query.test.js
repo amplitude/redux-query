@@ -1,11 +1,9 @@
-import { assert } from 'chai';
-
 import { getQueryKey } from '../../src/lib/query-key';
 import * as querySelectors from '../../src/selectors/query';
 
 describe('query selectors', () => {
   describe('isFinished', () => {
-    it('should work with a config', () => {
+    test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -21,10 +19,10 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.isTrue(isFinished);
+      expect(isFinished).toBe(true);
     });
 
-    it('should work with a config with a queryKey field', () => {
+    test('should work with a config with a queryKey field', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -40,12 +38,12 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.isTrue(isFinished);
+      expect(isFinished).toBe(true);
     });
   });
 
   describe('isPending', () => {
-    it('should work with a config', () => {
+    test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -61,10 +59,10 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.isTrue(isPending);
+      expect(isPending).toBe(true);
     });
 
-    it('should work with a config with a queryKey field', () => {
+    test('should work with a config with a queryKey field', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -80,12 +78,12 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.isTrue(isPending);
+      expect(isPending).toBe(true);
     });
   });
 
   describe('status', () => {
-    it('should work with a config', () => {
+    test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -101,10 +99,10 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.equal(status, 200);
+      expect(status).toEqual(200);
     });
 
-    it('should work with a config with a queryKey field', () => {
+    test('should work with a config with a queryKey field', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -120,12 +118,12 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.equal(status, 200);
+      expect(status).toEqual(200);
     });
   });
 
   describe('lastUpdated', () => {
-    it('should work with a config', () => {
+    test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -141,10 +139,10 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.equal(lastUpdated, 1488471746117);
+      expect(lastUpdated).toEqual(1488471746117);
     });
 
-    it('should work with a config with a queryKey field', () => {
+    test('should work with a config with a queryKey field', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -160,12 +158,12 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.equal(lastUpdated, 1488471746117);
+      expect(lastUpdated).toEqual(1488471746117);
     });
   });
 
   describe('queryCount', () => {
-    it('should work with a config', () => {
+    test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -181,10 +179,10 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.equal(queryCount, 2);
+      expect(queryCount).toEqual(2);
     });
 
-    it('should work with a config with a queryKey field', () => {
+    test('should work with a config with a queryKey field', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
         body: {
@@ -200,7 +198,7 @@ describe('query selectors', () => {
         },
         queryConfig,
       );
-      assert.equal(queryCount, 2);
+      expect(queryCount).toEqual(2);
     });
   });
 });

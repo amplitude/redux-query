@@ -43,4 +43,57 @@ describe('superagent interface', () => {
     const invalid = () => superagentInterface('http://localhost', 'abc');
     expect(invalid).toThrow();
   });
+
+  test('must call withCredentials on the request if they are included', () => {
+    const { instance } = superagentInterface('http://localhost', HTTPMethods.GET, {
+      credentials: 'include',
+    });
+    expect(instance._withCredentials).toBe(true);
+  });
+
+  test('must pass response body and body upon execution', done => {
+    const { instance, execute } = superagentInterface('http://localhost', HTTPMethods.GET);
+    let callback;
+    instance.end = jest.fn(receivedCallback => {
+      callback = receivedCallback;
+    });
+    execute((err, responseStatus, responseBody, responseText, responseHeaders) => {
+      expect(responseStatus).toBe(200);
+      expect(responseBody).toBe('body');
+      expect(responseText).toBe('text');
+      expect(responseHeaders).toBe('headers');
+      expect(err).toBe('error');
+      done();
+    });
+    callback('error', {
+      status: 200,
+      body: 'body',
+      text: 'text',
+      header: 'headers',
+    });
+  });
+
+  test('must pass undefined when there is no response', done => {
+    const { instance, execute } = superagentInterface('http://localhost', HTTPMethods.GET);
+    let callback;
+    instance.end = jest.fn(receivedCallback => {
+      callback = receivedCallback;
+    });
+    execute((err, responseStatus, responseBody, responseText, responseHeaders) => {
+      expect(responseStatus).toBe(0);
+      expect(responseBody).toBeUndefined();
+      expect(responseText).toBeUndefined();
+      expect(responseHeaders).toBeUndefined();
+      expect(err).toBe('error');
+      done();
+    });
+    callback('error', undefined);
+  });
+
+  test('must call abort on request upon abort', () => {
+    const { instance, abort } = superagentInterface('http://localhost', HTTPMethods.GET);
+    instance.abort = jest.fn();
+    abort();
+    expect(instance.abort).toHaveBeenCalled();
+  });
 });

@@ -3,6 +3,10 @@ import * as querySelectors from '../../src/selectors/query';
 
 describe('query selectors', () => {
   describe('isFinished', () => {
+    test('should return undefined when there is no query config', () => {
+      expect(querySelectors.isFinished({})).toBeUndefined();
+    });
+
     test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
@@ -43,6 +47,10 @@ describe('query selectors', () => {
   });
 
   describe('isPending', () => {
+    test('should return undefined when there is no query config', () => {
+      expect(querySelectors.isPending({})).toBeUndefined();
+    });
+
     test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
@@ -83,6 +91,9 @@ describe('query selectors', () => {
   });
 
   describe('status', () => {
+    test('returns undefined when there is no query config', () => {
+      expect(querySelectors.status({})).toBeUndefined();
+    });
     test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
@@ -122,7 +133,49 @@ describe('query selectors', () => {
     });
   });
 
+  describe('headers', () => {
+    test('returns undefined when there is no query config', () => {
+      expect(querySelectors.headers({})).toBeUndefined();
+    });
+    test('should work with a config', () => {
+      const queryConfig = {
+        url: '/api/dashboard/1/rename',
+        body: {
+          name: 'My KPIs',
+        },
+      };
+      const queryKey = getQueryKey(queryConfig);
+      const headers = querySelectors.headers(
+        {
+          [queryKey]: { headers: { 'Content-length': 100 } },
+        },
+        queryConfig,
+      );
+      expect(headers).toMatchObject({ 'Content-length': 100 });
+    });
+
+    test('should work with a config with a queryKey field', () => {
+      const queryConfig = {
+        url: '/api/dashboard/1/rename',
+        body: {
+          name: 'My KPIs',
+        },
+        queryKey: 'myQueryKey',
+      };
+      const headers = querySelectors.headers(
+        {
+          myQueryKey: { headers: { 'Content-length': 100 } },
+        },
+        queryConfig,
+      );
+      expect(headers).toMatchObject({ 'Content-length': 100 });
+    });
+  });
+
   describe('lastUpdated', () => {
+    test('should return undefined when there is no query config', () => {
+      expect(querySelectors.lastUpdated({})).toBeUndefined();
+    });
     test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',
@@ -163,6 +216,9 @@ describe('query selectors', () => {
   });
 
   describe('queryCount', () => {
+    test('should return undefined when there is no query config', () => {
+      expect(querySelectors.queryCount({})).toBeUndefined();
+    });
     test('should work with a config', () => {
       const queryConfig = {
         url: '/api/dashboard/1/rename',

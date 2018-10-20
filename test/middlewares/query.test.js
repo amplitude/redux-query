@@ -7,6 +7,7 @@ import { getQueryKey } from '../../src/lib/query-key';
 import queryMiddleware from '../../src/middleware/query';
 
 const apiMessage = 'hello, world!';
+let even = true;
 const mockEndpoint = (match, data) => {
   switch (match[0]) {
     case '/api': {
@@ -17,6 +18,11 @@ const mockEndpoint = (match, data) => {
         status: 200,
         ok: true,
       };
+    }
+
+    case '/retryable': {
+      even = !even;
+      return even ? { status: 200, ok: true, body: { message: data } } : { status: 503, ok: false };
     }
 
     default: {
@@ -122,6 +128,8 @@ describe('query middleware', () => {
 
     test('by dispatching start and success actions', done => {
       const url = '/api';
+      /* eslint-disable-next-line */
+      const unstable_preDispatchCallback = jest.fn();
       const actionsToDispatch = [
         {
           type: actionTypes.REQUEST_START,
@@ -136,7 +144,11 @@ describe('query middleware', () => {
           },
         },
       ];
-      const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+      const checkCallbackAndDone = () => {
+        expect(unstable_preDispatchCallback).toHaveBeenCalledTimes(1);
+        done();
+      };
+      const dispatch = mockDispatchToAssertActions(actionsToDispatch, checkCallbackAndDone);
       const getState = () => ({
         entities: {},
         queries: {},
@@ -152,6 +164,7 @@ describe('query middleware', () => {
         update: {
           message: (prevMessage, message) => message,
         },
+        unstable_preDispatchCallback,
       });
     });
 
@@ -374,6 +387,76 @@ describe('query middleware', () => {
           message: (prevMessage, message) => message,
         },
         force: true,
+      });
+    });
+
+    test('should retry if request fails with retryable code', done => {
+      const url = '/retryable';
+      const actionsToDispatch = [
+        {
+          type: actionTypes.REQUEST_START,
+          url,
+        },
+        {
+          type: actionTypes.REQUEST_START,
+          url,
+        },
+        {
+          type: actionTypes.REQUEST_SUCCESS,
+          url,
+          status: 200,
+          entities: {
+            message: apiMessage,
+          },
+        },
+      ];
+      const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+      const getState = () => ({
+        entities: {},
+        queries: {},
+      });
+      const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({
+        dispatch,
+        getState,
+      });
+      const actionHandler = nextHandler();
+      actionHandler({
+        type: actionTypes.REQUEST_ASYNC,
+        url,
+        update: {
+          message: (prevMessage, message) => message,
+        },
+      });
+    });
+
+    test('should dispatch failure if request fails', done => {
+      const url = '/404';
+      const actionsToDispatch = [
+        {
+          type: actionTypes.REQUEST_START,
+          url,
+        },
+        {
+          type: actionTypes.REQUEST_FAILURE,
+          url,
+        },
+      ];
+      const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+      const getState = () => ({
+        entities: {},
+        queries: {},
+      });
+      const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({
+        dispatch,
+        getState,
+      });
+      const actionHandler = nextHandler();
+      actionHandler({
+        type: actionTypes.REQUEST_ASYNC,
+        url,
+        update: {
+          message: (prevMessage, message) => message,
+        },
       });
     });
   });
@@ -643,6 +726,41 @@ describe('query middleware', () => {
         },
       });
     });
+
+    test('by not reverting optimistic updates if there were none', done => {
+      const url = '/bad-url';
+      const actionsToDispatch = [
+        {
+          type: actionTypes.MUTATE_START,
+          url,
+        },
+        {
+          type: actionTypes.MUTATE_FAILURE,
+          url,
+          status: 404,
+          rolledBackEntities: undefined,
+        },
+      ];
+      const dispatch = mockDispatchToAssertActions(actionsToDispatch, done);
+      const getState = () => ({
+        entities: {
+          message: apiMessage,
+        },
+        queries: {},
+      });
+      const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({
+        dispatch,
+        getState,
+      });
+      const actionHandler = nextHandler();
+      actionHandler({
+        type: actionTypes.MUTATE_ASYNC,
+        url,
+        update: {
+          message: (prevMessage, message) => message,
+        },
+      });
+    });
   });
 
   describe('must handle cancelations', () => {
@@ -712,6 +830,34 @@ describe('query middleware', () => {
         type: actionTypes.CANCEL_QUERY,
         queryKey,
       });
+    });
+
+    test('but not requests which are not in flight', () => {
+      const url = '/api';
+      const dispatch = () => {
+        expect(false).toBe(true);
+      };
+
+      console.warn = jest.fn();
+
+      const queryKey = getQueryKey({ url });
+      const getState = () => ({
+        entities: {},
+        queries: {},
+      });
+      const nextHandler = queryMiddleware(queriesSelector, entitiesSelector)({
+        dispatch,
+        getState,
+      });
+      const next = () => {};
+      const actionHandler = nextHandler(next);
+      expect(
+        actionHandler({
+          type: actionTypes.CANCEL_QUERY,
+          queryKey,
+        }),
+      ).toBeNull();
+      expect(console.warn).toHaveBeenCalledTimes(1);
     });
   });
 

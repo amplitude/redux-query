@@ -329,12 +329,9 @@ const queryMiddlewareAdvanced = networkInterface => (
         const state = getState();
         const queries = queriesSelector(state);
         const pendingQueries = getPendingQueries(queries);
-
-        for (const queryKey in pendingQueries) {
-          if (pendingQueries.hasOwnProperty(queryKey)) {
-            pendingQueries[queryKey].networkHandler.abort();
-          }
-        }
+        Object.keys(pendingQueries).forEach(queryKey => {
+          pendingQueries[queryKey].networkHandler.abort();
+        });
 
         returnValue = next(action);
 

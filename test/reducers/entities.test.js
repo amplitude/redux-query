@@ -87,6 +87,8 @@ describe('entities reducer', () => {
     const newEntities = entities(prevState, action);
     const expectedEntities = {};
     expect(newEntities).toEqual(expectedEntities);
+    const actionWithEntities = { type: actionTypes.RESET, entities: { foo: 'bar' } };
+    expect(entities(prevState, actionWithEntities)).toEqual(actionWithEntities.entities);
   });
 
   test('should handle UPDATE_ENTITIES', () => {
@@ -161,5 +163,20 @@ describe('entities reducer', () => {
       },
     };
     expect(newEntities).toEqual(expectedEntities);
+  });
+
+  test('should pass through othe actions', () => {
+    const action = {
+      type: 'OTHER',
+    };
+    const state = {};
+    expect(entities(state, action)).toBe(state);
+  });
+
+  test('should return empty state upon initialization', () => {
+    const action = {
+      type: 'OTHER',
+    };
+    expect(entities(undefined, action)).toEqual({});
   });
 });

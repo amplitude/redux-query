@@ -173,4 +173,19 @@ describe('errors reducer', () => {
     const expectedState = {};
     expect(newState).toEqual(expectedState);
   });
+
+  test('should pass through othe actions', () => {
+    const action = {
+      type: 'OTHER',
+    };
+    const state = {};
+    expect(errors(state, action)).toBe(state);
+  });
+
+  test('should return empty state upon initialization', () => {
+    const action = {
+      type: 'OTHER',
+    };
+    expect(errors(undefined, action)).toEqual({});
+  });
 });

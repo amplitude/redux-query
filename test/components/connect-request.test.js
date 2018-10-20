@@ -1,8 +1,5 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { expect } from 'chai';
-import { omit } from 'lodash';
-import sinon from 'sinon';
 
 import StoreShape from '../../src/lib/store-shape';
 import connectRequest from '../../src/components/connect-request';
@@ -20,6 +17,7 @@ class Foo extends React.Component {
     asap(() => this.props.onComponentWillUnmount(this));
   }
   render() {
+    this.props.onRender && this.props.onRender(this);
     return '';
   }
 }
@@ -32,7 +30,7 @@ Foo.defaultProps = {
 };
 
 const createStore = () => ({
-  dispatch: sinon.spy(params => new Promise(resolve => setTimeout(() => resolve(params), 1000))),
+  dispatch: jest.fn(params => new Promise(resolve => setTimeout(() => resolve(params), 1000))),
   subscribe: () => console.info('subscribe'),
   getState: () => console.info('getState'),
 });
@@ -44,7 +42,9 @@ class StoreProvider extends React.Component {
     };
   }
   render() {
-    return React.cloneElement(this.props.children, omit(this.props, 'store'));
+    /* eslint-disable-next-line */
+    const { store, children, ...props } = this.props;
+    return React.cloneElement(children, props);
   }
 }
 
@@ -88,11 +88,11 @@ describe('connectRequest', () => {
   it('Should dispatch request upon mounting', done => {
     mountFooWithOneConfig(store, {
       onComponentWillMount: () => {
-        expect(store.dispatch).have.callCount(0);
+        expect(store.dispatch).toHaveBeenCalledTimes(0);
       },
       onComponentDidMount: () => {
-        expect(store.dispatch).have.callCount(1);
-        expect(store.dispatch.getCall(0)).have.been.calledWithMatch(
+        expect(store.dispatch).toHaveBeenCalledTimes(1);
+        expect(store.dispatch.mock.calls[0][0]).toMatchObject(
           createActionMatch({ force: false, type: '@@query/REQUEST_ASYNC' }),
         );
         done();
@@ -103,22 +103,22 @@ describe('connectRequest', () => {
   it('Should dispatch second request upon forcing', done => {
     const mounted = mountFooWithOneConfig(store, {
       onComponentDidMount: self => {
-        expect(store.dispatch).have.callCount(1);
-        expect(store.dispatch.getCall(0)).have.been.calledWithMatch(
+        expect(store.dispatch).toHaveBeenCalledTimes(1);
+        expect(store.dispatch.mock.calls[0][0]).toMatchObject(
           createActionMatch({ force: false, type: '@@query/REQUEST_ASYNC' }),
         );
         self.props.forceRequest();
         asap(() => {
-          expect(store.dispatch.getCall(1)).have.been.calledWithMatch(
+          expect(store.dispatch.mock.calls[1][0]).toMatchObject(
             createActionMatch({ force: true, retry: false, type: '@@query/REQUEST_ASYNC' }),
           );
-          expect(store.dispatch).have.callCount(2);
+          expect(store.dispatch).toHaveBeenCalledTimes(2);
           asap(() => mounted.unmount());
         });
       },
       onComponentWillUnmount: () => {
-        expect(store.dispatch).have.callCount(3);
-        expect(store.dispatch.getCall(2)).have.been.calledWithMatch({
+        expect(store.dispatch).toHaveBeenCalledTimes(3);
+        expect(store.dispatch.mock.calls[2][0]).toMatchObject({
           type: '@@query/CANCEL_QUERY',
         });
         done();
@@ -129,12 +129,12 @@ describe('connectRequest', () => {
   it('Should not re-request if query keys did not change', done => {
     const mounted = mountFooWithOneConfig(store, {
       onComponentDidMount: () => {
-        expect(store.dispatch.getCall(0)).have.been.calledWithMatch(
+        expect(store.dispatch.mock.calls[0][0]).toMatchObject(
           createActionMatch({ force: false, type: '@@query/REQUEST_ASYNC' }),
         );
         mounted.setProps({ foo: 'bar' }, () => {
           asap(() => {
-            expect(store.dispatch).have.callCount(1);
+            expect(store.dispatch).toHaveBeenCalledTimes(1);
             done();
           });
         });
@@ -147,11 +147,11 @@ describe('connectRequest', () => {
       onComponentDidMount: () => {
         mounted.setProps({ url: 'http://foo2.bar' }, () => {
           asap(() => {
-            expect(store.dispatch).have.callCount(3);
-            expect(store.dispatch.getCall(0)).have.been.calledWithMatch(
+            expect(store.dispatch).toHaveBeenCalledTimes(3);
+            expect(store.dispatch.mock.calls[0][0]).toMatchObject(
               createActionMatch({ force: false, type: '@@query/REQUEST_ASYNC' }),
             );
-            expect(store.dispatch.getCall(1)).have.been.calledWithMatch({
+            expect(store.dispatch.mock.calls[1][0]).toMatchObject({
               type: '@@query/CANCEL_QUERY',
             });
             done();
@@ -167,8 +167,8 @@ describe('connectRequest', () => {
       onComponentDidMount: () => {
         mounted.setProps({ empty: true }, () => {
           asap(() => {
-            expect(store.dispatch).have.callCount(2);
-            expect(store.dispatch.getCall(1)).have.been.calledWithMatch({
+            expect(store.dispatch).toHaveBeenCalledTimes(2);
+            expect(store.dispatch.mock.calls[1][0]).toMatchObject({
               type: '@@query/CANCEL_QUERY',
             });
             done();
@@ -185,18 +185,18 @@ describe('connectRequest', () => {
       subscribe: () => undefined,
       getState: () => undefined,
     };
-    const spy = sinon.spy();
+    const spy = jest.fn();
     const mounted = mountFoo(mapPropsToConfigs)(store, {
       onComponentDidMount: () => {
         const connectedComponent = mounted.find('ConnectRequest(Foo)').instance();
         const promise = connectedComponent.forceRequest();
         const promise2 = connectedComponent.forceRequest();
-        expect(promise.then).to.be.a('function');
+        expect(typeof promise.then).toBe('function');
         promise.then(() => {
           spy();
           connectedComponent.forceRequest().then(() => {
-            expect(spy).have.callCount(2);
-            expect(connectedComponent._resolvers.length).to.eq(0);
+            expect(spy.mock.calls.length).toBe(2);
+            expect(connectedComponent._resolvers.length).toBe(0);
             done();
           });
           actions.pop().unstable_preDispatchCallback();
@@ -209,15 +209,46 @@ describe('connectRequest', () => {
     });
   });
 
-  it('should store the wrapped instance if withRef is passed', () => {
-    const mounted = mountFoo(mapPropsToConfigs, { withRef: true })(store);
-    const connected = mounted.find('ConnectRequest(Foo)').instance();
-    expect(connected.getWrappedInstance()).to.be.a('object');
+  describe('withRef', () => {
+    it('should store the wrapped instance if withRef is passed', () => {
+      const mounted = mountFoo(mapPropsToConfigs, { withRef: true })(store);
+      const connected = mounted.find('ConnectRequest(Foo)').instance();
+      expect(typeof connected.getWrappedInstance()).toBe('object');
+    });
+
+    it('should not store the wrapped instance if withRef is not passed', () => {
+      const mounted = mountFoo(mapPropsToConfigs)(store);
+      const connected = mounted.find('ConnectRequest(Foo)').instance();
+      expect(connected.getWrappedInstance()).toBeNull();
+    });
   });
 
-  it('should not store the wrapped instance if withRef is not passed', () => {
-    const mounted = mountFoo(mapPropsToConfigs)(store);
-    const connected = mounted.find('ConnectRequest(Foo)').instance();
-    expect(connected.getWrappedInstance()).to.be.a('null');
+  describe('pure', () => {
+    it('behave like pure if its pure', () => {
+      const onRender = jest.fn();
+      const mounted = mountFoo(mapPropsToConfigs, { pure: true })(store, { onRender, foo: 'bar' });
+      expect(onRender).toHaveBeenCalled();
+      mounted.setProps({ foo: 'bar' });
+      expect(onRender).toHaveBeenCalledTimes(1);
+      mounted.setProps({ foo: 'bar2' });
+      expect(onRender).toHaveBeenCalledTimes(2);
+    });
+
+    it('behave like a non-pure if it is not pure', () => {
+      const onRender = jest.fn();
+      const mounted = mountFoo(mapPropsToConfigs, { pure: false })(store, { onRender, foo: 'bar' });
+      expect(onRender).toHaveBeenCalled();
+      mounted.setProps({ foo: 'bar' });
+      expect(onRender).toHaveBeenCalledTimes(2);
+      mounted.setProps({ foo: 'bar2' });
+      expect(onRender).toHaveBeenCalledTimes(3);
+    });
+  });
+
+  describe('displayName', () => {
+    it('should be ConnectRequest(<componentName>)', () => {
+      const mounted = mountFoo(mapPropsToConfigs)(store);
+      expect(mounted.childAt(0).name()).toBe('ConnectRequest(Foo)');
+    });
   });
 });

@@ -8,9 +8,7 @@ import { getQueryKey } from '../lib/query-key';
 import shallowEqual from '../lib/shallow-equal';
 import storeShape from '../lib/store-shape';
 
-const ensureArray = maybe => {
-  return Array.isArray(maybe) ? maybe : [maybe];
-};
+const ensureArray = maybe => (Array.isArray(maybe) ? maybe : [maybe]);
 
 const diffConfigs = (prevConfigs, configs) => {
   const prevQueryKeys = prevConfigs.map(getQueryKey);
@@ -29,8 +27,6 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
   class ConnectRequest extends React.Component {
     constructor() {
       super();
-
-      this.forceRequest = this.forceRequest.bind(this);
 
       // A set of URLs that identify all pending requests
       this._pendingRequests = {};
@@ -100,7 +96,6 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
     makeRequest(config, force, retry) {
       const { dispatch } = this.context.store;
-
       if (config.url) {
         const queryKey = getQueryKey(config);
         const requestPromise = dispatch(
@@ -126,8 +121,14 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
       }
     }
 
-    forceRequest() {
-      this.requestAsync(mapPropsToConfigs(this.props), true, false);
+    forceRequest = () => this.requestData({ force: true });
+
+    requestData = ({ force } = {}) => {
+      this.requestAsync(mapPropsToConfigs(this.props), force, false);
+      return this.getFetchDataPromise();
+    };
+
+    getFetchDataPromise() {
       return new Promise(resolve => this._resolvers.push(resolve));
     }
 

@@ -24,7 +24,7 @@ const diffConfigs = (prevConfigs, configs) => {
 };
 
 const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => {
-  const { pure = true, withRef = false } = options;
+  const { pure = true, withRef = false, force = false } = options;
 
   class ConnectRequest extends React.Component {
     constructor() {
@@ -47,7 +47,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
     componentDidMount() {
       const configs = mapPropsToConfigs(this.props);
-      this.requestAsync(configs, false, true);
+      this.requestAsync(configs, force || !!this.props.forceRequestOnMount, true);
     }
 
     componentDidUpdate(prevProps) {

@@ -1,4 +1,5 @@
 import * as actionTypes from '../constants/action-types';
+import { lru } from '../lib/gc';
 
 const initialState = {};
 
@@ -7,6 +8,8 @@ const queries = (state = initialState, action) => {
     case actionTypes.RESET: {
       return {};
     }
+    case actionTypes.GARBAGE_COLLECT:
+      return (action.strategy ? action.strategy : lru)(state, action.options);
     case actionTypes.MUTATE_START:
     case actionTypes.REQUEST_START: {
       const { queryKey } = action;

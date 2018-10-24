@@ -199,3 +199,9 @@ export const updateEntities = update => {
     update,
   };
 };
+
+export const garbageCollect = ({ options, strategy }) => ({
+  type: actionTypes.GARBAGE_COLLECT,
+  options,
+  strategy,
+});

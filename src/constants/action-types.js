@@ -12,3 +12,4 @@ export const MUTATE_FAILURE = '@@query/MUTATE_FAILURE';
 
 export const RESET = '@@query/RESET';
 export const UPDATE_ENTITIES = '@@query/UPDATE_ENTITIES';
+export const GARBAGE_COLLECT = '@@query/GARBAGE_COLLECT';

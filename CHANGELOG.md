@@ -1,3 +1,7 @@
+## 2.3.1-pulse.2
+
+- New `clearQueries` action helping to clean up queries cache
+
 ## 2.3.1
 
 - Support redux v4 (karevn [#103](https://github.com/amplitude/redux-query/pull/103))

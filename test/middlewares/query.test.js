@@ -377,7 +377,7 @@ describe('query middleware', () => {
       });
     });
 
-    describe.only('expires', () => {
+    describe('expires', () => {
       it('should fetch after expires time has passed', done => {
         const url = '/api';
         const actionsToDispatch = [

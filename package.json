@@ -1,6 +1,6 @@
 {
   "name": "@pulse-platform/redux-query",
-  "version": "2.3.1-pulse.1",
+  "version": "2.3.1-pulse.2",
   "description": "A library for querying and managing network state in React/Redux applications",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",

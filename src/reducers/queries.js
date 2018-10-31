@@ -60,6 +60,21 @@ const queries = (state = initialState, action) => {
 
       return state;
     }
+    case actionTypes.CLEAR_QUERIES: {
+      const { queryKey } = action;
+
+      if (!queryKey) {
+        return {};
+      }
+
+      return Object.entries(state).reduce((acc, [key, value]) => {
+        if (queryKey.test(key)) {
+          return acc;
+        }
+
+        return { ...acc, [key]: value };
+      }, {});
+    }
     default: {
       return state;
     }

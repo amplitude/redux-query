@@ -5,6 +5,8 @@ export const REQUEST_FAILURE = '@@query/REQUEST_FAILURE';
 
 export const CANCEL_QUERY = '@@query/CANCEL_QUERY';
 
+export const CLEAR_QUERIES = '@@query/CLEAR_QUERIES';
+
 export const MUTATE_ASYNC = '@@query/MUTATE_ASYNC';
 export const MUTATE_START = '@@query/MUTATE_START';
 export const MUTATE_SUCCESS = '@@query/MUTATE_SUCCESS';

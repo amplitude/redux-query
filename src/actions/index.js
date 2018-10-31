@@ -195,6 +195,13 @@ export const cancelQuery = queryKey => {
   };
 };
 
+export const clearQueries = queryKey => {
+  return {
+    type: actionTypes.CLEAR_QUERIES,
+    queryKey,
+  };
+};
+
 export const updateEntities = update => {
   return {
     type: actionTypes.UPDATE_ENTITIES,

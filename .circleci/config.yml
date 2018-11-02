@@ -1,0 +1,70 @@
+defaults: &defaults
+  working_directory: ~/tmp
+  docker:
+  - image: pulsecare/pulse-circleci-node:latest
+
+version: 2
+jobs:
+  prebuild:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+            - ~/site/.cache/yarn
+            - ~/examples/async/.cache/yarn
+      - persist_to_workspace:
+          root: .
+          paths:
+          - node_modules
+          - site/node_modules
+          - examples/async/node_modules
+  test:
+    <<: *defaults
+    parallelism: 2
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Test
+          command: yarn run test:cov
+      - store_test_results:
+          path: "reports/junit/test-results.xml"
+      - store_artifacts:
+          path: "reports/junit/test-results.xml"
+          prefix: tests
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Package
+          command: yarn run package
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - prebuild
+      - build:
+          requires:
+          - prebuild
+      - test:
+          requires:
+          - prebuild

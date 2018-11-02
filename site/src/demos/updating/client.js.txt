@@ -87,8 +87,7 @@ class Echo extends Component {
     return (
       <div>
         <label>
-          Input:
-          {' '}
+          Input:{' '}
           <input
             type="text"
             value={props.input}
@@ -110,17 +109,21 @@ const mapStateToProps = state => ({
 
 // Map dispatch to props. This is ordinary react-redux usage.
 const mapDispatchToProps = dispatch => ({
-  changeInput: input => dispatch({
-    type: 'CHANGE_INPUT',
-    input,
-  }),
+  changeInput: input =>
+    dispatch({
+      type: 'CHANGE_INPUT',
+      input,
+    }),
 });
 
 // Map props from `mapStateToProps` to a request query config.
 const mapPropsToConfigs = props => echoRequest(props.input);
 
 const EchoContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
   connectRequest(mapPropsToConfigs)
 )(Echo);
 

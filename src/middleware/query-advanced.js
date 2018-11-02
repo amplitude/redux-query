@@ -33,22 +33,23 @@ const defaultConfig = {
     statusCodes.SERVICE_UNAVAILABLE,
     statusCodes.GATEWAY_TIMEOUT,
   ],
+  getQueryKey,
 };
 
 const getPendingQueries = queries => {
   return pickBy(queries, query => query.isPending);
 };
 
-const resOk = status => Math.floor(status / 100) === 2;
+const isStatusOK = status => status >= 200 && status < 300;
 
 const queryMiddlewareAdvanced = networkInterface => (
   queriesSelector,
   entitiesSelector,
-  config = defaultConfig,
+  customConfig,
 ) => {
   return ({ dispatch, getState }) => next => action => {
     let returnValue;
-
+    const { getQueryKey, ...config } = { ...defaultConfig, ...customConfig };
     switch (action.type) {
       case actionTypes.REQUEST_ASYNC: {
         const {
@@ -74,9 +75,10 @@ const queryMiddlewareAdvanced = networkInterface => (
         const queriesState = queries[queryKey];
         const isPending = get(queriesState, ['isPending']);
         const status = get(queriesState, ['status']);
-        const hasSucceeded = status >= 200 && status < 300;
-        const lastUpdated = get(queriesState, ['lastUpdated']);
-        const expired = !!(expires !== undefined && Date.now() - lastUpdated > expires);
+        const hasSucceeded = isStatusOK(status);
+        const expired = !!(
+          expires !== undefined && Date.now() - get(queriesState, ['lastUpdated']) > expires
+        );
 
         if (force || expired || !queriesState || (retry && !isPending && !hasSucceeded)) {
           returnValue = new Promise(resolve => {
@@ -126,7 +128,7 @@ const queryMiddlewareAdvanced = networkInterface => (
                   action.unstable_preDispatchCallback();
                 }
 
-                if (err || !resOk(status)) {
+                if (err || !isStatusOK(status)) {
                   dispatch(
                     requestFailure({
                       body,
@@ -242,7 +244,7 @@ const queryMiddlewareAdvanced = networkInterface => (
             let transformed;
             let newEntities;
 
-            if (err || !resOk(status)) {
+            if (err || !isStatusOK(status)) {
               let rolledBackEntities;
 
               if (optimisticUpdate) {

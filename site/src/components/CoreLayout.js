@@ -7,7 +7,7 @@ const Container = styled.div`
   display: flex;
   flex-grow: 1;
 
-  ${props => props.disableBodyScroll ? 'height' : 'min-height'}: 100vh;
+  ${props => (props.disableBodyScroll ? 'height' : 'min-height')}: 100vh;
   ${props => props.disableBodyScroll && 'max-width: 100vw;'};
   ${props => props.disableBodyScroll && 'overflow-x: hidden;'};
 

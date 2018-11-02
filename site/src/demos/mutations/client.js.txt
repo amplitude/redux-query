@@ -174,9 +174,13 @@ class NameForm extends Component {
           {state.isLoading === true && <p>Loading...</p>}
           {!state.isLoading && state.result === 'success' && <p>Success!</p>}
           {!state.isLoading &&
-            state.result === 'failure' &&
-            <p>An error occurred: "{state.error}".</p> // eslint-disable-line
-          }
+            state.result === 'failure' && (
+              <p>
+                An error occurred: &quot;
+                {state.error}
+                &quot;.
+              </p>
+            )}
         </form>
       </div>
     );
@@ -194,7 +198,10 @@ const mapDispatchToProps = {
 const mapPropsToConfig = () => queries.nameRequest();
 
 const NameFormContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
   connectRequest(mapPropsToConfig)
 )(NameForm);
 

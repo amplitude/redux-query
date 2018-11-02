@@ -109,23 +109,27 @@ class Item extends Component {
     return (
       <li>
         {props.isLoading && '...'}
-        {props.item &&
+        {props.item && (
           <div>
             <div>
-              <a href={props.item.url} target="_blank">{props.item.title}</a>
+              <a
+                href={props.item.url}
+                target="_blank"
+                rel="noopener noreferrer">
+                {props.item.title}
+              </a>
             </div>
             <div>
-              {props.item.score}
-              {' '}
-              points by
-              {' '}
+              {props.item.score} points by{' '}
               <a
                 href={`https://news.ycombinator.com/user?id=${props.item.by}`}
-                target="_blank">
+                target="_blank"
+                rel="noopener noreferrer">
                 {props.item.by}
               </a>
             </div>
-          </div>}
+          </div>
+        )}
       </li>
     );
   }
@@ -154,9 +158,9 @@ class TopStories extends Component {
 
     return (
       <ol>
-        {props.topStoryIds
-          .slice(0, 30)
-          .map(itemId => <ItemContainer itemId={itemId} key={itemId} />)}
+        {props.topStoryIds.slice(0, 30).map(itemId => (
+          <ItemContainer itemId={itemId} key={itemId} />
+        ))}
       </ol>
     );
   }

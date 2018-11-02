@@ -9,6 +9,8 @@
 # production
 /build
 /public/vendor
+src/CHANGELOG.md
+src/README.md
 
 # misc
 .DS_Store
@@ -16,4 +18,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-

@@ -5,7 +5,9 @@ export default class Posts extends Component {
   render() {
     return (
       <ul>
-        {this.props.posts.map((post, i) => <li key={i}>{post.data.title}</li>)}
+        {this.props.posts.map((post, i) => (
+          <li key={i}>{post.data.title}</li>
+        ))}
       </ul>
     );
   }

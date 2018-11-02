@@ -11,21 +11,21 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "babel-polyfill": "^6.3.14",
-    "isomorphic-fetch": "^2.1.1",
-    "lodash": "^4.0.1",
-    "normalizr": "^2.0.0",
+    "@babel/polyfill": "^7.0.0",
+    "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.11",
+    "normalizr": "^3.2.4",
     "prop-types": "^15.5.6",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^4.0.0",
-    "redux": "^3.0.0",
-    "redux-logger": "^2.0.2",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
     "redux-query": "../..",
-    "redux-thunk": "^1.0.0"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "expect": "^1.6.0",
-    "react-scripts": "0.9.3"
+    "react-scripts": "^1.1.5"
   }
 }

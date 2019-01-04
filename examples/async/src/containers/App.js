@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ReactReduxContext } from 'react-redux';
 import { schema, normalize } from 'normalizr';
 import { connectRequest, querySelectors } from 'redux-query';
 import get from 'lodash.get';
@@ -106,28 +106,31 @@ const getSchema = reddit => {
   return subreddit;
 };
 
-const AppContainer = connectRequest(props => ({
-  url: getRedditUrl(props.selectedReddit),
-  transform: response => normalize(response, getSchema(props.selectedReddit)).entities,
-  options: {
-    headers: {
-      Accept: 'application/json',
+const AppContainer = connectRequest(
+  props => ({
+    url: getRedditUrl(props.selectedReddit),
+    transform: response => normalize(response, getSchema(props.selectedReddit)).entities,
+    options: {
+      headers: {
+        Accept: 'application/json',
+      },
     },
-  },
-  update: {
-    posts: (prevPosts, posts) => {
-      return {
-        ...prevPosts,
-        ...posts,
-      };
+    update: {
+      posts: (prevPosts, posts) => {
+        return {
+          ...prevPosts,
+          ...posts,
+        };
+      },
+      reddits: (prevReddits, reddits) => {
+        return {
+          ...prevReddits,
+          ...reddits,
+        };
+      },
     },
-    reddits: (prevReddits, reddits) => {
-      return {
-        ...prevReddits,
-        ...reddits,
-      };
-    },
-  },
-}))(App);
+  }),
+  { reduxContext: ReactReduxContext }
+)(App);
 
 export default connect(mapStateToProps)(AppContainer);

@@ -208,7 +208,7 @@ may be set to an object specifying custom values for any of the following:
 
 
 | Name | Type | Description |
-|:---|:---|:---:|:---|
+|:---|:---:|:---|
 | `pure` | boolean | Re-renders based on a shallow comparison of the props passed to the `connectRequest`ed component instead of once per render of the parent. |
 | `withRef` | boolean | Allows access to the wrapped component via call to `.getWrappedInstance()`. |
 | `reduxContext` | object | Allows custom connection to a Redux context (e.g. for use with react-redux >= 6.0.0). |

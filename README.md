@@ -90,7 +90,7 @@ Query configs are objects used to describe how redux-query should handle the req
 | `url` | string | yes | The URL for the HTTP request. |
 | `transform` | function |  | A function that transforms the response data to an entities object where keys are entity IDs and values are entity data. Can be used to normalize data. |
 | `update` | object | yes | An object where keys are entity IDs and values are "update functions" (see below). |
-| `body` | object |  | The request body. For GETs, this object is stringified and appended to the URL as query params. |
+| `body` | object |  | The request body. For GETs, this object is stringified and appended to the URL as query params.<sup>[1](#footnote-1)</sup> |
 | `force` | boolean |  | A flag to indicate that the request should be performed even if a previous query with the same query key succeeded. |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
 | `meta` | object |  | Various metadata for the query. Can be used to update other reducers when queries succeed or fail. |
@@ -105,7 +105,7 @@ Query configs are objects used to describe how redux-query should handle the req
 | `update` | object | yes | An object where keys are entity IDs and values are "update functions" (see below). |
 | `optimisticUpdate` | object |  | An object where keys are entity IDs and values are "optimisticUpdate functions" (see below). Used to update entities immediately when the mutation starts. |
 | `rollback` | object |  | An object where keys are entity IDs and values are "rollback functions" (see below). Used to reverse the effects of `optimisticUpdate` when the mutation fails. If not provided, the entity will simply be reverted to its value before the `optimisticUpdate` was performed. |
-| `body` | object |  | The HTTP request body. For GETs, this object is stringified and appended to the URL as query params. |
+| `body` | object |  | The HTTP request body. For GETs, this object is stringified and appended to the URL as query params.<sup>[1](#footnote-1)</sup> |
 | `queryKey` | string |  | The identifier used to identify the query metadata in the `queries` reducer. If unprovided, the `url` and `body` fields are serialized to generate the query key. |
 | `meta` | object |  | Various metadata for the query. Can be used to update other reducers when queries succeed or fail. |
 | `options` | object |  | Options for the request. Set `options.method` to change the HTTP method, `options.headers` to set any headers and `options.credentials = 'include'` for CORS. |
@@ -405,3 +405,7 @@ $ cd examples/async
 $ yarn install
 $ yarn run start
 ```
+
+## Footnotes
+
+<a name="footnote-1">1</a>: This behavior is only guaranteed when using the superagent network interface, which is the network interface used if you use the default middleware.

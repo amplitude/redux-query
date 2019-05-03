@@ -1,11 +1,14 @@
 {
-  "name": "@pulse-platform/redux-query",
-  "version": "2.3.1-pulse.2.1",
+  "name": "@rally/redux-query",
+  "version": "2.3.1-rally.1",
   "description": "A library for querying and managing network state in React/Redux applications",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
   "jsnext:main": "dist/es/index.js",
+  "publishConfig": {
+    "registry": "https://artifacts.werally.in/artifactory/api/npm/npm-local"
+  },
   "scripts": {
     "build:commonjs": "yarn run clean:commonjs && cross-env NODE_ENV=production cross-env BABEL_ENV=commonjs babel src --out-dir dist/commonjs --ignore examples/,test/",
     "build:es": "yarn run clean:es && cross-env NODE_ENV=production cross-env BABEL_ENV=es babel src --out-dir dist/es --ignore examples/,test/",

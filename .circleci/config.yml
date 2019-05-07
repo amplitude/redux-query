@@ -35,6 +35,11 @@ jobs:
           - node_modules
           - site/node_modules
           - examples/async/node_modules
+  artifactory-setup:
+    <<: *defaults
+    - run:
+        name: Generate .npmrc
+        command: ./generateNpmrc.sh
   test:
     <<: *defaults
     parallelism: 2
@@ -68,6 +73,10 @@ workflows:
   build_and_test:
     jobs:
       - prebuild
+      - artifactory-setup:
+        context: Rally
+        requires:
+          - prebuild
       - build:
           requires:
           - prebuild

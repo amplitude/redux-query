@@ -5,6 +5,8 @@ from os import environ
 from os.path import expanduser,isfile
 import re
 
+
+#force 
 home = expanduser('~')
 
 username = environ.get('ARTIFACTORY_USERNAME')

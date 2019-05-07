@@ -37,9 +37,10 @@ jobs:
           - examples/async/node_modules
   artifactory-setup:
     <<: *defaults
-    - run:
-        name: Generate .npmrc
-        command: ./generateNpmrc.sh
+    steps:
+      - run:
+          name: Generate .npmrc
+          command: ./generateNpmrc.sh
   test:
     <<: *defaults
     parallelism: 2

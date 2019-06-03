@@ -42,7 +42,7 @@ const getPendingQueries = queries => {
 
 const isStatusOK = status => status >= 200 && status < 300;
 
-const queryMiddleware = networkInterface => (queriesSelector, entitiesSelector, customConfig) => {
+const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, customConfig) => {
   return ({ dispatch, getState }) => next => action => {
     let returnValue;
     const { getQueryKey, ...config } = { ...defaultConfig, ...customConfig };

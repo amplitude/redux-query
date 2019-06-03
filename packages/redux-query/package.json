@@ -1,0 +1,83 @@
+{
+  "name": "redux-query",
+  "version": "3.0.0",
+  "description": "A library for querying and managing network state in Redux applications",
+  "homepage": "https://github.com/amplitude/redux-query",
+  "main": "dist/commonjs/index.js",
+  "module": "dist/es/index.js",
+  "jsnext:main": "dist/es/index.js",
+  "scripts": {
+    "build:commonjs": "yarn run clean:commonjs && cross-env NODE_ENV=production cross-env BABEL_ENV=commonjs babel src --out-dir dist/commonjs --ignore test/",
+    "build:es": "yarn run clean:es && cross-env NODE_ENV=production cross-env BABEL_ENV=es babel src --out-dir dist/es --ignore test/",
+    "build:umd": "yarn run clean:umd && cross-env NODE_ENV=production webpack --config webpack.config.js --bail",
+    "build:examples": "cd examples/async && yarn run build",
+    "build": "yarn run build:commonjs && yarn run build:es && yarn run build:umd",
+    "clean:commonjs": "rimraf dist/commonjs",
+    "clean:coverage": "rimraf coverage",
+    "clean:es": "rimraf dist/es",
+    "clean:umd": "rimraf dist/umd",
+    "clean": "yarn run clean:commonjs && yarn run clean:es && yarn run clean:umd",
+    "coverage": "codecov",
+    "prebuild": "yarn run lint",
+    "lint": "eslint src test --fix",
+    "test:cov": "cross-env NODE_ENV=test jest --coverage",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amplitude/redux-query.git"
+  },
+  "keywords": [
+    "redux-query",
+    "redux",
+    "query",
+    "fetch",
+    "REST"
+  ],
+  "author": "Ryan Ashcraft <ryan@amplitude.com>",
+  "license": "MIT",
+  "dependencies": {
+    "backo": "^1.1.0",
+    "invariant": "^2.2.0",
+    "json-stable-stringify": "^1.0.0",
+    "lodash.difference": "^4.5.0",
+    "lodash.get": "^4.4.2",
+    "lodash.identity": "^3.0.0",
+    "lodash.includes": "^4.3.0",
+    "lodash.intersection": "^4.4.0",
+    "lodash.omit": "^4.5.0",
+    "lodash.pick": "^4.4.0",
+    "lodash.pickby": "^4.6.0",
+    "lodash.values": "^4.3.0",
+    "prop-types": "^15.5.6"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^7.1.1",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.2",
+    "codecov": "^3.1.0",
+    "cross-env": "^1.0.7",
+    "eslint": "^5.6.0",
+    "eslint-plugin-import": "^2.14.0",
+    "jest": "^23.6.0",
+    "rimraf": "^2.4.3",
+    "terser-webpack-plugin": "^1.3.0",
+    "superagent-mock": "^3.3.0",
+    "webpack": "^4.19.0",
+    "webpack-cli": "^3.1.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
+  }
+}

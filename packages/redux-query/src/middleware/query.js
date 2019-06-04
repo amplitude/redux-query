@@ -60,7 +60,6 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
         } = action;
 
         invariant(!!url, 'Missing required `url` field in action handler');
-        invariant(!!update, 'Missing required `update` field in action handler');
 
         const queryKey = getQueryKey(action);
 

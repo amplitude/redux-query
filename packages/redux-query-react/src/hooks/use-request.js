@@ -2,67 +2,77 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
-const useMemoizedQueryConfig = queryConfig => {
-  const memoizedQueryConfig = React.useRef(queryConfig);
-  const previousQueryKey = React.useRef(null);
+const useMemoizedAction = (queryConfig, callback) => {
+  const memoizedQueryConfig = React.useRef({
+    ...queryConfig,
+    unstable_preDispatchCallback: callback,
+  });
+  const previousQueryKey = React.useRef(getQueryKey(queryConfig));
 
   React.useEffect(() => {
     const queryKey = getQueryKey(queryConfig);
 
-    if (!previousQueryKey.current || queryKey !== previousQueryKey.current) {
+    if (queryKey !== previousQueryKey.current) {
       previousQueryKey.current = queryKey;
-      memoizedQueryConfig.current = queryConfig;
+      memoizedQueryConfig.current = {
+        ...queryConfig,
+        unstable_preDispatchCallback: callback,
+      };
     }
-  }, [queryConfig]);
+  }, [callback, queryConfig]);
 
   return memoizedQueryConfig.current;
 };
 
 const useRequest = providedQueryConfig => {
   const reduxDispatch = useDispatch();
+
+  const isPendingRef = React.useRef(false);
+
   const [isPending, setIsPending] = React.useState(false);
-  const queryConfig = useMemoizedQueryConfig(providedQueryConfig);
+
+  const finishedCallback = React.useCallback(() => {
+    setIsPending(false);
+    isPendingRef.current = false;
+  }, []);
+
+  const requestReduxAction = useMemoizedAction(providedQueryConfig, finishedCallback);
 
   const dispatchRequestToRedux = React.useCallback(
-    queryConfig => {
-      const promise = reduxDispatch(requestAsync(queryConfig));
+    action => {
+      const promise = reduxDispatch(requestAsync(action));
 
       if (promise) {
         setIsPending(true);
-
-        promise.then(() => {
-          setIsPending(false);
-        });
+        isPendingRef.current = true;
       }
     },
     [reduxDispatch],
   );
 
   const dispatchCancelToRedux = React.useCallback(
-    queryConfig => {
-      reduxDispatch(cancelQuery(queryConfig));
+    action => {
+      reduxDispatch(cancelQuery(action));
     },
     [reduxDispatch],
   );
 
   const forceRequest = React.useCallback(() => {
     dispatchRequestToRedux({
-      ...queryConfig,
+      ...requestReduxAction,
       force: true,
     });
-  }, [dispatchRequestToRedux, queryConfig]);
+  }, [dispatchRequestToRedux, requestReduxAction]);
 
   React.useEffect(() => {
-    dispatchRequestToRedux(queryConfig);
-  }, [dispatchRequestToRedux, queryConfig]);
+    dispatchRequestToRedux(requestReduxAction);
 
-  React.useEffect(() => {
     return () => {
-      if (isPending) {
-        dispatchCancelToRedux(queryConfig);
+      if (isPendingRef.current) {
+        dispatchCancelToRedux(getQueryKey(requestReduxAction));
       }
     };
-  }, [dispatchCancelToRedux, isPending, queryConfig]);
+  }, [dispatchCancelToRedux, dispatchRequestToRedux, requestReduxAction]);
 
   return { isPending, forceRequest };
 };

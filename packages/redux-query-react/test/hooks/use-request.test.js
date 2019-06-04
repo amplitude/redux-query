@@ -14,27 +14,19 @@ const reducer = combineReducers({
   queries: queriesReducer,
 });
 
+const artificialNetworkDelay = 100;
 const apiMessage = 'hello, world!';
 
-const mockNetworkInterface = (url, method, options) => {
+const mockNetworkInterface = url => {
+  let timeoutId = null;
+
   return {
     abort() {
-      // no op
+      clearTimeout(timeoutId);
     },
     execute(callback) {
-      if (url === '/echo-headers') {
-        setTimeout(() => {
-          const status = 200;
-          const body = {
-            message: options.headers,
-          };
-          const text = JSON.stringify(body);
-          const headers = {};
-
-          callback(null, status, body, text, headers);
-        }, 0);
-      } else if (url === '/api') {
-        setTimeout(() => {
+      if (url === '/api') {
+        timeoutId = setTimeout(() => {
           const status = 200;
           const body = {
             message: apiMessage,
@@ -43,11 +35,11 @@ const mockNetworkInterface = (url, method, options) => {
           const headers = {};
 
           callback(null, status, body, text, headers);
-        }, 0);
+        }, artificialNetworkDelay);
       } else {
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
           callback(null, 404, {}, '{}', {});
-        }, 0);
+        }, artificialNetworkDelay);
       }
     },
   };
@@ -67,7 +59,7 @@ describe('useRequest', () => {
     );
   });
 
-  it('loads data initially and supports refresh', async () => {
+  it.skip('loads data initially and supports refresh', async () => {
     const Content = () => {
       const { isPending, forceRequest } = useRequest({
         url: '/api',
@@ -152,11 +144,14 @@ describe('useRequest', () => {
 
       return (
         <div>
-          {path === '/' ? <Content /> : <div>404</div>}
+          {path === '/' ? <Content /> : <div data-testid="404">404</div>}
           <a
             data-testid="broken-link"
             href="/broken-link"
-            onClick={e => e.preventDefault() && setPath('broken-link')}
+            onClick={e => {
+              e.preventDefault();
+              setPath('broken-link');
+            }}
           >
             broken link
           </a>
@@ -175,9 +170,17 @@ describe('useRequest', () => {
     let loadingContentNode = getByTestId(container, 'loading-content');
     expect(loadingContentNode.textContent).toBe('loading');
 
-    // Loaded
+    // Click broken link - this should remove the component that has the useRequest hook,
+    // triggering the request from being canceled
 
     let brokenLinkNode = await waitForElement(() => getByTestId(container, 'broken-link'));
     fireEvent.click(brokenLinkNode);
+
+    // Loaded - check that query was actually canceled in Redux
+
+    let notFoundNode = await waitForElement(() => getByTestId(container, '404'));
+    expect(notFoundNode.textContent).toBe('404');
+    expect(store.getState().queries['{"url":"/api"}'].isPending).toBe(false);
+    expect(store.getState().entities.message).toBeUndefined();
   });
 });

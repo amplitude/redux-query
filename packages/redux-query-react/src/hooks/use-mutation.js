@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { mutateAsync } from 'redux-query';
 
+import useConstCallback from './use-const-callback';
 import useMemoizedAction from './use-memoized-action';
 
 const useMutation = providedQueryConfig => {
@@ -11,12 +12,19 @@ const useMutation = providedQueryConfig => {
 
   const [isPending, setIsPending] = React.useState(false);
 
-  const finishedCallback = React.useCallback(() => {
+  const finishedCallback = useConstCallback(() => {
     setIsPending(false);
     isPendingRef.current = false;
-  }, []);
+  });
 
-  const requestReduxAction = useMemoizedAction(providedQueryConfig, finishedCallback);
+  const transformQueryConfigToAction = useConstCallback(queryConfig => {
+    return {
+      ...queryConfig,
+      unstable_preDispatchCallback: finishedCallback,
+    };
+  });
+
+  const requestReduxAction = useMemoizedAction(providedQueryConfig, transformQueryConfigToAction);
 
   const dispatchMutationToRedux = React.useCallback(
     action => {

@@ -3,10 +3,8 @@ node_js:
   - 'node'
 cache:
   yarn: true
-  directories:
-    - node_modules
 script:
-  - yarn run build
+  - lerna bootstrap
   - yarn run test
 after_success:
   - yarn run coverage

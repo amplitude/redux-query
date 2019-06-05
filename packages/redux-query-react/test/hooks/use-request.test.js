@@ -165,13 +165,14 @@ describe('useRequest', () => {
       </App>,
     );
 
-    // Initial loading
+    // Initial loading of the component that has the useRequest hook
 
     let loadingContentNode = getByTestId(container, 'loading-content');
     expect(loadingContentNode.textContent).toBe('loading');
 
-    // Click broken link - this should remove the component that has the useRequest hook,
-    // triggering the request from being canceled
+    // Click broken link before component has finished loading. By clicking the link, we are
+    // unmounting the component that has the useRequest hook, triggering the network request to be
+    // canceled.
 
     let brokenLinkNode = await waitForElement(() => getByTestId(container, 'broken-link'));
     fireEvent.click(brokenLinkNode);

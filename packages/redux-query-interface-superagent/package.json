@@ -13,6 +13,7 @@
     "build": "yarn clean && yarn run build:commonjs && yarn run build:es && yarn run build:umd",
     "clean": "rimraf dist",
     "lint": "eslint src test --fix",
+    "prepublish": "yarn build",
     "test": "jest"
   },
   "repository": {

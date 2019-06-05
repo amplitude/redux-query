@@ -17,10 +17,7 @@ class ResultFrame extends Component {
   componentDidUpdate(prevProps) {
     const { props } = this;
 
-    if (
-      prevProps.clientCode !== props.clientCode ||
-      prevProps.serverCode !== props.serverCode
-    ) {
+    if (prevProps.clientCode !== props.clientCode || prevProps.serverCode !== props.serverCode) {
       this.update();
     }
   }
@@ -38,6 +35,7 @@ class ResultFrame extends Component {
               redux: 'Redux',
               'react-redux': 'ReactRedux',
               'redux-query': 'ReduxQuery',
+              'redux-query-react': 'ReduxQueryReact',
               'redux-saga': 'ReduxSaga',
               'redux-saga/effects': 'ReduxSaga.effects',
             },
@@ -65,6 +63,9 @@ class ResultFrame extends Component {
       process.env.NODE_ENV === 'development'
         ? '/vendor/redux-query.js'
         : '/redux-query/vendor/redux-query.js',
+      process.env.NODE_ENV === 'development'
+        ? '/vendor/redux-query-react.js'
+        : '/redux-query/vendor/redux-query-react.js',
     ];
     /* eslint-enable no-process-env */
 
@@ -80,7 +81,7 @@ class ResultFrame extends Component {
     contentWindow.document.write(
       `<script type="text/javascript">
         ${transformedServer.code}
-      </script>`
+      </script>`,
     );
     contentWindow.document.write(
       `<script type="text/javascript">
@@ -130,11 +131,7 @@ class ResultFrame extends Component {
             execute: execute
           };
         };
-
-        ReduxQuery = Object.assign({}, ReduxQuery, {
-          queryMiddleware: ReduxQuery.queryMiddlewareAdvanced(mockNetworkInterface),
-        });
-      </script>`
+      </script>`,
     );
     contentWindow.document.write(
       `<script type="text/javascript">
@@ -160,18 +157,18 @@ class ResultFrame extends Component {
           var modifiedMiddleware = Array.prototype.slice.call(arguments).concat([postMessageMiddleware]);
           return applyMiddleware.apply(applyMiddleware, modifiedMiddleware);
         };
-      </script>`
+      </script>`,
     );
     contentWindow.document.write(
       `<script type="text/javascript">
         ${transformed.code}
-      </script>`
+      </script>`,
     );
     contentWindow.document.write(`<div id="app"></div>`);
     contentWindow.document.write(
       `<script type="text/javascript">
         ReactDOM.render(React.createElement(window.Demo.default), document.getElementById('app'));
-      </script>`
+      </script>`,
     );
     contentWindow.document.write('</body>');
     contentWindow.document.write('</html>');

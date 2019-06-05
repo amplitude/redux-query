@@ -1,15 +1,23 @@
 {
-    "extends": "../.eslintrc",
-    "rules": {
-        "prettier/prettier": [
-            "error",
-            {
-                "tabWidth": 2,
-                "printWidth": 80,
-                "trailingComma": "es5",
-                "singleQuote": true,
-                "jsxBracketSameLine": true
-            }
-        ]
+  "parser": "babel-eslint",
+  "extends": ["eslint:recommended", "plugin:import/recommended", "plugin:react/recommended"],
+  "plugins": ["import", "react", "react-hooks"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
     }
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": false
+  },
+  "rules": {
+    "react/prop-types": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  }
 }

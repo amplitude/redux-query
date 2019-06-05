@@ -26,7 +26,8 @@
   "author": "Ryan Ashcraft <ryan@amplitude.com>",
   "license": "MIT",
   "dependencies": {
-    "redux-query": "3.0.0"
+    "redux-query": "3.0.0",
+    "superagent": "^5.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",

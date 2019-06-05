@@ -2,27 +2,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
-const useMemoizedAction = (queryConfig, callback) => {
-  const memoizedQueryConfig = React.useRef({
-    ...queryConfig,
-    unstable_preDispatchCallback: callback,
-  });
-  const previousQueryKey = React.useRef(getQueryKey(queryConfig));
-
-  React.useEffect(() => {
-    const queryKey = getQueryKey(queryConfig);
-
-    if (queryKey !== previousQueryKey.current) {
-      previousQueryKey.current = queryKey;
-      memoizedQueryConfig.current = {
-        ...queryConfig,
-        unstable_preDispatchCallback: callback,
-      };
-    }
-  }, [callback, queryConfig]);
-
-  return memoizedQueryConfig.current;
-};
+import useMemoizedAction from './use-memoized-action';
 
 const useRequest = providedQueryConfig => {
   const reduxDispatch = useDispatch();
@@ -74,7 +54,7 @@ const useRequest = providedQueryConfig => {
     };
   }, [dispatchCancelToRedux, dispatchRequestToRedux, requestReduxAction]);
 
-  return { isPending, forceRequest };
+  return [isPending, forceRequest];
 };
 
 export default useRequest;

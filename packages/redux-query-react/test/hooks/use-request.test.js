@@ -59,9 +59,9 @@ describe('useRequest', () => {
     );
   });
 
-  it.skip('loads data initially and supports refresh', async () => {
+  it('loads data initially and supports refresh', async () => {
     const Content = () => {
-      const { isPending, forceRequest } = useRequest({
+      const [isPending, refresh] = useRequest({
         url: '/api',
         update: {
           message: (prevValue, newValue) => newValue,
@@ -76,7 +76,7 @@ describe('useRequest', () => {
       return (
         <div>
           <div data-testid="loaded-content">{message}</div>
-          <button data-testid="refresh-button" onClick={forceRequest}>
+          <button data-testid="refresh-button" onClick={refresh}>
             refresh
           </button>
         </div>
@@ -117,7 +117,7 @@ describe('useRequest', () => {
 
   it('cancels pending requests as part of cleanup', async () => {
     const Content = () => {
-      const { isPending, forceRequest } = useRequest({
+      const [isPending, refresh] = useRequest({
         url: '/api',
         update: {
           message: (prevValue, newValue) => newValue,
@@ -132,7 +132,7 @@ describe('useRequest', () => {
       return (
         <div>
           <div data-testid="loaded-content">{message}</div>
-          <button data-testid="refresh-button" onClick={forceRequest}>
+          <button data-testid="refresh-button" onClick={refresh}>
             refresh
           </button>
         </div>

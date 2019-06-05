@@ -1,7 +1,7 @@
 {
   "name": "redux-query-site",
   "private": true,
-  "version": "1.0.0",
+  "version": "3.0.0-alpha.0",
   "homepage": "https://amplitude.github.io/redux-query",
   "dependencies": {
     "babel-standalone": "^6.26.0",

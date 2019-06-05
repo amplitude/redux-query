@@ -12,8 +12,9 @@ describe('useMemoizedAction', () => {
     };
 
     const callback = () => {};
+    const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
 
-    const { result } = renderHook(() => useMemoizedAction(queryConfig, callback));
+    const { result } = renderHook(() => useMemoizedAction(queryConfig, transform));
 
     expect(result.current).toEqual({
       url: '/api',
@@ -36,7 +37,8 @@ describe('useMemoizedAction', () => {
 
     // Initial render
 
-    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig, callback));
+    const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
+    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig, transform));
     const returnValue1 = result.current;
 
     // Rerending but no props chnaged and the query config is the exact same, so the return value
@@ -66,12 +68,12 @@ describe('useMemoizedAction', () => {
     };
 
     const callback = () => {};
+    const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
 
-    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig1, callback));
+    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig1, transform));
     const firstReturnValue = result.current;
     rerender(queryConfig2, callback);
     const secondReturnValue = result.current;
-
     expect(firstReturnValue).toBe(secondReturnValue);
   });
 
@@ -95,10 +97,11 @@ describe('useMemoizedAction', () => {
 
     let queryConfig = queryConfig1;
     const callback = () => {};
+    const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
 
     // Initial render
 
-    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig, callback));
+    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig, transform));
     const firstReturnValue = result.current;
 
     // Something in the component ancestry updated and now the query config has changed with a new

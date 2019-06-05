@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
+import useConstCallback from './use-const-callback';
 import useMemoizedAction from './use-memoized-action';
 
 const useRequest = providedQueryConfig => {
@@ -11,31 +12,35 @@ const useRequest = providedQueryConfig => {
 
   const [isPending, setIsPending] = React.useState(false);
 
-  const finishedCallback = React.useCallback(() => {
+  const finishedCallback = useConstCallback(() => {
     setIsPending(false);
     isPendingRef.current = false;
-  }, []);
+  });
 
-  const requestReduxAction = useMemoizedAction(providedQueryConfig, finishedCallback);
+  const transformQueryConfigToAction = useConstCallback(queryConfig => {
+    return {
+      ...queryConfig,
+      unstable_preDispatchCallback: finishedCallback,
+      retry: true,
+    };
+  });
 
-  const dispatchRequestToRedux = React.useCallback(
-    action => {
-      const promise = reduxDispatch(requestAsync(action));
+  const requestReduxAction = useMemoizedAction(providedQueryConfig, transformQueryConfigToAction);
 
-      if (promise) {
-        setIsPending(true);
-        isPendingRef.current = true;
-      }
-    },
-    [reduxDispatch],
-  );
+  const dispatchRequestToRedux = useConstCallback(action => {
+    const promise = reduxDispatch(requestAsync(action));
 
-  const dispatchCancelToRedux = React.useCallback(
-    action => {
-      reduxDispatch(cancelQuery(action));
-    },
-    [reduxDispatch],
-  );
+    if (promise) {
+      setIsPending(true);
+      isPendingRef.current = true;
+    }
+  });
+
+  const dispatchCancelToRedux = useConstCallback(action => {
+    reduxDispatch(cancelQuery(action));
+    setIsPending(false);
+    isPendingRef.current = false;
+  });
 
   const forceRequest = React.useCallback(() => {
     dispatchRequestToRedux({

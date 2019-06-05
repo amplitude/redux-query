@@ -40,6 +40,7 @@
   "author": "Ryan Ashcraft <ryan@amplitude.com>",
   "license": "MIT",
   "dependencies": {
+    "hoist-non-react-statics": "^3.3.0",
     "lodash.difference": "^4.5.0",
     "lodash.includes": "^4.3.0",
     "lodash.intersection": "^4.4.0",

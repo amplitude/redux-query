@@ -1,8 +1,5 @@
 {
   "name": "redux-query-packages",
-  "workspaces": [
-    "packages/*"
-  ],
   "private": true,
   "scripts": {
     "build": "bin/build.sh",

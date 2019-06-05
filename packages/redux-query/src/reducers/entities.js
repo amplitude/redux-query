@@ -1,5 +1,3 @@
-import omit from 'lodash.omit';
-
 import {
   MUTATE_FAILURE,
   MUTATE_START,
@@ -11,19 +9,6 @@ import {
 import { optimisticUpdateEntities } from '../lib/update';
 
 const initialState = {};
-
-const withoutPath = (state, path) => {
-  const [key, ...restPath] = path;
-
-  if (restPath.length) {
-    return {
-      ...state,
-      [key]: withoutPath(state[key], restPath),
-    };
-  } else {
-    return omit(state, key);
-  }
-};
 
 const entities = (state = initialState, action) => {
   if (action.type === RESET) {

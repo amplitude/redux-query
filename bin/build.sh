@@ -20,7 +20,7 @@ do
     continue
   fi
 
-  print_message "Running \"yarn precommit\" for ${package_name}…"
+  print_message "Running \"yarn build\" for ${package_name}…"
   yarn --cwd ${package} build
 
   printf "\n"

@@ -37,6 +37,7 @@ const reducer = combineReducers({
 
 // Tell redux-query where the queries and entities reducers are.
 const middleware = queryMiddleware(
+  mockNetworkInterface,
   state => state.queries,
   state => state.entities
 );

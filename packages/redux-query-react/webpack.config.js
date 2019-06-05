@@ -11,13 +11,13 @@ const mode = process.env.NODE_ENV;
 module.exports = {
   mode,
   entry: {
-    'redux-query-interface-superagent': './src/index.js',
+    'redux-query-react': './src/index.js',
   },
   output: {
     path: path.join(__dirname, 'dist/umd'),
     filename: '[name].js',
     libraryTarget: 'umd',
-    library: 'ReduxQueryInterfaceSuperagent',
+    library: 'ReduxQueryReact',
   },
   optimization: {
     minimize: true,

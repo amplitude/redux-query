@@ -9,13 +9,15 @@
     "codemirror": "^5.30.0",
     "github-markdown-css": "^2.5.0",
     "marked": "^0.3.6",
-    "react": "^16.0.0",
+    "react": "^16.8.2",
     "react-codemirror2": "^2.0.2",
-    "react-dom": "^16.0.0",
+    "react-dom": "^16.8.2",
     "react-inspector": "^2.2.0",
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.0.0",
     "redux": "^4.0.0",
+    "redux-query": "^3.0.1-alpha.0",
+    "redux-query-react": "^3.0.1-alpha.0",
     "rimraf": "^2.4.3",
     "styled-components": "^2.2.1"
   },
@@ -25,21 +27,16 @@
     "eslint": "^5.6.0",
     "eslint-plugin-babel": "^5.2.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.11.1",
-    "prettier": "^1.14.3",
     "react-scripts": "^1.1.5"
   },
   "scripts": {
     "build": "yarn run vendor && react-scripts build",
     "clean": "rimraf build",
-    "eject": "react-scripts eject",
-    "lint:demos": "eslint src --fix --ext .js.txt",
-    "lint": "yarn run link && eslint src --fix --ext .js && yarn run lint:demos",
+    "lint": "yarn run link && eslint src --fix --ext .js && eslint src --fix --ext .js.txt",
     "prebuild": "yarn run lint",
     "start": "yarn run link && yarn run vendor && react-scripts start",
-    "test": "react-scripts test --env=jsdom",
-    "vendor": "mkdir -p public/vendor && cp ../dist/umd/redux-query.js public/vendor/redux-query.js",
-    "link": "ln -f ../CHANGELOG.md src/CHANGELOG.md && ln -f ../README.md src/README.md"
+    "link": "ln -f ../CHANGELOG.md src/CHANGELOG.md && ln -f ../README.md src/README.md",
+    "vendor": "mkdir -p public/vendor && cp node_modules/redux-query/dist/umd/redux-query.js public/vendor/redux-query.js && cp node_modules/redux-query-react/dist/umd/redux-query-react.js public/vendor/redux-query-react.js"
   }
 }

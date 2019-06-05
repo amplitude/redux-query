@@ -17,9 +17,9 @@
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.0.0",
     "redux": "^4.0.0",
-    "redux-query": "^3.0.1-alpha.0",
-    "redux-query-interface-superagent": "^3.0.1-alpha.0",
-    "redux-query-react": "^3.0.1-alpha.0",
+    "redux-query": "^3.0.0-alpha.0",
+    "redux-query-interface-superagent": "^3.0.0-alpha.0",
+    "redux-query-react": "^3.0.0-alpha.0",
     "rimraf": "^2.4.3",
     "styled-components": "^2.2.1"
   },

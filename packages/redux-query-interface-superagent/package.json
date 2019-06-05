@@ -7,10 +7,10 @@
   "module": "dist/es/index.js",
   "jsnext:main": "dist/es/index.js",
   "scripts": {
-    "build:commonjs": "yarn run clean:commonjs && cross-env NODE_ENV=production cross-env BABEL_ENV=commonjs babel src --out-dir dist/commonjs --ignore test/",
-    "build:es": "yarn run clean:es && cross-env NODE_ENV=production cross-env BABEL_ENV=es babel src --out-dir dist/es --ignore test/",
-    "build:umd": "yarn run clean:umd && cross-env NODE_ENV=production webpack --config webpack.config.js --bail",
-    "build": "yarn run build:commonjs && yarn run build:es && yarn run build:umd",
+    "build:commonjs": "cross-env NODE_ENV=production cross-env BABEL_ENV=commonjs babel src --out-dir dist/commonjs --ignore test/",
+    "build:es": "cross-env NODE_ENV=production cross-env BABEL_ENV=es babel src --out-dir dist/es --ignore test/",
+    "build:umd": "cross-env NODE_ENV=production webpack --config webpack.config.js --bail",
+    "build": "yarn clean && yarn run build:commonjs && yarn run build:es && yarn run build:umd",
     "clean": "rimraf dist",
     "lint": "eslint src test --fix",
     "test": "jest"

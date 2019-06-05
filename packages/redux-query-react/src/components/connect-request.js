@@ -77,13 +77,15 @@ const useMultiRequest = (mapPropsToConfigs, props) => {
   });
 
   React.useEffect(() => {
-    const { cancelKeys, requestActions } = getDiff(previousActions, requestReduxActions);
+    const { cancelKeys, requestActions } = getDiff(previousActions.current, requestReduxActions);
 
     requestActions.forEach(dispatchRequestToRedux);
     cancelKeys.forEach(dispatchCancelToRedux);
 
+    previousActions.current = requestReduxActions;
+
     return () => {
-      pendingRequests.current.values().forEach(dispatchCancelToRedux);
+      [...pendingRequests.current].forEach(dispatchCancelToRedux);
     };
   }, [dispatchCancelToRedux, dispatchRequestToRedux, requestReduxActions]);
 
@@ -105,13 +107,11 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
   const ConnectRequestFunction = props => {
     const forceRequest = useMultiRequest(mapPropsToConfigs, props);
 
-    return <WrappedComponent {...this.props} forceRequest={forceRequest} />;
+    return <WrappedComponent {...props} forceRequest={forceRequest} />;
   };
 
   const ConnectRequest = pure ? React.memo(ConnectRequestFunction) : ConnectRequestFunction;
-
   const wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-
   const displayName = `ConnectRequest(${wrappedComponentName})`;
 
   ConnectRequest.WrappedComponent = WrappedComponent;
@@ -124,6 +124,7 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
 
     forwarded.displayName = displayName;
     forwarded.WrappedComponent = WrappedComponent;
+
     return hoistStatics(forwarded, WrappedComponent);
   }
 

@@ -4,7 +4,7 @@ import { Provider, useSelector } from 'react-redux';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 
-import useRequest from '../../src/hooks/use-request';
+import connectRequest from '../../src/components/connect-request';
 
 export const getQueries = state => state.queries;
 export const getEntities = state => state.entities;
@@ -60,14 +60,13 @@ describe('useRequest', () => {
   });
 
   it('loads data initially and supports refresh', async () => {
-    const Content = () => {
-      const [isPending, refresh] = useRequest({
-        url: '/api',
-        update: {
-          message: (prevValue, newValue) => newValue,
-        },
-      });
+    const Content = props => {
       const message = useSelector(state => state.entities.message);
+      const isPending = useSelector(state => {
+        const queryState = state.queries['{"url":"/api"}'];
+
+        return queryState ? queryState.isPending : false;
+      });
 
       if (isPending) {
         return <div data-testid="loading-content">loading</div>;
@@ -76,16 +75,23 @@ describe('useRequest', () => {
       return (
         <div>
           <div data-testid="loaded-content">{message}</div>
-          <button data-testid="refresh-button" onClick={refresh}>
+          <button data-testid="refresh-button" onClick={props.forceRequest}>
             refresh
           </button>
         </div>
       );
     };
 
+    const ContentContainer = connectRequest(() => ({
+      url: '/api',
+      update: {
+        message: (_, newValue) => newValue,
+      },
+    }))(Content);
+
     const { container } = render(
       <App>
-        <Content />
+        <ContentContainer />
       </App>,
     );
 
@@ -116,14 +122,13 @@ describe('useRequest', () => {
   });
 
   it('cancels pending requests as part of cleanup', async () => {
-    const Content = () => {
-      const [isPending, refresh] = useRequest({
-        url: '/api',
-        update: {
-          message: (prevValue, newValue) => newValue,
-        },
-      });
+    const Content = props => {
       const message = useSelector(state => state.entities.message);
+      const isPending = useSelector(state => {
+        const queryState = state.queries['{"url":"/api"}'];
+
+        return queryState ? queryState.isPending : false;
+      });
 
       if (isPending) {
         return <div data-testid="loading-content">loading</div>;
@@ -132,19 +137,26 @@ describe('useRequest', () => {
       return (
         <div>
           <div data-testid="loaded-content">{message}</div>
-          <button data-testid="refresh-button" onClick={refresh}>
+          <button data-testid="refresh-button" onClick={props.forceRequest}>
             refresh
           </button>
         </div>
       );
     };
 
+    const ContentContainer = connectRequest(() => ({
+      url: '/api',
+      update: {
+        message: (_, newValue) => newValue,
+      },
+    }))(Content);
+
     const Router = () => {
       const [path, setPath] = React.useState('/');
 
       return (
         <div>
-          {path === '/' ? <Content /> : <div data-testid="404">404</div>}
+          {path === '/' ? <ContentContainer /> : <div data-testid="404">404</div>}
           <a
             data-testid="broken-link"
             href="/broken-link"

@@ -53,12 +53,12 @@ class ResultFrame extends Component {
 
     /* eslint-disable no-process-env */
     const srcs = [
-      'https://unpkg.com/react@15/dist/react.min.js',
-      'https://unpkg.com/react-dom@15/dist/react-dom.min.js',
-      'https://unpkg.com/redux@3.6.0/dist/redux.min.js',
-      'https://unpkg.com/react-redux@5.0.3/dist/react-redux.min.js',
+      'https://unpkg.com/react@16.8.6/umd/react.production.min.js',
+      'https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js',
+      'https://unpkg.com/redux@4.0.1/dist/redux.min.js',
+      'https://unpkg.com/react-redux@7.1.0-rc.1/dist/react-redux.min.js',
       'https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js',
-      'https://unpkg.com/redux-saga@0.14/dist/redux-saga.min.js',
+      'https://unpkg.com/redux-saga@1.0.0/dist/redux-saga.umd.min.js',
       'https://unpkg.com/qs@6.0.4/dist/qs.js',
       process.env.NODE_ENV === 'development'
         ? '/vendor/redux-query.js'
@@ -66,6 +66,9 @@ class ResultFrame extends Component {
       process.env.NODE_ENV === 'development'
         ? '/vendor/redux-query-react.js'
         : '/redux-query/vendor/redux-query-react.js',
+      process.env.NODE_ENV === 'development'
+        ? '/vendor/redux-query-interface-superagent.js'
+        : '/redux-query/vendor/redux-query-interface-superagent.js',
     ];
     /* eslint-enable no-process-env */
 
@@ -89,7 +92,7 @@ class ResultFrame extends Component {
           var isExternalUrl = url.indexOf('://') > 0 || url.indexOf('//') === 0;
 
           if (isExternalUrl) {
-            return ReduxQuery.networkInterfaces.superagent.apply(ReduxQuery.networkInterfaces.superagent, arguments);
+            return ReduxQueryInterfaceSuperagent.default.apply(ReduxQueryInterfaceSuperagent, arguments);
           }
 
           var aborted = false;

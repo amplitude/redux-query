@@ -19,12 +19,8 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import {
-  connectRequest,
-  entitiesReducer,
-  queriesReducer,
-  queryMiddleware,
-} from 'redux-query';
+import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
+import { connectRequest } from 'redux-query-react';
 
 /**
  * Set up redux and redux-query
@@ -39,8 +35,9 @@ const reducer = combineReducers({
 
 // Tell redux-query where the queries and entities reducers are.
 const middleware = queryMiddleware(
+  mockNetworkInterface,
   state => state.queries,
-  state => state.entities
+  state => state.entities,
 );
 
 const store = createStore(reducer, applyMiddleware(middleware));
@@ -61,11 +58,7 @@ class HelloWorld extends Component {
   render() {
     return (
       <h1>
-        {this.props.message ? (
-          <span>Hello, {this.props.message}!</span>
-        ) : (
-          <span>Hello?</span>
-        )}
+        {this.props.message ? <span>Hello, {this.props.message}!</span> : <span>Hello?</span>}
       </h1>
     );
   }
@@ -83,7 +76,7 @@ const mapPropsToConfigs = () => helloRequest();
 
 const HelloWorldContainer = compose(
   connect(mapStateToProps),
-  connectRequest(mapPropsToConfigs)
+  connectRequest(mapPropsToConfigs),
 )(HelloWorld);
 
 class App extends Component {

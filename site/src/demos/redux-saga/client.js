@@ -33,8 +33,8 @@ import {
   cancelQuery,
   getQueryKey,
 } from 'redux-query';
-import createSagaMiddleware, { takeLatest } from 'redux-saga';
-import { cancelled, put } from 'redux-saga/effects';
+import createSagaMiddleware from 'redux-saga';
+import { all, cancelled, fork, put, putResolve, takeLatest } from 'redux-saga/effects';
 
 /**
  * Set up redux and redux-query
@@ -68,8 +68,9 @@ const reducer = combineReducers({
 
 // Tell redux-query where the queries and entities reducers are.
 const middleware = queryMiddleware(
+  mockNetworkInterface,
   state => state.queries,
-  state => state.entities
+  state => state.entities,
 );
 
 const sagaMiddleware = createSagaMiddleware();
@@ -144,15 +145,15 @@ const actions = {
 
 function* requestName() {
   // Request the name when the root saga runs.
-  yield put.sync(requestAsync(queries.nameRequest()));
+  yield putResolve(requestAsync(queries.nameRequest()));
 }
 
 function* changeName(action) {
   const query = queries.changeNameMutation(action.name, action.optimistic);
 
   try {
-    // We can capture the result from the mutateAsync promise using `put.sync`.
-    const result = yield put.sync(mutateAsync(query));
+    // We can capture the result from the mutateAsync promise using `putResolve`.
+    const result = yield putResolve(mutateAsync(query));
 
     if (result.status >= 200 && result.status < 300) {
       yield put(actions.nameChangeSucceeded());
@@ -169,10 +170,7 @@ function* changeName(action) {
 }
 
 function* rootSaga() {
-  yield [
-    requestName(),
-    takeLatest(action => action.type === 'CHANGE_NAME', changeName),
-  ];
+  yield all([fork(requestName), takeLatest(action => action.type === 'CHANGE_NAME', changeName)]);
 }
 
 sagaMiddleware.run(rootSaga);
@@ -208,7 +206,8 @@ class NameForm extends Component {
           onSubmit={e => {
             // Prevent default form behavior.
             e.preventDefault();
-          }}>
+          }}
+        >
           <input
             type="text"
             value={state.inputValue}
@@ -227,14 +226,13 @@ class NameForm extends Component {
           />
           {props.isLoading === true && <p>Loading...</p>}
           {!props.isLoading && props.result === 'success' && <p>Success!</p>}
-          {!props.isLoading &&
-            props.result === 'failure' && (
-              <p>
-                An error occurred: &quot;
-                {props.error}
-                &quot;.
-              </p>
-            )}
+          {!props.isLoading && props.result === 'failure' && (
+            <p>
+              An error occurred: &quot;
+              {props.error}
+              &quot;.
+            </p>
+          )}
         </form>
       </div>
     );
@@ -254,7 +252,7 @@ const mapDispatchToProps = {
 
 const NameFormContainer = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(NameForm);
 
 /**

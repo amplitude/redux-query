@@ -1,4 +1,6 @@
-import clientCode from './client.js.txt';
+import raw from 'raw.macro';
+
+const clientCode = raw('./client.js');
 
 export default {
   clientCode,

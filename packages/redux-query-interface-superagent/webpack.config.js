@@ -11,13 +11,7 @@ const mode = process.env.NODE_ENV;
 module.exports = {
   mode,
   externals: {
-    react: {
-      root: 'React',
-      commonjs2: 'react',
-      commonjs: 'react',
-      amd: 'react',
-    },
-    reduxQuery: {
+    'redux-query': {
       root: 'ReduxQuery',
       commonjs2: 'redux-query',
       commonjs: 'redux-query',
@@ -25,13 +19,13 @@ module.exports = {
     },
   },
   entry: {
-    'redux-query-react': './src/index.js',
+    'redux-query-interface-superagent': './src/index.js',
   },
   output: {
     path: path.join(__dirname, 'dist/umd'),
     filename: '[name].js',
     libraryTarget: 'umd',
-    library: 'ReduxQueryReact',
+    library: 'ReduxQueryInterfaceSuperagent',
   },
   optimization: {
     minimize: true,

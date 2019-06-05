@@ -22,12 +22,8 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import {
-  connectRequest,
-  entitiesReducer,
-  queriesReducer,
-  queryMiddleware,
-} from 'redux-query';
+import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
+import { connectRequest } from 'redux-query-react';
 
 /**
  * Set up redux and redux-query
@@ -52,8 +48,9 @@ const reducer = combineReducers({
 
 // Tell redux-query where the queries and entities reducers are.
 const middleware = queryMiddleware(
+  mockNetworkInterface,
   state => state.queries,
-  state => state.entities
+  state => state.entities,
 );
 
 const store = createStore(reducer, applyMiddleware(middleware));
@@ -122,9 +119,9 @@ const mapPropsToConfigs = props => echoRequest(props.input);
 const EchoContainer = compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
   ),
-  connectRequest(mapPropsToConfigs)
+  connectRequest(mapPropsToConfigs),
 )(Echo);
 
 class App extends Component {

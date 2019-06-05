@@ -11,12 +11,6 @@ const mode = process.env.NODE_ENV;
 module.exports = {
   mode,
   externals: {
-    react: {
-      root: 'React',
-      commonjs2: 'react',
-      commonjs: 'react',
-      amd: 'react',
-    },
     redux: {
       root: 'Redux',
       commonjs2: 'redux',

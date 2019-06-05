@@ -112,16 +112,6 @@ const ResultContainer = styled.div`
   border-left: 1px solid #ccc;
 `;
 
-const parseCode = input => {
-  try {
-    return atob(input.slice('data:text/plain;base64,'.length));
-  } catch (e) {
-    console.warn('Unable to parse initial code', e);
-  }
-
-  return null;
-};
-
 class Playground extends Component {
   state = {
     clientCode: '',
@@ -138,10 +128,8 @@ class Playground extends Component {
     super(props);
 
     if (props.demo) {
-      const clientCode = parseCode(props.demo.clientCode) || '';
-      const serverCode = props.demo.serverCode
-        ? parseCode(props.demo.serverCode)
-        : null;
+      const clientCode = props.demo.clientCode || '';
+      const serverCode = props.demo.serverCode ? props.demo.serverCode : null;
 
       this.state = {
         ...this.state,
@@ -249,7 +237,8 @@ class Playground extends Component {
                   this.setState({
                     devTool: 'CLIENT_CODE',
                   });
-                }}>
+                }}
+              >
                 Client
               </ToolbarButton>
               {!!props.demo.serverCode && (
@@ -262,7 +251,8 @@ class Playground extends Component {
                     this.setState({
                       devTool: 'SERVER_CODE',
                     });
-                  }}>
+                  }}
+                >
                   Mock Server
                 </ToolbarButton>
               )}
@@ -275,7 +265,8 @@ class Playground extends Component {
                   this.setState({
                     devTool: 'REDUX_LOG',
                   });
-                }}>
+                }}
+              >
                 Redux Log
               </ToolbarButton>
             </ToolbarSection>
@@ -285,13 +276,9 @@ class Playground extends Component {
               </RunButton>
             </ToolbarSection>
           </Toolbar>
-          {state.devTool === 'REDUX_LOG' && (
-            <ReduxLog messages={state.messages} />
-          )}
-          {state.devTool === 'CLIENT_CODE' &&
-            this.renderCode('pendingClientCode')}
-          {state.devTool === 'SERVER_CODE' &&
-            this.renderCode('pendingServerCode')}
+          {state.devTool === 'REDUX_LOG' && <ReduxLog messages={state.messages} />}
+          {state.devTool === 'CLIENT_CODE' && this.renderCode('pendingClientCode')}
+          {state.devTool === 'SERVER_CODE' && this.renderCode('pendingServerCode')}
         </DevToolsContainer>
         <ResultContainer>
           <ResultFrame

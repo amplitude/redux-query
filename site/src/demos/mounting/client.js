@@ -33,14 +33,8 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import {
-  connectRequest,
-  entitiesReducer,
-  queriesReducer,
-  queryMiddleware,
-  querySelectors,
-} from 'redux-query';
-
+import { entitiesReducer, queriesReducer, queryMiddleware, querySelectors } from 'redux-query';
+import { connectRequest } from 'redux-query-react';
 /**
  * Set up redux and redux-query
  * ----------------------------
@@ -54,8 +48,9 @@ const reducer = combineReducers({
 
 // Tell redux-query where the queries and entities reducers are.
 const middleware = queryMiddleware(
+  mockNetworkInterface,
   state => state.queries,
-  state => state.entities
+  state => state.entities,
 );
 
 const store = createStore(reducer, applyMiddleware(middleware));
@@ -79,13 +74,7 @@ class HelloWorld extends Component {
     return (
       <div>
         <div>{props.isLoading && <em>Loading...</em>}</div>
-        <h1>
-          {props.message ? (
-            <span>Hello, {props.message}!</span>
-          ) : (
-            <span>Hello?</span>
-          )}
-        </h1>
+        <h1>{props.message ? <span>Hello, {props.message}!</span> : <span>Hello?</span>}</h1>
       </div>
     );
   }
@@ -103,7 +92,7 @@ const mapPropsToConfigs = props => helloRequest(props.force);
 
 const HelloWorldContainer = compose(
   connect(mapStateToProps),
-  connectRequest(mapPropsToConfigs)
+  connectRequest(mapPropsToConfigs),
 )(HelloWorld);
 
 class App extends Component {
@@ -123,7 +112,8 @@ class App extends Component {
                 this.setState({
                   componentMounted: false,
                 });
-              }}>
+              }}
+            >
               Unmount Hello World Component
             </button>
           ) : (
@@ -132,7 +122,8 @@ class App extends Component {
                 this.setState({
                   componentMounted: true,
                 });
-              }}>
+              }}
+            >
               Mount Hello World Component
             </button>
           )}
@@ -149,9 +140,7 @@ class App extends Component {
             Force
           </label>
           <hr />
-          {state.componentMounted && (
-            <HelloWorldContainer force={state.isForceEnabled} />
-          )}
+          {state.componentMounted && <HelloWorldContainer force={state.isForceEnabled} />}
         </div>
       </Provider>
     );

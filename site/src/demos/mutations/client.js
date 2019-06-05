@@ -30,13 +30,8 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import {
-  connectRequest,
-  entitiesReducer,
-  queriesReducer,
-  queryMiddleware,
-  mutateAsync,
-} from 'redux-query';
+import { entitiesReducer, queriesReducer, queryMiddleware, mutateAsync } from 'redux-query';
+import { connectRequest } from 'redux-query-react';
 
 /**
  * Set up redux and redux-query
@@ -51,8 +46,9 @@ const reducer = combineReducers({
 
 // Tell redux-query where the queries and entities reducers are.
 const middleware = queryMiddleware(
+  mockNetworkInterface,
   state => state.queries,
-  state => state.entities
+  state => state.entities,
 );
 
 const store = createStore(reducer, applyMiddleware(middleware));
@@ -93,8 +89,7 @@ const queries = {
 };
 
 const actions = {
-  changeName: (name, optimistic) =>
-    mutateAsync(queries.changeNameMutation(name, optimistic)),
+  changeName: (name, optimistic) => mutateAsync(queries.changeNameMutation(name, optimistic)),
 };
 
 class NameForm extends Component {
@@ -147,7 +142,8 @@ class NameForm extends Component {
           onSubmit={e => {
             // Prevent default form behavior.
             e.preventDefault();
-          }}>
+          }}
+        >
           <input
             type="text"
             value={state.inputValue}
@@ -173,14 +169,13 @@ class NameForm extends Component {
           />
           {state.isLoading === true && <p>Loading...</p>}
           {!state.isLoading && state.result === 'success' && <p>Success!</p>}
-          {!state.isLoading &&
-            state.result === 'failure' && (
-              <p>
-                An error occurred: &quot;
-                {state.error}
-                &quot;.
-              </p>
-            )}
+          {!state.isLoading && state.result === 'failure' && (
+            <p>
+              An error occurred: &quot;
+              {state.error}
+              &quot;.
+            </p>
+          )}
         </form>
       </div>
     );
@@ -200,9 +195,9 @@ const mapPropsToConfig = () => queries.nameRequest();
 const NameFormContainer = compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
   ),
-  connectRequest(mapPropsToConfig)
+  connectRequest(mapPropsToConfig),
 )(NameForm);
 
 class App extends Component {

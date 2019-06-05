@@ -16,13 +16,8 @@
 import React, { Component } from 'react';
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux';
 import { connect, Provider } from 'react-redux';
-import {
-  connectRequest,
-  entitiesReducer,
-  queriesReducer,
-  queryMiddleware,
-  querySelectors,
-} from 'redux-query';
+import { entitiesReducer, queriesReducer, queryMiddleware, querySelectors } from 'redux-query';
+import { connectRequest } from 'redux-query-react';
 
 /**
  * Set up redux and redux-query
@@ -39,7 +34,7 @@ const reducer = combineReducers({
 const middleware = queryMiddleware(
   mockNetworkInterface,
   state => state.queries,
-  state => state.entities
+  state => state.entities,
 );
 
 const store = createStore(reducer, applyMiddleware(middleware));
@@ -113,10 +108,7 @@ class Item extends Component {
         {props.item && (
           <div>
             <div>
-              <a
-                href={props.item.url}
-                target="_blank"
-                rel="noopener noreferrer">
+              <a href={props.item.url} target="_blank" rel="noopener noreferrer">
                 {props.item.title}
               </a>
             </div>
@@ -125,7 +117,8 @@ class Item extends Component {
               <a
                 href={`https://news.ycombinator.com/user?id=${props.item.by}`}
                 target="_blank"
-                rel="noopener noreferrer">
+                rel="noopener noreferrer"
+              >
                 {props.item.by}
               </a>
             </div>
@@ -145,7 +138,7 @@ const ItemContainer = compose(
       query,
     };
   }),
-  connectRequest(props => props.query)
+  connectRequest(props => props.query),
 )(Item);
 
 /**
@@ -171,7 +164,7 @@ const TopStoriesContainer = compose(
   connect(state => ({
     topStoryIds: selectTopStoryIds(state),
   })),
-  connectRequest(() => topStoriesRequest())
+  connectRequest(() => topStoriesRequest()),
 )(TopStories);
 
 /**

@@ -235,6 +235,10 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
             let transformed;
             let newEntities;
 
+            if (action.unstable_preDispatchCallback) {
+              action.unstable_preDispatchCallback();
+            }
+
             if (err || !isStatusOK(status)) {
               let rolledBackEntities;
 

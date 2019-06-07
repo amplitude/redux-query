@@ -48,16 +48,9 @@ const serveRequest = (url, method, { body }, callback) => {
       return;
     }
 
-    if (
-      !body.name ||
-      body.name.trim().length === 0 ||
-      body.name.trim() !== body.name
-    ) {
+    if (!body.name || body.name.trim().length === 0 || body.name.trim() !== body.name) {
       setTimeout(() => {
-        callback(
-          400,
-          'A valid name must be provided with no leading or trailing spaces'
-        );
+        callback(400, 'A valid name must be provided with no leading or trailing spaces');
       }, artificialDelayDuration);
       return;
     }

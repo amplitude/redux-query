@@ -32,9 +32,7 @@ class CoreLayout extends Component {
     return (
       <Container disableBodyScroll={props.disableBodyScroll}>
         <Navigation />
-        <Main disableBodyScroll={props.disableBodyScroll}>
-          {this.props.children}
-        </Main>
+        <Main disableBodyScroll={props.disableBodyScroll}>{this.props.children}</Main>
       </Container>
     );
   }

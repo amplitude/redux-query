@@ -89,12 +89,10 @@ class Navigation extends Component {
           <ProjectTitle>redux-query</ProjectTitle>
           <Section>
             <ExternalLink href="https://github.com/amplitude/redux-query">
-              <i className="fa fa-github" aria-hidden="true" />{' '}
-              <span>Source</span>
+              <i className="fa fa-github" aria-hidden="true" /> <span>Source</span>
             </ExternalLink>
             <ExternalLink href="https://github.com/amplitude/redux-query/issues">
-              <i className="fa fa-exclamation-circle" aria-hidden="true" />{' '}
-              <span>Issues</span>
+              <i className="fa fa-exclamation-circle" aria-hidden="true" /> <span>Issues</span>
             </ExternalLink>
           </Section>
           <Section>

@@ -46,10 +46,7 @@ class ReduxLog extends Component {
     if (this._containerRef && props.messages !== nextProps.messages) {
       const { scrollTop, offsetHeight, scrollHeight } = this._containerRef;
 
-      if (
-        scrollTop + offsetHeight >=
-        scrollHeight - pinScrollToBottomTolerance
-      ) {
+      if (scrollTop + offsetHeight >= scrollHeight - pinScrollToBottomTolerance) {
         this._shouldPinScrollToBottom = true;
       }
     }
@@ -77,7 +74,7 @@ class ReduxLog extends Component {
               name="prev state"
               data={message.prevState}
               expandLevel={1}
-            />
+            />,
           );
 
           accum.push(
@@ -87,7 +84,7 @@ class ReduxLog extends Component {
               name="action"
               data={message.action}
               expandLevel={1}
-            />
+            />,
           );
 
           accum.push(
@@ -97,7 +94,7 @@ class ReduxLog extends Component {
               name={'next state'}
               data={message.nextState}
               expandLevel={1}
-            />
+            />,
           );
 
           if (i < messages.length - 1) {

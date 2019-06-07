@@ -1,11 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  HashRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import DocViewer from './components/DocViewer';
 import Playground from './components/Playground';
@@ -25,31 +20,15 @@ import './index.css';
 ReactDOM.render(
   <Router>
     <Switch>
-      <Route
-        path="/"
-        exact={true}
-        component={() => <DocViewer name="readme" doc={readme} />}
-      />
-      <Route
-        path="/changelog"
-        component={() => <DocViewer name="changelog" doc={changelog} />}
-      />
+      <Route path="/" exact={true} component={() => <DocViewer name="readme" doc={readme} />} />
+      <Route path="/changelog" component={() => <DocViewer name="changelog" doc={changelog} />} />
       <Route
         path="/hello-world"
         component={() => <Playground name="hello world" demo={helloWorld} />}
       />
-      <Route
-        path="/mounting"
-        component={() => <Playground name="mounting" demo={mounting} />}
-      />
-      <Route
-        path="/updating"
-        component={() => <Playground name="updating" demo={updating} />}
-      />
-      <Route
-        path="/mutations"
-        component={() => <Playground name="mutations" demo={mutations} />}
-      />
+      <Route path="/mounting" component={() => <Playground name="mounting" demo={mounting} />} />
+      <Route path="/updating" component={() => <Playground name="updating" demo={updating} />} />
+      <Route path="/mutations" component={() => <Playground name="mutations" demo={mutations} />} />
       <Route
         path="/hacker-news"
         component={() => <Playground name="hacker news" demo={hackerNews} />}
@@ -61,5 +40,5 @@ ReactDOM.render(
       <Route render={() => <Redirect to="/hello-world" />} />
     </Switch>
   </Router>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

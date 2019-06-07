@@ -9,7 +9,7 @@ import { getQueryKey } from 'redux-query/src/lib/query-key';
 import useConstCallback from '../hooks/use-const-callback';
 
 const normalizeToArray = maybe => {
-  return Array.isArray(maybe) ? maybe : [maybe];
+  return (Array.isArray(maybe) ? maybe : [maybe]).filter(Boolean);
 };
 
 const getDiff = (prevActions, actions) => {

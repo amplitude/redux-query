@@ -196,4 +196,38 @@ describe('useRequest', () => {
     expect(store.getState().queries['{"url":"/api"}'].isPending).toBe(false);
     expect(store.getState().entities.message).toBeUndefined();
   });
+
+  it('does nothing if query config is null', async () => {
+    const Content = () => {
+      const message = useSelector(state => state.entities.message);
+      const isPending = useSelector(state => {
+        const queryState = state.queries['{"url":"/api"}'];
+
+        return queryState ? queryState.isPending : false;
+      });
+
+      if (isPending) {
+        return <div data-testid="loading-content">loading</div>;
+      }
+
+      return (
+        <div>
+          <div data-testid="loaded-content">{message}</div>
+        </div>
+      );
+    };
+
+    const ContentContainer = connectRequest(() => null)(Content);
+
+    const { container } = render(
+      <App>
+        <ContentContainer />
+      </App>,
+    );
+
+    // It never loads
+
+    let loadedContentNode = getByTestId(container, 'loaded-content');
+    expect(loadedContentNode.textContent).toBe('');
+  });
 });

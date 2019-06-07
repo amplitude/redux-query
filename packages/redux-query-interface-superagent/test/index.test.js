@@ -1,46 +1,128 @@
-import httpMethods from 'redux-query/src/constants/http-methods';
+import superagent from 'superagent';
+import superagentMock from 'superagent-mock';
+import HttpMethods from 'redux-query/src/constants/http-methods';
+
 import superagentInterface from '../src';
 
+const mockEndpoint = requestHttpMethod => () => {
+  return {
+    text: requestHttpMethod,
+    status: 200,
+    ok: true,
+  };
+};
+
+const superagentMockConfig = [
+  {
+    pattern: '/echo-headers',
+    fixtures: (match, params, headers) => {
+      const filteredHeaders = { ...headers };
+      delete filteredHeaders['User-Agent'];
+
+      return filteredHeaders;
+    },
+    get: (match, data) => {
+      return {
+        body: {
+          headers: data,
+        },
+        status: 200,
+        ok: true,
+      };
+    },
+  },
+  {
+    pattern: '/api',
+    fixtures: () => {},
+    delete: mockEndpoint(HttpMethods.DELETE),
+    get: mockEndpoint(HttpMethods.GET),
+    head: mockEndpoint(HttpMethods.HEAD),
+    patch: mockEndpoint(HttpMethods.PATCH),
+    post: mockEndpoint(HttpMethods.POST),
+    put: mockEndpoint(HttpMethods.PUT),
+  },
+];
+
+superagentMock(superagent, superagentMockConfig);
+
 describe('superagent interface', () => {
-  test('must return an object with both execute and abort functions, as well as the request instance', () => {
-    const networkInterface = superagentInterface('http://localhost', httpMethods.GET);
+  test('returns an object with both execute and abort functions, as well as the request instance', () => {
+    const networkInterface = superagentInterface('/api', HttpMethods.GET);
     expect(typeof networkInterface.execute).toBe('function');
     expect(typeof networkInterface.abort).toBe('function');
-    expect(networkInterface.instance).toBeTruthy();
   });
 
-  test('must return a HEAD request when supplied a HEAD method', () => {
-    const { instance } = superagentInterface('http://localhost', httpMethods.HEAD);
-    expect(instance.method).toEqual(httpMethods.HEAD);
+  test('returns a DELETE request when supplied a HEAD method', () => {
+    const { execute } = superagentInterface('/api', HttpMethods.DELETE);
+
+    execute((err, status, body, text) => {
+      expect(status).toEqual(200);
+      expect(text).toEqual(HttpMethods.DELETE);
+    });
   });
 
-  test('must return a DELETE request when supplied a DELETE method', () => {
-    const { instance } = superagentInterface('http://localhost', httpMethods.DELETE);
-    expect(instance.method).toEqual(httpMethods.DELETE);
+  test('returns a GET request when supplied a GET method', () => {
+    const { execute } = superagentInterface('/api', HttpMethods.GET);
+
+    execute((err, status, body, text) => {
+      expect(status).toEqual(200);
+      expect(text).toEqual(HttpMethods.GET);
+    });
   });
 
-  test('must return a GET request when supplied a GET method', () => {
-    const { instance } = superagentInterface('http://localhost', httpMethods.GET);
-    expect(instance.method).toEqual(httpMethods.GET);
+  test('returns a HEAD request when supplied a HEAD method', () => {
+    const { execute } = superagentInterface('/api', HttpMethods.HEAD);
+
+    execute((err, status, body, text) => {
+      expect(status).toEqual(200);
+      expect(text).toEqual(HttpMethods.HEAD);
+    });
   });
 
-  test('must return a PATCH request when supplied a PATCH method', () => {
-    const { instance } = superagentInterface('http://localhost', httpMethods.PATCH);
-    expect(instance.method).toEqual(httpMethods.PATCH);
+  test('returns a PATCH request when supplied a PATCH method', () => {
+    const { execute } = superagentInterface('/api', HttpMethods.PATCH);
+
+    execute((err, status, body, text) => {
+      expect(status).toEqual(200);
+      expect(text).toEqual(HttpMethods.PATCH);
+    });
   });
 
-  test('must return a POST request when supplied a POST method', () => {
-    const { instance } = superagentInterface('http://localhost', httpMethods.POST);
-    expect(instance.method).toEqual(httpMethods.POST);
+  test('returns a POST request when supplied a POST method', () => {
+    const { execute } = superagentInterface('/api', HttpMethods.POST);
+
+    execute((err, status, body, text) => {
+      expect(status).toEqual(200);
+      expect(text).toEqual(HttpMethods.POST);
+    });
   });
 
-  test('must return a PUT request when supplied a PUT method', () => {
-    const { instance } = superagentInterface('http://localhost', httpMethods.PUT);
-    expect(instance.method).toEqual(httpMethods.PUT);
+  test('returns a PUT request when supplied a PUT method', () => {
+    const { execute } = superagentInterface('/api', HttpMethods.PUT);
+
+    execute((err, status, body, text) => {
+      expect(status).toEqual(200);
+      expect(text).toEqual(HttpMethods.PUT);
+    });
   });
 
-  test('must throw an error when supplied an invalid HTTP method', () => {
-    const invalid = () => superagentInterface('http://localhost', 'abc');
+  test('throws an error when supplied an invalid HTTP method', () => {
+    const invalid = () => superagentInterface('/api', 'foo');
     expect(invalid).toThrow();
+  });
+
+  test('includes headers when headers are provided', () => {
+    const { execute } = superagentInterface('/echo-headers', HttpMethods.GET, {
+      headers: {
+        'X-Org': 21,
+      },
+    });
+
+    execute((err, status, body) => {
+      expect(status).toEqual(200);
+      expect(body.headers).toEqual({
+        'X-Org': 21,
+      });
+    });
   });
 });

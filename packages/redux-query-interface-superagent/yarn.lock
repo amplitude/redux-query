@@ -5626,6 +5626,11 @@ strip-json-comments@^2.0.1, strip-json-comments@~2.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
+superagent-mock@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/superagent-mock/-/superagent-mock-3.7.0.tgz#d424909e2dbb0bd0e5ab213ef8df91e3cbbcd613"
+  integrity sha512-+vWnpMgRw4X0tlN2c4SPbhoVG4RSdYdErJ4AiwCK0r2XqGbHvVNbpZlY0RBfzOy6F5eN5Q1+d1sncmakxnjbiQ==
+
 superagent@^5.0.5:
   version "5.0.5"
   resolved "https://registry.yarnpkg.com/superagent/-/superagent-5.0.5.tgz#53d0f578c4db0aab1a849b647af01b9750f8a2e7"

@@ -46,7 +46,6 @@ const superagentNetworkInterface = (url, method, { body, headers, credentials } 
   return {
     abort,
     execute,
-    instance: request,
   };
 };
 

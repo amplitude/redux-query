@@ -43,14 +43,18 @@ const useRequest = providedQueryConfig => {
   });
 
   const forceRequest = React.useCallback(() => {
-    dispatchRequestToRedux({
-      ...requestReduxAction,
-      force: true,
-    });
+    if (requestReduxAction) {
+      dispatchRequestToRedux({
+        ...requestReduxAction,
+        force: true,
+      });
+    }
   }, [dispatchRequestToRedux, requestReduxAction]);
 
   React.useEffect(() => {
-    dispatchRequestToRedux(requestReduxAction);
+    if (requestReduxAction) {
+      dispatchRequestToRedux(requestReduxAction);
+    }
 
     return () => {
       if (isPendingRef.current) {

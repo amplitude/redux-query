@@ -113,5 +113,13 @@ describe('useMemoizedAction', () => {
     const secondReturnValue = result.current;
 
     expect(firstReturnValue).not.toBe(secondReturnValue);
+    expect(firstReturnValue).toEqual({
+      ...queryConfig1,
+      unstable_preDispatchCallback: callback,
+    });
+    expect(secondReturnValue).toEqual({
+      ...queryConfig2,
+      unstable_preDispatchCallback: callback,
+    });
   });
 });

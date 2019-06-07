@@ -184,4 +184,32 @@ describe('useRequest', () => {
     expect(store.getState().queries['{"url":"/api"}'].isPending).toBe(false);
     expect(store.getState().entities.message).toBeUndefined();
   });
+
+  it('does nothing if query config is null', async () => {
+    const Content = () => {
+      const [isPending] = useRequest(null);
+      const message = useSelector(state => state.entities.message);
+
+      if (isPending) {
+        return <div data-testid="loading-content">loading</div>;
+      }
+
+      return (
+        <div>
+          <div data-testid="loaded-content">{message}</div>
+        </div>
+      );
+    };
+
+    const { container } = render(
+      <App>
+        <Content />
+      </App>,
+    );
+
+    // It never loads
+
+    let loadedContentNode = getByTestId(container, 'loaded-content');
+    expect(loadedContentNode.textContent).toBe('');
+  });
 });

@@ -6,7 +6,9 @@ import { getQueryKey } from 'redux-query';
  * the provided queryConfig changes.
  */
 const useMemoizedAction = (queryConfig, transform) => {
-  const [memoizedAction, setMemoizedAction] = React.useState(transform(queryConfig));
+  const [memoizedAction, setMemoizedAction] = React.useState(
+    queryConfig ? transform(queryConfig) : null,
+  );
   const previousQueryKey = React.useRef(getQueryKey(queryConfig));
 
   React.useEffect(() => {
@@ -14,7 +16,7 @@ const useMemoizedAction = (queryConfig, transform) => {
 
     if (queryKey !== previousQueryKey.current) {
       previousQueryKey.current = queryKey;
-      setMemoizedAction(transform);
+      setMemoizedAction(queryConfig ? transform(queryConfig) : null);
     }
   }, [queryConfig, transform]);
 

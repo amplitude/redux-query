@@ -112,4 +112,64 @@ describe('useMutation', () => {
     let loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
     expect(loadedContentNode.textContent).toBe('Ryan');
   });
+
+  it('supplies a callback that returns a promise', async () => {
+    const Content = () => {
+      const [message, setMessage] = React.useState(null);
+
+      const [isPending, mutate] = useMutation({
+        url: '/echo',
+        body: {
+          value: 'Ryan',
+        },
+        update: {
+          message: (prevValue, newValue) => newValue,
+        },
+      });
+
+      const onSubmit = React.useCallback(() => {
+        mutate().then(result => setMessage(result.body.message));
+      }, [mutate]);
+
+      return (
+        <div>
+          {message ? (
+            <div data-testid="loaded-content">{message}</div>
+          ) : (
+            <div data-testid="empty-state">empty</div>
+          )}
+          {isPending && <div data-testid="loading-content">loading</div>}
+          <button data-testid="submit-button" onClick={onSubmit}>
+            submit
+          </button>
+        </div>
+      );
+    };
+
+    const { container } = render(
+      <App>
+        <Content />
+      </App>,
+    );
+
+    // Loaded
+
+    let emptyStateNode = getByTestId(container, 'empty-state');
+    expect(emptyStateNode.textContent).toBe('empty');
+
+    // Click submit button
+
+    let buttonNode = getByTestId(container, 'submit-button');
+    fireEvent.click(buttonNode);
+
+    // We're in a loading state now
+
+    let loadingContentNode = await waitForElement(() => getByTestId(container, 'loading-content'));
+    expect(loadingContentNode.textContent).toBe('loading');
+
+    // Mutation finished, message should be visible
+
+    let loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
+    expect(loadedContentNode.textContent).toBe('Ryan');
+  });
 });

@@ -5,6 +5,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 
 import useRequest from '../../src/hooks/use-request';
+import ReduxQueryProvider from '../../src/components/Provider';
 
 export const getQueries = state => state.queries;
 export const getEntities = state => state.entities;
@@ -48,7 +49,11 @@ const mockNetworkInterface = url => {
 let store;
 
 const App = props => {
-  return <Provider store={store}>{props.children}</Provider>;
+  return (
+    <Provider store={store}>
+      <ReduxQueryProvider queriesSelector={getQueries}>{props.children}</ReduxQueryProvider>
+    </Provider>
+  );
 };
 
 describe('useRequest', () => {
@@ -61,7 +66,7 @@ describe('useRequest', () => {
 
   it('loads data initially and supports refresh', async () => {
     const Content = () => {
-      const [isPending, refresh] = useRequest({
+      const [{ isPending }, refresh] = useRequest({
         url: '/api',
         update: {
           message: (prevValue, newValue) => newValue,
@@ -117,7 +122,7 @@ describe('useRequest', () => {
 
   it('cancels pending requests as part of cleanup', async () => {
     const Content = () => {
-      const [isPending, refresh] = useRequest({
+      const [{ isPending }, refresh] = useRequest({
         url: '/api',
         update: {
           message: (prevValue, newValue) => newValue,
@@ -187,7 +192,7 @@ describe('useRequest', () => {
 
   it('does nothing if query config is null', async () => {
     const Content = () => {
-      const [isPending] = useRequest(null);
+      const [{ isPending }] = useRequest(null);
       const message = useSelector(state => state.entities.message);
 
       if (isPending) {

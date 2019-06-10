@@ -5,6 +5,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 
 import useMutation from '../../src/hooks/use-mutation';
+import ReduxQueryProvider from '../../src/components/Provider';
 
 export const getQueries = state => state.queries;
 export const getEntities = state => state.entities;
@@ -47,7 +48,11 @@ const mockNetworkInterface = (url, method, { body: requestBody }) => {
 let store;
 
 const App = props => {
-  return <Provider store={store}>{props.children}</Provider>;
+  return (
+    <Provider store={store}>
+      <ReduxQueryProvider queriesSelector={getQueries}>{props.children}</ReduxQueryProvider>
+    </Provider>
+  );
 };
 
 describe('useMutation', () => {

@@ -16,90 +16,90 @@ const difference = (a, b) => {
   return a.filter(x => !bSet.has(x));
 };
 
-const getDiff = (prevActions, actions) => {
-  const prevQueryKeys = prevActions.map(getQueryKey);
-  const queryKeys = actions.map(getQueryKey);
-  const actionByQueryKey = queryKeys.reduce((accum, queryKey, i) => {
-    accum.set(queryKey, actions[i]);
+const getDiff = (prevQueryConfigs, queryConfigs) => {
+  const prevQueryKeys = prevQueryConfigs.map(getQueryKey);
+  const queryKeys = queryConfigs.map(getQueryKey);
+  const queryConfigByQueryKey = queryKeys.reduce((accum, queryKey, i) => {
+    accum.set(queryKey, queryConfigs[i]);
 
     return accum;
   }, new Map());
 
   const cancelKeys = difference(prevQueryKeys, queryKeys);
   const requestKeys = difference(queryKeys, prevQueryKeys);
-  const requestActions = requestKeys.map(queryKey => actionByQueryKey.get(queryKey));
+  const requestQueryConfigs = requestKeys.map(queryKey => queryConfigByQueryKey.get(queryKey));
 
-  return { cancelKeys, requestActions };
+  return { cancelKeys, requestQueryConfigs };
 };
 
-const useMemoizedActions = (mapPropsToConfigs, props, callback) => {
-  const actions = normalizeToArray(mapPropsToConfigs(props)).map(queryConfig => ({
+const useMemoizedQueryConfigs = (mapPropsToConfigs, props, callback) => {
+  const queryConfigs = normalizeToArray(mapPropsToConfigs(props)).map(queryConfig => ({
     ...queryConfig,
     unstable_preDispatchCallback: () => callback(getQueryKey(queryConfig)),
   }));
-  const [memoizedActions, setMemoizedActions] = React.useState(actions);
-  const previousQueryKeys = React.useRef(actions.map(getQueryKey));
+  const [memoizedQueryConfigs, setMemoizedQueryConfigs] = React.useState(queryConfigs);
+  const previousQueryKeys = React.useRef(queryConfigs.map(getQueryKey));
 
   React.useEffect(() => {
-    const queryKeys = actions.map(getQueryKey);
+    const queryKeys = queryConfigs.map(getQueryKey);
 
     if (
       queryKeys.length !== previousQueryKeys.current.length ||
       queryKeys.some((queryKey, i) => previousQueryKeys.current[i] !== queryKey)
     ) {
       previousQueryKeys.current = queryKeys;
-      setMemoizedActions(actions);
+      setMemoizedQueryConfigs(queryConfigs);
     }
-  }, [actions]);
+  }, [queryConfigs]);
 
-  return memoizedActions;
+  return memoizedQueryConfigs;
 };
 
 const useMultiRequest = (mapPropsToConfigs, props) => {
   const reduxDispatch = useDispatch();
 
-  const previousActions = React.useRef([]);
+  const previousQueryConfigs = React.useRef([]);
 
   const pendingRequests = React.useRef(new Set());
 
-  const dispatchRequestToRedux = useConstCallback(action => {
-    const promise = reduxDispatch(requestAsync(action));
+  const dispatchRequestToRedux = useConstCallback(queryConfig => {
+    const promise = reduxDispatch(requestAsync(queryConfig));
 
     if (promise) {
-      pendingRequests.current.add(getQueryKey(action));
+      pendingRequests.current.add(getQueryKey(queryConfig));
     }
   });
 
-  const dispatchCancelToRedux = useConstCallback(action => {
-    reduxDispatch(cancelQuery(action));
-    pendingRequests.current.delete(getQueryKey(action));
+  const dispatchCancelToRedux = useConstCallback(queryConfig => {
+    reduxDispatch(cancelQuery(queryConfig));
+    pendingRequests.current.delete(getQueryKey(queryConfig));
   });
 
-  const requestReduxActions = useMemoizedActions(mapPropsToConfigs, props, queryKey => {
+  const queryConfigs = useMemoizedQueryConfigs(mapPropsToConfigs, props, queryKey => {
     pendingRequests.current.delete(queryKey);
   });
 
   React.useEffect(() => {
-    const { cancelKeys, requestActions } = getDiff(previousActions.current, requestReduxActions);
+    const { cancelKeys, requestQueryConfigs } = getDiff(previousQueryConfigs.current, queryConfigs);
 
-    requestActions.forEach(dispatchRequestToRedux);
+    requestQueryConfigs.forEach(dispatchRequestToRedux);
     cancelKeys.forEach(dispatchCancelToRedux);
 
-    previousActions.current = requestReduxActions;
+    previousQueryConfigs.current = queryConfigs;
 
     return () => {
       [...pendingRequests.current].forEach(dispatchCancelToRedux);
     };
-  }, [dispatchCancelToRedux, dispatchRequestToRedux, requestReduxActions]);
+  }, [dispatchCancelToRedux, dispatchRequestToRedux, queryConfigs]);
 
   const forceRequest = React.useCallback(() => {
-    requestReduxActions.forEach(requestReduxAction => {
+    queryConfigs.forEach(requestReduxAction => {
       dispatchRequestToRedux({
         ...requestReduxAction,
         force: true,
       });
     });
-  }, [dispatchRequestToRedux, requestReduxActions]);
+  }, [dispatchRequestToRedux, queryConfigs]);
 
   return forceRequest;
 };

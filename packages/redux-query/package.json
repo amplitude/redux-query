@@ -34,15 +34,9 @@
     "backo": "^1.1.0",
     "invariant": "^2.2.0",
     "json-stable-stringify": "^1.0.0",
-    "lodash.difference": "^4.5.0",
     "lodash.get": "^4.4.2",
-    "lodash.identity": "^3.0.0",
-    "lodash.includes": "^4.3.0",
-    "lodash.intersection": "^4.4.0",
-    "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
-    "lodash.pickby": "^4.6.0",
-    "lodash.values": "^4.3.0"
+    "lodash.pickby": "^4.6.0"
   },
   "peerDependencies": {
     "redux": "^4.0.0"

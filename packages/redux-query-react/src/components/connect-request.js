@@ -1,6 +1,4 @@
 import hoistStatics from 'hoist-non-react-statics';
-import difference from 'lodash.difference';
-import intersection from 'lodash.intersection';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery } from 'redux-query/src/actions';
@@ -12,6 +10,12 @@ const normalizeToArray = maybe => {
   return (Array.isArray(maybe) ? maybe : [maybe]).filter(Boolean);
 };
 
+const difference = (a, b) => {
+  const bSet = new Set(b);
+
+  return a.filter(x => !bSet.has(x));
+};
+
 const getDiff = (prevActions, actions) => {
   const prevQueryKeys = prevActions.map(getQueryKey);
   const queryKeys = actions.map(getQueryKey);
@@ -21,9 +25,8 @@ const getDiff = (prevActions, actions) => {
     return accum;
   }, new Map());
 
-  const intersect = intersection(prevQueryKeys, queryKeys);
-  const cancelKeys = difference(prevQueryKeys, intersect);
-  const requestKeys = difference(queryKeys, intersect);
+  const cancelKeys = difference(prevQueryKeys, queryKeys);
+  const requestKeys = difference(queryKeys, prevQueryKeys);
   const requestActions = requestKeys.map(queryKey => actionByQueryKey.get(queryKey));
 
   return { cancelKeys, requestActions };

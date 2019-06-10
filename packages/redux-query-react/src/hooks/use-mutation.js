@@ -33,6 +33,8 @@ const useMutation = providedQueryConfig => {
       setIsPending(true);
       isPendingRef.current = true;
     }
+
+    return promise;
   }, [reduxDispatch, queryConfig]);
 
   return [isPending, mutate];

@@ -1,8 +1,6 @@
 import Backoff from 'backo';
 import invariant from 'invariant';
 import get from 'lodash.get';
-import identity from 'lodash.identity';
-import includes from 'lodash.includes';
 import pick from 'lodash.pick';
 import pickBy from 'lodash.pickby';
 
@@ -41,6 +39,8 @@ const getPendingQueries = queries => {
 };
 
 const isStatusOK = status => status >= 200 && status < 300;
+
+const identity = x => x;
 
 const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, customConfig) => {
   return ({ dispatch, getState }) => next => action => {
@@ -102,7 +102,7 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
 
               networkHandler.execute((err, status, responseBody, responseText, responseHeaders) => {
                 if (
-                  includes(config.retryableStatusCodes, status) &&
+                  config.retryableStatusCodes.includes(status) &&
                   attempts < config.backoff.maxAttempts
                 ) {
                   // TODO take into account Retry-After header if 503

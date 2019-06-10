@@ -1,5 +1,3 @@
-import omit from 'lodash.omit';
-
 import * as actionTypes from '../constants/action-types';
 
 const initialState = {};
@@ -12,8 +10,11 @@ const queries = (state = initialState, action) => {
     case actionTypes.MUTATE_START:
     case actionTypes.REQUEST_START: {
       const { queryKey } = action;
+      const newState = { ...state };
 
-      return omit(state, queryKey);
+      delete newState[queryKey];
+
+      return newState;
     }
     case actionTypes.MUTATE_FAILURE:
     case actionTypes.REQUEST_FAILURE: {

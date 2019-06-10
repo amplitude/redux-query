@@ -43,9 +43,21 @@ const isStatusOK = status => status >= 200 && status < 300;
 const identity = x => x;
 
 const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, customConfig) => {
+  const networkHandlersByQueryKey = {};
+
+  const abortQuery = queryKey => {
+    const networkHandler = networkHandlersByQueryKey[queryKey];
+
+    if (networkHandler) {
+      networkHandler.abort();
+      delete networkHandlersByQueryKey[queryKey];
+    }
+  };
+
   return ({ dispatch, getState }) => next => action => {
     let returnValue;
     const { getQueryKey, ...config } = { ...defaultConfig, ...customConfig };
+
     switch (action.type) {
       case actionTypes.REQUEST_ASYNC: {
         const {
@@ -88,11 +100,12 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
                 credentials: options.credentials,
               });
 
+              networkHandlersByQueryKey[queryKey] = networkHandler;
+
               dispatch(
                 requestStart({
                   body,
                   meta,
-                  networkHandler,
                   queryKey,
                   url,
                 }),
@@ -172,6 +185,8 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
                     headers: responseHeaders,
                   });
                 }
+
+                delete networkHandlersByQueryKey[queryKey];
               });
             };
 
@@ -214,13 +229,14 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
             credentials: options.credentials,
           });
 
+          networkHandlersByQueryKey[queryKey] = networkHandler;
+
           // Note: only the entities that are included in `optimisticUpdate` will be passed along in the
           // `mutateStart` action as `optimisticEntities`
           dispatch(
             mutateStart({
               body,
               meta,
-              networkHandler,
               optimisticEntities,
               queryKey,
               url,
@@ -301,6 +317,8 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
                 headers: responseHeaders,
               });
             }
+
+            delete networkHandlersByQueryKey[queryKey];
           });
         });
 
@@ -315,7 +333,7 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
         const pendingQueries = getPendingQueries(queries);
 
         if (queryKey in pendingQueries) {
-          pendingQueries[queryKey].networkHandler.abort();
+          abortQuery(queryKey);
           returnValue = next(action);
         } else {
           // eslint-disable-next-line
@@ -332,7 +350,7 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
 
         for (const queryKey in pendingQueries) {
           if (pendingQueries.hasOwnProperty(queryKey)) {
-            pendingQueries[queryKey].networkHandler.abort();
+            abortQuery(queryKey);
           }
         }
 

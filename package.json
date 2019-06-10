@@ -11,6 +11,7 @@
     "@babel/core": "^7.0.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@babel/preset-env": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-jest": "^24.8.0",
     "babel-plugin-idx": "^2.4.0",

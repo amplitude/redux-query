@@ -1,6 +1,10 @@
+import { applyMiddleware, combineReducers, createStore } from 'redux';
+
 import * as actionTypes from '../../src/constants/action-types';
 import { getQueryKey } from '../../src/lib/query-key';
 import queryMiddleware from '../../src/middleware/query';
+import queriesReducer from '../../src/reducers/queries';
+import entitiesReducer from '../../src/reducers/entities';
 
 const apiMessage = 'hello, world!';
 
@@ -629,66 +633,69 @@ describe('query middleware', () => {
     const queriesSelector = state => state.queries;
     const entitiesSelector = state => state.entities;
 
-    test('by canceling pending request', done => {
+    test('by aborting request network requests', done => {
       const url = '/api';
-      const dispatch = () => {
-        expect(false).toBe(true);
-      };
-      const mockRequestObject = {
-        abort: () => {
-          done();
-        },
+      const mockNetworkInterface = () => {
+        return {
+          abort: () => {
+            // Test passes if async callback called
+            done();
+          },
+          execute: cb => {
+            // Simulate network latency
+            setTimeout(() => cb(null, 200, {}), 500);
+          },
+        };
       };
       const queryKey = getQueryKey({ url });
-      const getState = () => ({
-        entities: {},
-        queries: {
-          [queryKey]: {
-            isPending: true,
-            networkHandler: mockRequestObject,
-          },
-        },
+      const rootReducer = combineReducers({
+        queries: queriesReducer,
+        entities: entitiesReducer,
       });
-      const next = () => {};
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
-        dispatch,
-        getState,
+      const store = createStore(
+        rootReducer,
+        undefined,
+        applyMiddleware(queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)),
+      );
+      store.dispatch({
+        type: actionTypes.REQUEST_ASYNC,
+        url,
       });
-      const actionHandler = nextHandler(next);
-      actionHandler({
+      store.dispatch({
         type: actionTypes.CANCEL_QUERY,
         queryKey,
       });
     });
 
-    test('by canceling pending mutation', done => {
+    test('by aborting mutation network requests', done => {
       const url = '/api';
-      const dispatch = () => {
-        expect(false).toBe(true);
-      };
-      const mockRequestObject = {
-        abort: () => {
-          done();
-        },
+      const mockNetworkInterface = () => {
+        return {
+          abort: () => {
+            // Test passes if async callback called
+            done();
+          },
+          execute: cb => {
+            // Simulate network latency
+            setTimeout(() => cb(null, 200, {}), 500);
+          },
+        };
       };
       const queryKey = getQueryKey({ url });
-      const getState = () => ({
-        entities: {},
-        queries: {
-          [queryKey]: {
-            isPending: true,
-            isMutation: true,
-            networkHandler: mockRequestObject,
-          },
-        },
+      const rootReducer = combineReducers({
+        queries: queriesReducer,
+        entities: entitiesReducer,
       });
-      const next = () => {};
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
-        dispatch,
-        getState,
+      const store = createStore(
+        rootReducer,
+        undefined,
+        applyMiddleware(queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)),
+      );
+      store.dispatch({
+        type: actionTypes.MUTATE_ASYNC,
+        url,
       });
-      const actionHandler = nextHandler(next);
-      actionHandler({
+      store.dispatch({
         type: actionTypes.CANCEL_QUERY,
         queryKey,
       });
@@ -700,38 +707,41 @@ describe('query middleware', () => {
     const entitiesSelector = state => state.entities;
 
     test('by canceling all pending queries', done => {
-      const dispatch = () => {
-        expect(false).toBe(true);
-      };
-      const next = () => {};
       let queriesLeft = 2;
-      const mockRequestObject = {
-        abort: () => {
-          queriesLeft -= 1;
-          if (queriesLeft === 0) {
-            done();
-          }
-        },
+      const mockNetworkInterface = () => {
+        return {
+          abort: () => {
+            queriesLeft -= 1;
+
+            if (queriesLeft === 0) {
+              // Test passes if async callback called
+              done();
+            }
+          },
+          execute: cb => {
+            // Simulate network latency
+            setTimeout(() => cb(null, 200, {}), 500);
+          },
+        };
       };
-      const getState = () => ({
-        entities: {},
-        queries: {
-          '/api1': {
-            isPending: true,
-            networkHandler: mockRequestObject,
-          },
-          '/api2': {
-            isPending: true,
-            networkHandler: mockRequestObject,
-          },
-        },
+      const rootReducer = combineReducers({
+        queries: queriesReducer,
+        entities: entitiesReducer,
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
-        dispatch,
-        getState,
+      const store = createStore(
+        rootReducer,
+        undefined,
+        applyMiddleware(queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)),
+      );
+      store.dispatch({
+        type: actionTypes.REQUEST_ASYNC,
+        url: '/api',
       });
-      const actionHandler = nextHandler(next);
-      actionHandler({
+      store.dispatch({
+        type: actionTypes.REQUEST_ASYNC,
+        url: '/api2',
+      });
+      store.dispatch({
         type: actionTypes.RESET,
       });
     });

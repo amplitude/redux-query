@@ -1,11 +1,10 @@
 import * as actionTypes from '../constants/action-types';
 
-export const requestStart = ({ body, meta, networkHandler, queryKey, url }) => {
+export const requestStart = ({ body, meta, queryKey, url }) => {
   return {
     type: actionTypes.REQUEST_START,
     url,
     body,
-    networkHandler,
     meta,
     queryKey,
   };
@@ -65,12 +64,11 @@ export const requestFailure = ({
   };
 };
 
-export const mutateStart = ({ body, meta, networkHandler, optimisticEntities, queryKey, url }) => {
+export const mutateStart = ({ body, meta, optimisticEntities, queryKey, url }) => {
   return {
     type: actionTypes.MUTATE_START,
     url,
     body,
-    networkHandler,
     optimisticEntities,
     queryKey,
     meta,

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
 import useConstCallback from './use-const-callback';
-import useMemoizedAction from './use-memoized-action';
+import useMemoizedQueryConfig from './use-memoized-query-config';
 
 const useRequest = providedQueryConfig => {
   const reduxDispatch = useDispatch();
@@ -17,7 +17,7 @@ const useRequest = providedQueryConfig => {
     isPendingRef.current = false;
   });
 
-  const transformQueryConfigToAction = useConstCallback(queryConfig => {
+  const transformQueryConfig = useConstCallback(queryConfig => {
     return {
       ...queryConfig,
       unstable_preDispatchCallback: finishedCallback,
@@ -25,7 +25,7 @@ const useRequest = providedQueryConfig => {
     };
   });
 
-  const requestReduxAction = useMemoizedAction(providedQueryConfig, transformQueryConfigToAction);
+  const queryConfig = useMemoizedQueryConfig(providedQueryConfig, transformQueryConfig);
 
   const dispatchRequestToRedux = useConstCallback(action => {
     const promise = reduxDispatch(requestAsync(action));
@@ -43,25 +43,25 @@ const useRequest = providedQueryConfig => {
   });
 
   const forceRequest = React.useCallback(() => {
-    if (requestReduxAction) {
+    if (queryConfig) {
       dispatchRequestToRedux({
-        ...requestReduxAction,
+        ...queryConfig,
         force: true,
       });
     }
-  }, [dispatchRequestToRedux, requestReduxAction]);
+  }, [dispatchRequestToRedux, queryConfig]);
 
   React.useEffect(() => {
-    if (requestReduxAction) {
-      dispatchRequestToRedux(requestReduxAction);
+    if (queryConfig) {
+      dispatchRequestToRedux(queryConfig);
     }
 
     return () => {
       if (isPendingRef.current) {
-        dispatchCancelToRedux(getQueryKey(requestReduxAction));
+        dispatchCancelToRedux(getQueryKey(queryConfig));
       }
     };
-  }, [dispatchCancelToRedux, dispatchRequestToRedux, requestReduxAction]);
+  }, [dispatchCancelToRedux, dispatchRequestToRedux, queryConfig]);
 
   return [isPending, forceRequest];
 };

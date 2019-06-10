@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { mutateAsync } from 'redux-query';
 
 import useConstCallback from './use-const-callback';
-import useMemoizedAction from './use-memoized-action';
+import useMemoizedQueryConfig from './use-memoized-query-config';
 
 const useMutation = providedQueryConfig => {
   const reduxDispatch = useDispatch();
@@ -24,26 +24,16 @@ const useMutation = providedQueryConfig => {
     };
   });
 
-  const requestReduxAction = useMemoizedAction(providedQueryConfig, transformQueryConfigToAction);
-
-  const dispatchMutationToRedux = React.useCallback(
-    action => {
-      const promise = reduxDispatch(mutateAsync(action));
-
-      if (promise) {
-        setIsPending(true);
-        isPendingRef.current = true;
-      }
-    },
-    [reduxDispatch],
-  );
+  const queryConfig = useMemoizedQueryConfig(providedQueryConfig, transformQueryConfigToAction);
 
   const mutate = React.useCallback(() => {
-    dispatchMutationToRedux({
-      ...requestReduxAction,
-      force: true,
-    });
-  }, [dispatchMutationToRedux, requestReduxAction]);
+    const promise = reduxDispatch(mutateAsync(queryConfig));
+
+    if (promise) {
+      setIsPending(true);
+      isPendingRef.current = true;
+    }
+  }, [reduxDispatch, queryConfig]);
 
   return [isPending, mutate];
 };

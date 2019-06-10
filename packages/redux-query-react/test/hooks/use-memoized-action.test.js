@@ -1,8 +1,8 @@
 import { renderHook } from 'react-hooks-testing-library';
 
-import useMemoizedAction from '../../src/hooks/use-memoized-action';
+import useMemoizedQueryConfig from '../../src/hooks/use-memoized-query-config';
 
-describe('useMemoizedAction', () => {
+describe('useMemoizedQueryConfig', () => {
   it('should merge in a callback', () => {
     const queryConfig = {
       url: '/api',
@@ -14,7 +14,7 @@ describe('useMemoizedAction', () => {
     const callback = () => {};
     const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
 
-    const { result } = renderHook(() => useMemoizedAction(queryConfig, transform));
+    const { result } = renderHook(() => useMemoizedQueryConfig(queryConfig, transform));
 
     expect(result.current).toEqual({
       url: '/api',
@@ -38,7 +38,7 @@ describe('useMemoizedAction', () => {
     // Initial render
 
     const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
-    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig, transform));
+    const { result, rerender } = renderHook(() => useMemoizedQueryConfig(queryConfig, transform));
     const returnValue1 = result.current;
 
     // Rerending but no props chnaged and the query config is the exact same, so the return value
@@ -70,7 +70,7 @@ describe('useMemoizedAction', () => {
     const callback = () => {};
     const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
 
-    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig1, transform));
+    const { result, rerender } = renderHook(() => useMemoizedQueryConfig(queryConfig1, transform));
     const firstReturnValue = result.current;
     rerender(queryConfig2, callback);
     const secondReturnValue = result.current;
@@ -101,7 +101,7 @@ describe('useMemoizedAction', () => {
 
     // Initial render
 
-    const { result, rerender } = renderHook(() => useMemoizedAction(queryConfig, transform));
+    const { result, rerender } = renderHook(() => useMemoizedQueryConfig(queryConfig, transform));
     const firstReturnValue = result.current;
 
     // Something in the component ancestry updated and now the query config has changed with a new

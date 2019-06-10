@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
-  "extends": ["eslint:recommended", "plugin:import/recommended"],
-  "plugins": ["import"],
+  "extends": ["eslint:recommended", "plugin:import/recommended", "plugin:flowtype/recommended"],
+  "plugins": ["flowtype", "import"],
   "parserOptions": {
     "sourceType": "module"
   },
@@ -9,5 +9,10 @@
     "browser": true,
     "es6": true,
     "node": false
+  },
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    }
   }
 }

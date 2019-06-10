@@ -1,10 +1,14 @@
+// @flow
+
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { querySelectors } from 'redux-query';
+import type { QueryConfig } from 'redux-query/src/types';
 
 import ReduxQueryContext from '../context';
+import type { QueryState } from '../types';
 
-const useQueryState = queryConfig => {
+const useQueryState = (queryConfig: ?QueryConfig): QueryState => {
   const contextValue = React.useContext(ReduxQueryContext);
 
   if (!contextValue) {

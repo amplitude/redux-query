@@ -1,51 +1,46 @@
-import get from 'lodash.get';
+// @flow
 
+import idx from 'idx';
+
+import type { State as QueriesState } from '../reducers/queries';
 import { getQueryKey } from '../lib/query-key';
+import type { QueryConfig } from '../types';
 
-export const isFinished = (queriesState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const isFinished = (queriesState: QueriesState, queryConfig: QueryConfig): boolean => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(queriesState, [queryKey, 'isFinished']);
-  }
+  return idx(queriesState, _ => _[queryKey].isFinished) || false;
 };
 
-export const isPending = (queriesState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const isPending = (queriesState: QueriesState, queryConfig: QueryConfig): boolean => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(queriesState, [queryKey, 'isPending']);
-  }
+  return idx(queriesState, _ => _[queryKey].isPending) || false;
 };
 
-export const status = (queriesState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const status = (queriesState: QueriesState, queryConfig: QueryConfig): ?number => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(queriesState, [queryKey, 'status']);
-  }
+  return idx(queriesState, _ => _[queryKey].status);
 };
 
-export const headers = (queriesState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const headers = (
+  queriesState: QueriesState,
+  queryConfig: QueryConfig,
+): ?{ [key: string]: any } => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(queriesState, [queryKey, 'headers']);
-  }
+  return idx(queriesState, _ => _[queryKey].headers);
 };
 
-export const lastUpdated = (queriesState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const lastUpdated = (queriesState: QueriesState, queryConfig: QueryConfig): ?number => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(queriesState, [queryKey, 'lastUpdated']);
-  }
+  return idx(queriesState, _ => _[queryKey].lastUpdated);
 };
 
-export const queryCount = (queriesState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const queryCount = (queriesState: QueriesState, queryConfig: QueryConfig): number => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(queriesState, [queryKey, 'queryCount']);
-  }
+  return idx(queriesState, _ => _[queryKey].queryCount) || 0;
 };

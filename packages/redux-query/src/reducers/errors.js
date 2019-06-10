@@ -1,8 +1,21 @@
+// @flow
+
 import * as actionTypes from '../constants/action-types';
+
+export type State = {
+  [key: string]: {|
+    responseBody: ?{ [key: string]: any },
+    responseHeaders: ?{ [key: string]: any },
+    responseText: ?string,
+  |},
+};
+
+// $FlowFixMe
+type Action = any;
 
 const initialState = {};
 
-const queries = (state = initialState, action) => {
+const queries = (state: State = initialState, action: Action) => {
   switch (action.type) {
     case actionTypes.RESET: {
       return {};

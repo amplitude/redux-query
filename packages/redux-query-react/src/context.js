@@ -1,5 +1,11 @@
+// @flow
+
 import React from 'react';
 
-const ReduxQueryContext = React.createContext(null);
+type ReduxQueryContextValue = ?{
+  queriesSelector: (state: any, ...any) => any,
+};
+
+const ReduxQueryContext = React.createContext<ReduxQueryContextValue>(null);
 
 export default ReduxQueryContext;

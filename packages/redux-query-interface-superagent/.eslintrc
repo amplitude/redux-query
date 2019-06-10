@@ -1,10 +1,7 @@
 {
   "parser": "babel-eslint",
-  "extends": [
-    "eslint:recommended",
-    "plugin:import/recommended"
-  ],
-  "plugins": ["import"],
+  "extends": ["eslint:recommended", "plugin:import/recommended"],
+  "plugins": ["flowtype", "import"],
   "parserOptions": {
     "sourceType": "module"
   },

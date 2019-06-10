@@ -1,27 +1,31 @@
-import get from 'lodash.get';
+// @flow
 
+import idx from 'idx';
+
+import type { State as ErrorsState } from '../reducers/errors';
 import { getQueryKey } from '../lib/query-key';
+import type { QueryConfig } from '../types';
 
-export const responseBody = (errorsState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const responseBody = (
+  errorsState: ErrorsState,
+  queryConfig: QueryConfig,
+): ?{ [key: string]: any } => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(errorsState, [queryKey, 'responseBody']);
-  }
+  return idx(errorsState, _ => _[queryKey].responseBody);
 };
 
-export const responseText = (errorsState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const responseText = (errorsState: ErrorsState, queryConfig: QueryConfig): ?string => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(errorsState, [queryKey, 'responseText']);
-  }
+  return idx(errorsState, _ => _[queryKey].responseText);
 };
 
-export const responseHeaders = (errorsState, queryConfig) => {
-  if (queryConfig) {
-    const queryKey = getQueryKey(queryConfig);
+export const responseHeaders = (
+  errorsState: ErrorsState,
+  queryConfig: QueryConfig,
+): ?{ [key: string]: any } => {
+  const queryKey = getQueryKey(queryConfig);
 
-    return get(errorsState, [queryKey, 'responseHeaders']);
-  }
+  return idx(errorsState, _ => _[queryKey].responseHeaders);
 };

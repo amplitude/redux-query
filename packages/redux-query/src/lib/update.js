@@ -4,13 +4,13 @@ import type { Update, Entities, OptimisticUpdate, Rollback } from '../types';
 
 export const updateEntities = (
   update: Update = {},
-  entities: Entities,
-  transformed: Entities,
+  entities: Entities = {},
+  transformed: Entities = {},
 ): Entities => {
   // If update is not supplied, then no change to entities will be made
 
-  return Object.keys(update).reduce((accum, key) => {
-    accum[key] = update[key]((entities || {})[key], (transformed || {})[key]);
+  return Object.keys(update).reduce((accum, key: string) => {
+    accum[key] = update[key](entities[key], transformed[key]);
 
     return accum;
   }, {});
@@ -20,7 +20,7 @@ export const optimisticUpdateEntities = (
   optimisticUpdate: OptimisticUpdate,
   entities: Entities,
 ): Entities => {
-  return Object.keys(optimisticUpdate).reduce((accum, key) => {
+  return Object.keys(optimisticUpdate).reduce((accum, key: string) => {
     accum[key] = optimisticUpdate[key](entities[key]);
 
     return accum;
@@ -32,7 +32,7 @@ export const rollbackEntities = (
   initialEntities: Entities,
   entities: Entities,
 ): Entities => {
-  return Object.keys(initialEntities).reduce((accum, key) => {
+  return Object.keys(initialEntities).reduce((accum, key: string) => {
     if (rollback[key]) {
       accum[key] = rollback[key](initialEntities[key], entities[key]);
     } else {

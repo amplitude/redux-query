@@ -351,13 +351,19 @@ export const updateEntities = (update: Update): UpdateEntitiesAction => {
   };
 };
 
-type ResetAction = {|
-  type: '@@query/RESET',
+type ResetParams = {|
+  entities: Entities,
 |};
 
-export const reset = (): ResetAction => {
+type ResetAction = {|
+  type: '@@query/RESET',
+  entities: Entities,
+|};
+
+export const reset = ({ entities }: ResetParams): ResetAction => {
   return {
     type: actionTypes.RESET,
+    entities,
   };
 };
 
@@ -367,3 +373,12 @@ export type PublicAction =
   | CancelQueryAction
   | UpdateEntitiesAction
   | ResetAction;
+
+export type Action =
+  | PublicAction
+  | RequestStartAction
+  | RequestSuccessAction
+  | RequestFailureAction
+  | MutateStartAction
+  | MutateSuccessAction
+  | MutateFailureAction;

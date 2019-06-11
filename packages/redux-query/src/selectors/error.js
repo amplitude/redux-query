@@ -12,11 +12,19 @@ export const responseBody = (
 ): ?{ [key: string]: any } => {
   const queryKey = getQueryKey(queryConfig);
 
+  if (!queryKey) {
+    return null;
+  }
+
   return idx(errorsState, _ => _[queryKey].responseBody);
 };
 
 export const responseText = (errorsState: ErrorsState, queryConfig: QueryConfig): ?string => {
   const queryKey = getQueryKey(queryConfig);
+
+  if (!queryKey) {
+    return null;
+  }
 
   return idx(errorsState, _ => _[queryKey].responseText);
 };
@@ -26,6 +34,10 @@ export const responseHeaders = (
   queryConfig: QueryConfig,
 ): ?{ [key: string]: any } => {
   const queryKey = getQueryKey(queryConfig);
+
+  if (!queryKey) {
+    return null;
+  }
 
   return idx(errorsState, _ => _[queryKey].responseHeaders);
 };

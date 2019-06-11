@@ -75,7 +75,7 @@ export type QueriesSelector = (state: any) => QueriesState;
 
 export type EntitiesSelector = (state: any) => EntitiesState;
 
-export type QueryKeyGetter = (queryConfig: ?QueryConfig) => QueryKey;
+export type QueryKeyGetter = (queryConfig: ?QueryConfig) => ?QueryKey;
 
 export type ActionPromiseValue = {|
   body: ResponseBody,

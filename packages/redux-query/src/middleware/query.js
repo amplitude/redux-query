@@ -1,10 +1,7 @@
 // @flow
 
 import Backoff from 'backo';
-import invariant from 'invariant';
-import get from 'lodash.get';
-import pick from 'lodash.pick';
-import pickBy from 'lodash.pickby';
+import idx from 'idx';
 
 import {
   requestStart,
@@ -20,12 +17,14 @@ import * as statusCodes from '../constants/status-codes';
 import { getQueryKey } from '../lib/query-key';
 import { updateEntities, optimisticUpdateEntities, rollbackEntities } from '../lib/update';
 
-import type { PublicAction } from '../actions';
+import type { Action, PublicAction } from '../actions';
 import type {
   ActionPromiseValue,
   EntitiesSelector,
+  NetworkHandler,
   NetworkInterface,
   QueriesSelector,
+  QueryKey,
   QueryKeyGetter,
   ResponseBody,
   Status,
@@ -44,7 +43,7 @@ type Config = {|
 |};
 
 type ReduxStore = {|
-  dispatch: (action: any) => any,
+  dispatch: (action: Action) => any,
   getState: () => any,
 |};
 
@@ -67,10 +66,35 @@ const defaultConfig: Config = {
 };
 
 const getPendingQueries = (queries: QueriesState): QueriesState => {
-  return pickBy(queries, query => query.isPending);
+  const pendingQueries = {};
+
+  for (const queryKey in queries) {
+    if (queries.hasOwnProperty(queryKey)) {
+      const query = queries[queryKey];
+
+      if (query.isPending) {
+        pendingQueries[queryKey] = query;
+      }
+    }
+  }
+
+  return pendingQueries;
 };
 
-const isStatusOK = (status: Status): boolean => status >= 200 && status < 300;
+const pick = (source: { [key: string]: any }, keys: Array<string>): { [key: string]: any } => {
+  const picked = {};
+
+  for (const key of keys) {
+    if (source.hasOwnProperty(key)) {
+      picked[key] = source[key];
+    }
+  }
+
+  return picked;
+};
+
+const isStatusOk = (status: ?Status): boolean =>
+  status !== null && status !== undefined && status >= 200 && status < 300;
 
 const defaultTransform: Transform = (body: ?ResponseBody) => body || {};
 
@@ -80,7 +104,7 @@ const queryMiddleware = (
   entitiesSelector: EntitiesSelector,
   customConfig: ?Config,
 ) => {
-  const networkHandlersByQueryKey = {};
+  const networkHandlersByQueryKey: { [key: QueryKey]: NetworkHandler } = {};
 
   const abortQuery = queryKey => {
     const networkHandler = networkHandlersByQueryKey[queryKey];
@@ -108,7 +132,9 @@ const queryMiddleware = (
           meta,
         } = action;
 
-        invariant(!!url, 'Missing required `url` field in action handler');
+        if (!url) {
+          throw new Error('Missing required url field for request');
+        }
 
         const queryKey = getQueryKey({
           body: action.body,
@@ -116,13 +142,17 @@ const queryMiddleware = (
           url: action.url,
         });
 
+        if (!queryKey) {
+          throw new Error('Failed to generate queryKey for request');
+        }
+
         const state = getState();
         const queries = queriesSelector(state);
 
         const queriesState = queries[queryKey];
-        const isPending = get(queriesState, ['isPending']);
-        const status = get(queriesState, ['status']);
-        const hasSucceeded = isStatusOK(status);
+        const isPending = idx(queriesState, _ => _.isPending);
+        const status = idx(queriesState, _ => _.status);
+        const hasSucceeded = isStatusOk(status);
 
         if (force || !queriesState || (retry && !isPending && !hasSucceeded)) {
           returnValue = new Promise<ActionPromiseValue>(resolve => {
@@ -173,7 +203,7 @@ const queryMiddleware = (
                   action.unstable_preDispatchCallback();
                 }
 
-                if (err || !isStatusOK(status)) {
+                if (err || !isStatusOk(status)) {
                   dispatch(
                     requestFailure({
                       body,
@@ -248,7 +278,10 @@ const queryMiddleware = (
           options = {},
           meta,
         } = action;
-        invariant(!!url, 'Missing required `url` field in action handler');
+
+        if (!url) {
+          throw new Error('Missing required url field for mutation');
+        }
 
         const initialState = getState();
         const initialEntities = entitiesSelector(initialState);
@@ -263,6 +296,10 @@ const queryMiddleware = (
           url: action.url,
           body: action.body,
         });
+
+        if (!queryKey) {
+          throw new Error('Failed to generate queryKey for mutation');
+        }
 
         returnValue = new Promise<ActionPromiseValue>(resolve => {
           const start = new Date();
@@ -300,7 +337,7 @@ const queryMiddleware = (
               action.unstable_preDispatchCallback();
             }
 
-            if (err || !isStatusOK(status)) {
+            if (err || !isStatusOk(status)) {
               let rolledBackEntities;
 
               if (optimisticUpdate) {
@@ -371,7 +408,10 @@ const queryMiddleware = (
       }
       case actionTypes.CANCEL_QUERY: {
         const { queryKey } = action;
-        invariant(!!queryKey, 'Missing required `queryKey` field in action handler');
+
+        if (!queryKey) {
+          throw new Error('Missing required queryKey field');
+        }
 
         const state = getState();
         const queries = queriesSelector(state);

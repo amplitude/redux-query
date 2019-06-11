@@ -1,3 +1,5 @@
+// @flow
+
 import * as actionTypes from './constants/action-types';
 import httpMethods from './constants/http-methods';
 import * as errorSelectors from './selectors/error';

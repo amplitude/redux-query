@@ -1,3 +1,5 @@
+// @flow
+
 import {
   MUTATE_FAILURE,
   MUTATE_START,
@@ -8,9 +10,15 @@ import {
 } from '../constants/action-types';
 import { optimisticUpdateEntities } from '../lib/update';
 
+import type { Action } from '../actions';
+
+export type State = {
+  [key: string]: any,
+};
+
 const initialState = {};
 
-const entities = (state = initialState, action) => {
+const entities = (state: State = initialState, action: Action) => {
   if (action.type === RESET) {
     return 'entities' in action ? action.entities : initialState;
   } else if (action.type === MUTATE_START && action.optimisticEntities) {

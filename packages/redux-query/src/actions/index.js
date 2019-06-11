@@ -259,14 +259,9 @@ export const mutateFailure = ({
   };
 };
 
-type RequestAsyncParams = {|
-  ...QueryConfig,
-  unstable_preDispatchCallback: () => void,
-|};
-
 type RequestAsyncAction = {|
   type: '@@query/REQUEST_ASYNC',
-  ...RequestAsyncParams,
+  ...QueryConfig,
 |};
 
 export const requestAsync = ({
@@ -281,7 +276,7 @@ export const requestAsync = ({
   url,
   /* eslint-disable-next-line camelcase */
   unstable_preDispatchCallback,
-}: RequestAsyncParams): RequestAsyncAction => {
+}: QueryConfig): RequestAsyncAction => {
   return {
     type: actionTypes.REQUEST_ASYNC,
     body,
@@ -351,13 +346,19 @@ export const updateEntities = (update: Update): UpdateEntitiesAction => {
   };
 };
 
-type ResetAction = {|
-  type: '@@query/RESET',
+type ResetParams = {|
+  entities: Entities,
 |};
 
-export const reset = (): ResetAction => {
+type ResetAction = {|
+  type: '@@query/RESET',
+  entities: Entities,
+|};
+
+export const reset = ({ entities }: ResetParams): ResetAction => {
   return {
     type: actionTypes.RESET,
+    entities,
   };
 };
 
@@ -367,3 +368,12 @@ export type PublicAction =
   | CancelQueryAction
   | UpdateEntitiesAction
   | ResetAction;
+
+export type Action =
+  | PublicAction
+  | RequestStartAction
+  | RequestSuccessAction
+  | RequestFailureAction
+  | MutateStartAction
+  | MutateSuccessAction
+  | MutateFailureAction;

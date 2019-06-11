@@ -3,11 +3,13 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { mutateAsync } from 'redux-query';
+
 import type { QueryConfig } from 'redux-query/src/types';
 
 import useConstCallback from './use-const-callback';
 import useMemoizedQueryConfig from './use-memoized-query-config';
 import useQueryState from './use-query-state';
+
 import type { QueryState } from '../types';
 
 const useMutation = (providedQueryConfig: ?QueryConfig): [QueryState, () => void] => {
@@ -19,14 +21,14 @@ const useMutation = (providedQueryConfig: ?QueryConfig): [QueryState, () => void
     isPendingRef.current = false;
   });
 
-  const transformQueryConfigToAction = useConstCallback(queryConfig => {
+  const transformQueryConfig = useConstCallback(queryConfig => {
     return {
       ...queryConfig,
       unstable_preDispatchCallback: finishedCallback,
     };
   });
 
-  const queryConfig = useMemoizedQueryConfig(providedQueryConfig, transformQueryConfigToAction);
+  const queryConfig = useMemoizedQueryConfig(providedQueryConfig, transformQueryConfig);
 
   const queryState = useQueryState(queryConfig);
 

@@ -1,5 +1,9 @@
+// @flow
+
 import superagent from 'superagent';
 import httpMethods from 'redux-query/src/constants/http-methods';
+
+import type { NetworkInterface } from 'redux-query/src/types';
 
 const createRequest = (url, method, body) => {
   switch (method) {
@@ -20,7 +24,11 @@ const createRequest = (url, method, body) => {
   }
 };
 
-const superagentNetworkInterface = (url, method, { body, headers, credentials } = {}) => {
+const superagentNetworkInterface: NetworkInterface = (
+  url,
+  method,
+  { body, headers, credentials } = {},
+) => {
   const request = createRequest(url, method, body);
 
   if (headers) {

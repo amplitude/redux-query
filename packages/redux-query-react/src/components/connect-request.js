@@ -1,42 +1,75 @@
+// @flow
+
 import hoistStatics from 'hoist-non-react-statics';
-import React from 'react';
+import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery } from 'redux-query/src/actions';
 import { getQueryKey } from 'redux-query/src/lib/query-key';
 
+import type { QueryConfig, QueryKey } from 'redux-query/src/types';
+
 import useConstCallback from '../hooks/use-const-callback';
 
-const normalizeToArray = maybe => {
+type MapPropsToConfigs = (props: mixed) => QueryConfig | Array<QueryConfig>;
+
+type Options = {|
+  forwardRef?: boolean,
+  pure?: boolean,
+|};
+
+const normalizeToArray = (maybe: QueryConfig | Array<QueryConfig>): Array<QueryConfig> => {
   return (Array.isArray(maybe) ? maybe : [maybe]).filter(Boolean);
 };
 
-const difference = (a, b) => {
+const difference = <T>(a: Array<T>, b: Array<T>): Array<T> => {
   const bSet = new Set(b);
 
   return a.filter(x => !bSet.has(x));
 };
 
-const getDiff = (prevQueryConfigs, queryConfigs) => {
-  const prevQueryKeys = prevQueryConfigs.map(getQueryKey);
-  const queryKeys = queryConfigs.map(getQueryKey);
-  const queryConfigByQueryKey = queryKeys.reduce((accum, queryKey, i) => {
-    accum.set(queryKey, queryConfigs[i]);
+const getDiff = (prevQueryConfigs: Array<QueryConfig>, queryConfigs: Array<QueryConfig>) => {
+  const prevQueryKeys = prevQueryConfigs.map(config => getQueryKey(config));
+  const queryKeys = queryConfigs.map(config => getQueryKey(config));
+  const queryConfigByQueryKey = queryKeys.reduce((accum, queryKey: ?QueryKey, i) => {
+    const queryConfig = queryConfigs[i];
+
+    if (queryConfig) {
+      accum.set(queryKey, queryConfig);
+    }
 
     return accum;
   }, new Map());
 
-  const cancelKeys = difference(prevQueryKeys, queryKeys);
-  const requestKeys = difference(queryKeys, prevQueryKeys);
-  const requestQueryConfigs = requestKeys.map(queryKey => queryConfigByQueryKey.get(queryKey));
+  const cancelKeys = difference(prevQueryKeys, queryKeys).filter(Boolean);
+  const requestKeys = difference(queryKeys, prevQueryKeys).filter(Boolean);
+  const requestQueryConfigs = requestKeys
+    .map(queryKey => queryConfigByQueryKey.get(queryKey))
+    .filter(Boolean);
 
   return { cancelKeys, requestQueryConfigs };
 };
 
-const useMemoizedQueryConfigs = (mapPropsToConfigs, props, callback) => {
-  const queryConfigs = normalizeToArray(mapPropsToConfigs(props)).map(queryConfig => ({
-    ...queryConfig,
-    unstable_preDispatchCallback: () => callback(getQueryKey(queryConfig)),
-  }));
+const useMemoizedQueryConfigs = (
+  mapPropsToConfigs,
+  props,
+  callback: (queryKey: QueryKey) => void,
+) => {
+  const queryConfigs = normalizeToArray(mapPropsToConfigs(props))
+    .map(
+      (queryConfig: QueryConfig): ?QueryConfig => {
+        const queryKey = getQueryKey(queryConfig);
+
+        if (queryKey) {
+          return {
+            ...queryConfig,
+            unstable_preDispatchCallback: () => {
+              callback(queryKey);
+            },
+          };
+        }
+      },
+    )
+    .filter(Boolean);
   const [memoizedQueryConfigs, setMemoizedQueryConfigs] = React.useState(queryConfigs);
   const previousQueryKeys = React.useRef(queryConfigs.map(getQueryKey));
 
@@ -60,22 +93,26 @@ const useMultiRequest = (mapPropsToConfigs, props) => {
 
   const previousQueryConfigs = React.useRef([]);
 
-  const pendingRequests = React.useRef(new Set());
+  const pendingRequests = React.useRef<Set<QueryKey>>(new Set());
 
-  const dispatchRequestToRedux = useConstCallback(queryConfig => {
+  const dispatchRequestToRedux = useConstCallback((queryConfig: QueryConfig) => {
     const promise = reduxDispatch(requestAsync(queryConfig));
 
     if (promise) {
-      pendingRequests.current.add(getQueryKey(queryConfig));
+      const queryKey = getQueryKey(queryConfig);
+
+      if (queryKey) {
+        pendingRequests.current.add(queryKey);
+      }
     }
   });
 
-  const dispatchCancelToRedux = useConstCallback(queryConfig => {
-    reduxDispatch(cancelQuery(queryConfig));
-    pendingRequests.current.delete(getQueryKey(queryConfig));
+  const dispatchCancelToRedux = useConstCallback((queryKey: QueryKey) => {
+    reduxDispatch(cancelQuery(queryKey));
+    pendingRequests.current.delete(queryKey);
   });
 
-  const queryConfigs = useMemoizedQueryConfigs(mapPropsToConfigs, props, queryKey => {
+  const queryConfigs = useMemoizedQueryConfigs(mapPropsToConfigs, props, (queryKey: QueryKey) => {
     pendingRequests.current.delete(queryKey);
   });
 
@@ -83,7 +120,7 @@ const useMultiRequest = (mapPropsToConfigs, props) => {
     const { cancelKeys, requestQueryConfigs } = getDiff(previousQueryConfigs.current, queryConfigs);
 
     requestQueryConfigs.forEach(dispatchRequestToRedux);
-    cancelKeys.forEach(dispatchCancelToRedux);
+    cancelKeys.forEach(queryKey => dispatchCancelToRedux(queryKey));
 
     previousQueryConfigs.current = queryConfigs;
 
@@ -104,10 +141,12 @@ const useMultiRequest = (mapPropsToConfigs, props) => {
   return forceRequest;
 };
 
-const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => {
-  const { pure = true, forwardRef = false } = options;
+const connectRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs, options: Options) => (
+  WrappedComponent: React.AbstractComponent<Config>,
+): React.AbstractComponent<Config> => {
+  const { pure = true, forwardRef = false } = options || {};
 
-  const ConnectRequestFunction = props => {
+  const ConnectRequestFunction = (props: Config) => {
     const forceRequest = useMultiRequest(mapPropsToConfigs, props);
 
     return <WrappedComponent {...props} forceRequest={forceRequest} />;
@@ -117,16 +156,14 @@ const connectRequest = (mapPropsToConfigs, options = {}) => WrappedComponent => 
   const wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
   const displayName = `ConnectRequest(${wrappedComponentName})`;
 
-  ConnectRequest.WrappedComponent = WrappedComponent;
   ConnectRequest.displayName = displayName;
 
   if (forwardRef) {
-    const forwarded = React.forwardRef((props, ref) => (
+    const forwarded = React.forwardRef<Config, mixed>((props: Config, ref) => (
       <ConnectRequest {...props} forwardedRef={ref} />
     ));
 
     forwarded.displayName = displayName;
-    forwarded.WrappedComponent = WrappedComponent;
 
     return hoistStatics(forwarded, WrappedComponent);
   }

@@ -2,12 +2,15 @@
 
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
-import type { QueryConfig } from 'redux-query/src/types';
+import { requestAsync, cancelQuery } from 'redux-query/src/actions';
+import { getQueryKey } from 'redux-query/src/lib/query-key';
+
+import type { QueryConfig, QueryKey } from 'redux-query/src/types';
 
 import useConstCallback from './use-const-callback';
 import useMemoizedQueryConfig from './use-memoized-query-config';
 import useQueryState from './use-query-state';
+
 import type { QueryState } from '../types';
 
 const useRequest = (providedQueryConfig: ?QueryConfig): [QueryState, () => void] => {
@@ -20,7 +23,7 @@ const useRequest = (providedQueryConfig: ?QueryConfig): [QueryState, () => void]
   });
 
   const transformQueryConfig = useConstCallback(
-    (queryConfig: QueryConfig): QueryConfig => {
+    (queryConfig: ?QueryConfig): ?QueryConfig => {
       return {
         ...queryConfig,
         unstable_preDispatchCallback: finishedCallback,
@@ -33,16 +36,16 @@ const useRequest = (providedQueryConfig: ?QueryConfig): [QueryState, () => void]
 
   const queryState = useQueryState(queryConfig);
 
-  const dispatchRequestToRedux = useConstCallback(action => {
-    const promise = reduxDispatch(requestAsync(action));
+  const dispatchRequestToRedux = useConstCallback(queryConfig => {
+    const promise = reduxDispatch(requestAsync(queryConfig));
 
     if (promise) {
       isPendingRef.current = true;
     }
   });
 
-  const dispatchCancelToRedux = useConstCallback(action => {
-    reduxDispatch(cancelQuery(action));
+  const dispatchCancelToRedux = useConstCallback((queryKey: QueryKey) => {
+    reduxDispatch(cancelQuery(queryKey));
     isPendingRef.current = false;
   });
 
@@ -62,7 +65,11 @@ const useRequest = (providedQueryConfig: ?QueryConfig): [QueryState, () => void]
 
     return () => {
       if (isPendingRef.current) {
-        dispatchCancelToRedux(getQueryKey(queryConfig));
+        const queryKey = getQueryKey(queryConfig);
+
+        if (queryKey) {
+          dispatchCancelToRedux(queryKey);
+        }
       }
     };
   }, [dispatchCancelToRedux, dispatchRequestToRedux, queryConfig]);

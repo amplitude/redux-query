@@ -1,3 +1,5 @@
+// @flow
+
 export const UNKNOWN = 0;
 export const REQUEST_TIMEOUT = 408; // client took too long
 export const TOO_MANY_REQUESTS = 429;

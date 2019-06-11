@@ -2,16 +2,16 @@
 
 import * as actionTypes from '../constants/action-types';
 
+import type { Action } from '../actions';
+import type { ResponseBody, ResponseHeaders, ResponseText } from '../types';
+
 export type State = {
   [key: string]: {|
-    responseBody: ?{ [key: string]: any },
-    responseHeaders: ?{ [key: string]: any },
-    responseText: ?string,
+    responseBody: ?ResponseBody,
+    responseHeaders: ?ResponseHeaders,
+    responseText: ?ResponseText,
   |},
 };
-
-// $FlowFixMe
-type Action = any;
 
 const initialState = {};
 

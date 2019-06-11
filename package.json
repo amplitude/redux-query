@@ -4,7 +4,8 @@
   "scripts": {
     "build": "bin/build.sh",
     "coverage": "codecov",
-    "test": "jest --coverage --no-cache"
+    "test": "jest --coverage --no-cache",
+    "flow-check": "flow check"
   },
   "dependencies": {},
   "devDependencies": {

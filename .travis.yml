@@ -6,5 +6,6 @@ cache:
 script:
   - lerna bootstrap
   - yarn run test
+  - yarn flow-check
 after_success:
   - yarn run coverage

@@ -259,14 +259,9 @@ export const mutateFailure = ({
   };
 };
 
-type RequestAsyncParams = {|
-  ...QueryConfig,
-  unstable_preDispatchCallback: () => void,
-|};
-
 type RequestAsyncAction = {|
   type: '@@query/REQUEST_ASYNC',
-  ...RequestAsyncParams,
+  ...QueryConfig,
 |};
 
 export const requestAsync = ({
@@ -281,7 +276,7 @@ export const requestAsync = ({
   url,
   /* eslint-disable-next-line camelcase */
   unstable_preDispatchCallback,
-}: RequestAsyncParams): RequestAsyncAction => {
+}: QueryConfig): RequestAsyncAction => {
   return {
     type: actionTypes.REQUEST_ASYNC,
     body,

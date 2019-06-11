@@ -14,6 +14,6 @@ export const getQueryKey: QueryKeyGetter = queryConfig => {
   if (queryKey !== null && queryKey !== undefined) {
     return queryKey;
   } else {
-    return stringify({ url, body });
+    return (stringify({ url, body }): string);
   }
 };

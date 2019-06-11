@@ -5,8 +5,10 @@ import type { HttpMethod } from './constants/http-methods';
 import type { State as QueriesState } from './reducers/queries';
 import type { State as EntitiesState } from './reducers/entities';
 
+type CredentialOption = 'include' | 'same-origin' | 'omit';
+
 type QueryOptions = {
-  credentials?: 'include' | 'same-origin' | 'omit',
+  credentials?: CredentialOption,
   method?: HttpMethod,
   headers?: { [key: string]: any },
 };
@@ -69,7 +71,17 @@ export type NetworkHandler = {|
   ) => void,
 |};
 
-export type NetworkInterface = (url: Url, method: HttpMethod, QueryOptions) => NetworkHandler;
+export type NetworkOptions = {
+  body: ?RequestBody,
+  headers: ?RequestHeaders,
+  credentials: ?CredentialOption,
+};
+
+export type NetworkInterface = (
+  url: Url,
+  method: HttpMethod,
+  networkOptions: NetworkOptions,
+) => NetworkHandler;
 
 export type QueriesSelector = (state: any) => QueriesState;
 

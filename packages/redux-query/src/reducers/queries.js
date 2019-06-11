@@ -2,25 +2,25 @@
 
 import * as actionTypes from '../constants/action-types';
 
+import type { Action } from '../actions';
+import type { QueryKey, ResponseHeaders, Status, Url } from '../types';
+
 export type State = {
-  [key: string]: {|
-    headers: ?{ [key: string]: any },
+  [key: QueryKey]: {|
+    headers?: ?ResponseHeaders,
     isFinished: boolean,
     isMutation: boolean,
     isPending: boolean,
-    lastUpdated: number,
+    lastUpdated?: number,
     queryCount: number,
-    status: number,
-    url: string,
+    status?: Status,
+    url: Url,
   |},
 };
 
-// $FlowFixMe
-type Action = any;
-
 const initialState = {};
 
-const queries = (state: State = initialState, action: Action) => {
+const queries = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case actionTypes.RESET: {
       return {};

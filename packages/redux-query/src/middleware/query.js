@@ -25,7 +25,6 @@ import type {
   NetworkInterface,
   QueriesSelector,
   QueryKey,
-  QueryKeyGetter,
   ResponseBody,
   Status,
   Transform,
@@ -39,7 +38,6 @@ type Config = {|
     maxDuration: number,
   |},
   retryableStatusCodes: Array<Status>,
-  getQueryKey: QueryKeyGetter,
 |};
 
 type ReduxStore = {|
@@ -62,7 +60,6 @@ const defaultConfig: Config = {
     statusCodes.SERVICE_UNAVAILABLE,
     statusCodes.GATEWAY_TIMEOUT,
   ],
-  getQueryKey,
 };
 
 const getPendingQueries = (queries: QueriesState): QueriesState => {
@@ -117,7 +114,7 @@ const queryMiddleware = (
 
   return ({ dispatch, getState }: ReduxStore) => (next: Next) => (action: PublicAction) => {
     let returnValue;
-    const { getQueryKey, ...config } = { ...defaultConfig, ...customConfig };
+    const config = { ...defaultConfig, ...customConfig };
 
     switch (action.type) {
       case actionTypes.REQUEST_ASYNC: {

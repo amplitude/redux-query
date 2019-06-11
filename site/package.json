@@ -1,7 +1,7 @@
 {
   "name": "redux-query-site",
   "private": true,
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "homepage": "https://amplitude.github.io/redux-query",
   "dependencies": {
     "babel-standalone": "^6.26.0",
@@ -17,9 +17,9 @@
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.0.0",
     "redux": "^4.0.0",
-    "redux-query": "^3.0.0-alpha.5",
-    "redux-query-interface-superagent": "^3.0.0-alpha.5",
-    "redux-query-react": "^3.0.0-alpha.5",
+    "redux-query": "^3.0.0-alpha.6",
+    "redux-query-interface-superagent": "^3.0.0-alpha.6",
+    "redux-query-react": "^3.0.0-alpha.6",
     "rimraf": "^2.4.3",
     "styled-components": "^2.2.1"
   },

@@ -1,6 +1,6 @@
 {
   "name": "redux-query-react",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "The React interface for integrating with redux-query",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",
@@ -33,7 +33,7 @@
   "license": "MIT",
   "dependencies": {
     "hoist-non-react-statics": "^3.3.0",
-    "redux-query": "^3.0.0-alpha.5"
+    "redux-query": "^3.0.0-alpha.6"
   },
   "peerDependencies": {
     "react": "^16.8.6",

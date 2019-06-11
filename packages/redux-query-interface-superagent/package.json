@@ -1,6 +1,6 @@
 {
   "name": "redux-query-interface-superagent",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "The default interface for redux-query, powered by superagent",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",
@@ -27,7 +27,7 @@
   "author": "Ryan Ashcraft <ryan@amplitude.com>",
   "license": "MIT",
   "dependencies": {
-    "redux-query": "^3.0.0-alpha.5",
+    "redux-query": "^3.0.0-alpha.6",
     "superagent": "^5.0.6"
   },
   "devDependencies": {

@@ -1,3 +1,5 @@
+// @flow
+
 import Backoff from 'backo';
 import invariant from 'invariant';
 import get from 'lodash.get';
@@ -18,7 +20,37 @@ import * as statusCodes from '../constants/status-codes';
 import { getQueryKey } from '../lib/query-key';
 import { updateEntities, optimisticUpdateEntities, rollbackEntities } from '../lib/update';
 
-const defaultConfig = {
+import type { PublicAction } from '../actions';
+import type {
+  ActionPromiseValue,
+  EntitiesSelector,
+  NetworkInterface,
+  QueriesSelector,
+  QueryKeyGetter,
+  ResponseBody,
+  Status,
+  Transform,
+} from '../types';
+import type { State as QueriesState } from '../reducers/queries';
+
+type Config = {|
+  backoff: {|
+    maxAttempts: number,
+    minDuration: number,
+    maxDuration: number,
+  |},
+  retryableStatusCodes: Array<Status>,
+  getQueryKey: QueryKeyGetter,
+|};
+
+type ReduxStore = {|
+  dispatch: (action: any) => any,
+  getState: () => any,
+|};
+
+type Next = (action: PublicAction) => any;
+
+const defaultConfig: Config = {
   backoff: {
     maxAttempts: 5,
     minDuration: 300,
@@ -34,15 +66,20 @@ const defaultConfig = {
   getQueryKey,
 };
 
-const getPendingQueries = queries => {
+const getPendingQueries = (queries: QueriesState): QueriesState => {
   return pickBy(queries, query => query.isPending);
 };
 
-const isStatusOK = status => status >= 200 && status < 300;
+const isStatusOK = (status: Status): boolean => status >= 200 && status < 300;
 
-const identity = x => x;
+const defaultTransform: Transform = (body: ?ResponseBody) => body || {};
 
-const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, customConfig) => {
+const queryMiddleware = (
+  networkInterface: NetworkInterface,
+  queriesSelector: QueriesSelector,
+  entitiesSelector: EntitiesSelector,
+  customConfig: ?Config,
+) => {
   const networkHandlersByQueryKey = {};
 
   const abortQuery = queryKey => {
@@ -54,7 +91,7 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
     }
   };
 
-  return ({ dispatch, getState }) => next => action => {
+  return ({ dispatch, getState }: ReduxStore) => (next: Next) => (action: PublicAction) => {
     let returnValue;
     const { getQueryKey, ...config } = { ...defaultConfig, ...customConfig };
 
@@ -65,7 +102,7 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
           body,
           force,
           retry,
-          transform = identity,
+          transform = defaultTransform,
           update,
           options = {},
           meta,
@@ -73,7 +110,11 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
 
         invariant(!!url, 'Missing required `url` field in action handler');
 
-        const queryKey = getQueryKey(action);
+        const queryKey = getQueryKey({
+          body: action.body,
+          queryKey: action.queryKey,
+          url: action.url,
+        });
 
         const state = getState();
         const queries = queriesSelector(state);
@@ -84,7 +125,7 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
         const hasSucceeded = isStatusOK(status);
 
         if (force || !queriesState || (retry && !isPending && !hasSucceeded)) {
-          returnValue = new Promise(resolve => {
+          returnValue = new Promise<ActionPromiseValue>(resolve => {
             const start = new Date();
             const { method = httpMethods.GET } = options;
             let attempts = 0;
@@ -199,7 +240,7 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
       case actionTypes.MUTATE_ASYNC: {
         const {
           url,
-          transform = identity,
+          transform = defaultTransform,
           update,
           rollback,
           body,
@@ -217,9 +258,13 @@ const queryMiddleware = (networkInterface, queriesSelector, entitiesSelector, cu
           optimisticEntities = optimisticUpdateEntities(optimisticUpdate, initialEntities);
         }
 
-        const queryKey = getQueryKey(action);
+        const queryKey = getQueryKey({
+          queryKey: action.queryKey,
+          url: action.url,
+          body: action.body,
+        });
 
-        returnValue = new Promise(resolve => {
+        returnValue = new Promise<ActionPromiseValue>(resolve => {
           const start = new Date();
           const { method = httpMethods.POST } = options;
 

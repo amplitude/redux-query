@@ -1,6 +1,40 @@
+// @flow
+
 import * as actionTypes from '../constants/action-types';
 
-export const requestStart = ({ body, meta, queryKey, url }) => {
+import type {
+  Duration,
+  Entities,
+  Meta,
+  QueryConfig,
+  QueryKey,
+  RequestBody,
+  ResponseBody,
+  ResponseHeaders,
+  ResponseText,
+  Status,
+  Update,
+  Url,
+} from '../types';
+
+type RequestStartParams = {|
+  body: RequestBody,
+  meta: ?Meta,
+  queryKey: QueryKey,
+  url: Url,
+|};
+
+type RequestStartAction = {|
+  type: '@@query/REQUEST_START',
+  ...RequestStartParams,
+|};
+
+export const requestStart = ({
+  body,
+  meta,
+  queryKey,
+  url,
+}: RequestStartParams): RequestStartAction => {
   return {
     type: actionTypes.REQUEST_START,
     url,
@@ -9,6 +43,25 @@ export const requestStart = ({ body, meta, queryKey, url }) => {
     queryKey,
   };
 };
+
+type RequestSuccessParams = {|
+  body: RequestBody,
+  duration: Duration,
+  entities: Entities,
+  meta: ?Meta,
+  responseBody: ?ResponseBody,
+  responseHeaders: ?ResponseHeaders,
+  responseText: ?ResponseText,
+  queryKey: QueryKey,
+  status: Status,
+  url: Url,
+|};
+
+type RequestSuccessAction = {|
+  type: '@@query/REQUEST_SUCCESS',
+  ...RequestSuccessParams,
+  time: number,
+|};
 
 export const requestSuccess = ({
   body,
@@ -21,7 +74,7 @@ export const requestSuccess = ({
   responseText,
   status,
   url,
-}) => {
+}: RequestSuccessParams): RequestSuccessAction => {
   return {
     type: actionTypes.REQUEST_SUCCESS,
     url,
@@ -38,6 +91,24 @@ export const requestSuccess = ({
   };
 };
 
+type RequestFailureParams = {|
+  body: RequestBody,
+  duration: Duration,
+  meta: ?Meta,
+  responseBody: ?ResponseBody,
+  responseHeaders: ?ResponseHeaders,
+  responseText: ?ResponseText,
+  queryKey: QueryKey,
+  status: Status,
+  url: Url,
+|};
+
+type RequestFailureAction = {|
+  type: '@@query/REQUEST_FAILURE',
+  ...RequestFailureParams,
+  time: number,
+|};
+
 export const requestFailure = ({
   body,
   duration,
@@ -48,7 +119,7 @@ export const requestFailure = ({
   responseText,
   status,
   url,
-}) => {
+}: RequestFailureParams): RequestFailureAction => {
   return {
     type: actionTypes.REQUEST_FAILURE,
     url,
@@ -64,7 +135,26 @@ export const requestFailure = ({
   };
 };
 
-export const mutateStart = ({ body, meta, optimisticEntities, queryKey, url }) => {
+type MutateStartParams = {|
+  body: RequestBody,
+  meta: ?Meta,
+  optimisticEntities: Entities,
+  queryKey: QueryKey,
+  url: Url,
+|};
+
+type MutateStartAction = {|
+  type: '@@query/MUTATE_START',
+  ...MutateStartParams,
+|};
+
+export const mutateStart = ({
+  body,
+  meta,
+  optimisticEntities,
+  queryKey,
+  url,
+}: MutateStartParams): MutateStartAction => {
   return {
     type: actionTypes.MUTATE_START,
     url,
@@ -74,6 +164,25 @@ export const mutateStart = ({ body, meta, optimisticEntities, queryKey, url }) =
     meta,
   };
 };
+
+type MutateSuccessParams = {|
+  body: RequestBody,
+  duration: Duration,
+  entities: Entities,
+  meta: ?Meta,
+  responseBody: ?ResponseBody,
+  responseHeaders: ?ResponseHeaders,
+  responseText: ?ResponseText,
+  queryKey: QueryKey,
+  status: Status,
+  url: Url,
+|};
+
+type MutateSuccessAction = {|
+  type: '@@query/MUTATE_SUCCESS',
+  ...MutateSuccessParams,
+  time: number,
+|};
 
 export const mutateSuccess = ({
   body,
@@ -86,7 +195,7 @@ export const mutateSuccess = ({
   responseText,
   status,
   url,
-}) => {
+}: MutateSuccessParams): MutateSuccessAction => {
   return {
     type: actionTypes.MUTATE_SUCCESS,
     url,
@@ -103,6 +212,25 @@ export const mutateSuccess = ({
   };
 };
 
+type MutateFailureParams = {|
+  body: RequestBody,
+  duration: Duration,
+  meta: ?Meta,
+  responseBody: ?ResponseBody,
+  responseHeaders: ?ResponseHeaders,
+  responseText: ?ResponseText,
+  rolledBackEntities: ?Entities,
+  queryKey: QueryKey,
+  status: Status,
+  url: Url,
+|};
+
+type MutateFailureAction = {|
+  type: '@@query/MUTATE_FAILURE',
+  ...MutateFailureParams,
+  time: number,
+|};
+
 export const mutateFailure = ({
   body,
   duration,
@@ -114,7 +242,7 @@ export const mutateFailure = ({
   rolledBackEntities,
   status,
   url,
-}) => {
+}: MutateFailureParams): MutateFailureAction => {
   return {
     type: actionTypes.MUTATE_FAILURE,
     url,
@@ -131,6 +259,16 @@ export const mutateFailure = ({
   };
 };
 
+type RequestAsyncParams = {|
+  ...QueryConfig,
+  unstable_preDispatchCallback: () => void,
+|};
+
+type RequestAsyncAction = {|
+  type: '@@query/REQUEST_ASYNC',
+  ...RequestAsyncParams,
+|};
+
 export const requestAsync = ({
   body,
   force,
@@ -143,7 +281,7 @@ export const requestAsync = ({
   url,
   /* eslint-disable-next-line camelcase */
   unstable_preDispatchCallback,
-}) => {
+}: RequestAsyncParams): RequestAsyncAction => {
   return {
     type: actionTypes.REQUEST_ASYNC,
     body,
@@ -159,6 +297,11 @@ export const requestAsync = ({
   };
 };
 
+type MutateAsyncAction = {|
+  type: '@@query/MUTATE_ASYNC',
+  ...QueryConfig,
+|};
+
 export const mutateAsync = ({
   body,
   meta,
@@ -169,7 +312,7 @@ export const mutateAsync = ({
   transform,
   update,
   url,
-}) => {
+}: QueryConfig): MutateAsyncAction => {
   return {
     type: actionTypes.MUTATE_ASYNC,
     body,
@@ -184,16 +327,43 @@ export const mutateAsync = ({
   };
 };
 
-export const cancelQuery = queryKey => {
+type CancelQueryAction = {|
+  type: '@@query/CANCEL_QUERY',
+  queryKey: QueryKey,
+|};
+
+export const cancelQuery = (queryKey: QueryKey): CancelQueryAction => {
   return {
     type: actionTypes.CANCEL_QUERY,
     queryKey,
   };
 };
 
-export const updateEntities = update => {
+type UpdateEntitiesAction = {|
+  type: '@@query/UPDATE_ENTITIES',
+  update: Update,
+|};
+
+export const updateEntities = (update: Update): UpdateEntitiesAction => {
   return {
     type: actionTypes.UPDATE_ENTITIES,
     update,
   };
 };
+
+type ResetAction = {|
+  type: '@@query/RESET',
+|};
+
+export const reset = (): ResetAction => {
+  return {
+    type: actionTypes.RESET,
+  };
+};
+
+export type PublicAction =
+  | RequestAsyncAction
+  | MutateAsyncAction
+  | CancelQueryAction
+  | UpdateEntitiesAction
+  | ResetAction;

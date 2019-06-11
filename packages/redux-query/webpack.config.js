@@ -41,7 +41,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: path.join(__dirname, 'src'),
+        include: [path.join(__dirname, 'src'), path.join(__dirname, '..', 'redux-query', 'src')],
       },
     ],
   },

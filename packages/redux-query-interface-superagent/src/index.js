@@ -1,7 +1,7 @@
 // @flow
 
 import superagent from 'superagent';
-import httpMethods from 'redux-query/src/constants/http-methods';
+import { httpMethods } from 'redux-query';
 
 import type { NetworkInterface } from 'redux-query/src/types';
 

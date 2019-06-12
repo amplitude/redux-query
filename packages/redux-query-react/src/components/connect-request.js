@@ -3,8 +3,7 @@
 import hoistStatics from 'hoist-non-react-statics';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { requestAsync, cancelQuery } from 'redux-query/src/actions';
-import { getQueryKey } from 'redux-query/src/lib/query-key';
+import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
 import type { QueryConfig, QueryKey } from 'redux-query/src/types';
 

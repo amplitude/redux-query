@@ -1,6 +1,6 @@
 import superagent from 'superagent';
 import superagentMock from 'superagent-mock';
-import httpMethods from 'redux-query/src/constants/http-methods';
+import { httpMethods } from 'redux-query';
 
 import superagentInterface from '../src';
 

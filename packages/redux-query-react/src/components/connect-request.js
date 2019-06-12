@@ -10,7 +10,7 @@ import type { QueryConfig, QueryKey } from 'redux-query/src/types';
 
 import useConstCallback from '../hooks/use-const-callback';
 
-type MapPropsToConfigs = (props: mixed) => QueryConfig | Array<QueryConfig>;
+type MapPropsToConfigs<T> = (props: T) => QueryConfig | Array<QueryConfig>;
 
 type Options = {|
   forwardRef?: boolean,
@@ -49,9 +49,9 @@ const getDiff = (prevQueryConfigs: Array<QueryConfig>, queryConfigs: Array<Query
   return { cancelKeys, requestQueryConfigs };
 };
 
-const useMemoizedQueryConfigs = (
-  mapPropsToConfigs,
-  props,
+const useMemoizedQueryConfigs = <Config>(
+  mapPropsToConfigs: MapPropsToConfigs<Config>,
+  props: Config,
   callback: (queryKey: QueryKey) => void,
 ) => {
   const queryConfigs = normalizeToArray(mapPropsToConfigs(props))
@@ -90,7 +90,7 @@ const useMemoizedQueryConfigs = (
   return memoizedQueryConfigs;
 };
 
-const useMultiRequest = (mapPropsToConfigs, props) => {
+const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, props: Config) => {
   const reduxDispatch = useDispatch();
 
   const previousQueryConfigs = React.useRef<Array<QueryConfig>>([]);
@@ -148,13 +148,13 @@ type Wrapper<Config> = (
 ) => React.AbstractComponent<$Diff<Config, { forceRequest: () => void }>>;
 
 const connectRequest = <Config: {}>(
-  mapPropsToConfigs: MapPropsToConfigs,
+  mapPropsToConfigs: MapPropsToConfigs<Config>,
   options: ?Options,
 ): Wrapper<Config> => WrappedComponent => {
   const { pure = true, forwardRef = false } = options || {};
 
   const ConnectRequestFunction = (props: Config) => {
-    const forceRequest = useMultiRequest(mapPropsToConfigs, props);
+    const forceRequest = useMultiRequest<Config>(mapPropsToConfigs, props);
 
     return <WrappedComponent {...props} forceRequest={forceRequest} />;
   };

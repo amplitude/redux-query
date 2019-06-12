@@ -71,10 +71,12 @@ const useMemoizedQueryConfigs = (
     )
     .filter(Boolean);
   const [memoizedQueryConfigs, setMemoizedQueryConfigs] = React.useState(queryConfigs);
-  const previousQueryKeys = React.useRef(queryConfigs.map(getQueryKey));
+  const previousQueryKeys = React.useRef<Array<QueryKey>>(
+    queryConfigs.map(getQueryKey).filter(Boolean),
+  );
 
   React.useEffect(() => {
-    const queryKeys = queryConfigs.map(getQueryKey);
+    const queryKeys = queryConfigs.map(getQueryKey).filter(Boolean);
 
     if (
       queryKeys.length !== previousQueryKeys.current.length ||
@@ -91,7 +93,7 @@ const useMemoizedQueryConfigs = (
 const useMultiRequest = (mapPropsToConfigs, props) => {
   const reduxDispatch = useDispatch();
 
-  const previousQueryConfigs = React.useRef([]);
+  const previousQueryConfigs = React.useRef<Array<QueryConfig>>([]);
 
   const pendingRequests = React.useRef<Set<QueryKey>>(new Set());
 
@@ -141,9 +143,14 @@ const useMultiRequest = (mapPropsToConfigs, props) => {
   return forceRequest;
 };
 
-const connectRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs, options: Options) => (
+type Wrapper<Config> = (
   WrappedComponent: React.AbstractComponent<Config>,
-): React.AbstractComponent<Config> => {
+) => React.AbstractComponent<$Diff<Config, { forceRequest: () => void }>>;
+
+const connectRequest = <Config: {}>(
+  mapPropsToConfigs: MapPropsToConfigs,
+  options: ?Options,
+): Wrapper<Config> => WrappedComponent => {
   const { pure = true, forwardRef = false } = options || {};
 
   const ConnectRequestFunction = (props: Config) => {

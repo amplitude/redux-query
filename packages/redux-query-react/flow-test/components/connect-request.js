@@ -5,6 +5,7 @@ import * as React from 'react';
 import connectRequest from '../../src/components/connect-request';
 
 type Props = {
+  url: string,
   forceRequest: () => void,
   title: string,
 };
@@ -23,14 +24,14 @@ class Card extends React.Component<Props> {
   }
 }
 
-const mapPropsToConfigs = () => {
+const mapPropsToConfigs = props => {
   return {
-    url: '/api',
+    url: props.url,
   };
 };
 
 const ConnectedCard = connectRequest<React.Config<Props, DefaultProps>>(mapPropsToConfigs)(Card);
 
-const App = () => {
-  return <ConnectedCard />;
+export const App = () => {
+  return <ConnectedCard url="/api" />;
 };

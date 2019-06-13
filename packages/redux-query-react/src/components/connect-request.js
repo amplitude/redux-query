@@ -61,6 +61,7 @@ const useMemoizedQueryConfigs = <Config>(
         if (queryKey) {
           return {
             ...queryConfig,
+            retry: true,
             unstable_preDispatchCallback: () => {
               callback(queryKey);
             },

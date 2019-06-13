@@ -110,8 +110,10 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
   });
 
   const dispatchCancelToRedux = useConstCallback((queryKey: QueryKey) => {
-    reduxDispatch(cancelQuery(queryKey));
-    pendingRequests.current.delete(queryKey);
+    if (pendingRequests.current.has(queryKey)) {
+      reduxDispatch(cancelQuery(queryKey));
+      pendingRequests.current.delete(queryKey);
+    }
   });
 
   const queryConfigs = useMemoizedQueryConfigs(mapPropsToConfigs, props, (queryKey: QueryKey) => {

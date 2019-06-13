@@ -160,6 +160,16 @@ describe('useRequest', () => {
           >
             broken link
           </a>
+          <a
+            data-testid="home-link"
+            href="/"
+            onClick={e => {
+              e.preventDefault();
+              setPath('/');
+            }}
+          >
+            home link
+          </a>
         </div>
       );
     };
@@ -182,12 +192,27 @@ describe('useRequest', () => {
     let brokenLinkNode = await waitForElement(() => getByTestId(container, 'broken-link'));
     fireEvent.click(brokenLinkNode);
 
-    // Loaded - check that query was actually canceled in Redux
+    // 404 page loaded - check that query was actually canceled in Redux
 
     let notFoundNode = await waitForElement(() => getByTestId(container, '404'));
     expect(notFoundNode.textContent).toBe('404');
     expect(store.getState().queries['{"url":"/api"}'].isPending).toBe(false);
     expect(store.getState().entities.message).toBeUndefined();
+
+    // Go back home
+
+    let homeLinkNode = await waitForElement(() => getByTestId(container, 'home-link'));
+    fireEvent.click(homeLinkNode);
+
+    // Check that query begins again
+
+    loadingContentNode = await waitForElement(() => getByTestId(container, 'loading-content'));
+    expect(loadingContentNode.textContent).toBe('loading');
+
+    // Loaded now
+
+    const loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
+    expect(loadedContentNode.textContent).toBe(apiMessage);
   });
 
   it('does nothing if query config is null', async () => {

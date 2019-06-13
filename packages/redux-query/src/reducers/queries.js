@@ -3,7 +3,7 @@
 import * as actionTypes from '../constants/action-types';
 
 import type { Action } from '../actions';
-import type { QueryKey, ResponseHeaders, Status, Url } from '../types';
+import type { QueryKey, ResponseHeaders, Status } from '../types';
 
 export type State = {
   [key: QueryKey]: {|
@@ -14,7 +14,6 @@ export type State = {
     lastUpdated?: number,
     queryCount: number,
     status?: Status,
-    url: Url,
   |},
 };
 
@@ -32,7 +31,6 @@ const queries = (state: State = initialState, action: Action): State => {
       return {
         ...state,
         [queryKey]: {
-          url: action.url,
           isFinished: false,
           isPending: true,
           isMutation: action.type === actionTypes.MUTATE_START,

@@ -1,7 +1,6 @@
 # redux-query
 
-[![Travis](https://img.shields.io/travis/amplitude/redux-query.svg?style=flat-square)](https://travis-ci.org/amplitude/redux-query)
-[![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
+[![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)
 
 A library for managing network state in Redux.
 
@@ -37,25 +36,6 @@ A library for managing network state in Redux.
 
 - [Simple example](https://amplitude.github.io/redux-query/docs/examples/simple): This example is a very simple web app that has only one feature – you can view and update your username. The purpose of this example is to demonstrate how requests and mutations (including optimistic updates) work with redux-query.
 - [Hacker News](https://amplitude.github.io/redux-query/docs/examples/hacker-news): This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
-
-## Packages
-
-This project is published as multiple packages. redux-query, the core library, is the only required package. redux-query-react is recommended if you are using React in your application. redux-query requires a [network interface](https://amplitude.github.io/redux-query/network-interfaces) which handles the implementation of network requests. You must either use the recommended interface, redux-query-interface-superagent, or supply your own.
-
-| Name                                                                              | Version                                                                                                                                                       | Description                                                        |
-| :-------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------- |
-| [`redux-query`](./packages/redux-query)                                           | [![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)                                           | The core library for managing network requests with Redux.         |
-| [`redux-query-react`](./packages/redux-query-react)                               | [![npm](https://img.shields.io/npm/v/redux-query-react.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-react)                               | Library of APIs for integrating redux-query with React components. |
-| [`redux-query-interface-superagent`](./packages/redux-query-interface-superagent) | [![npm](https://img.shields.io/npm/v/redux-query-interface-superagent.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-interface-superagent) | The recommended network interface that handles network requests.   |
-
-## Upgrade guides
-
-- [1.x to 2.x](https://amplitude.github.io/redux-query/docs/upgrade-guides/v1-to-v2)
-- [2.x to 3.x](https://amplitude.github.io/redux-query/docs/upgrade-guides/v2-to-v3)
-
-## Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 

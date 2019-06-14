@@ -127,11 +127,13 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
     cancelKeys.forEach(queryKey => dispatchCancelToRedux(queryKey));
 
     previousQueryConfigs.current = queryConfigs;
+  }, [dispatchCancelToRedux, dispatchRequestToRedux, queryConfigs]);
 
+  React.useEffect(() => {
     return () => {
       [...pendingRequests.current].forEach(dispatchCancelToRedux);
     };
-  }, [dispatchCancelToRedux, dispatchRequestToRedux, queryConfigs]);
+  }, [dispatchCancelToRedux]);
 
   const forceRequest = React.useCallback(() => {
     queryConfigs.forEach(requestReduxAction => {

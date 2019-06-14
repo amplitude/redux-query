@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { render, waitForElement, getByTestId, fireEvent } from '@testing-library/react';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useSelector, connect } from 'react-redux';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
-import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
+
+import { entitiesReducer, queriesReducer, queryMiddleware, querySelectors } from 'redux-query';
 
 import connectRequest from '../../src/components/connect-request';
 
@@ -254,5 +255,69 @@ describe('useRequest', () => {
 
     let loadedContentNode = getByTestId(container, 'loaded-content');
     expect(loadedContentNode.textContent).toBe('');
+  });
+
+  it('does not cancel all in-flight requests when list of query configs change', async () => {
+    const Content = () => {
+      const message1 = useSelector(state => state.entities.message1);
+      const message2 = useSelector(state => state.entities.message2);
+
+      return (
+        <div>
+          {!!message1 && <div data-testid="loaded-message1">{message1}</div>}
+          {!!message2 && <div data-testid="loaded-message2">{message2}</div>}
+        </div>
+      );
+    };
+
+    const mapStateToProps = state => {
+      const isFirstRequestLoading = querySelectors.isPending(state.queries, {
+        url: '/api',
+      });
+
+      return {
+        isFirstRequestLoading,
+      };
+    };
+
+    const mapPropsToConfigs = props => {
+      return [
+        {
+          url: '/api',
+          update: {
+            message1: () => 'loaded',
+          },
+        },
+        !props.isFirstRequestLoading && {
+          url: '/api',
+          body: {
+            a: 'a',
+          },
+          update: {
+            message2: () => 'loaded',
+          },
+        },
+      ];
+    };
+
+    const ContentContainer = connect(mapStateToProps)(connectRequest(mapPropsToConfigs)(Content));
+
+    const { container } = render(
+      <App>
+        <ContentContainer />
+      </App>,
+    );
+
+    // Check that query begins again
+
+    const loadedMessageNode = await waitForElement(() => getByTestId(container, 'loaded-message1'));
+    expect(loadedMessageNode.textContent).toBe('loaded');
+
+    // Loaded now
+
+    const loadedMessage2Node = await waitForElement(() =>
+      getByTestId(container, 'loaded-message2'),
+    );
+    expect(loadedMessage2Node.textContent).toBe('loaded');
   });
 });

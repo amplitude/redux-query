@@ -1,4 +1,7 @@
-# redux-query 1.x to 2.x Transition Guide
+---
+id: v1-to-v2
+title: 2.x Upgrade Guide
+---
 
 ## Important things to know
 
@@ -43,7 +46,7 @@ redux-query 2 exports a new reducer `errorsReducer` and accompanying set of sele
 
 ### Update all references to `request` field in actions and queries state
 
-The `request` fields in the start actions and stored in the queries reducer state has been removed in favor of a new field  called `networkHandler`.
+The `request` fields in the start actions and stored in the queries reducer state has been removed in favor of a new field called `networkHandler`.
 
 `networkHandler` is the returned value from the network interface, not the underlying superagent instance. When using redux-query in its default mode with the superagent network interface, you can get the superagent instance with `networkHandler.instance`.
 
@@ -65,9 +68,11 @@ becomes:
 import omit from 'lodash.omit';
 import { updateEntities } from 'redux-query';
 
-dispatch(updateEntities({
-    dashboards: (value) => omit(value, '78dhr8v'),
-}));
+dispatch(
+  updateEntities({
+    dashboards: value => omit(value, '78dhr8v'),
+  }),
+);
 ```
 
 ### Update all references to `reconcileQueryKey` and `getQueryKey`

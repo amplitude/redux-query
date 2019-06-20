@@ -8,11 +8,17 @@
       "connect-request": {
         "title": "connectRequest"
       },
+      "contributing": {
+        "title": "Contributing"
+      },
       "entities": {
         "title": "Entities"
       },
       "error-state": {
         "title": "Error State"
+      },
+      "flow": {
+        "title": "Flow Support"
       },
       "getting-started": {
         "title": "Getting Started"
@@ -38,8 +44,11 @@
       "requests-vs-mutations": {
         "title": "Requests vs. Mutations"
       },
-      "transition-guides/v2": {
-        "title": "transition-guides/v2"
+      "upgrade-guides/v1-to-v2": {
+        "title": "2.x Upgrade Guide"
+      },
+      "upgrade-guides/v2-to-v3": {
+        "title": "3.x Upgrade Guide"
       },
       "use-mutation": {
         "title": "useMutation"
@@ -57,6 +66,7 @@
       "Core Concepts": "Core Concepts",
       "Redux API": "Redux API",
       "React API": "React API",
+      "Upgrade Guides": "Upgrade Guides",
       "Other": "Other"
     }
   },

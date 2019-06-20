@@ -5,8 +5,14 @@
     "previous": "Previous",
     "tagline": "Manage your network state in Redux",
     "docs": {
+      "connect-request": {
+        "title": "connectRequest"
+      },
       "entities": {
         "title": "Entities"
+      },
+      "error-state": {
+        "title": "Error State"
       },
       "getting-started": {
         "title": "Getting Started"
@@ -27,13 +33,16 @@
         "title": "Actions"
       },
       "redux-selectors": {
-        "title": "redux-selectors"
+        "title": "Selectors"
       },
       "requests-vs-mutations": {
         "title": "Requests vs. Mutations"
       },
       "transition-guides/v2": {
         "title": "transition-guides/v2"
+      },
+      "use-mutation": {
+        "title": "useMutation"
       },
       "use-request": {
         "title": "useRequest"

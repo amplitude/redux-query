@@ -11,10 +11,10 @@ When dispatching a `mutateAsync` action, you can Promise-chain on the returned v
 
 ```javascript
 import { mutateAsync } from 'redux-query';
-import { createUpdateDashboardQuery } from '../queries/dashboard';
+import { updateDashboard } from '../queries/dashboard';
 
 export const updateDashboard = (dashboardId, newName) => {
-  return mutateAsync(createUpdateDashboardQuery(dashboardId, newName));
+  return mutateAsync(updateDashboard(dashboardId, newName));
 };
 
 const mapDispatchToProps = (dispatch, props) => {

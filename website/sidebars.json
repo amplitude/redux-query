@@ -6,6 +6,7 @@
       "requests-vs-mutations",
       "query-configs",
       "query-state",
+      "error-state",
       "network-interfaces"
     ],
     "Redux API": ["redux-actions", "redux-selectors"],

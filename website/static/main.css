@@ -1,12 +1,3 @@
-.homeContainer {
-  background-color: hsla(308, 38%, 36%, 1);
-}
-
-.projectTitle {
-  color: white;
-}
-
-.homeContainer .button {
-  border-color: white;
-  color: white;
+.mainContainer h2:first-child {
+  margin-top: 0;
 }

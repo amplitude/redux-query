@@ -63,7 +63,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href="#try">Try It Out</Button>
+            <Button href={docsPart}>Get Started</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -77,57 +77,38 @@ class Index extends React.Component {
     const { baseUrl } = siteConfig;
 
     const Block = props => (
-      <Container padding={['bottom', 'top']} id={props.id} background={props.background}>
+      <Container id={props.id} background={props.background}>
         <GridBlock align="center" contents={props.children} layout={props.layout} />
       </Container>
     );
 
     const Features = () => (
-      <Block layout="fourColumn">
+      <Block layout="threeColumn">
         {[
           {
-            content: 'This is the content of my feature',
-            imageAlign: 'top',
-            title: 'Feature One',
+            title: 'Simply Redux',
+            content:
+              "Follow best practices for storing and handling network state in Redux, with support for features like optimistic updates and cancellation. There's no magic here, just middleware, actions, selectors, and reducers.",
           },
           {
-            content: 'The content of my second feature',
-            imageAlign: 'top',
-            title: 'Feature Two',
+            title: 'Extensible',
+            content:
+              'Built to fit most use cases out-of-the-box, but can easily be extended with custom Redux middleware, UI integrations, and network interfaces.',
+          },
+          {
+            title: 'Works Great with React',
+            content:
+              'With the provided React hooks and higher-order component in redux-query-react (optional), colocate data dependencies with your components and run requests when components mount or update.',
           },
         ]}
       </Block>
     );
 
-    const Showcase = () => {
-      if ((siteConfig.users || []).length === 0) {
-        return null;
-      }
-
-      const showcase = siteConfig.users
-        .filter(user => user.pinned)
-        .map(user => (
-          <a href={user.infoLink} key={user.infoLink}>
-            <img src={user.image} alt={user.caption} title={user.caption} />
-          </a>
-        ));
-
-      const pageUrl = page => baseUrl + (language ? `${language}/` : '') + page;
-
-      return (
-        <div className="productShowcaseSection paddingBottom">
-          <h2>Who is using redux-query?</h2>
-          <div className="logos">{showcase}</div>
-        </div>
-      );
-    };
-
     return (
       <div>
         <HomeSplash siteConfig={siteConfig} language={language} />
-        <div className="mainContainer">
+        <div className="mainContainer lightBackground">
           <Features />
-          <Showcase />
         </div>
       </div>
     );

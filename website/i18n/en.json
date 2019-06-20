@@ -3,38 +3,52 @@
   "localized-strings": {
     "next": "Next",
     "previous": "Previous",
-    "tagline": "Manage your network state in Redux without the boilerplate",
+    "tagline": "Manage your network state in Redux",
     "docs": {
-      "doc1": {
-        "title": "Latin-ish",
-        "sidebar_label": "Example Page"
+      "entities": {
+        "title": "Entities"
       },
-      "doc2": {
-        "title": "document number 2"
+      "getting-started": {
+        "title": "Getting Started"
       },
-      "doc3": {
-        "title": "This is document number 3"
+      "network-interfaces": {
+        "title": "Network Interfaces"
       },
-      "doc4": {
-        "title": "Other Document"
+      "principles": {
+        "title": "Principles"
       },
-      "doc5": {
-        "title": "Fifth Document"
+      "query-configs": {
+        "title": "Query Configs"
+      },
+      "query-state": {
+        "title": "Query State"
+      },
+      "redux-actions": {
+        "title": "Actions"
+      },
+      "redux-selectors": {
+        "title": "redux-selectors"
+      },
+      "requests-vs-mutations": {
+        "title": "Requests vs. Mutations"
       },
       "transition-guides/v2": {
         "title": "transition-guides/v2"
+      },
+      "use-request": {
+        "title": "useRequest"
       }
     },
     "links": {
       "Docs": "Docs",
-      "API": "API",
-      "Help": "Help",
-      "Blog": "Blog"
+      "GitHub": "GitHub"
     },
     "categories": {
-      "Docusaurus": "Docusaurus",
-      "First Category": "First Category",
-      "Second Category": "Second Category"
+      "Introduction": "Introduction",
+      "Core Concepts": "Core Concepts",
+      "Redux API": "Redux API",
+      "React API": "React API",
+      "Other": "Other"
     }
   },
   "pages-strings": {

@@ -22,7 +22,7 @@ const users = [
 
 const siteConfig = {
   title: 'redux-query', // Title for your website.
-  tagline: 'Manage your network state in Redux without the boilerplate',
+  tagline: 'Manage your network state in Redux',
   url: 'https://amplitude.github.io', // Your website URL
   baseUrl: '/redux-query/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
@@ -38,8 +38,7 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    { doc: 'doc1', label: 'Docs' },
-    { doc: 'doc4', label: 'API' },
+    { doc: 'getting-started', label: 'Docs' },
     { href: 'https://github.com/amplitude/redux-query', label: 'GitHub' },
   ],
 
@@ -47,14 +46,14 @@ const siteConfig = {
   users,
 
   /* path to images for header/footer */
-  headerIcon: 'img/redux-query-white.png',
-  footerIcon: 'img/redux-query-white.png',
-  favicon: 'img/favicon.ico',
+  // headerIcon: 'img/redux-query-white.png',
+  // footerIcon: 'img/redux-query-white.png',
+  // favicon: 'img/favicon.ico',
 
   /* Colors for website */
   colors: {
     primaryColor: '#914187',
-    secondaryColor: '#f55651',
+    secondaryColor: '#5d1d53',
   },
 
   /* Custom fonts for website */
@@ -88,8 +87,8 @@ const siteConfig = {
   cleanUrl: true,
 
   // Open Graph and Twitter card images.
-  ogImage: 'img/undraw_online.svg',
-  twitterImage: 'img/undraw_tweetstorm.svg',
+  // ogImage: 'img/undraw_online.svg',
+  // twitterImage: 'img/undraw_tweetstorm.svg',
 
   // Show documentation's last contributor's name.
   // enableUpdateBy: true,

@@ -17,6 +17,12 @@
       "error-state": {
         "title": "Error State"
       },
+      "examples/hacker-news": {
+        "title": "Hacker News Example"
+      },
+      "examples/simple": {
+        "title": "Simple Example"
+      },
       "flow": {
         "title": "Flow Support"
       },
@@ -67,6 +73,7 @@
       "Redux API": "Redux API",
       "React API": "React API",
       "Upgrade Guides": "Upgrade Guides",
+      "Examples": "Examples",
       "Other": "Other"
     }
   },

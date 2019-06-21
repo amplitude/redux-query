@@ -90,6 +90,12 @@ const siteConfig = {
   // No .html extensions for paths.
   cleanUrl: true,
 
+  algolia: {
+    apiKey: '9bcd3f8820b12f68241d561c58d31fa2',
+    indexName: 'amplitude-redux-query',
+    algoliaOptions: {},
+  },
+
   // Open Graph and Twitter card images.
   // ogImage: 'img/undraw_online.svg',
   // twitterImage: 'img/undraw_tweetstorm.svg',

@@ -12,9 +12,9 @@ redux-query-react is a library for making it easy to integrating redux-query wit
 
 ## Docs
 
-[https://amplitude.github.io/redux-query](View the docs here).
+[View the docs here](https://amplitude.github.io/redux-query).
 
-[https://amplitude.github.io/redux-query/getting-started](Getting started).
+[Getting started](https://amplitude.github.io/redux-query/getting-started).
 
 ## About
 

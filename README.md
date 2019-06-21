@@ -13,15 +13,15 @@ redux-query is a set of libraries for managing network state in Redux applicatio
 
 ## Docs
 
-[https://amplitude.github.io/redux-query](View the docs here).
+[View the docs here](https://amplitude.github.io/redux-query).
 
-[https://amplitude.github.io/redux-query/getting-started](Getting started).
+[Getting started](https://amplitude.github.io/redux-query/getting-started).
 
 ## Examples
 
-[https://amplitude.github.io/redux-query/examples/simple](Simple example): This example is a very simple web app that has only one feature – you can view and update your username. The purpose of this example is to demonstrate how requests and mutations (including optimistic updates) work with redux-query.
+[Simple example](https://amplitude.github.io/redux-query/examples/simple): This example is a very simple web app that has only one feature – you can view and update your username. The purpose of this example is to demonstrate how requests and mutations (including optimistic updates) work with redux-query.
 
-[https://amplitude.github.io/redux-query/examples/hacker-news](Hacker News): This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
+[Hacker News](https://amplitude.github.io/redux-query/examples/hacker-news): This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
 
 ## Packages
 

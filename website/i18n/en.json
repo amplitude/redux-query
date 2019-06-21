@@ -3,7 +3,7 @@
   "localized-strings": {
     "next": "Next",
     "previous": "Previous",
-    "tagline": "Manage your network state in Redux",
+    "tagline": "A library for managing network state in Redux",
     "docs": {
       "connect-request": {
         "title": "connectRequest"
@@ -18,7 +18,7 @@
         "title": "Error State"
       },
       "examples/hacker-news": {
-        "title": "Hacker News Example"
+        "title": "Hacker News"
       },
       "examples/simple": {
         "title": "Simple Example"
@@ -72,8 +72,8 @@
       "Core Concepts": "Core Concepts",
       "Redux API": "Redux API",
       "React API": "React API",
-      "Upgrade Guides": "Upgrade Guides",
       "Examples": "Examples",
+      "Upgrade Guides": "Upgrade Guides",
       "Other": "Other"
     }
   },

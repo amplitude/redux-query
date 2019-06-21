@@ -22,7 +22,7 @@ const users = [
 
 const siteConfig = {
   title: 'redux-query', // Title for your website.
-  tagline: 'Manage your network state in Redux',
+  tagline: 'A library for managing network state in Redux',
   url: 'https://amplitude.github.io', // Your website URL
   baseUrl: '/redux-query/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
@@ -30,7 +30,7 @@ const siteConfig = {
   //   baseUrl: '/test-site/',
 
   // Used for publishing and more
-  projectName: 'redux-query-site',
+  projectName: 'redux-query',
   organizationName: 'amplitude',
   // For top-level user or org sites, the organization is still the same.
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
@@ -79,7 +79,11 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: [
+    'https://buttons.github.io/buttons.js',
+    'https://cdn.amplitude.com/libs/amplitude-5.2.2-min.gz.js',
+    '/redux-query/js/analytics.js',
+  ],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
@@ -98,7 +102,7 @@ const siteConfig = {
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
-  //   repoUrl: 'https://github.com/facebook/test-site',
+  repoUrl: 'https://github.com/amplitude/redux-query',
 };
 
 module.exports = siteConfig;

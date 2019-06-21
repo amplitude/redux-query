@@ -14,9 +14,17 @@ redux-query is a library for managing network state in Redux applications.
 
 ## Docs
 
-[View the docs here](https://amplitude.github.io/redux-query).
+- **[Getting Started and Installation](https://amplitude.github.io/redux-query/docs/getting-started)**
+- [Entities](https://amplitude.github.io/redux-query/docs/entities)
+- [Requests vs. Mutations](https://amplitude.github.io/redux-query/docs/requests-vs-mutations)
+- [Query Configs](https://amplitude.github.io/redux-query/docs/query-configs)
+- [Query State](https://amplitude.github.io/redux-query/docs/query-state)
+- [Error State](https://amplitude.github.io/redux-query/docs/error-state)
 
-[Getting started](https://amplitude.github.io/redux-query/getting-started).
+## Redux API
+
+- [Redux Actions](https://amplitude.github.io/redux-query/docs/redux-actions)
+- [Redux Selectors](https://amplitude.github.io/redux-query/docs/redux-selectors)
 
 ## About
 

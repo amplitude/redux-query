@@ -13,15 +13,30 @@ redux-query is a set of libraries for managing network state in Redux applicatio
 
 ## Docs
 
-[View the docs here](https://amplitude.github.io/redux-query).
+- [Getting Started](https://amplitude.github.io/redux-query/docs/getting-started)
+- [Entities](https://amplitude.github.io/redux-query/docs/entities)
+- [Requests vs. Mutations](https://amplitude.github.io/redux-query/docs/requests-vs-mutations)
+- [Query Configs](https://amplitude.github.io/redux-query/docs/query-configs)
+- [Query State](https://amplitude.github.io/redux-query/docs/query-state)
+- [Error State](https://amplitude.github.io/redux-query/docs/error-state)
+- [Network Interfaces](https://amplitude.github.io/redux-query/docs/network-interfaces)
+- [Flow Support](https://amplitude.github.io/redux-query/docs/flow)
 
-[Getting started](https://amplitude.github.io/redux-query/getting-started).
+## Redux API
+
+- [Redux Actions](https://amplitude.github.io/redux-query/docs/redux-actions)
+- [Redux Selectors](https://amplitude.github.io/redux-query/docs/redux-selectors)
+
+## React API
+
+- [useRequest](https://amplitude.github.io/redux-query/docs/use-request)
+- [useMutation](https://amplitude.github.io/redux-query/docs/use-mutation)
+- [connectRequest](https://amplitude.github.io/redux-query/docs/connect-request)
 
 ## Examples
 
-[Simple example](https://amplitude.github.io/redux-query/examples/simple): This example is a very simple web app that has only one feature – you can view and update your username. The purpose of this example is to demonstrate how requests and mutations (including optimistic updates) work with redux-query.
-
-[Hacker News](https://amplitude.github.io/redux-query/examples/hacker-news): This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
+- [Simple example](https://amplitude.github.io/redux-query/examples/simple): This example is a very simple web app that has only one feature – you can view and update your username. The purpose of this example is to demonstrate how requests and mutations (including optimistic updates) work with redux-query.
+- [Hacker News](https://amplitude.github.io/redux-query/examples/hacker-news): This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
 
 ## Packages
 
@@ -34,6 +49,15 @@ redux-query requires a [network interface](https://amplitude.github.io/redux-que
 | `redux-query`                      | [![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)                                           | The core library for managing network requests with Redux.         |
 | `redux-query-react`                | [![npm](https://img.shields.io/npm/v/redux-query-react.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-react)                               | Library of APIs for integrating redux-query with React components. |
 | `redux-query-interface-superagent` | [![npm](https://img.shields.io/npm/v/redux-query-interface-superagent.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-interface-superagent) | The recommended network interface that handles network requests.   |
+
+## Upgrade Guides
+
+- [1.x to 2.x](https://amplitude.github.io/redux-query/docs/v1-to-v2)
+- [2.x to 3.x](https://amplitude.github.io/redux-query/docs/v2-to-v3)
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## About
 

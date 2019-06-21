@@ -1,6 +1,0 @@
-{
-    "rules": {
-        "func-style": 0,
-        "import/no-unresolved": 0
-    }
-}

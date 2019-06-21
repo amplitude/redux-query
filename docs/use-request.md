@@ -3,7 +3,7 @@ id: use-request
 title: useRequest
 ---
 
-`useRequest` is one of the hooks provided by redux-query-react. It's intended to be used for cases when you have a component that has network dependencies (i.e. things need to load from the server in order for this component to render properly). Its behavior is as follows:
+`useRequest` is one of the React hooks provided by redux-query-react. It's intended to be used for cases when you have a component that has network dependencies (i.e. things need to load from the server in order for this component to render properly). Its behavior is as follows:
 
 1. When the associated component first renders, if there is a valid query config provided, then a request will be made (by dispatching a [`requestAsync`](redux-actions#requestasync) action).
 2. Whenever the query config changes and its query key also changes as a result, then a new request will be made. Also, if there is a previously-issued request that is still in-flight, then a [`cancelQuery`](redux-actions#cancelquery) action will be dispatched which will attempt to abort the network request.

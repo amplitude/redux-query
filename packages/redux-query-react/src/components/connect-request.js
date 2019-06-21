@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
-import type { QueryConfig, QueryKey } from 'redux-query/types.flow';
+import type { QueryConfig, QueryKey } from 'redux-query/types.js.flow';
 
 import useConstCallback from '../hooks/use-const-callback';
 

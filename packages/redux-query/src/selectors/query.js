@@ -6,7 +6,7 @@ import type { State as QueriesState } from '../reducers/queries';
 import { getQueryKey } from '../lib/query-key';
 import type { QueryConfig } from '../types';
 
-export const isFinished = (queriesState: QueriesState, queryConfig: QueryConfig): boolean => {
+export const isFinished = (queriesState: QueriesState, queryConfig: ?QueryConfig): boolean => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {
@@ -16,7 +16,7 @@ export const isFinished = (queriesState: QueriesState, queryConfig: QueryConfig)
   return idx(queriesState, _ => _[queryKey].isFinished) || false;
 };
 
-export const isPending = (queriesState: QueriesState, queryConfig: QueryConfig): boolean => {
+export const isPending = (queriesState: QueriesState, queryConfig: ?QueryConfig): boolean => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {
@@ -26,7 +26,7 @@ export const isPending = (queriesState: QueriesState, queryConfig: QueryConfig):
   return idx(queriesState, _ => _[queryKey].isPending) || false;
 };
 
-export const status = (queriesState: QueriesState, queryConfig: QueryConfig): ?number => {
+export const status = (queriesState: QueriesState, queryConfig: ?QueryConfig): ?number => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {
@@ -38,7 +38,7 @@ export const status = (queriesState: QueriesState, queryConfig: QueryConfig): ?n
 
 export const headers = (
   queriesState: QueriesState,
-  queryConfig: QueryConfig,
+  queryConfig: ?QueryConfig,
 ): ?{ [key: string]: any } => {
   const queryKey = getQueryKey(queryConfig);
 
@@ -49,7 +49,7 @@ export const headers = (
   return idx(queriesState, _ => _[queryKey].headers);
 };
 
-export const lastUpdated = (queriesState: QueriesState, queryConfig: QueryConfig): ?number => {
+export const lastUpdated = (queriesState: QueriesState, queryConfig: ?QueryConfig): ?number => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {
@@ -59,7 +59,7 @@ export const lastUpdated = (queriesState: QueriesState, queryConfig: QueryConfig
   return idx(queriesState, _ => _[queryKey].lastUpdated);
 };
 
-export const queryCount = (queriesState: QueriesState, queryConfig: QueryConfig): number => {
+export const queryCount = (queriesState: QueriesState, queryConfig: ?QueryConfig): number => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {

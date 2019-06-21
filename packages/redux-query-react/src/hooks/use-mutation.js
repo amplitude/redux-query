@@ -14,7 +14,7 @@ import type { QueryState } from '../types';
 
 const useMutation = (
   providedQueryConfig: ?QueryConfig,
-): [QueryState, () => Promise<ActionPromiseValue>] => {
+): [QueryState, () => ?Promise<ActionPromiseValue>] => {
   const reduxDispatch = useDispatch();
 
   const isPendingRef = React.useRef(false);
@@ -35,6 +35,10 @@ const useMutation = (
   const queryState = useQueryState(queryConfig);
 
   const mutate = React.useCallback(() => {
+    if (!queryConfig) {
+      return null;
+    }
+
     const promise = reduxDispatch(mutateAsync(queryConfig));
 
     if (promise) {

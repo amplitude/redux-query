@@ -59,7 +59,7 @@ const queries = (state: State = initialState, action: Action): State => {
     case actionTypes.CANCEL_QUERY: {
       const { queryKey } = action;
 
-      if (state[queryKey].isPending) {
+      if (queryKey && state[queryKey].isPending) {
         // Make sure query is actually pending
 
         return {

@@ -324,7 +324,7 @@ export const mutateAsync = ({
 
 type CancelQueryAction = {|
   type: '@@query/CANCEL_QUERY',
-  queryKey: QueryKey,
+  queryKey: ?QueryKey,
 |};
 
 export const cancelQuery = (queryKey: QueryKey): CancelQueryAction => {

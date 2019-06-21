@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
-import type { QueryConfig, QueryKey } from 'redux-query/src/types';
+import type { ActionPromiseValue, QueryConfig, QueryKey } from 'redux-query/src/types';
 
 import useConstCallback from './use-const-callback';
 import useMemoizedQueryConfig from './use-memoized-query-config';
@@ -12,7 +12,9 @@ import useQueryState from './use-query-state';
 
 import type { QueryState } from '../types';
 
-const useRequest = (providedQueryConfig: ?QueryConfig): [QueryState, () => void] => {
+const useRequest = (
+  providedQueryConfig: ?QueryConfig,
+): [QueryState, () => ?Promise<ActionPromiseValue>] => {
   const reduxDispatch = useDispatch();
 
   const isPendingRef = React.useRef(false);
@@ -41,6 +43,8 @@ const useRequest = (providedQueryConfig: ?QueryConfig): [QueryState, () => void]
     if (promise) {
       isPendingRef.current = true;
     }
+
+    return promise;
   });
 
   const dispatchCancelToRedux = useConstCallback((queryKey: QueryKey) => {
@@ -50,7 +54,7 @@ const useRequest = (providedQueryConfig: ?QueryConfig): [QueryState, () => void]
 
   const forceRequest = React.useCallback(() => {
     if (queryConfig) {
-      dispatchRequestToRedux({
+      return dispatchRequestToRedux({
         ...queryConfig,
         force: true,
       });

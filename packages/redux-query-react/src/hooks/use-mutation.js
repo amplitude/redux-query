@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { mutateAsync } from 'redux-query';
 
-import type { QueryConfig } from 'redux-query/src/types';
+import type { ActionPromiseValue, QueryConfig } from 'redux-query/src/types';
 
 import useConstCallback from './use-const-callback';
 import useMemoizedQueryConfig from './use-memoized-query-config';
@@ -12,7 +12,9 @@ import useQueryState from './use-query-state';
 
 import type { QueryState } from '../types';
 
-const useMutation = (providedQueryConfig: ?QueryConfig): [QueryState, () => void] => {
+const useMutation = (
+  providedQueryConfig: ?QueryConfig,
+): [QueryState, () => Promise<ActionPromiseValue>] => {
   const reduxDispatch = useDispatch();
 
   const isPendingRef = React.useRef(false);

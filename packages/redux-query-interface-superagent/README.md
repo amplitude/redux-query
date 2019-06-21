@@ -12,9 +12,8 @@ redux-query-interface-superagent is the recommended [network interface](https://
 
 ## Docs
 
-[View the docs here](https://amplitude.github.io/redux-query).
-
-[Getting started](https://amplitude.github.io/redux-query/getting-started).
+- **[Getting Started and Installation](https://amplitude.github.io/redux-query/docs/getting-started)**
+- [Network Interfaces](https://amplitude.github.io/redux-query/docs/network-interfaces)
 
 ## About
 

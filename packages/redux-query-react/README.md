@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/redux-query-react.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-react)
 
-redux-query-react is a library for making it easy to integrating redux-query with your React components.
+redux-query-react is a library for directly integrating redux-query features with your React components.
 
 ## Why use redux-query?
 
@@ -12,9 +12,13 @@ redux-query-react is a library for making it easy to integrating redux-query wit
 
 ## Docs
 
-[View the docs here](https://amplitude.github.io/redux-query).
+- **[Getting Started and Installation](https://amplitude.github.io/redux-query/docs/getting-started)**
 
-[Getting started](https://amplitude.github.io/redux-query/getting-started).
+## API
+
+- [useRequest](https://amplitude.github.io/redux-query/docs/use-request)
+- [useMutation](https://amplitude.github.io/redux-query/docs/use-mutation)
+- [connectRequest](https://amplitude.github.io/redux-query/docs/connect-request)
 
 ## About
 

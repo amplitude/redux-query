@@ -1,6 +1,6 @@
 {
   "name": "redux-query",
-  "version": "3.0.0-alpha.10",
+  "version": "3.0.0-rc.0",
   "description": "A library for querying and managing network state in Redux applications",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",
@@ -67,5 +67,5 @@
       "^.+\\.js$": "babel-jest"
     }
   },
-  "gitHead": "c9d3c7ee420cd2161c8daeec73d2c55437a1679e"
+  "gitHead": "2c3a764d3885d54c2e33dd0eb61456ec29ebb5e1"
 }

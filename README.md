@@ -48,7 +48,7 @@ This project is published as multiple packages. redux-query, the core library, i
 | [`redux-query-react`](./packages/redux-query-react)                               | [![npm](https://img.shields.io/npm/v/redux-query-react.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-react)                               | Library of APIs for integrating redux-query with React components. |
 | [`redux-query-interface-superagent`](./packages/redux-query-interface-superagent) | [![npm](https://img.shields.io/npm/v/redux-query-interface-superagent.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-interface-superagent) | The recommended network interface that handles network requests.   |
 
-## Upgrade ]guides
+## Upgrade guides
 
 - [1.x to 2.x](https://amplitude.github.io/redux-query/docs/v1-to-v2)
 - [2.x to 3.x](https://amplitude.github.io/redux-query/docs/v2-to-v3)

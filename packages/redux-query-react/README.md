@@ -20,6 +20,11 @@ redux-query-react is a library for directly integrating redux-query features wit
 - [useMutation](https://amplitude.github.io/redux-query/docs/use-mutation)
 - [connectRequest](https://amplitude.github.io/redux-query/docs/connect-request)
 
+## Examples
+
+- [Simple example](https://amplitude.github.io/redux-query/examples/simple): This example is a very simple web app that has only one feature – you can view and update your username. The purpose of this example is to demonstrate how requests and mutations (including optimistic updates) work with redux-query.
+- [Hacker News](https://amplitude.github.io/redux-query/examples/hacker-news): This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
+
 ## About
 
 Brought to you by [Amplitude](https://amplitude.com/engineering). We're hiring!

@@ -15,6 +15,10 @@ redux-query-interface-superagent is the recommended [network interface](https://
 - **[Getting Started and Installation](https://amplitude.github.io/redux-query/docs/getting-started)**
 - [Network Interfaces](https://amplitude.github.io/redux-query/docs/network-interfaces)
 
+## Examples
+
+- [Hacker News](https://amplitude.github.io/redux-query/examples/hacker-news): This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
+
 ## About
 
 Brought to you by [Amplitude](https://amplitude.com/engineering). We're hiring!

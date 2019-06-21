@@ -4,7 +4,7 @@
 [![Travis](https://img.shields.io/travis/amplitude/redux-query.svg?style=flat-square)](https://travis-ci.org/amplitude/redux-query)
 [![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
 
-redux-query is a library for managing network state in Redux applications.
+redux-query is a set of libraries for managing network state in Redux applications. This package is the main library.
 
 ## Why use redux-query?
 
@@ -21,10 +21,15 @@ redux-query is a library for managing network state in Redux applications.
 - [Query State](https://amplitude.github.io/redux-query/docs/query-state)
 - [Error State](https://amplitude.github.io/redux-query/docs/error-state)
 
-## Redux API
+## API
 
 - [Redux Actions](https://amplitude.github.io/redux-query/docs/redux-actions)
 - [Redux Selectors](https://amplitude.github.io/redux-query/docs/redux-selectors)
+
+## Examples
+
+- [Simple example](https://amplitude.github.io/redux-query/examples/simple): This example is a very simple web app that has only one feature – you can view and update your username. The purpose of this example is to demonstrate how requests and mutations (including optimistic updates) work with redux-query.
+- [Hacker News](https://amplitude.github.io/redux-query/examples/hacker-news): This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
 
 ## About
 

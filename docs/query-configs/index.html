@@ -1,0 +1,215 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Query Configs · redux-query</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Query configs are the atomic unit of redux-query. They describe how a query should be translated into a network request and how the response should be handled. Most redux-query APIs use query configs as the primary parameter – they are used for most Redux actions and selectors. With redux-query-react, they&#x27;re also used for all React integration APIs.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Query Configs · redux-query"/><meta property="og:type" content="website"/><meta property="og:url" content="https://amplitude.github.io/redux-query/"/><meta property="og:description" content="&lt;p&gt;Query configs are the atomic unit of redux-query. They describe how a query should be translated into a network request and how the response should be handled. Most redux-query APIs use query configs as the primary parameter – they are used for most Redux actions and selectors. With redux-query-react, they&#x27;re also used for all React integration APIs.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/redux-query/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/redux-query/js/scrollSpy.js"></script><link rel="stylesheet" href="/redux-query/css/main.css"/><script src="/redux-query/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/redux-query/"><h2 class="headerTitle">redux-query</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/redux-query/docs/getting-started" target="_self">Docs</a></li><li class=""><a href="https://github.com/amplitude/redux-query" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Core Concepts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/redux-query/docs/getting-started">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/principles">Principles</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Core Concepts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/redux-query/docs/entities">Entities</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/requests-vs-mutations">Requests vs. Mutations</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/redux-query/docs/query-configs">Query Configs</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/query-state">Query State</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/error-state">Error State</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/network-interfaces">Network Interfaces</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Redux API</h3><ul class=""><li class="navListItem"><a class="navItem" href="/redux-query/docs/redux-actions">Actions</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/redux-selectors">Selectors</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">React API</h3><ul class=""><li class="navListItem"><a class="navItem" href="/redux-query/docs/use-request">useRequest</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/use-mutation">useMutation</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/connect-request">connectRequest</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Examples</h3><ul class=""><li class="navListItem"><a class="navItem" href="/redux-query/docs/examples/simple">Simple Example</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/examples/hacker-news">Hacker News</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Upgrade Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/redux-query/docs/upgrade-guides/v1-to-v2">2.x Upgrade Guide</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/upgrade-guides/v2-to-v3">3.x Upgrade Guide</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Other</h3><ul class=""><li class="navListItem"><a class="navItem" href="/redux-query/docs/flow">Flow Support</a></li><li class="navListItem"><a class="navItem" href="/redux-query/docs/contributing">Contributing</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Query Configs</h1></header><article><div><span><p>Query configs are the atomic unit of redux-query. They describe how a query should be translated into a network request and how the response should be handled. Most redux-query APIs use query configs as the primary parameter – they are used for most Redux actions and selectors. With redux-query-react, they're also used for all React integration APIs.</p>
+<p>Query configs usually are defined to update at least one entity in the <a href="entities">entities</a> state. But it's possible that they don't update any entities, or update more than one.</p>
+<h2><a class="anchor" aria-hidden="true" id="query-keys"></a><a href="#query-keys" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Query keys</h2>
+<p>A query key is a unique identifier string generated for a given query config. You can set an explicit query key by providing a <code>queryKey</code> field in the query config, or you can rely on the default behavior where redux-query will serialize the <code>url</code> and <code>body</code> fields.</p>
+<p><strong>Important</strong>: redux-query and redux-query-react make assumptions about query configs and their query keys. Most logic will assume that query configs with equal query keys are themselves equal.</p>
+<h2><a class="anchor" aria-hidden="true" id="transform-and-update"></a><a href="#transform-and-update" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Transform and update</h2>
+<p>With a successful query, there are two staged in which a response is transformed before storing the result in the entities state: transform and update.</p>
+<p>Transform is the first step, where you can massage the data to get it ready for the update step. The transform step might involve normalizing the response data or simply transforming it to fit your entity schema.</p>
+<p>Update is the final step, where you reconcile the new data with the previously stored entities state.</p>
+<h2><a class="anchor" aria-hidden="true" id="optimistic-updates"></a><a href="#optimistic-updates" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Optimistic updates</h2>
+<p>Optimistic updates are handled similarly to updates, but they obviously don't have the new data, just the previous.</p>
+<p>When optimistic updates fail, you can specifiy rollback behavior to undo that optimistic update. If you don't specify a rollback behaivor, redux-query will simply revert the entity state to the value that was saved before the optimistic update took place. This is only a concern if you are dealing with an entity that is a collection (like an array of map) that could be affected by multiple simultaneous mutations.</p>
+<h2><a class="anchor" aria-hidden="true" id="basic-example"></a><a href="#basic-example" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Basic example</h2>
+<pre><code class="hljs css language-javascript"><span class="hljs-comment">// After making a request with this query config and receiving a successful</span>
+<span class="hljs-comment">// response, the "echoedMessage" entity will be "hello"</span>
+<span class="hljs-keyword">const</span> helloWorld = {
+  <span class="hljs-attr">url</span>: <span class="hljs-string">'/api/echo'</span>,
+  <span class="hljs-attr">body</span>: {
+    <span class="hljs-attr">message</span>: <span class="hljs-string">'hello'</span>,
+  },
+  <span class="hljs-attr">transform</span>: <span class="hljs-function"><span class="hljs-params">responseBody</span> =&gt;</span> {
+    <span class="hljs-comment">// The server responded with a JSON body: { "data": "hello" }</span>
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">echoedMessage</span>: responseBody.data,
+    };
+  },
+  <span class="hljs-attr">update</span>: {
+    <span class="hljs-attr">echoedMessage</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> newValue,
+  },
+};
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="real-world-example"></a><a href="#real-world-example" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Real-world example</h2>
+<pre><code class="hljs css language-javascript"><span class="hljs-comment">// Query config for retrieving current user's playlists</span>
+<span class="hljs-keyword">const</span> playlists = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({
+  <span class="hljs-attr">url</span>: <span class="hljs-string">'/api/playlists'</span>,
+  <span class="hljs-attr">transform</span>: <span class="hljs-function"><span class="hljs-params">responseBody</span> =&gt;</span> {
+    <span class="hljs-keyword">const</span> { data } = responseBody;
+
+    <span class="hljs-comment">// Server returned key-value pair of playlists by id</span>
+    <span class="hljs-keyword">const</span> { playlists } = data;
+    <span class="hljs-keyword">const</span> playlistIds = playlists.map(<span class="hljs-function"><span class="hljs-params">playlist</span> =&gt;</span> playlist.id);
+
+    <span class="hljs-keyword">return</span> {
+      playlistIds,
+      <span class="hljs-attr">playlistsById</span>: playlists,
+    };
+  },
+  <span class="hljs-attr">update</span>: {
+    <span class="hljs-attr">playlistIds</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> {
+      <span class="hljs-comment">// We fetched all the playlists, so can disregard previous value</span>
+      <span class="hljs-keyword">return</span> newValue;
+    },
+    <span class="hljs-attr">playlistsById</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> {
+      <span class="hljs-keyword">return</span> {
+        ...oldValue,
+        ...newValue,
+      };
+    },
+  },
+});
+
+<span class="hljs-comment">// Query config for making a new playlist</span>
+<span class="hljs-keyword">const</span> makePlaylist = <span class="hljs-function"><span class="hljs-params">name</span> =&gt;</span> ({
+  <span class="hljs-attr">url</span>: <span class="hljs-string">'/api/make-playlist'</span>,
+  <span class="hljs-attr">body</span>: {
+    name,
+  },
+  <span class="hljs-attr">transform</span>: <span class="hljs-function"><span class="hljs-params">responseBody</span> =&gt;</span> {
+    <span class="hljs-keyword">const</span> { data } = responseBody;
+
+    <span class="hljs-comment">// Server returned a single playlist model object</span>
+    <span class="hljs-comment">// Transform this data before reconciling with previous-stored entity data</span>
+    <span class="hljs-keyword">const</span> { playlist } = data;
+    <span class="hljs-keyword">const</span> playlistIds = [playlist.id];
+
+    <span class="hljs-keyword">return</span> {
+      playlistIds,
+      <span class="hljs-attr">playlistsById</span>: {
+        [playlist.id]: playlist,
+      },
+    };
+  },
+  <span class="hljs-attr">update</span>: {
+    <span class="hljs-attr">playlistIds</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> {
+      <span class="hljs-comment">// Assume new playlists get added to the end of the list</span>
+      <span class="hljs-keyword">return</span> [...oldValue, newValue];
+    },
+    <span class="hljs-attr">playlistsById</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> ({
+      ...oldValue,
+      ...newValue,
+    }),
+  },
+});
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="api"></a><a href="#api" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>API</h2>
+<h3><a class="anchor" aria-hidden="true" id="request-query-config-fields"></a><a href="#request-query-config-fields" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Request query config fields</h3>
+<table>
+<thead>
+<tr><th style="text-align:left">Name</th><th style="text-align:left">Type</th><th style="text-align:center">Required?</th><th style="text-align:left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left"><code>url</code></td><td style="text-align:left">string</td><td style="text-align:center">yes</td><td style="text-align:left">The URL for the HTTP request.</td></tr>
+<tr><td style="text-align:left"><code>transform</code></td><td style="text-align:left">function</td><td style="text-align:center"></td><td style="text-align:left">A function that transforms the response data to an entities object where keys are entity IDs and values are entity data. Can be used to normalize data.</td></tr>
+<tr><td style="text-align:left"><code>update</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">An object where keys are entity IDs and values are &quot;update functions&quot; (see below).</td></tr>
+<tr><td style="text-align:left"><code>body</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">The request body. For GETs, this object is stringified and appended to the URL as query params.<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></td></tr>
+<tr><td style="text-align:left"><code>force</code></td><td style="text-align:left">boolean</td><td style="text-align:center"></td><td style="text-align:left">A flag to indicate that the request should be performed even if a previous query with the same query key succeeded.</td></tr>
+<tr><td style="text-align:left"><code>queryKey</code></td><td style="text-align:left">string</td><td style="text-align:center"></td><td style="text-align:left">The identifier used to identify the query metadata in the <code>queries</code> reducer. If unprovided, the <code>url</code> and <code>body</code> fields are serialized to generate the query key.</td></tr>
+<tr><td style="text-align:left"><code>meta</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">Various metadata for the query. Can be used to update other reducers when queries succeed or fail.</td></tr>
+<tr><td style="text-align:left"><code>options</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">Options for the request. Set <code>options.method</code> to change the HTTP method, <code>options.headers</code> to set any headers and <code>options.credentials = 'include'</code> for CORS.</td></tr>
+</tbody>
+</table>
+<h3><a class="anchor" aria-hidden="true" id="mutation-query-config-fields"></a><a href="#mutation-query-config-fields" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Mutation query config fields</h3>
+<table>
+<thead>
+<tr><th style="text-align:left">Name</th><th style="text-align:left">Type</th><th style="text-align:center">Required?</th><th style="text-align:left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left"><code>url</code></td><td style="text-align:left">string</td><td style="text-align:center">yes</td><td style="text-align:left">The URL for the HTTP request.</td></tr>
+<tr><td style="text-align:left"><code>transform</code></td><td style="text-align:left">function</td><td style="text-align:center"></td><td style="text-align:left">A function that transforms the response data to an entities object where keys are entity IDs and values are entity data. Can be used to normalize data.</td></tr>
+<tr><td style="text-align:left"><code>update</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">An object where keys are entity IDs and values are &quot;update functions&quot; (see below).</td></tr>
+<tr><td style="text-align:left"><code>optimisticUpdate</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">An object where keys are entity IDs and values are &quot;optimisticUpdate functions&quot; (see below). Used to update entities immediately when the mutation starts.</td></tr>
+<tr><td style="text-align:left"><code>rollback</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">An object where keys are entity IDs and values are &quot;rollback functions&quot; (see below). Used to reverse the effects of <code>optimisticUpdate</code> when the mutation fails. If not provided, the entity will simply be reverted to its value before the <code>optimisticUpdate</code> was performed.</td></tr>
+<tr><td style="text-align:left"><code>body</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">The HTTP request body. For GETs, this object is stringified and appended to the URL as query params.<sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1]</a></sup></td></tr>
+<tr><td style="text-align:left"><code>queryKey</code></td><td style="text-align:left">string</td><td style="text-align:center"></td><td style="text-align:left">The identifier used to identify the query metadata in the <code>queries</code> reducer. If unprovided, the <code>url</code> and <code>body</code> fields are serialized to generate the query key.</td></tr>
+<tr><td style="text-align:left"><code>meta</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">Various metadata for the query. Can be used to update other reducers when queries succeed or fail.</td></tr>
+<tr><td style="text-align:left"><code>options</code></td><td style="text-align:left">object</td><td style="text-align:center"></td><td style="text-align:left">Options for the request. Set <code>options.method</code> to change the HTTP method, <code>options.headers</code> to set any headers and <code>options.credentials = 'include'</code> for CORS.</td></tr>
+</tbody>
+</table>
+<h3><a class="anchor" aria-hidden="true" id="transform-functions"></a><a href="#transform-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>transform functions</h3>
+<p><code>transform</code> functions let you process and normalize response data before it is passed to the <code>update</code> step. They have the following signature:</p>
+<pre><code class="hljs css language-javascript">(responseJson: ?<span class="hljs-built_in">Object</span>, <span class="hljs-attr">responseText</span>: ?string) =&gt; { [key: string]: any }
+</code></pre>
+<p>If your data is normalized on the server, you may not need to use this function.</p>
+<h3><a class="anchor" aria-hidden="true" id="update-functions"></a><a href="#update-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>update functions</h3>
+<p><code>update</code> functions are responsible for reconciling response data with the existing entity state for the given entity ID. They have the following signature:</p>
+<pre><code class="hljs css language-javascript">(prevValue: any, <span class="hljs-attr">transformedValue</span>: any) =&gt; any;
+</code></pre>
+<p>The <code>prevValue</code> is the whatever value is selected from the <code>entities</code> reducer for the respective entity ID. The returned value from this function will become the new value for the entity ID in the <code>entities</code> reducer.</p>
+<h3><a class="anchor" aria-hidden="true" id="optimisticupdate-functions"></a><a href="#optimisticupdate-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>optimisticUpdate functions</h3>
+<p><code>optimisticUpdate</code> functions are just like update functions except they only pass the <code>prevValue</code>:</p>
+<pre><code class="hljs css language-javascript">(prevValue: any) =&gt; any;
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="rollback-functions"></a><a href="#rollback-functions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>rollback functions</h3>
+<p><code>rollback</code> functions are used to reverse the effect of <code>optimisticUpdate</code>s when the mutation fails. They are provided two parameters: the state of the entity before the optimistic update and the current state of the entity:</p>
+<pre><code class="hljs css language-javascript">(initialValue: any, <span class="hljs-attr">currentValue</span>: any) =&gt; any;
+</code></pre>
+<p>Specifying <code>rollback</code> functions are not required. However, it is recommended for entities that are partially updated (e.g. an object collection of items keyed by IDs). The default <code>rollback</code> behavior is equivalent to the following:</p>
+<pre><code class="hljs css language-javascript">(initialValue, currentValue) =&gt; initialValue;
+</code></pre>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1"  class="footnote-item"><p>This behavior is only guaranteed when using the superagent network interface, which is the network interface used if you use the default middleware. <a href="#fnref1" class="footnote-backref">↩</a> <a href="#fnref1:1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/redux-query/docs/requests-vs-mutations"><span class="arrow-prev">← </span><span>Requests vs. Mutations</span></a><a class="docs-next button" href="/redux-query/docs/query-state"><span>Query State</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#query-keys">Query keys</a></li><li><a href="#transform-and-update">Transform and update</a></li><li><a href="#optimistic-updates">Optimistic updates</a></li><li><a href="#basic-example">Basic example</a></li><li><a href="#real-world-example">Real-world example</a></li><li><a href="#api">API</a><ul class="toc-headings"><li><a href="#request-query-config-fields">Request query config fields</a></li><li><a href="#mutation-query-config-fields">Mutation query config fields</a></li><li><a href="#transform-functions">transform functions</a></li><li><a href="#update-functions">update functions</a></li><li><a href="#optimisticupdate-functions">optimisticUpdate functions</a></li><li><a href="#rollback-functions">rollback functions</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/redux-query/" class="nav-home"></a><div><h5>Docs</h5><a href="/redux-query/docs/en/getting-started.html">Getting Started</a><a href="/redux-query/docs/en/principles.html">Principles</a></div><div><h5>More</h5><a href="https://github.com/amplitude/redux-query">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/amplitude/redux-query/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Amplitude</section></footer></div></body></html>

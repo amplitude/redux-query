@@ -17,8 +17,8 @@ export const updateEntities = (
 };
 
 export const optimisticUpdateEntities = (
-  optimisticUpdate: OptimisticUpdate,
-  entities: Entities,
+  optimisticUpdate: OptimisticUpdate = {},
+  entities: Entities = {},
 ): Entities => {
   return Object.keys(optimisticUpdate).reduce((accum, key: string) => {
     accum[key] = optimisticUpdate[key](entities[key]);
@@ -29,8 +29,8 @@ export const optimisticUpdateEntities = (
 
 export const rollbackEntities = (
   rollback: Rollback = {},
-  initialEntities: Entities,
-  entities: Entities,
+  initialEntities: Entities = {},
+  entities: Entities = {},
 ): Entities => {
   return Object.keys(initialEntities).reduce((accum, key: string) => {
     if (rollback[key]) {

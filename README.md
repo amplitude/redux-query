@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/amplitude/redux-query.svg?style=flat-square)](https://travis-ci.org/amplitude/redux-query)
 [![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
 
-redux-query is a library for managing network state in Redux applications.
+redux-query is a set of libraries for managing network state in Redux applications.
 
 ## Why use redux-query?
 
@@ -25,11 +25,15 @@ redux-query is a library for managing network state in Redux applications.
 
 ## Packages
 
-| Name                               | Version                                                                                                                                                       | Description                                                             |
-| :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------- |
-| `redux-query`                      | [![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)                                           | The core library for managing network requests with Redux.              |
-| `redux-query-react`                | [![npm](https://img.shields.io/npm/v/redux-query-react.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-react)                               | Library of APIs for integrating redux-query with your React components. |
-| `redux-query-interface-superagent` | [![npm](https://img.shields.io/npm/v/redux-query-interface-superagent.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-interface-superagent) | The recommended network interface that handles network requests.        |
+This project has multiple packages. redux-query, the core library, is the only required package. redux-query-react is recommended if you are using React in your application.
+
+redux-query requires a [network interface](https://amplitude.github.io/redux-query/network-interfaces), that handles the implementation of network requests. You must either use the recommended interface, redux-query-interface-superagent, or supply your own.
+
+| Name                               | Version                                                                                                                                                       | Description                                                        |
+| :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------- |
+| `redux-query`                      | [![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)                                           | The core library for managing network requests with Redux.         |
+| `redux-query-react`                | [![npm](https://img.shields.io/npm/v/redux-query-react.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-react)                               | Library of APIs for integrating redux-query with React components. |
+| `redux-query-interface-superagent` | [![npm](https://img.shields.io/npm/v/redux-query-interface-superagent.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-interface-superagent) | The recommended network interface that handles network requests.   |
 
 ## About
 

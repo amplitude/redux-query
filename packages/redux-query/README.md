@@ -4,7 +4,7 @@
 [![Travis](https://img.shields.io/travis/amplitude/redux-query.svg?style=flat-square)](https://travis-ci.org/amplitude/redux-query)
 [![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
 
-redux-query is a set of libraries for managing network state in Redux applications. This package is the main library.
+redux-query is a library for managing network state in Redux applications.
 
 ## Why use redux-query?
 

@@ -1,7 +1,7 @@
 // @flow
 
 import type { HttpMethod } from './constants/http-methods';
-
+import type { PublicAction } from './actions';
 import type { State as QueriesState } from './reducers/queries';
 import type { State as EntitiesState } from './reducers/entities';
 
@@ -98,3 +98,5 @@ export type ActionPromiseValue = {|
   text: ?ResponseText,
   transformed?: Entities,
 |};
+
+export type Action = PublicAction;

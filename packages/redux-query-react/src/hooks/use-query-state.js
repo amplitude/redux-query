@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { querySelectors } from 'redux-query';
-import type { QueryConfig } from 'redux-query/src/types';
+import type { QueryConfig } from 'redux-query/types.flow';
 
 import ReduxQueryContext from '../context';
 import type { QueryState } from '../types';

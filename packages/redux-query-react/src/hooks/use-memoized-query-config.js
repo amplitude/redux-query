@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { getQueryKey } from 'redux-query';
-import type { QueryConfig } from 'redux-query/src/types';
+import type { QueryConfig } from 'redux-query/types.flow';
 
 const identity = x => x;
 

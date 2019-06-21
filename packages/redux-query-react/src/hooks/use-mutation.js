@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { mutateAsync } from 'redux-query';
 
-import type { ActionPromiseValue, QueryConfig } from 'redux-query/src/types';
+import type { ActionPromiseValue, QueryConfig } from 'redux-query/types.flow';
 
 import useConstCallback from './use-const-callback';
 import useMemoizedQueryConfig from './use-memoized-query-config';

@@ -1,10 +1,8 @@
 # redux-query
 
 [![npm](https://img.shields.io/npm/v/redux-query.svg?style=flat-square)](https://www.npmjs.com/package/redux-query)
-[![Travis](https://img.shields.io/travis/amplitude/redux-query.svg?style=flat-square)](https://travis-ci.org/amplitude/redux-query)
-[![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
 
-redux-query is a library for managing network state in Redux applications.
+Manage your network state in Redux.
 
 ## Why use redux-query?
 
@@ -20,11 +18,19 @@ redux-query is a library for managing network state in Redux applications.
 - [Query Configs](https://amplitude.github.io/redux-query/docs/query-configs)
 - [Query State](https://amplitude.github.io/redux-query/docs/query-state)
 - [Error State](https://amplitude.github.io/redux-query/docs/error-state)
+- [Network Interfaces](https://amplitude.github.io/redux-query/docs/network-interfaces)
+- [Flow Support](https://amplitude.github.io/redux-query/docs/flow)
 
-## API
+## Redux API
 
 - [Redux Actions](https://amplitude.github.io/redux-query/docs/redux-actions)
 - [Redux Selectors](https://amplitude.github.io/redux-query/docs/redux-selectors)
+
+## React API
+
+- [useRequest](https://amplitude.github.io/redux-query/docs/use-request)
+- [useMutation](https://amplitude.github.io/redux-query/docs/use-mutation)
+- [connectRequest](https://amplitude.github.io/redux-query/docs/connect-request)
 
 ## Examples
 

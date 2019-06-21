@@ -3,7 +3,7 @@
 [![Travis](https://img.shields.io/travis/amplitude/redux-query.svg?style=flat-square)](https://travis-ci.org/amplitude/redux-query)
 [![Codecov](https://img.shields.io/codecov/c/github/amplitude/redux-query.svg?style=flat-square)](https://codecov.io/gh/amplitude/redux-query)
 
-This project is a set of libraries for managing network state in Redux applications.
+Manage your network state in Redux.
 
 ## Why use redux-query?
 

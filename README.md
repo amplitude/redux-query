@@ -50,8 +50,8 @@ This project is published as multiple packages. redux-query, the core library, i
 
 ## Upgrade guides
 
-- [1.x to 2.x](https://amplitude.github.io/redux-query/docs/v1-to-v2)
-- [2.x to 3.x](https://amplitude.github.io/redux-query/docs/v2-to-v3)
+- [1.x to 2.x](https://amplitude.github.io/redux-query/docs/upgrade-guides/v1-to-v2)
+- [2.x to 3.x](https://amplitude.github.io/redux-query/docs/upgrade-guides/v2-to-v3)
 
 ## Contributing
 

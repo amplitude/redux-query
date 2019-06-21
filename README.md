@@ -13,7 +13,7 @@ redux-query is a set of libraries for managing network state in Redux applicatio
 
 ## Docs
 
-- [Getting Started](https://amplitude.github.io/redux-query/docs/getting-started)
+- **[Getting Started and Installation](https://amplitude.github.io/redux-query/docs/getting-started)**
 - [Entities](https://amplitude.github.io/redux-query/docs/entities)
 - [Requests vs. Mutations](https://amplitude.github.io/redux-query/docs/requests-vs-mutations)
 - [Query Configs](https://amplitude.github.io/redux-query/docs/query-configs)
@@ -42,7 +42,7 @@ redux-query is a set of libraries for managing network state in Redux applicatio
 
 This project has multiple packages. redux-query, the core library, is the only required package. redux-query-react is recommended if you are using React in your application.
 
-redux-query requires a [network interface](https://amplitude.github.io/redux-query/network-interfaces), that handles the implementation of network requests. You must either use the recommended interface, redux-query-interface-superagent, or supply your own.
+redux-query requires a [network interface](https://amplitude.github.io/redux-query/network-interfaces) which handles the implementation of network requests. You must either use the recommended interface, redux-query-interface-superagent, or supply your own.
 
 | Name                               | Version                                                                                                                                                       | Description                                                        |
 | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------- |

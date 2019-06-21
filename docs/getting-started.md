@@ -23,7 +23,7 @@ or yarn:
 yarn add redux-query redux-query-react redux-query-interface-superagent
 ```
 
-Note: redux-query-interface-superagent is the recommended default network interface. If you'd rather use a different network request library, you don't need to install redux-query-interface-superagent. Instead, you will need to build your own network interface.
+Note: redux-query-interface-superagent is the recommended default [network interface](network-interfaces). If you'd rather use a different network request library, you don't need to install redux-query-interface-superagent. Instead, you will need to build your own network interface.
 
 ## Install without React support
 

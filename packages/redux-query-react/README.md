@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/redux-query-react.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-react)
 
-redux-query-react is a library for directly integrating redux-query features with your React components.
+redux-query-react is a library for directly integrating [redux-query](https://amplitude.github.io/redux-query/) features with your React components.
 
 ## Why use redux-query?
 

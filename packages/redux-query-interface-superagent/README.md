@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/redux-query-interface-superagent.svg?style=flat-square)](https://www.npmjs.com/package/redux-query-interface-superagent)
 
-redux-query-interface-superagent is the recommended [network interface](https://amplitude.github.io/redux-query/network-interfaces) for redux-query.
+redux-query-interface-superagent is the recommended [network interface](https://amplitude.github.io/redux-query/network-interfaces) for [redux-query](https://amplitude.github.io/redux-query/).
 
 ## Why use redux-query?
 

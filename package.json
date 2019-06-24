@@ -2,7 +2,7 @@
   "name": "redux-query-packages",
   "private": true,
   "scripts": {
-    "build": "bin/build.sh",
+    "build": "lerna bootstrap",
     "coverage": "codecov",
     "test": "jest --coverage --no-cache",
     "flow-check": "flow check"

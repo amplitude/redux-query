@@ -113,35 +113,24 @@ const ChangeUsernameForm = props => {
 
   useRequest(nameQueryConfigs.nameRequest());
 
-  const [queryState, changeName] = useMutation(
-    nameQueryConfigs.changeNameMutation(inputValue, false),
+  const [queryState, changeName] = useMutation(optimistic =>
+    nameQueryConfigs.changeNameMutation(inputValue, optimistic),
   );
 
-  const [optimisticQueryState, changeNameOptimistically] = useMutation(
-    nameQueryConfigs.changeNameMutation(inputValue, true),
+  const submit = React.useCallback(
+    optimistic => {
+      changeName(optimistic).then(result => {
+        if (result !== 200) {
+          setError(result.text);
+        }
+
+        setStatus(result.status);
+      });
+    },
+    [changeName],
   );
 
-  const submit = React.useCallback(() => {
-    changeName().then(result => {
-      if (result !== 200) {
-        setError(result.text);
-      }
-
-      setStatus(result.status);
-    });
-  }, [changeName]);
-
-  const submitOptimistically = React.useCallback(() => {
-    changeNameOptimistically().then(result => {
-      if (result !== 200) {
-        setError(result.text);
-      }
-
-      setStatus(result.status);
-    });
-  }, [changeNameOptimistically]);
-
-  const isPending = queryState.isPending || optimisticQueryState.isPending;
+  const isPending = queryState.isPending;
 
   return (
     <div>
@@ -163,11 +152,11 @@ const ChangeUsernameForm = props => {
             setInputValue(e.target.value);
           }}
         />
-        <input type="submit" value="Submit" onClick={submit} disabled={isPending} />
+        <input type="submit" value="Submit" onClick={() => submit(false)} disabled={isPending} />
         <input
           type="submit"
           value="I'm Feeling Optimistic"
-          onClick={submitOptimistically}
+          onClick={() => submit(true)}
           disabled={isPending}
         />
         {isPending ? (

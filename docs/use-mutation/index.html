@@ -80,10 +80,10 @@
     };
   },
   <span class="hljs-attr">update</span>: {
-    <span class="hljs-attr">commentsById</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> {
+    <span class="hljs-attr">commentsById</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> ({
       ...oldValue,
       ...newValue,
-    }
+    }),
   },
 });
 
@@ -103,8 +103,9 @@
 ];
 
 <span class="hljs-keyword">const</span> Comment = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
-  <span class="hljs-keyword">const</span> [{ isPending }, react] = <span class="hljs-function"><span class="hljs-params">reactionType</span> =&gt;</span>
-    useMutation(reactMutation(props.comment.id, reactionType));
+  <span class="hljs-keyword">const</span> [{ isPending }, react] = useMutation(<span class="hljs-function"><span class="hljs-params">reactionType</span> =&gt;</span>
+    reactMutation(props.comment.id, reactionType),
+  );
 
   <span class="hljs-keyword">return</span> (
     <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>

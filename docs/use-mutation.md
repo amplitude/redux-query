@@ -33,10 +33,10 @@ const reactMutation = (commentId, reactionType) => ({
     };
   },
   update: {
-    commentsById: (oldValue, newValue) => {
+    commentsById: (oldValue, newValue) => ({
       ...oldValue,
       ...newValue,
-    }
+    }),
   },
 });
 
@@ -56,8 +56,9 @@ const reactions = [
 ];
 
 const Comment = () => {
-  const [{ isPending }, react] = reactionType =>
-    useMutation(reactMutation(props.comment.id, reactionType));
+  const [{ isPending }, react] = useMutation(reactionType =>
+    reactMutation(props.comment.id, reactionType),
+  );
 
   return (
     <div>

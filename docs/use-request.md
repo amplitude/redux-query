@@ -11,6 +11,8 @@ title: useRequest
 
 ## API
 
+`useRequest` takes a single parameter – a query config. If you pass null, undefined, or an invalid query config as the parameter to `useRequest`, the value will be ignored.
+
 `useRequest` returns a tuple-like array, where the first value in the tuple is an object representing the [query state](query-state) for the request. The second value in the tuple is a callback to re-issue the request, even if a previous request with the same query key has already been made and resulted in a successful server response.
 
 ## Example

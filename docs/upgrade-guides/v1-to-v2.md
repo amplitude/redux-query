@@ -1,0 +1,106 @@
+---
+id: v1-to-v2
+title: 2.x Upgrade Guide
+---
+
+## Important things to know
+
+### superagent has been updated to 3.x
+
+Any code that relied on the older version may need to be updated.
+
+### Mutations have a subtly different behavior when updating entities
+
+Motivation:
+
+With redux-query 1.x, if you have simultaneous mutations that update the same entity, you could end up in with one mutation completely overwriting the changes of the other one. This is because the entities state for the update is captured before the network request starts, as opposed to when it finishes.
+
+Solution:
+
+With redux-query 2.x, mutations behave more like requests when it comes to how the entities state is used when updating. `transform`s and `update`s will always be passed the latest entities state.
+
+Breaking changes:
+
+- Logic depending on the previous behavior will break and need to be updated.
+- The returned value to the promise on mutation failures no longer include the "entities" field.
+
+### New rollback behavior for optimistically-updated entities
+
+Motivation:
+
+With redux-query 1.x, mutation failures blindly revert the entire entities state. This shouldn't have much impact for apps that don't have many mutations going on simultaneously, but it's obviously a suboptimal and dangerous behavior.
+
+Solution:
+
+Rollbacks are now handled on a per-entity basis. By default we'll simply revert all optimistically-updated entities back to their previous value before the optimistic update. All entities without an optimistic update handler will be unaffected.
+
+Additionally, we now offer a custom hook in query configs to enable manual control of the rollback logic. This will enable you to safely support simultaneous mutations for the same entity when using optimistic update. It'll be important that apps consider providing a rollback handler whenever an entity is partially updated by multiple, possibly-simultaneous mutations.
+
+See the README for more information on the `rollback` field.
+
+### New optional reducer for tracking failed query response data
+
+redux-query 2 exports a new reducer `errorsReducer` and accompanying set of selectors, `errorSelectors`. See the README for more information.
+
+## Other actions to take
+
+### Update all references to `request` field in actions and queries state
+
+The `request` fields in the start actions and stored in the queries reducer state has been removed in favor of a new field called `networkHandler`.
+
+`networkHandler` is the returned value from the network interface, not the underlying superagent instance. When using redux-query in its default mode with the superagent network interface, you can get the superagent instance with `networkHandler.instance`.
+
+### Replace `removeEntity` and `removeEntities` with `updateEntities`
+
+`REMOVE_ENTITY` and `REMOVE_ENTITIES` actions have been replaced with a more generic UPDATE_ENTITIES action.
+
+For example, the following 1.x redux-query usage:
+
+```javascript
+import { removeEntity } from 'redux-query';
+
+dispatch(removeEntity(['dashboardsById', '78dhr8v']));
+```
+
+becomes:
+
+```javascript
+import omit from 'lodash.omit';
+import { updateEntities } from 'redux-query';
+
+dispatch(
+  updateEntities({
+    dashboards: value => omit(value, '78dhr8v'),
+  }),
+);
+```
+
+### Update all references to `reconcileQueryKey` and `getQueryKey`
+
+`reconcileQueryKey` and `getQueryKey` have been combined into a single function: `getQueryKey`. This function no longer accepts separate `url` and `body` parameters – instead you must pass a query config (or query-config-like object).
+
+For example, the following 1.x redux-query usage:
+
+```javascript
+import { getQueryKey } from 'redux-query';
+const queryKey = getQueryKey(query.url, query.body);
+```
+
+becomes:
+
+```javascript
+import { getQueryKey } from 'redux-query';
+const queryKey = getQueryKey(query);
+```
+
+### Update all references to `querySelectors`
+
+All selectors in `querySelectors` have changed their signatures. The queries state is now the first argument, with a query config (or query-config-like object) as the second parameter.
+
+### Replace imports of `actions`, as it's no longer exported
+
+If you were importing `actions` from redux-query, you should change to import the actions directly. The only supported actions that are exported are: `cancelQuery`, `mutateAsync`, `requestAsync`, and `updateEntities`.
+
+### Rename "adapters" to "network interfaces"
+
+This is not a breaking change, but if you use `queryMiddlewareAdvanced` – I recommend renaming any references to "adapters" to prevent future confusion.

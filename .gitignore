@@ -1,5 +1,6 @@
 *.lcov
 .nyc_output
+*.log
 coverage
 dist
 node_modules

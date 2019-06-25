@@ -16,6 +16,7 @@ import httpMethods from '../constants/http-methods';
 import * as statusCodes from '../constants/status-codes';
 import { getQueryKey } from '../lib/query-key';
 import { updateEntities, optimisticUpdateEntities, rollbackEntities } from '../lib/update';
+import { pick } from '../lib/object';
 
 import type { Action, PublicAction } from '../actions';
 import type {
@@ -78,20 +79,9 @@ const getPendingQueries = (queries: QueriesState): QueriesState => {
   return pendingQueries;
 };
 
-const pick = (source: { [key: string]: any }, keys: Array<string>): { [key: string]: any } => {
-  const picked = {};
-
-  for (const key of keys) {
-    if (source.hasOwnProperty(key)) {
-      picked[key] = source[key];
-    }
-  }
-
-  return picked;
+const isStatusOk = (status: ?Status): boolean => {
+  return status !== null && status !== undefined && status >= 200 && status < 300;
 };
-
-const isStatusOk = (status: ?Status): boolean =>
-  status !== null && status !== undefined && status >= 200 && status < 300;
 
 const defaultTransform: Transform = (body: ?ResponseBody) => body || {};
 

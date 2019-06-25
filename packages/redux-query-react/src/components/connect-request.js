@@ -20,7 +20,7 @@ const normalizeToArray = (maybe: QueryConfig | Array<QueryConfig>): Array<QueryC
   return (Array.isArray(maybe) ? maybe : [maybe]).filter(Boolean);
 };
 
-const difference = <T>(a: Array<T>, b: Array<T>): Array<T> => {
+const difference = <T>(a: $ReadOnlyArray<T>, b: $ReadOnlyArray<T>): Array<T> => {
   const bSet = new Set(b);
 
   return a.filter(x => !bSet.has(x));

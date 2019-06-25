@@ -41,7 +41,7 @@ describe('useMemoizedQueryConfig', () => {
     const { result, rerender } = renderHook(() => useMemoizedQueryConfig(queryConfig, transform));
     const returnValue1 = result.current;
 
-    // Rerending but no props chnaged and the query config is the exact same, so the return value
+    // Rerending but no props changed and the query config is the exact same, so the return value
     // better be memoized (reference equality memoization)
 
     rerender();

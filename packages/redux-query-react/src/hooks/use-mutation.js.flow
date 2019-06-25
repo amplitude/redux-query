@@ -4,6 +4,11 @@ import type { ActionPromiseValue, QueryConfig } from 'redux-query/types.js.flow'
 
 import type { QueryState } from '../types';
 
+// This flow type declaration enables proper typechecking on each of the arguments. So this fails:
+// ```
+// const [, mutate] = useMutation((myBool: boolean) => makeMyQueryConfig(myBool));
+// mutate('a atring');
+// ``
 declare export default function useMutation<T: $ReadOnlyArray<mixed>>(
   callback: (...args: T) => QueryConfig,
 ): [QueryState, (...args: T) => Promise<ActionPromiseValue>];

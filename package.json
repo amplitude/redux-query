@@ -5,7 +5,7 @@
     "build": "lerna bootstrap",
     "coverage": "codecov",
     "test": "jest --coverage --no-cache",
-    "flow-check": "flow check"
+    "flow-check": "flow check --max-warnings=0"
   },
   "dependencies": {},
   "devDependencies": {

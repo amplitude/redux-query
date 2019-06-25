@@ -118,45 +118,6 @@ describe('useMutation', () => {
     expect(loadedContentNode.textContent).toBe('Ryan');
   });
 
-  it('does nothing if the query config is null', async () => {
-    const Content = () => {
-      const [isPending, mutate] = useMutation(() => null);
-      const message = useSelector(state => state.entities.message);
-
-      return (
-        <div>
-          {message ? (
-            <div data-testid="loaded-content">{message}</div>
-          ) : (
-            <div data-testid="empty-state">empty</div>
-          )}
-          {isPending && <div data-testid="loading-content">loading</div>}
-          <button data-testid="submit-button" onClick={mutate}>
-            submit
-          </button>
-        </div>
-      );
-    };
-
-    const { container } = render(
-      <App>
-        <Content />
-      </App>,
-    );
-
-    // Loaded
-
-    let emptyStateNode = getByTestId(container, 'empty-state');
-    expect(emptyStateNode.textContent).toBe('empty');
-
-    // Click submit button
-
-    let buttonNode = getByTestId(container, 'submit-button');
-    fireEvent.click(buttonNode);
-
-    // Nothing happens
-  });
-
   it('supplies a callback that returns a promise', async () => {
     const Content = () => {
       const [message, setMessage] = React.useState(null);

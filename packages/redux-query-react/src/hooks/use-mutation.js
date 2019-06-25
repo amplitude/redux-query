@@ -1,26 +1,22 @@
+// @flow
+
+// NOTE(ryan): The public flow type interface for this hook is defined in use-mutation.js.flow
+
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { mutateAsync } from 'redux-query';
+import type { ActionPromiseValue, QueryConfig } from 'redux-query/types.js.flow';
 
-import useConstCallback from './use-const-callback';
+import type { QueryState } from '../types';
 import useQueryState from './use-query-state';
 
-const useMutation = makeQueryConfig => {
+const useMutation = (
+  makeQueryConfig: (...args: $ReadOnlyArray<mixed>) => QueryConfig,
+): [QueryState, (...args: $ReadOnlyArray<mixed>) => Promise<ActionPromiseValue>] => {
   const reduxDispatch = useDispatch();
 
-  const isPendingRef = React.useRef(false);
-
-  const finishedCallback = useConstCallback(() => {
-    isPendingRef.current = false;
-  });
-
-  const transformQueryConfig = useConstCallback(queryConfig => {
-    return {
-      ...queryConfig,
-      unstable_preDispatchCallback: finishedCallback,
-    };
-  });
-
+  // This query config and query state are driven based off of the callback – so they represent
+  // the the query config that was used for the most-recent mutation callback.
   const [queryConfig, setQueryConfig] = React.useState(null);
 
   const queryState = useQueryState(queryConfig);
@@ -29,21 +25,11 @@ const useMutation = makeQueryConfig => {
     (...args) => {
       const queryConfig = makeQueryConfig(...args);
 
-      if (!queryConfig) {
-        return;
-      }
+      setQueryConfig(queryConfig);
 
-      setQueryConfig(transformQueryConfig(queryConfig));
-
-      const promise = reduxDispatch(mutateAsync(queryConfig));
-
-      if (promise) {
-        isPendingRef.current = true;
-      }
-
-      return promise;
+      return reduxDispatch(mutateAsync(queryConfig));
     },
-    [makeQueryConfig, reduxDispatch, transformQueryConfig],
+    [makeQueryConfig, reduxDispatch],
   );
 
   return [queryState, mutate];

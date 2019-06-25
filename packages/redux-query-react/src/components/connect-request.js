@@ -26,7 +26,10 @@ const difference = <T>(a: Array<T>, b: Array<T>): Array<T> => {
   return a.filter(x => !bSet.has(x));
 };
 
-const getDiff = (prevQueryConfigs: Array<QueryConfig>, queryConfigs: Array<QueryConfig>) => {
+const diffQueryConfigs = (
+  prevQueryConfigs: Array<QueryConfig>,
+  queryConfigs: Array<QueryConfig>,
+) => {
   const prevQueryKeys = prevQueryConfigs.map(config => getQueryKey(config));
   const queryKeys = queryConfigs.map(config => getQueryKey(config));
   const queryConfigByQueryKey = queryKeys.reduce((accum, queryKey: ?QueryKey, i) => {
@@ -39,7 +42,10 @@ const getDiff = (prevQueryConfigs: Array<QueryConfig>, queryConfigs: Array<Query
     return accum;
   }, new Map());
 
+  // Keys that existed before that no longer exist, should be subject to cancellation
   const cancelKeys = difference(prevQueryKeys, queryKeys).filter(Boolean);
+
+  // Keys that are new, should be subject to a new request
   const requestKeys = difference(queryKeys, prevQueryKeys).filter(Boolean);
   const requestQueryConfigs = requestKeys
     .map(queryKey => queryConfigByQueryKey.get(queryKey))
@@ -48,6 +54,18 @@ const getDiff = (prevQueryConfigs: Array<QueryConfig>, queryConfigs: Array<Query
   return { cancelKeys, requestQueryConfigs };
 };
 
+/**
+ * This hook memoizes the list of query configs that are returned form the `mapPropsToConfigs`
+ * function. It also transforms the query configs to set `retry` to `true` and pass a
+ * synchronous callback to track pending state.
+ *
+ * `mapPropsToConfigs` may return null, undefined, a single query config,
+ * or a list of query configs. null and undefined values are ignored, and single query configs are
+ * normalized to be lists.
+ *
+ * Memoization is handled by comparing query keys. If the list changes in size, or any query config
+ * in the list's query key changes, an entirely new list of query configs is returned.
+ */
 const useMemoizedQueryConfigs = <Config>(
   mapPropsToConfigs: MapPropsToConfigs<Config>,
   props: Config,
@@ -95,8 +113,15 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
 
   const previousQueryConfigs = React.useRef<Array<QueryConfig>>([]);
 
+  // This hook manually tracks the pending state, which is synchronized as precisely as possible
+  // with the Redux state. This may seem a little hacky, but we're trying to avoid any asynchronous
+  // synchronization. Hence why the pending state here is using a ref and it is updated via a
+  // synchronous callback, which is called from the redux-query query middleware.
   const pendingRequests = React.useRef<Set<QueryKey>>(new Set());
 
+  // These "const callbacks" are memoized across re-renders. Unlike useCallback, useConstCallback
+  // guarantees memoization, which is relied upon elsewhere in this hook to explicitly control when
+  // certain side effects occur.
   const dispatchRequestToRedux = useConstCallback((queryConfig: QueryConfig) => {
     const promise = reduxDispatch(requestAsync(queryConfig));
 
@@ -116,24 +141,11 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
     }
   });
 
+  // Query configs are memoized based on query key. As long as the query keys in the list don't
+  // change, the query config list won't change.
   const queryConfigs = useMemoizedQueryConfigs(mapPropsToConfigs, props, (queryKey: QueryKey) => {
     pendingRequests.current.delete(queryKey);
   });
-
-  React.useEffect(() => {
-    const { cancelKeys, requestQueryConfigs } = getDiff(previousQueryConfigs.current, queryConfigs);
-
-    requestQueryConfigs.forEach(dispatchRequestToRedux);
-    cancelKeys.forEach(queryKey => dispatchCancelToRedux(queryKey));
-
-    previousQueryConfigs.current = queryConfigs;
-  }, [dispatchCancelToRedux, dispatchRequestToRedux, queryConfigs]);
-
-  React.useEffect(() => {
-    return () => {
-      [...pendingRequests.current].forEach(dispatchCancelToRedux);
-    };
-  }, [dispatchCancelToRedux]);
 
   const forceRequest = React.useCallback(() => {
     queryConfigs.forEach(requestReduxAction => {
@@ -144,6 +156,28 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
     });
   }, [dispatchRequestToRedux, queryConfigs]);
 
+  React.useEffect(() => {
+    // Whenever the list of query configs change, we need to manually diff the query configs
+    // against the previous list of query configs. Whatever was there and is no longer, will be
+    // cancelled. Whatever is new, will turn into a request.
+    const { cancelKeys, requestQueryConfigs } = diffQueryConfigs(
+      previousQueryConfigs.current,
+      queryConfigs,
+    );
+
+    requestQueryConfigs.forEach(dispatchRequestToRedux);
+    cancelKeys.forEach(queryKey => dispatchCancelToRedux(queryKey));
+
+    previousQueryConfigs.current = queryConfigs;
+  }, [dispatchCancelToRedux, dispatchRequestToRedux, queryConfigs]);
+
+  // When the component unmounts, cancel all pending requests
+  React.useEffect(() => {
+    return () => {
+      [...pendingRequests.current].forEach(dispatchCancelToRedux);
+    };
+  }, [dispatchCancelToRedux]);
+
   return forceRequest;
 };
 
@@ -151,6 +185,13 @@ type Wrapper<Config> = (
   WrappedComponent: React.AbstractComponent<Config>,
 ) => React.AbstractComponent<$Diff<Config, { forceRequest: () => void }>>;
 
+/**
+ * This is the higher-order component code. Some of the code here was influenced by react-redux's
+ * `connectAdvanced` implementation.
+ *
+ * See https://github.com/reduxjs/react-redux/blob/master/src/components/connectAdvanced.js
+ * react-redux is licensed under the MIT License. Copyright (c) 2015-present Dan Abramov.
+ */
 const connectRequest = <Config: {}>(
   mapPropsToConfigs: MapPropsToConfigs<Config>,
   options: ?Options,

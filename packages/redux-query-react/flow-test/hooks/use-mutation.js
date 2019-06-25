@@ -13,7 +13,9 @@ const Card = () => {
   return (
     <div>
       {isPending ? 'loading…' : 'loaded'}
-      <button onClick={() => mutate(false)}>Trigger</button>
+      {/* $FlowFixMe expected */}
+      <button onClick={() => mutate('false')}>Trigger</button>
+      <button onClick={() => mutate(true)}>Trigger</button>
     </div>
   );
 };

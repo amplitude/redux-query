@@ -33,6 +33,7 @@ If your app uses flow, you will now benefit from built-in flow types.
 - The network handler instance is no longer stored in the query reducer state.
 - The queries reducer state no longer stores the query url.
 - connectRequest has been rewritten to use hooks internally.
+- connectRequest's `withRef` option has been renamed to `forwardRef`.
 
 ## Action items
 
@@ -51,7 +52,8 @@ If your app uses connectRequest:
 1. Update react-redux to 7.1.0 or later.
 2. Add redux-query-react as a dependency.
 3. Follow the [getting started](getting-started#setup-react-integration) section for setting up the React integration.
-4. Going forwards, consider using [useRequest](../use-request) and [useMutation]('../use-mutation) instead of connectRequest for new components.
+4. If any of your existing connectRequest calls use the `withRef` configuration option, rename that to `forwardRef`.
+5. Going forwards, consider using [useRequest](../use-request) and [useMutation]('../use-mutation) instead of connectRequest for new components.
 
 And finally:
 

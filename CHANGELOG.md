@@ -1,3 +1,23 @@
+## 3.0.0
+
+Please refer to the [v3 upgrade guide](https://amplitude.github.io/redux-query/docs/upgrade-guides/v2-to-v3) for instructions on how to upgrade from redux-query 2.x to 3.0. See [#129](https://github.com/amplitude/redux-query/pull/129) for the (unfortunately massive) PR.
+
+- New React hooks – `useRequest` and `useMutation`
+- Split project into separate packages – `redux-query`, `redux-query-react` and `redux-query-superagent` – for better support for non-React apps and apps with custom network interfaces
+- Flow types
+- Support for react-redux v7.1.0 and new React Context API
+
+### Other changes
+
+- Revamped docs
+- Removed the `redux-query/advanced` entrypoint
+- Network interfaces must always be provided to the query middleware (no more default superagent network interface)
+- The `update` query config field is no longer required
+- The network handler instance is no longer stored in the query reducer state
+- The queries reducer state no longer stores the query url
+- connectRequest has been rewritten to use hooks internally
+- connectRequest's `withRef` option has been renamed to `forwardRef`
+
 ## 2.3.1
 
 - Support redux v4 (karevn [#103](https://github.com/amplitude/redux-query/pull/103))
@@ -18,7 +38,7 @@
 
 ## 2.0.0
 
-Refer to the [v2 transition guide](https://github.com/amplitude/redux-query/blob/master/docs/transition-guides/v2.md) for instructions on how to upgrade from redux-query 1.x to 2.x.
+Refer to the [v2 transition guide](https://amplitude.github.io/redux-query/docs/upgrade-guides/v1-to-v2) for instructions on how to upgrade from redux-query 1.x to 2.x.
 
 - Use the latest entities state when the network request finishes for mutations
 - Replace `request` fields in queries reducer and relevant actions with `networkHandler`

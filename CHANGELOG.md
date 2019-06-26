@@ -3,7 +3,7 @@
 Please refer to the [v3 upgrade guide](https://amplitude.github.io/redux-query/docs/upgrade-guides/v2-to-v3) for instructions on how to upgrade from redux-query 2.x to 3.0. See [#129](https://github.com/amplitude/redux-query/pull/129) for the (unfortunately massive) PR.
 
 - New React hooks – `useRequest` and `useMutation`
-- Split project into separate packages – `redux-query`, `redux-query-react` and `redux-query-superagent` – for better support for non-React apps and apps with custom network interfaces
+- Split project into separate packages – `redux-query`, `redux-query-react` and `redux-query-interface-superagent` – for better support for non-React apps and apps with custom network interfaces
 - Flow types
 - Support for react-redux v7.1.0 and new React Context API
 

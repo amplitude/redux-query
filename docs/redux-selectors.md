@@ -27,4 +27,4 @@ If you have the [`errorsReducer`](error-state) as part of your Redux state, then
 | responseText    | ?string                 | Unparsed response body string (if query failed). |
 | responseHeaders | ?{ [key: string]: any } | Response headers (if query failed).              |
 
-All of the query selectors have the following signature: the root errors reducer state as the first paramter and the query config as the second parameter.
+All of the query selectors have the following signature: the root errors reducer state as the first paramater and the query config as the second parameter.

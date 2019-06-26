@@ -15,17 +15,17 @@ A query key is a unique identifier string generated for a given query config. Yo
 
 ## Transform and update
 
-With a successful query, there are two staged in which a response is transformed before storing the result in the entities state: transform and update.
+With a successful query, there are two steps in which a response is handled before storing the result in the entities state: the "transform" step and the "update" step.
 
-Transform is the first step, where you can massage the data to get it ready for the update step. The transform step might involve normalizing the response data or simply transforming it to fit your entity schema.
+"Transform" is the first step. This typically involves normalizing the response data and transforming it to fit your entity schema. After the data has gone through the "transform" step, it gets passed to the "update" functions, where it is then reconciled with the previously-stored entity state.
 
-Update is the final step, where you reconcile the new data with the previously stored entities state.
+See the examples below for how this looks in practice, and read the [transform functions](#transform-functions) and [update functions](#update-functions) sections below for more API details.
 
 ## Optimistic updates
 
 Optimistic updates are handled similarly to updates, but they obviously don't have the new data, just the previous.
 
-When optimistic updates fail, you can specifiy rollback behavior to undo that optimistic update. If you don't specify a rollback behaivor, redux-query will simply revert the entity state to the value that was saved before the optimistic update took place. This is only a concern if you are dealing with an entity that is a collection (like an array of map) that could be affected by multiple simultaneous mutations.
+When optimistic updates fail, you can specify rollback behavior to undo that optimistic update. If you don't specify a rollback behaivor, redux-query will simply revert the entity state to the value that was saved before the optimistic update took place. This is only a concern if you are dealing with an entity that is a collection (like an array of map) that could be affected by multiple simultaneous mutations.
 
 ## Basic example
 

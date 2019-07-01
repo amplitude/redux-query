@@ -1,8 +1,8 @@
 import React from 'react';
-import { QueryConfig, QueryState, ActionPromiseValue } from 'redux-query';
+import { QueryConfig, QueryState, QueriesState, ActionPromiseValue } from 'redux-query';
 
 declare module 'redux-query-react' {
-  export type MapPropsToConfigs<T> = (props: T) => QueryConfig | QueryConfig[];
+  export type QueryConfigFactory = (...args: any[]) => QueryConfig | QueryConfig[];
 
   export interface ConnectRequestOptions {
     forwardRef?: boolean;
@@ -17,18 +17,14 @@ declare module 'redux-query-react' {
     children?: React.ReactNode;
   }
 
-  export type QueriesState = {
-    [key: string]: QueryState;
-  };
+  export type QueriesSelector = <TState>(state: TState, ...args: any[]) => QueriesState;
 
-  export type QueriesSelector = <TState>(state: TState, ...any) => QueriesState;
-
-  type ConnectRequestWrapper<TProps> = (
+  export type ConnectRequestWrapper<TProps> = (
     WrappedComponent: React.ComponentType<TProps>,
   ) => React.ComponentType<Omit<TProps, 'forceRequest'>>;
 
   export type RequestConnector = <TProps extends {} = {}>(
-    mapPropsToConfigs: MapPropsToConfigs<TProps>,
+    mapPropsToConfigs: QueryConfigFactory,
     options?: ConnectRequestOptions,
   ) => ConnectRequestWrapper<TProps>;
 
@@ -39,7 +35,7 @@ declare module 'redux-query-react' {
   export type ReduxQueryProvider = React.ComponentType<ProviderProps>;
   export type ActionPromise = Promise<ActionPromiseValue> | undefined;
   export type UseRequestHook = (queryConfig: QueryConfig) => [QueryState, () => ActionPromise];
-  export type QueryConfigFactory = (...any) => QueryConfig;
+
   export type UseMutationHook = (
     createQueryConfig: QueryConfigFactory,
   ) => [QueryState, ActionPromise];

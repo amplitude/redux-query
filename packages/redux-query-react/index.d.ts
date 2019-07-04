@@ -1,30 +1,31 @@
-import React from 'react';
-import { QueryConfig, QueryState, QueriesState, ActionPromiseValue } from 'redux-query';
-
 declare module 'redux-query-react' {
-  export type QueryConfigFactory = (...args: any[]) => QueryConfig | QueryConfig[];
+  import React from 'react';
+  import { ActionPromiseValue, QueriesState, QueryConfig, QueryState } from 'redux-query';
+
+  export type QueryConfigFactory = (...args: any[]) => QueryConfig;
+  export type QueryConfigsFactory = (...args: any[]) => QueryConfig | QueryConfig[];
 
   export interface ConnectRequestOptions {
     forwardRef?: boolean;
     pure?: boolean;
   }
-
+  export type ForceRequestCallback = () => void;
   export interface WithForceRequest {
-    forceRequest: () => void;
+    forceRequest: ForceRequestCallback;
   }
 
   export interface WithChildren {
     children?: React.ReactNode;
   }
 
-  export type QueriesSelector = <TState>(state: TState, ...args: any[]) => QueriesState;
+  export type QueriesSelector = (state: any) => QueriesState;
 
-  export type ConnectRequestWrapper<TProps> = (
+  export type ConnectRequestWrapper<TProps extends WithForceRequest> = (
     WrappedComponent: React.ComponentType<TProps>,
   ) => React.ComponentType<Omit<TProps, 'forceRequest'>>;
 
-  export type RequestConnector = <TProps extends {} = {}>(
-    mapPropsToConfigs: QueryConfigFactory,
+  export type RequestConnector = <TProps extends WithForceRequest = WithForceRequest>(
+    mapPropsToConfigs: QueryConfigsFactory,
     options?: ConnectRequestOptions,
   ) => ConnectRequestWrapper<TProps>;
 
@@ -38,7 +39,7 @@ declare module 'redux-query-react' {
 
   export type UseMutationHook = (
     createQueryConfig: QueryConfigFactory,
-  ) => [QueryState, ActionPromise];
+  ) => [QueryState, ForceRequestCallback];
 
   export const connectRequest: RequestConnector;
   export const Provider: ReduxQueryProvider;

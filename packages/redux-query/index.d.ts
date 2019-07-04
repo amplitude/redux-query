@@ -222,9 +222,35 @@ declare module 'redux-query' {
   export const entitiesReducer: EntitiesReducer;
   export const errorsReducer: ErrorsReducer;
 
-  export const querySelectors: any;
-  export const errorSelectors: any;
-  export const actionTypes: any;
+  export const querySelectors: {
+    isFinished: (queriesState: QueriesState, queryConfig: QueryConfig) => boolean;
+    isPending: (queriesState: QueriesState, queryConfig: QueryConfig) => boolean;
+    status: (queriesState: QueriesState, queryConfig: QueryConfig) => ResponseStatus | undefined;
+    headers: (queriesState: QueriesState, queryConfig: QueryConfig) => ResponseHeaders | undefined;
+    lastUpdated: (queriesState: QueriesState, queryConfig: QueryConfig) => number | undefined;
+    queryCount: (queriesState: QueriesState, queryConfig: QueryConfig) => number;
+  };
+
+  export const errorSelectors: {
+    responseBody: (errorsState: ErrorsState, queryConfig: QueryConfig) => ResponseBody;
+    responseText: (errorsState: ErrorsState, queryConfig: QueryConfig) => ResponseText;
+    responseHeaders: (errorsState: ErrorsState, queryConfig: QueryConfig) => ResponseHeaders;
+  };
+  export const actionTypes: {
+    REQUEST_ASYNC: string;
+    REQUEST_START: string;
+    REQUEST_SUCCESS: string;
+    REQUEST_FAILURE: string;
+    CANCEL_QUERY: string;
+    MUTATE_ASYNC: string;
+    MUTATE_START: string;
+    MUTATE_SUCCESS: string;
+    MUTATE_FAILURE: string;
+    RESET: string;
+    UPDATE_ENTITIES: string;
+  };
+
+  export const httpMethods: HttpMethods;
 
   export const queryMiddleware: QueryMiddlewareFactory;
   export interface ReduxQueryDispatch<A extends AnyAction = ReduxQueryAction> {

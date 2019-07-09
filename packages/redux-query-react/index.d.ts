@@ -38,7 +38,7 @@ declare module 'redux-query-react' {
   export type ActionPromise = Promise<ActionPromiseValue> | undefined;
   export type UseRequestHook = (queryConfig: QueryConfig) => [QueryState, ForceRequestCallback];
   export type MutationQueryConfigFactory = (...args: any) => QueryConfig;
-  export type RunMutation = (...args: any) => void;
+  export type RunMutation = (...args: any) => Promise<ActionPromiseValue>;
   export type UseMutationHook = (
     createQueryConfig: MutationQueryConfigFactory,
   ) => [QueryState, RunMutation];

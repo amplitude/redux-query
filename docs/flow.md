@@ -3,7 +3,7 @@ id: flow
 title: Flow Support
 ---
 
-redux-query, redux-query-react, and redux-query-interface-suepragent all come with built-in [Flow](https://flow.org/) types. You should be able to take advantage of these types without any change to your flow configuration. These types have no effect if you are not using Flow.
+redux-query, redux-query-react, and redux-query-interface-superagent all come with built-in [Flow](https://flow.org/) types. You should be able to take advantage of these types without any change to your flow configuration. These types have no effect if you are not using Flow.
 
 ## Importing types
 

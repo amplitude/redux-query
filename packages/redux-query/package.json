@@ -18,6 +18,7 @@
     "prepublish": "yarn build",
     "test": "jest"
   },
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/amplitude/redux-query.git"

@@ -20,6 +20,7 @@ A library for managing network state in Redux.
 - [Error State](https://amplitude.github.io/redux-query/docs/error-state)
 - [Network Interfaces](https://amplitude.github.io/redux-query/docs/network-interfaces)
 - [Flow Support](https://amplitude.github.io/redux-query/docs/flow)
+- [Typescript Support](https://amplitude.github.io/redux-query/docs/typescript)
 
 ## Redux API
 

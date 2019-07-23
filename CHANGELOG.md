@@ -1,4 +1,4 @@
-## 3.1.0
+## 3.1.1
 
 - Support typescript (karevn [#131](https://github.com/amplitude/redux-query/pull/131))
 - Security vulnerability fixes [#132](https://github.com/amplitude/redux-query/pull/132), [#133](https://github.com/amplitude/redux-query/pull/133)

@@ -1,3 +1,8 @@
+## 3.1.0
+
+- Support typescript (karevn [#131](https://github.com/amplitude/redux-query/pull/131))
+- Security vulnerability fixes [#132](https://github.com/amplitude/redux-query/pull/132), [#133](https://github.com/amplitude/redux-query/pull/133)
+
 ## 3.0.0
 
 Please refer to the [v3 upgrade guide](https://amplitude.github.io/redux-query/docs/upgrade-guides/v2-to-v3) for instructions on how to upgrade from redux-query 2.x to 3.0. See [#129](https://github.com/amplitude/redux-query/pull/129) for the (unfortunately massive) PR.

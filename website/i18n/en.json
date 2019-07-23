@@ -50,6 +50,9 @@
       "requests-vs-mutations": {
         "title": "Requests vs. Mutations"
       },
+      "typescript": {
+        "title": "Typescript Support"
+      },
       "upgrade-guides/v1-to-v2": {
         "title": "2.x Upgrade Guide"
       },

@@ -8,16 +8,16 @@ declare module 'redux-query-react' {
     QueriesSelector,
   } from 'redux-query';
 
-  export type QueryConfigFactory = (...args: any[]) => QueryConfig;
-  export type QueryConfigsFactory = (...args: any[]) => QueryConfig | QueryConfig[];
+  export type QueryConfigFactory<T> = (...args: any[]) => QueryConfig<T>;
+  export type QueryConfigsFactory<T> = (...args: any[]) => QueryConfig<T> | QueryConfig<T>[];
 
   export interface ConnectRequestOptions {
     forwardRef?: boolean;
     pure?: boolean;
   }
-  export type ForceRequestCallback = () => Promise<ActionPromiseValue>;
-  export interface WithForceRequest {
-    forceRequest: ForceRequestCallback;
+  export type ForceRequestCallback<T> = () => Promise<ActionPromiseValue<T>>;
+  export interface WithForceRequest<T> {
+    forceRequest: ForceRequestCallback<T>;
   }
 
   export type ConnectRequestWrapper<TProps extends WithForceRequest> = (
@@ -35,13 +35,13 @@ declare module 'redux-query-react' {
   }
 
   export type ReduxQueryProvider = React.ComponentType<ProviderProps>;
-  export type ActionPromise = Promise<ActionPromiseValue> | undefined;
-  export type UseRequestHook = (queryConfig: QueryConfig) => [QueryState, ForceRequestCallback];
-  export type MutationQueryConfigFactory = (...args: any) => QueryConfig;
-  export type RunMutation = (...args: any) => Promise<ActionPromiseValue>;
-  export type UseMutationHook = (
-    createQueryConfig: MutationQueryConfigFactory,
-  ) => [QueryState, RunMutation];
+  export type ActionPromise<T> = Promise<ActionPromiseValue<T>> | undefined;
+  export type UseRequestHook<T> = (queryConfig: QueryConfig<T>) => [QueryState, ForceRequestCallback<T>];
+  export type MutationQueryConfigFactory<T> = (...args: any) => QueryConfig<T>;
+  export type RunMutation<T> = (...args: any) => Promise<ActionPromiseValue<T>>;
+  export type UseMutationHook<T> = (
+    createQueryConfig: MutationQueryConfigFactory<T>,
+  ) => [QueryState, RunMutation<T>];
 
   export const connectRequest: RequestConnector;
   export const Provider: ReduxQueryProvider;

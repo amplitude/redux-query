@@ -7,7 +7,7 @@ declare module 'redux-query' {
   export interface RequestHeaders {
     [key: string]: RequestHeader;
   }
-  export type MetaValue = string;
+  export type MetaValue = any;
   export interface Meta {
     [key: string]: MetaValue;
   }

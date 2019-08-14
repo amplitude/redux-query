@@ -26,8 +26,8 @@ declare module 'redux-query' {
 
   export const httpMethods: { [k in KnownHttpMethods]: KnownHttpMethods };
 
-  export type TransformStrategy<Entities> = (
-    body: ResponseBody,
+  export type TransformStrategy<Entities, Body = ResponseBody> = (
+    body: Body,
     text: ResponseText,
   ) => Partial<Entities>;
   export type UpdateStrategy<T> = (prevValue: T, newValue: T) => T;

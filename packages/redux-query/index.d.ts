@@ -29,7 +29,7 @@ declare module 'redux-query' {
   export type TransformStrategy<Entities> = (
     body: ResponseBody,
     text: ResponseText,
-  ) => Entities;
+  ) => Partial<Entities>;
   export type UpdateStrategy<T> = (prevValue: T, newValue: T) => T;
   export type OptimisticUpdateStrategy<T> = (prevValue: T) => T;
   export type RollbackStrategy<T> = (initialValue: T, currentValue: T) => T;

@@ -25,13 +25,13 @@ declare module 'redux-query' {
   }
   export type EntitiesState = Entities;
 
-  export enum HttpMethods {
-    DELETE,
-    GET,
-    HEAD,
-    POST,
-    PUT,
-    PATCH,
+  export const enum httpMethods {
+    DELETE = 'DELETE',
+    GET = 'GET',
+    HEAD = 'HEAD',
+    POST = 'POST',
+    PUT = 'PUT',
+    PATCH = 'PATCH',
   }
 
   export type TransformStrategy = (
@@ -130,13 +130,13 @@ declare module 'redux-query' {
 
   export type NetworkInterface = (
     url: Url,
-    method: HttpMethods,
+    method: httpMethods,
     networkOptions: NetworkOptions,
   ) => NetworkHandler;
 
   export interface QueryOptions {
     credentials?: CredentialOption;
-    method?: HttpMethods;
+    method?: httpMethods;
     headers?: { [key: string]: string };
   }
 
@@ -249,8 +249,6 @@ declare module 'redux-query' {
     RESET: string;
     UPDATE_ENTITIES: string;
   };
-
-  export const httpMethods: HttpMethods;
 
   export const queryMiddleware: QueryMiddlewareFactory;
   export interface ReduxQueryDispatch<A extends AnyAction = ReduxQueryAction> {

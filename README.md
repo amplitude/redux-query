@@ -41,7 +41,7 @@ A library for managing network state in Redux.
 
 ## Packages
 
-This project is published as multiple packages. redux-query, the core library, is the only required package. redux-query-react is recommended if you are using React in your application. redux-query requires a [network interface](https://amplitude.github.io/redux-query/network-interfaces) which handles the implementation of network requests. You must either use the recommended interface, redux-query-interface-superagent, or supply your own.
+This project is published as multiple packages. redux-query, the core library, is the only required package. redux-query-react is recommended if you are using React in your application. redux-query requires a [network interface](https://amplitude.github.io/redux-query/docs/network-interfaces) which handles the implementation of network requests. You must either use the recommended interface, redux-query-interface-superagent, or supply your own.
 
 | Name                                                                              | Version                                                                                                                                                       | Description                                                        |
 | :-------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------- |

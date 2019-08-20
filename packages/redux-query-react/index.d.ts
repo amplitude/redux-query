@@ -24,8 +24,8 @@ declare module 'redux-query-react' {
     WrappedComponent: React.ComponentType<TProps>,
   ) => React.ComponentType<Omit<TProps, 'forceRequest'>>;
 
-  export type RequestConnector = <TProps extends WithForceRequest = WithForceRequest>(
-    mapPropsToConfigs: QueryConfigsFactory,
+  export type RequestConnector = <TState, TProps extends WithForceRequest = WithForceRequest>(
+    mapPropsToConfigs: QueryConfigsFactory<TState>,
     options?: ConnectRequestOptions,
   ) => ConnectRequestWrapper<TProps>;
 

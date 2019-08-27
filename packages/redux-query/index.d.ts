@@ -25,14 +25,10 @@ declare module 'redux-query' {
   }
   export type EntitiesState = Entities;
 
-  export enum HttpMethods {
-    DELETE,
-    GET,
-    HEAD,
-    POST,
-    PUT,
-    PATCH,
-  }
+  export type KnownHttpMethods = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS';
+  export type HttpMethods = KnownHttpMethods | string;
+
+  export const httpMethods: { [k in KnownHttpMethods]: KnownHttpMethods };
 
   export type TransformStrategy = (
     body: ResponseBody,
@@ -249,8 +245,6 @@ declare module 'redux-query' {
     RESET: string;
     UPDATE_ENTITIES: string;
   };
-
-  export const httpMethods: HttpMethods;
 
   export const queryMiddleware: QueryMiddlewareFactory;
   export interface ReduxQueryDispatch<A extends AnyAction = ReduxQueryAction> {

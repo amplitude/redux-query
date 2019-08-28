@@ -25,7 +25,14 @@ declare module 'redux-query' {
   }
   export type EntitiesState = Entities;
 
-  export type KnownHttpMethods = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS';
+  export type KnownHttpMethods =
+    | 'GET'
+    | 'HEAD'
+    | 'PUT'
+    | 'POST'
+    | 'DELETE'
+    | 'PATCH'
+    | 'OPTIONS';
   export type HttpMethods = KnownHttpMethods | string;
 
   export const httpMethods: { [k in KnownHttpMethods]: KnownHttpMethods };

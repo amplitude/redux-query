@@ -7,7 +7,7 @@ declare module 'redux-query' {
   export interface RequestHeaders {
     [key: string]: RequestHeader;
   }
-  export type MetaValue = string;
+  export type MetaValue = any;
   export interface Meta {
     [key: string]: MetaValue;
   }
@@ -25,29 +25,36 @@ declare module 'redux-query' {
   }
   export type EntitiesState = Entities;
 
-  export type KnownHttpMethods = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS';
+  export type KnownHttpMethods =
+    | 'GET'
+    | 'HEAD'
+    | 'PUT'
+    | 'POST'
+    | 'DELETE'
+    | 'PATCH'
+    | 'OPTIONS';
   export type HttpMethods = KnownHttpMethods | string;
 
   export const httpMethods: { [k in KnownHttpMethods]: KnownHttpMethods };
 
-  export type TransformStrategy = (
-    body: ResponseBody,
+  export type TransformStrategy<TEntities = Entities, TBody = ResponseBody> = (
+    body: TBody,
     text: ResponseText,
-  ) => { [key: string]: any };
-  export type UpdateStrategy = (prevValue: any, newValue: any) => any;
-  export type OptimisticUpdateStrategy = (prevValue: any) => any;
-  export type RollbackStrategy = (initialValue: any, currentValue: any) => any;
+  ) => Partial<TEntities>;
+  export type UpdateStrategy<T> = (prevValue: T, newValue: T) => T;
+  export type OptimisticUpdateStrategy<T> = (prevValue: T) => T;
+  export type RollbackStrategy<T> = (initialValue: T, currentValue: T) => T;
 
-  export interface Update {
-    [key: string]: UpdateStrategy;
+  export type Update<TEntities = Entities> = {
+    [K in keyof TEntities]?: UpdateStrategy<TEntities[K]>;
   }
 
-  export interface OptimisticUpdate {
-    [key: string]: OptimisticUpdateStrategy;
+  export type OptimisticUpdate<TEntities = Entities> = {
+    [K in keyof TEntities]?: OptimisticUpdateStrategy<TEntities[K]>;
   }
 
-  export interface Rollback {
-    [key: string]: RollbackStrategy;
+  export type Rollback<TEntities = Entities> = {
+    [K in keyof TEntities]?: RollbackStrategy<TEntities[K]>;
   }
 
   export interface WithTime {
@@ -58,11 +65,11 @@ declare module 'redux-query' {
     queryKey: QueryKey;
   }
 
-  export interface WithUpdateEntities {
-    update: Update;
+  export interface WithUpdateEntities<TEntities = Entities> {
+    update: Update<TEntities>;
   }
 
-  export type RequestAsyncAction = Action<'@@query/REQUEST_ASYNC'> & QueryConfig;
+  export type RequestAsyncAction<TEntities = Entities> = Action<'@@query/REQUEST_ASYNC'> & QueryConfig<TEntities>;
 
   export interface QueryStartParams {
     body?: RequestBody;
@@ -70,15 +77,15 @@ declare module 'redux-query' {
     queryKey: QueryKey;
     url: Url;
   }
-  export interface WithOptimisticEntities {
-    optimisticEntities: Entities;
+  export interface WithOptimisticEntities<TEntities = Entities> {
+    optimisticEntities: TEntities;
   }
   export type MutateStartParams = QueryStartParams;
   export type RequestStartAction = Action<'@@query/REQUEST_START'> & QueryStartParams;
-  export interface QueryResponse {
+  export interface QueryResponse<TEntities = Entities> {
     body: RequestBody;
     duration: Duration;
-    entities: Entities;
+    entities: TEntities;
     meta?: Meta;
     responseBody?: ResponseBody;
     responseHeaders?: ResponseHeaders;
@@ -88,22 +95,22 @@ declare module 'redux-query' {
     url: Url;
   }
 
-  export type RequestSuccessAction = Action<'@@query/REQUEST_SUCCESS'> | QueryResponse | WithTime;
-  export type RequestFailureAction = Action<'@@query/REQUEST_FAILURE'> | QueryResponse | WithTime;
-  export type MutateAsyncAction = Action<'@@query/MUTATE_ASYNC'> & QueryConfig;
+  export type RequestSuccessAction<TEntities = Entities> = Action<'@@query/REQUEST_SUCCESS'> | QueryResponse<TEntities> | WithTime;
+  export type RequestFailureAction<TEntities = Entities> = Action<'@@query/REQUEST_FAILURE'> | QueryResponse<TEntities> | WithTime;
+  export type MutateAsyncAction<TEntities = Entities> = Action<'@@query/MUTATE_ASYNC'> & QueryConfig<TEntities>;
   export type MutateSuccessAction = Action<'@@query/MUTATE_SUCCESS'> & QueryResponse;
-  export type UpdateEntitiesAction = Action<'@@query/UPDATE_ENTITIES'> & WithUpdateEntities;
+  export type UpdateEntitiesAction<TEntities = Entities> = Action<'@@query/UPDATE_ENTITIES'> & WithUpdateEntities<TEntities>;
   export type CancelQueryAction = Action<'@@query/CANCEL_QUERY'> & WithQueryKey;
-  export type ReduxQueryAction =
-    | RequestAsyncAction
-    | MutateAsyncAction
-    | UpdateEntitiesAction
+  export type ReduxQueryAction<TEntities = Entities> =
+    | RequestAsyncAction<TEntities>
+    | MutateAsyncAction<TEntities>
+    | UpdateEntitiesAction<TEntities>
     | CancelQueryAction;
 
-  export const requestAsync: (params: QueryConfig) => RequestAsyncAction;
-  export const mutateAsync: (params: QueryConfig) => MutateAsyncAction;
-  export const cancelQuery: (queryKey: QueryKey) => CancelQueryAction;
-  export const updateEntities: (update: Update) => UpdateEntitiesAction;
+  export const requestAsync: <T>(params: QueryConfig<T>) => RequestAsyncAction<T>;
+  export const mutateAsync: <T>(params: QueryConfig<T>) => MutateAsyncAction<T>;
+  export const cancelQuery: <T>(queryKey: QueryKey) => CancelQueryAction;
+  export const updateEntities: <T>(update: Update<T>) => UpdateEntitiesAction<T>;
 
   export interface NetworkHandler {
     abort: () => void;
@@ -136,17 +143,17 @@ declare module 'redux-query' {
     headers?: { [key: string]: string };
   }
 
-  export interface QueryConfig {
+  export interface QueryConfig<TEntities = Entities> {
     body?: RequestBody;
     force?: boolean;
     meta?: Meta;
     options?: QueryOptions;
     queryKey?: QueryKey;
-    transform?: TransformStrategy;
-    update?: Update;
-    optimisticUpdate?: OptimisticUpdate;
+    transform?: TransformStrategy<TEntities>;
+    update?: Update<TEntities>;
+    optimisticUpdate?: OptimisticUpdate<TEntities>;
     retry?: boolean;
-    rollback?: { [key: string]: (initialValue: any, currentValue: any) => any };
+    rollback?: Rollback<TEntities>;
     unstable_preDispatchCallback?: () => void;
     url: Url;
   }
@@ -164,11 +171,11 @@ declare module 'redux-query' {
     };
   }
 
-  export type QueriesSelector = (state: any) => QueriesState;
+  export type QueriesSelector<TState = any> = (state: TState) => QueriesState;
 
-  export type EntitiesSelector = (state: any) => EntitiesState;
+  export type EntitiesSelector<TEntities = EntitiesState, TState = any> = (state: TState) => TEntities;
 
-  export type QueryKeyBuilder = (queryConfig?: QueryConfig) => QueryKey | undefined;
+  export type QueryKeyBuilder<TEntities = Entities> = (queryConfig?: QueryConfig<TEntities>) => QueryKey | undefined;
 
   export interface QueryState {
     headers?: ResponseHeaders;
@@ -179,14 +186,14 @@ declare module 'redux-query' {
     status?: ResponseStatus;
   }
 
-  export interface ActionPromiseValue {
+  export interface ActionPromiseValue<TEntities = Entities> {
     body: ResponseBody;
     duration: Duration;
-    entities?: Entities;
+    entities?: TEntities;
     headers?: ResponseHeaders;
     status: ResponseStatus;
     text?: ResponseText;
-    transformed?: Entities;
+    transformed?: TEntities;
   }
 
   export interface ErrorsState {
@@ -204,13 +211,13 @@ declare module 'redux-query' {
     };
     retryableStatusCodes: ResponseStatus[];
   }
-  export type QueriesReducer = Reducer<QueriesState, ReduxQueryAction>;
-  export type EntitiesReducer = Reducer<EntitiesState, ReduxQueryAction>;
-  export type ErrorsReducer = Reducer<ErrorsState, ReduxQueryAction>;
-  export type QueryMiddlewareFactory = (
+  export type QueriesReducer<TEntities = EntitiesState> = Reducer<QueriesState, ReduxQueryAction<TEntities>>;
+  export type EntitiesReducer<TEntities = EntitiesState> = Reducer<TEntities, ReduxQueryAction<TEntities>>;
+  export type ErrorsReducer<TEntities = EntitiesState> = Reducer<ErrorsState, ReduxQueryAction<TEntities>>;
+  export type QueryMiddlewareFactory = <TEntities = EntitiesState, TState = any>(
     networkInterface: NetworkInterface,
-    queriesSelector: QueriesSelector,
-    entitiesSelector: EntitiesSelector,
+    queriesSelector: QueriesSelector<TState>,
+    entitiesSelector: EntitiesSelector<TEntities, TState>,
     customConfig?: Config,
   ) => Middleware<ReduxQueryDispatch, any, ReduxQueryDispatch>;
   export const getQueryKey: QueryKeyBuilder;
@@ -219,18 +226,18 @@ declare module 'redux-query' {
   export const errorsReducer: ErrorsReducer;
 
   export const querySelectors: {
-    isFinished: (queriesState: QueriesState, queryConfig: QueryConfig) => boolean;
-    isPending: (queriesState: QueriesState, queryConfig: QueryConfig) => boolean;
-    status: (queriesState: QueriesState, queryConfig: QueryConfig) => ResponseStatus | undefined;
-    headers: (queriesState: QueriesState, queryConfig: QueryConfig) => ResponseHeaders | undefined;
-    lastUpdated: (queriesState: QueriesState, queryConfig: QueryConfig) => number | undefined;
-    queryCount: (queriesState: QueriesState, queryConfig: QueryConfig) => number;
+    isFinished: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => boolean;
+    isPending: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => boolean;
+    status: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => ResponseStatus | undefined;
+    headers: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => ResponseHeaders | undefined;
+    lastUpdated: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => number | undefined;
+    queryCount: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => number;
   };
 
   export const errorSelectors: {
-    responseBody: (errorsState: ErrorsState, queryConfig: QueryConfig) => ResponseBody;
-    responseText: (errorsState: ErrorsState, queryConfig: QueryConfig) => ResponseText;
-    responseHeaders: (errorsState: ErrorsState, queryConfig: QueryConfig) => ResponseHeaders;
+    responseBody: (errorsState: ErrorsState, queryConfig: QueryConfig<any>) => ResponseBody;
+    responseText: (errorsState: ErrorsState, queryConfig: QueryConfig<any>) => ResponseText;
+    responseHeaders: (errorsState: ErrorsState, queryConfig: QueryConfig<any>) => ResponseHeaders;
   };
   export const actionTypes: {
     REQUEST_ASYNC: string;
@@ -247,8 +254,8 @@ declare module 'redux-query' {
   };
 
   export const queryMiddleware: QueryMiddlewareFactory;
-  export interface ReduxQueryDispatch<A extends AnyAction = ReduxQueryAction> {
-    <T extends ReduxQueryAction>(action: ReduxQueryAction): Promise<ActionPromiseValue>;
+  export interface ReduxQueryDispatch<A extends AnyAction = ReduxQueryAction<TEntities>, TEntities = Entities> {
+    <T extends ReduxQueryAction<TEntities>>(action: ReduxQueryAction<TEntities>): Promise<ActionPromiseValue<TEntities>>;
     <T extends A>(action: T): T;
   }
 }

@@ -78,7 +78,7 @@ Import `Provider` from redux-query-react and render it at the root of your React
 
 ```javascript
 import * as React from 'react';
-import { Provider } from 'redux-query-react';
+import { Provider } from 'react-redux';
 import { Provider as ReduxQueryProvider } from 'redux-query-react';
 
 import App from './App';

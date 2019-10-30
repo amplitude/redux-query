@@ -219,7 +219,7 @@ declare module 'redux-query' {
     queriesSelector: QueriesSelector<TState>,
     entitiesSelector: EntitiesSelector<TEntities, TState>,
     customConfig?: Config,
-  ) => Middleware<ReduxQueryDispatch, any, ReduxQueryDispatch>;
+  ) => Middleware<ReduxQueryDispatch<TEntities>, any, ReduxQueryDispatch<TEntities>>;
   export const getQueryKey: QueryKeyBuilder;
   export const queriesReducer: QueriesReducer;
   export const entitiesReducer: EntitiesReducer;
@@ -254,7 +254,7 @@ declare module 'redux-query' {
   };
 
   export const queryMiddleware: QueryMiddlewareFactory;
-  export interface ReduxQueryDispatch<A extends AnyAction = ReduxQueryAction<TEntities>, TEntities = Entities> {
+  export interface ReduxQueryDispatch<TEntities = Entities, A extends AnyAction = ReduxQueryAction<TEntities>> {
     <T extends ReduxQueryAction<TEntities>>(action: ReduxQueryAction<TEntities>): Promise<ActionPromiseValue<TEntities>>;
     <T extends A>(action: T): T;
   }

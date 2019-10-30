@@ -141,7 +141,7 @@
   <span class="hljs-attr">update</span>: {
     <span class="hljs-attr">playlistIds</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> {
       <span class="hljs-comment">// Assume new playlists get added to the end of the list</span>
-      <span class="hljs-keyword">return</span> [...oldValue, newValue];
+      <span class="hljs-keyword">return</span> [...oldValue, ...newValue];
     },
     <span class="hljs-attr">playlistsById</span>: <span class="hljs-function">(<span class="hljs-params">oldValue, newValue</span>) =&gt;</span> ({
       ...oldValue,

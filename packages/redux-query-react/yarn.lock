@@ -4102,9 +4102,9 @@ lodash.sortby@^4.7.0:
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
 lodash@^4.14.0, lodash@^4.17.11:
-  version "4.17.11"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
-  integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
@@ -4323,9 +4323,9 @@ mississippi@^3.0.0:
     through2 "^2.0.0"
 
 mixin-deep@^1.2.0:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.1.tgz#a49e7268dce1a0d9698e45326c5626df3543d0fe"
-  integrity sha512-8ZItLHeEgaqEvd5lYBXfm4EZSFCX29Jb9K+lAHhDKzReKBQKj3R+7NOF6tjqYi9t4oI8VUfaWITJQm86wnXGNQ==
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/mixin-deep/-/mixin-deep-1.3.2.tgz#1120b43dc359a785dce65b55b82e257ccf479566"
+  integrity sha512-WRoDn//mXBiJ1H40rqa3vH0toePwSsGb45iInWlTySa+Uu4k3tYUSxa2v1KqAiLtvlrSzaExqS1gtk96A9zvEA==
   dependencies:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
@@ -5243,10 +5243,10 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
-redux-query@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.1.1.tgz#2f7fb40938f162fe744d5ac63d8238f020214421"
-  integrity sha512-9BGgYPcAssHY293pInPsCcQNT+JeVnCj1DO6EvSaj00SeAsTdYHmT2xj27yoTdUFY2ZK+th7mlY3WwR579bODA==
+redux-query@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.2.0.tgz#542451535b1de93194a5fa93a33e33bf1aaa4a31"
+  integrity sha512-bkpP5ZchxWqst4KHwiA8la9j8UL5q4W4wJbapyVWkeEqagPFTMmguDZz4kQTP3Bgq7uX+pX/RWGU7Nb0cxO26A==
   dependencies:
     backo "^1.1.0"
     idx "^2.5.6"

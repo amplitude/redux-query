@@ -1,3 +1,8 @@
+## 3.2.0
+
+- Generic Entities Typing (petejohanson [#138](https://github.com/amplitude/redux-query/pull/138))
+- Fix HttpMethods TypeScript Typings (karevn [#139](https://github.com/amplitude/redux-query/pull/139))
+
 ## 3.1.1
 
 - Support typescript (karevn [#131](https://github.com/amplitude/redux-query/pull/131))

@@ -105,7 +105,7 @@ const makePlaylist = name => ({
   update: {
     playlistIds: (oldValue, newValue) => {
       // Assume new playlists get added to the end of the list
-      return [...oldValue, newValue];
+      return [...oldValue, ...newValue];
     },
     playlistsById: (oldValue, newValue) => ({
       ...oldValue,

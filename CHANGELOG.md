@@ -1,3 +1,8 @@
+## 3.2.1
+
+- Generic Entities Typing Fix (petejohanson [#155](https://github.com/amplitude/redux-query/pull/155))
+- Misc Package updates for security
+
 ## 3.2.0
 
 - Generic Entities Typing (petejohanson [#138](https://github.com/amplitude/redux-query/pull/138))

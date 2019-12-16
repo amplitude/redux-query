@@ -19,26 +19,28 @@ import type { QueryConfig, QueryKey } from 'redux-query/types.js.flow';
  */
 
 const useMemoizedQueryConfigs = (
-  providedQueryConfigs: Array<QueryConfig>,
+  providedQueryConfigs: ?Array<QueryConfig>,
   callback: (queryKey: QueryKey) => void,
 ) => {
   const queryConfigs = providedQueryConfigs
-    .map(
-      (queryConfig: ?QueryConfig): ?QueryConfig => {
-        const queryKey = getQueryKey(queryConfig);
+    ? providedQueryConfigs
+        .map(
+          (queryConfig: ?QueryConfig): ?QueryConfig => {
+            const queryKey = getQueryKey(queryConfig);
 
-        if (queryKey) {
-          return {
-            ...queryConfig,
-            retry: true,
-            unstable_preDispatchCallback: () => {
-              callback(queryKey);
-            },
-          };
-        }
-      },
-    )
-    .filter(Boolean);
+            if (queryKey) {
+              return {
+                ...queryConfig,
+                retry: true,
+                unstable_preDispatchCallback: () => {
+                  callback(queryKey);
+                },
+              };
+            }
+          },
+        )
+        .filter(Boolean)
+    : [];
   const [memoizedQueryConfigs, setMemoizedQueryConfigs] = React.useState(queryConfigs);
   const previousQueryKeys = React.useRef<Array<QueryKey>>(
     queryConfigs.map(getQueryKey).filter(Boolean),

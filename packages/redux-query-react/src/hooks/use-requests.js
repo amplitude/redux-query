@@ -47,7 +47,7 @@ const diffQueryConfigs = (
 };
 
 const useRequests = (
-  providedQueryConfigs: Array<QueryConfig>,
+  providedQueryConfigs: ?Array<QueryConfig>,
 ): [QueriesState, () => ?Promise<ActionPromiseValue>] => {
   const reduxDispatch = useDispatch();
 

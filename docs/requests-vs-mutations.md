@@ -18,7 +18,7 @@ Mutations always trigger a network request.
 
 Dispatch a [requestAsync](redux-actions#requestasync) action with your Redux store.
 
-If you'd like to make a request right from a React component, install redux-query-react and use either the [useRequest](use-request) hooks or the [connectRequest](connect-request) HOC.
+If you'd like to make a request right from a React component, install redux-query-react and use either the [useRequest](use-request) and [`useRequests`](use-requests) hooks or the [connectRequest](connect-request) HOC.
 
 ## How to make mutations
 

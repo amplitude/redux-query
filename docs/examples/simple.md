@@ -5,7 +5,7 @@ title: Simple Example
 
 This example is a very simple web app that has only one feature – you can view and update your username. The purpose of this example is to demonstrate how requests and mutations (including optimistic updates) work with redux-query.
 
-[![Edit redux-query Basic Example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/redux-query-hacker-news-example-jpoko?fontsize=14)
+[![Edit redux-query Basic Example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/redux-query-basic-example-8x4zo?fontsize=14)
 
 **Note**: This example fakes a server with a custom mock [network interface](../network-interfaces). In a real app, you would want to use a network interface that actually communicates to a server via HTTP.
 

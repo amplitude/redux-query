@@ -1,6 +1,6 @@
 {
   "name": "redux-query-interface-superagent",
-  "version": "3.3.0-alpha.4",
+  "version": "3.3.0-alpha.5",
   "description": "The default interface for redux-query, powered by superagent",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",
@@ -49,7 +49,7 @@
     "eslint": "^5.11.1",
     "eslint-plugin-import": "^2.14.0",
     "jest": "^24.8.0",
-    "redux-query": "^3.3.0-alpha.4",
+    "redux-query": "^3.3.0-alpha.5",
     "rimraf": "^2.4.3",
     "superagent-mock": "^3.7.0",
     "terser-webpack-plugin": "^1.3.0",

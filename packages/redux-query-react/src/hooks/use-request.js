@@ -13,7 +13,7 @@ import useQueryState from './use-query-state';
 import type { QueryState } from '../types';
 
 const useRequest = (
-  providedQueryConfig: ?QueryConfig,
+  providedQueryConfig: QueryConfig,
 ): [QueryState, () => ?Promise<ActionPromiseValue>] => {
   const reduxDispatch = useDispatch();
 

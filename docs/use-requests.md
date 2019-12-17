@@ -1,6 +1,6 @@
 ---
 id: use-requests
-title: useRequestss
+title: useRequests
 ---
 
 `useRequests` is one of the React hooks provided by redux-query-react. It's intended to be used for cases when you have a component that has network dependencies (i.e. things need to load from the server in order for this component to render properly). Its behavior is as follows:

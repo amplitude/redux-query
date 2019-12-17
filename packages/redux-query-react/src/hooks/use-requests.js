@@ -81,11 +81,25 @@ const useRequests = (
     }
   });
 
+  const finishedCallback = useConstCallback(() => {
+    (queryKey: QueryKey) => {
+      pendingRequests.current.delete(queryKey);
+    };
+  });
+
+  const transformQueryConfig = useConstCallback(
+    (queryConfig: ?QueryConfig): ?QueryConfig => {
+      return {
+        ...queryConfig,
+        unstable_preDispatchCallback: finishedCallback,
+        retry: true,
+      };
+    },
+  );
+
   // Query configs are memoized based on query key. As long as the query keys in the list don't
   // change, the query config list won't change.
-  const queryConfigs = useMemoizedQueryConfigs(providedQueryConfigs, (queryKey: QueryKey) => {
-    pendingRequests.current.delete(queryKey);
-  });
+  const queryConfigs = useMemoizedQueryConfigs(providedQueryConfigs, transformQueryConfig);
 
   // This is an object containing two variables, isPending and isFinished, these apply to all queries.
   // If any queries are pending, isPending is true, and

@@ -5,6 +5,8 @@ import { getQueryKey } from 'redux-query';
 
 import type { QueryConfig, QueryKey } from 'redux-query/types.js.flow';
 
+const identity = x => x;
+
 /**
  * This hook memoizes the list of query configs that are returned form the `mapPropsToConfigs`
  * function. It also transforms the query configs to set `retry` to `true` and pass a
@@ -20,7 +22,7 @@ import type { QueryConfig, QueryKey } from 'redux-query/types.js.flow';
 
 const useMemoizedQueryConfigs = (
   providedQueryConfigs: ?Array<QueryConfig>,
-  callback: (queryKey: QueryKey) => void,
+  transform: (?QueryConfig) => ?QueryConfig = identity,
 ) => {
   const queryConfigs = providedQueryConfigs
     ? providedQueryConfigs
@@ -29,13 +31,7 @@ const useMemoizedQueryConfigs = (
             const queryKey = getQueryKey(queryConfig);
 
             if (queryKey) {
-              return {
-                ...queryConfig,
-                retry: true,
-                unstable_preDispatchCallback: () => {
-                  callback(queryKey);
-                },
-              };
+              return transform(queryConfig);
             }
           },
         )

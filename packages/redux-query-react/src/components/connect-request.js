@@ -88,13 +88,27 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
     }
   });
 
+  const finishedCallback = useConstCallback(() => {
+    (queryKey: QueryKey) => {
+      pendingRequests.current.delete(queryKey);
+    };
+  });
+
+  const transformQueryConfig = useConstCallback(
+    (queryConfig: ?QueryConfig): ?QueryConfig => {
+      return {
+        ...queryConfig,
+        unstable_preDispatchCallback: finishedCallback,
+        retry: true,
+      };
+    },
+  );
+
   // Query configs are memoized based on query key. As long as the query keys in the list don't
   // change, the query config list won't change.
   const queryConfigs = useMemoizedQueryConfigs(
     normalizeToArray(mapPropsToConfigs(props)),
-    (queryKey: QueryKey) => {
-      pendingRequests.current.delete(queryKey);
-    },
+    transformQueryConfig,
   );
 
   const forceRequest = React.useCallback(() => {

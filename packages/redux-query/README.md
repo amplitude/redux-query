@@ -30,6 +30,7 @@ A library for managing network state in Redux.
 ## React API
 
 - [useRequest](https://amplitude.github.io/redux-query/docs/use-request)
+- [useRequests](https://amplitude.github.io/redux-query/docs/use-requests)
 - [useMutation](https://amplitude.github.io/redux-query/docs/use-mutation)
 - [connectRequest](https://amplitude.github.io/redux-query/docs/connect-request)
 

@@ -17,6 +17,7 @@ redux-query-react is a library for directly integrating [redux-query](https://am
 ## API
 
 - [useRequest](https://amplitude.github.io/redux-query/docs/use-request)
+- [useRequests](https://amplitude.github.io/redux-query/docs/use-requests)
 - [useMutation](https://amplitude.github.io/redux-query/docs/use-mutation)
 - [connectRequest](https://amplitude.github.io/redux-query/docs/connect-request)
 

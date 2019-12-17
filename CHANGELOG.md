@@ -1,3 +1,7 @@
+## 3.3.0
+
+- New React hook - `useRequests` (rctbusk [#159](https://github.com/amplitude/redux-query/pull/159))
+
 ## 3.2.1
 
 - Generic Entities Typing Fix (petejohanson [#155](https://github.com/amplitude/redux-query/pull/155))

@@ -8,3 +8,8 @@ export type QueryState = {|
   queryCount: number,
   status: ?number,
 |};
+
+export type QueriesState = {|
+  isFinished: boolean,
+  isPending: boolean,
+|};

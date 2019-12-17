@@ -53,7 +53,7 @@ If your app uses connectRequest:
 2. Add redux-query-react as a dependency.
 3. Follow the [getting started](getting-started#setup-react-integration) section for setting up the React integration.
 4. If any of your existing connectRequest calls use the `withRef` configuration option, rename that to `forwardRef`.
-5. Going forwards, consider using [useRequest](../use-request) and [useMutation]('../use-mutation) instead of connectRequest for new components.
+5. Going forwards, consider using [useRequest](../use-request), [useRequests](../use-requests), and [useMutation]('../use-mutation) instead of connectRequest for new components.
 
 And finally:
 

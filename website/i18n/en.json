@@ -64,6 +64,9 @@
       },
       "use-request": {
         "title": "useRequest"
+      },
+      "use-requests": {
+        "title": "useRequests"
       }
     },
     "links": {

@@ -52,7 +52,7 @@ Similarly to how mutations are triggered by dispatching `mutateAsync` actions, y
 
 You can also Promise-chain on dispatched `requestAsync` actions, but a Promise will only be returned if `redux-query` determines it will make a network request. For example, if the query config does not have `force` set to `true` and a previous request with the same query key previously succeeded, then a Promise will not be returned. So be sure to always check that the returned value from a dispatched `requestAsync` is a Promise before interacting with it.
 
-**Note**: With redux-query-react, [`connectRequest`](connect-request) and [`useRequest`](use-request) automatically dispatch `requestAsync` actions when the associated component mounts (if the provided query config is valid). It will also dispatch `requestAsync` actions whenever the query config updates with a new query key.
+**Note**: With redux-query-react, [`connectRequest`](connect-request), [`useRequest`](use-request), and [`useRequests`](use-requests) automatically dispatch `requestAsync` actions when the associated component mounts (if the provided query config is valid). It will also dispatch `requestAsync` actions whenever the query config updates with a new query key.
 
 ## cancelQuery
 
@@ -66,7 +66,7 @@ import { cancelQuery } from 'redux-query';
 store.dispatch(cancelQuery('{"url":"/api/playlists"}'));
 ```
 
-**Note**: With redux-query-react, [`connectRequest`](connect-request) and [`useRequest`](use-request) automatically dispatch `cancelQuery` actions when the associated component unmounts.
+**Note**: With redux-query-react, [`connectRequest`](connect-request), [`useRequest`](use-request), and [`useRequests`](use-requests) automatically dispatch `cancelQuery` actions when the associated component unmounts.
 
 ## updateEntities
 

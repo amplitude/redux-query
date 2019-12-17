@@ -5,7 +5,7 @@ title: Hacker News
 
 This example shows how to use redux-query, redux-query-react, and redux-query-interface-superagent to build a basic Hacker News client. You can run this example in the browser by clicking the button below:
 
-[![Edit redux-query Hacker News Example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/redux-query-hacker-news-example-qkwzo?fontsize=14)
+[![Edit redux-query Hacker News Example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/trusting-wilson-ndyzf?fontsize=14)
 
 ## Entry point
 
@@ -67,22 +67,6 @@ export const topStoriesRequest = () => {
   };
 };
 
-export const newStoriesRequest = () => {
-  return {
-    url: `https://hacker-news.firebaseio.com/v0/newstories.json`,
-    transform: body => ({
-      // The server responds with an array of IDs
-      newStoryIds: body,
-    }),
-    update: {
-      newStoryIds: (prev, next) => {
-        // Discard previous `response` value (we don't need it anymore).
-        return next;
-      },
-    },
-  };
-};
-
 export const itemRequest = itemId => {
   return {
     url: `https://hacker-news.firebaseio.com/v0/item/${itemId}.json`,
@@ -113,10 +97,6 @@ const emptyArray = [];
 
 export const getTopStoryIds = state => {
   return state.entities.topStoryIds || emptyArray;
-};
-
-export const getNewStoryIds = state => {
-  return state.entities.newStoryIds || emptyArray;
 };
 
 export const getItem = (state, itemId) => {
@@ -180,50 +160,20 @@ import Item from '../components/Item';
 import * as storyQueryConfigs from '../query-configs/stories';
 import * as storySelectors from '../selectors/stories';
 
-const Stories = props => {
-  const [{ isPending }] = useRequests([
-    storyQueryConfigs.topStoriesRequest(),
-    storyQueryConfigs.newStoriesRequest(),
-  ]);
+const TopStories = props => {
+  useRequest(storyQueryConfigs.topStoriesRequest());
   const topStoryIds = useSelector(storySelectors.getTopStoryIds);
-  const newStoryIds = useSelector(storySelectors.getNewStoryIds);
-
-  const [listToShow, setListToShow] = React.useState('new');
-
-  if (isPending) {
-    return 'Loading';
-  }
 
   return (
-    <div>
-      <div style={{ display: 'flex', cursor: 'pointer', color: 'blue', fontSize: '20px' }}>
-        <div
-          style={{ paddingRight: '10px', textDecoration: 'underline' }}
-          onClick={() => {
-            setListToShow('new');
-          }}
-        >
-          New
-        </div>
-        <div
-          style={{ paddingRight: '10px', textDecoration: 'underline' }}
-          onClick={() => {
-            setListToShow('top');
-          }}
-        >
-          Top
-        </div>
-      </div>
-      <ol>
-        {(listToShow === 'top' ? topStoryIds : newStoryIds).slice(0, 30).map(itemId => (
-          <Item itemId={itemId} key={itemId} />
-        ))}
-      </ol>
-    </div>
+    <ol>
+      {topStoryIds.slice(0, 30).map(itemId => (
+        <Item itemId={itemId} key={itemId} />
+      ))}
+    </ol>
   );
 };
 
-export default Stories;
+export default TopStories;
 ```
 
 ### `components/HackerNews.js`
@@ -233,7 +183,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { Provider as ReduxQueryProvider } from 'redux-query-react';
 
-import Stories from '../components/Stories';
+import TopStories from '../components/TopStories';
 import { getQueries } from '../store';
 
 const HackerNews = props => {
@@ -242,7 +192,7 @@ const HackerNews = props => {
       <ReduxQueryProvider queriesSelector={getQueries}>
         <>
           <h1>Hacker News</h1>
-          <Stories />
+          <TopStories />
         </>
       </ReduxQueryProvider>
     </Provider>

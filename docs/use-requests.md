@@ -15,6 +15,12 @@ title: useRequestss
 
 `useRequests` returns a tuple-like array, where the first value in the tuple is an object representing the state of the requests. This object will have "isFinished" and "isPending" keys. "isFinished" will be false until all queries in the query array are cmopleted. "isPending" will be true as long as any of the queries are still in flight. The second value in the tuple is a callback to re-issue all the requests, even if previous requests with the same query key have already been made and resulted in a successful server responses.
 
+## Note
+
+`useRequests` is meant to for cases in which the number of querys that are going to be dispatched is unknown or arbitrary. The point of this hook is for when a batch of queries need to be called and state of the individual queries is not important. What is important for the use case of this hook is the overall state of all of the input queries.
+
+The below example takes an array of user requests. The list of users will not be rendered until every request in array of requests is complete.
+
 ## Example
 
 ```javascript
@@ -22,32 +28,27 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useRequests } from 'redux-query-react';
 
-const getNotifications = state => state.entities.notifications;
-
 const getUsers = state => state.entities.users;
 
-const requests = [
-  {
-    url: '/api/notifications',
+const userIds = ['ryan.busk@amplitude.com', 'ryan@amplitude.com' /* etc... */]; // arbitrary number of users
+
+const requests = userIds.map(userId => {
+  return {
+    url: `/api/users/${userId}`,
     update: {
-      notifications: (oldValue, newValue) => newValue,
+      users: (oldValue, newValue) => {
+        return (oldValue[user] = newValue);
+      },
     },
-  },
-  {
-    url: '/api/users',
-    update: {
-      users: (oldValue, newValue) => newValue,
-    },
-  },
-];
+  };
+}); // unknown number of requests
 
 const NotificationsView = () => {
-  const notifications = useSelector(getNotifications) || [];
   const users = useSelector(getUsers) || [];
 
   const [{ isPending, isFinished }, refresh] = useRequests(requests);
 
-  if (isPending) {
+  if (!isFinished) {
     return 'Loading…';
   }
 
@@ -55,13 +56,8 @@ const NotificationsView = () => {
     <div>
       <button onClick={refresh}>Refresh</button>
       <ul>
-        {notifications.map(notification => (
-          <Notification key={notificationId} />
-        ))}
-      </ul>
-      <ul>
         {users.map(user => (
-          <User key={userId} />
+          <User key={user.userId} />
         ))}
       </ul>
     </div>

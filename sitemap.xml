@@ -21,4 +21,5 @@
 <url> <loc>https://amplitude.github.io/redux-query/docs/upgrade-guides/v2-to-v3</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://amplitude.github.io/redux-query/docs/upgrade-guides/v2-to-v3" /> </url>
 <url> <loc>https://amplitude.github.io/redux-query/docs/use-mutation</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://amplitude.github.io/redux-query/docs/use-mutation" /> </url>
 <url> <loc>https://amplitude.github.io/redux-query/docs/use-request</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://amplitude.github.io/redux-query/docs/use-request" /> </url>
+<url> <loc>https://amplitude.github.io/redux-query/docs/use-requests</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://amplitude.github.io/redux-query/docs/use-requests" /> </url>
 </urlset>

@@ -43,10 +43,10 @@ declare module 'redux-query-react' {
   export type ReduxQueryProvider = React.ComponentType<ProviderProps>;
   export type ActionPromise<TEntities> = Promise<ActionPromiseValue<TEntities>> | undefined;
   export type UseRequestHook = <TEntities>(
-    queryConfig: QueryConfig<TEntities>,
+    queryConfig: QueryConfig<TEntities> | null | undefined,
   ) => [QueryState, ForceRequestCallback<TEntities>];
   export type UseRequestsHook = <TEntities>(
-    queryConfigs: Array<QueryConfig<TEntities>> | null | undefined,
+    queryConfigs: Array<QueryConfig<TEntities> | null | undefined> | null | undefined,
   ) => [QueryState, ForceRequestCallback<TEntities>];
   export type MutationQueryConfigFactory<TEntities> = <TEntities>(
     ...args: any

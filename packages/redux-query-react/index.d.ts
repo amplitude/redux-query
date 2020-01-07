@@ -28,12 +28,12 @@ declare module 'redux-query-react' {
   ) => React.ComponentType<Omit<TProps, 'forceRequest'>>;
 
   export type RequestConnector = <
-    TProps extends WithForceRequest<TEntities> = WithForceRequest<TEntities>,
-    TEntities = Entities
+    TEntities = Entities,
+    TProps extends WithForceRequest<TEntities> = WithForceRequest<TEntities>
   >(
     mapPropsToConfigs: QueryConfigsFactory<TEntities>,
     options?: ConnectRequestOptions,
-  ) => ConnectRequestWrapper<TProps, TEntities>;
+  ) => ConnectRequestWrapper<TProps>;
 
   export interface ProviderProps {
     queriesSelector: QueriesSelector;
@@ -48,8 +48,12 @@ declare module 'redux-query-react' {
   export type UseRequestsHook = <TEntities>(
     queryConfigs: Array<QueryConfig<TEntities>> | null | undefined,
   ) => [QueryState, ForceRequestCallback<TEntities>];
-  export type MutationQueryConfigFactory = <TEntities>(...args: any) => QueryConfig<TEntities>;
-  export type RunMutation = <TEntities>(...args: any) => Promise<ActionPromiseValue<TEntities>>;
+  export type MutationQueryConfigFactory<TEntities> = <TEntities>(
+    ...args: any
+  ) => QueryConfig<TEntities>;
+  export type RunMutation<TEntities> = <TEntities>(
+    ...args: any
+  ) => Promise<ActionPromiseValue<TEntities>>;
   export type UseMutationHook = <TEntities>(
     createQueryConfig: MutationQueryConfigFactory<TEntities>,
   ) => [QueryState, RunMutation<TEntities>];

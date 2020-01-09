@@ -88,9 +88,11 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
     }
   });
 
-  const finishedCallback = useConstCallback(() => {
-    (queryKey: QueryKey) => {
-      pendingRequests.current.delete(queryKey);
+  const finishedCallback = useConstCallback((queryKey: ?QueryKey) => {
+    return () => {
+      if (queryKey != null) {
+        pendingRequests.current.delete(queryKey);
+      }
     };
   });
 
@@ -98,7 +100,7 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
     (queryConfig: ?QueryConfig): ?QueryConfig => {
       return {
         ...queryConfig,
-        unstable_preDispatchCallback: finishedCallback,
+        unstable_preDispatchCallback: finishedCallback(getQueryKey(queryConfig)),
         retry: true,
       };
     },

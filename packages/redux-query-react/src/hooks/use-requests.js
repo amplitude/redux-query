@@ -81,9 +81,11 @@ const useRequests = (
     }
   });
 
-  const finishedCallback = useConstCallback(() => {
-    (queryKey: QueryKey) => {
-      pendingRequests.current.delete(queryKey);
+  const finishedCallback = useConstCallback((queryKey: ?QueryKey) => {
+    return () => {
+      if (queryKey != null) {
+        pendingRequests.current.delete(queryKey);
+      }
     };
   });
 
@@ -91,7 +93,7 @@ const useRequests = (
     (queryConfig: ?QueryConfig): ?QueryConfig => {
       return {
         ...queryConfig,
-        unstable_preDispatchCallback: finishedCallback,
+        unstable_preDispatchCallback: finishedCallback(getQueryKey(queryConfig)),
         retry: true,
       };
     },

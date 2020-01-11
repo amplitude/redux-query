@@ -1,3 +1,9 @@
+## 3.3.1
+
+- Fix `finishedCallback` to not throw console warning (mili-confluent [#166](https://github.com/amplitude/redux-query/pull/166))
+- Add useRequests typescript and fix other typescript typings (kamranayub [#165](https://github.com/amplitude/redux-query/pull/165))
+- Fix Security vulnerbilities and update logs for 3.3.1 (rctbusk [#167](https://github.com/amplitude/redux-query/pull/167))
+
 ## 3.3.0
 
 - New React hook - `useRequests` (rctbusk [#159](https://github.com/amplitude/redux-query/pull/159))

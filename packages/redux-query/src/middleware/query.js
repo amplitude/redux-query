@@ -18,7 +18,7 @@ import { getQueryKey } from '../lib/query-key';
 import { updateEntities, optimisticUpdateEntities, rollbackEntities } from '../lib/update';
 import { pick } from '../lib/object';
 
-import type { Action, PublicAction } from '../actions';
+import type { PublicAction } from '../actions';
 import type {
   ActionPromiseValue,
   EntitiesSelector,
@@ -26,6 +26,7 @@ import type {
   NetworkInterface,
   QueriesSelector,
   QueryKey,
+  ReduxStore,
   ResponseBody,
   Status,
   Transform,
@@ -39,11 +40,6 @@ type Config = {|
     maxDuration: number,
   |},
   retryableStatusCodes: Array<Status>,
-|};
-
-type ReduxStore = {|
-  dispatch: (action: Action) => any,
-  getState: () => any,
 |};
 
 type Next = (action: PublicAction) => any;

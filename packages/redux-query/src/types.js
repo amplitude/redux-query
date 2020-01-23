@@ -1,7 +1,7 @@
 // @flow
 
 import type { HttpMethod } from './constants/http-methods';
-import type { PublicAction } from './actions';
+import type { Action as PrivateAction, PublicAction } from './actions';
 import type { State as QueriesState } from './reducers/queries';
 import type { State as EntitiesState } from './reducers/entities';
 
@@ -12,6 +12,11 @@ type QueryOptions = {
   method?: HttpMethod,
   headers?: { [key: string]: any },
 };
+
+export type ReduxStore = {|
+  dispatch: (action: PrivateAction) => any,
+  getState: () => any,
+|};
 
 export type QueryConfig = {|
   body?: RequestBody,

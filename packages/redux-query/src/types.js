@@ -80,6 +80,7 @@ export type NetworkOptions = {
   body: ?RequestBody,
   headers: ?RequestHeaders,
   credentials: ?CredentialOption,
+  store: ReduxStore,
 };
 
 export type NetworkInterface = (

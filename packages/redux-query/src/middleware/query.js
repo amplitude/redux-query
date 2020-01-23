@@ -98,9 +98,11 @@ const queryMiddleware = (
     }
   };
 
-  return ({ dispatch, getState }: ReduxStore) => (next: Next) => (action: PublicAction) => {
+  return (store: ReduxStore) => (next: Next) => (action: PublicAction) => {
     let returnValue;
     const config = { ...defaultConfig, ...customConfig };
+
+    const { dispatch, getState } = store;
 
     switch (action.type) {
       case actionTypes.REQUEST_ASYNC: {
@@ -152,6 +154,7 @@ const queryMiddleware = (
                 body,
                 headers: options.headers,
                 credentials: options.credentials,
+                store,
               });
 
               networkHandlersByQueryKey[queryKey] = networkHandler;
@@ -292,6 +295,7 @@ const queryMiddleware = (
             body,
             headers: options.headers,
             credentials: options.credentials,
+            store,
           });
 
           networkHandlersByQueryKey[queryKey] = networkHandler;

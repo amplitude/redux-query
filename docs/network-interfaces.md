@@ -17,6 +17,10 @@ type NetworkInterface = (
     body: ?any,
     headers: ?{ [key: string]: any },
     credentials: ?('include' | 'same-origin' | 'omit'),
+    store: {
+      dispatch: (action: Action) => any,
+      getState: () => any,
+    },
   },
 ) => NetworkHandler;
 ```

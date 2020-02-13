@@ -74,3 +74,14 @@ const Comment = () => {
   );
 };
 ```
+
+Also the `useMutation` callback accepts **async functions**, this is helpful when we need to create **body** based off another api call or any async function:
+
+### Example
+
+```javascript
+const [props, mutate] = useMutation(async values => ({
+  url: '/api',
+  body: await myAsyncFn(values),
+}));
+```

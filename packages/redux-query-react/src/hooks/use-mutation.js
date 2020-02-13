@@ -22,8 +22,8 @@ const useMutation = (
   const queryState = useQueryState(queryConfig);
 
   const mutate = React.useCallback(
-    (...args) => {
-      const queryConfig = makeQueryConfig(...args);
+    async (...args) => {
+      const queryConfig = await makeQueryConfig(...args);
 
       setQueryConfig(queryConfig);
 

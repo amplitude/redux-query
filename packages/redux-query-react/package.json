@@ -83,5 +83,5 @@
       "^.+\\.js$": "babel-jest"
     }
   },
-  "gitHead": "6937a1967c90ba7316fe351161d156334d3e3a3a"
+  "gitHead": "5d599c99447938cf4a93a35bc3711bd59af96965"
 }

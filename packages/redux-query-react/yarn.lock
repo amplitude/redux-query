@@ -5248,10 +5248,10 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
-redux-query@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.3.0.tgz#b62b527666739a7a3a76a0aa6470d3b087c76af3"
-  integrity sha512-jS+H/4P3r9FE2+rG9KljR7t2HxYlgD6TsO8uXUMHAW7bjvtQCNj3ISCu2+BzZybDCEBR5JYm4fXUw6W3eigHSg==
+redux-query@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.3.1.tgz#f447c927b6c9efb1bacc8b9bc1f729dd547e0b3d"
+  integrity sha512-MoLCmm1q9Axk7N2az5K9bgu4eDjXGTTGCp5e0ojuJE6voakKzvrwOg5aWrU2Pi5lpl2Nd786zVZG2PBW8lUGRg==
   dependencies:
     backo "^1.1.0"
     idx "^2.5.6"
@@ -5403,6 +5403,11 @@ require-main-filename@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
+
+reselect@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.0.0.tgz#f2529830e5d3d0e021408b246a206ef4ea4437f7"
+  integrity sha512-qUgANli03jjAyGlnbYVAV5vvnOmJnODyABz51RdBN7M4WaVu8mecZWgyQNkG8Yqe3KRGRt0l4K4B3XVEULC4CA==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"

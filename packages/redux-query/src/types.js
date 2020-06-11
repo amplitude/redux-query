@@ -31,9 +31,9 @@ export type QueryConfig = {|
 export type QueryDetails = {
   isFinished: boolean,
   isPending: boolean,
-  status: ?number,
+  status?: number,
   headers: ?{ [key: string]: any },
-  lastUpdated: ?number,
+  lastUpdated?: number,
   queryCount: number,
 };
 

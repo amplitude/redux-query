@@ -10,9 +10,7 @@ import { createSelector } from 'reselect';
 const defaultDetailsObject = {
   isFinished: false,
   isPending: false,
-  status: null,
   headers: null,
-  lastUpdated: null,
   queryCount: 0,
 };
 

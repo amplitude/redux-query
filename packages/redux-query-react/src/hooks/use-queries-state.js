@@ -20,7 +20,7 @@ const useQueriesState = (queryConfigs: Array<QueryConfig>): QueriesState => {
   const { queriesSelector } = contextValue;
 
   const isPending = useSelector(state =>
-    queryConfigs.some(queryConfig => querySelectors.status(queriesSelector(state), queryConfig)),
+    queryConfigs.some(queryConfig => querySelectors.isPending(queriesSelector(state), queryConfig)),
   );
 
   const isFinished = useSelector(state =>

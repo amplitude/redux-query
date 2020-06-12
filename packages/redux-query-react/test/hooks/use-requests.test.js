@@ -15,8 +15,11 @@ const reducer = combineReducers({
   queries: queriesReducer,
 });
 
-const artificialNetworkDelay = 100;
+const artificialApiNetworkDelay = 100;
 const apiMessage = 'hello, world!';
+
+const artificialTestNetworkDelay = 200;
+const testRouteMessage = 'test message';
 
 const mockNetworkInterface = url => {
   let timeoutId = null;
@@ -30,29 +33,29 @@ const mockNetworkInterface = url => {
         timeoutId = setTimeout(() => {
           const status = 200;
           const body = {
-            message: apiMessage,
+            apiMessage: apiMessage,
           };
           const text = JSON.stringify(body);
           const headers = {};
 
           callback(null, status, body, text, headers);
-        }, artificialNetworkDelay);
+        }, artificialApiNetworkDelay);
       }
       if (url === '/test') {
         timeoutId = setTimeout(() => {
           const status = 200;
           const body = {
-            message: apiMessage,
+            testMessage: testRouteMessage,
           };
           const text = JSON.stringify(body);
           const headers = {};
 
           callback(null, status, body, text, headers);
-        }, artificialNetworkDelay);
+        }, artificialTestNetworkDelay);
       } else {
         timeoutId = setTimeout(() => {
           callback(null, 404, {}, '{}', {});
-        }, artificialNetworkDelay);
+        }, artificialApiNetworkDelay);
       }
     },
   };
@@ -82,17 +85,18 @@ describe('useRequests', () => {
         {
           url: '/api',
           update: {
-            message: (prevValue, newValue) => newValue,
+            apiMessage: (prevValue, newValue) => newValue,
           },
         },
         {
           url: '/test',
           update: {
-            message: (prevValue, newValue) => newValue,
+            testMessage: (prevValue, newValue) => newValue,
           },
         },
       ]);
-      const message = useSelector(state => state.entities.message);
+      const apiMessage = useSelector(state => state.entities.apiMessage);
+      const testMessage = useSelector(state => state.entities.testMessage);
 
       if (isPending) {
         return <div data-testid="loading-content">loading</div>;
@@ -100,7 +104,8 @@ describe('useRequests', () => {
 
       return (
         <div>
-          <div data-testid="loaded-content">{message}</div>
+          <div data-testid="loaded-api-content">{apiMessage}</div>
+          <div data-testid="loaded-test-content">{testMessage}</div>
           <button data-testid="refresh-button" onClick={refresh}>
             refresh
           </button>
@@ -121,8 +126,15 @@ describe('useRequests', () => {
 
     // Loaded
 
-    let loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
-    expect(loadedContentNode.textContent).toBe(apiMessage);
+    let loadedApiContentNode = await waitForElement(() =>
+      getByTestId(container, 'loaded-api-content'),
+    );
+    expect(loadedApiContentNode.textContent).toBe(apiMessage);
+
+    let loadedTestContentNode = await waitForElement(() =>
+      getByTestId(container, 'loaded-test-content'),
+    );
+    expect(loadedTestContentNode.textContent).toBe(testRouteMessage);
 
     // Click refresh button
 
@@ -136,8 +148,68 @@ describe('useRequests', () => {
 
     // Loaded again
 
-    loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
-    expect(loadedContentNode.textContent).toBe(apiMessage);
+    loadedApiContentNode = await waitForElement(() => getByTestId(container, 'loaded-api-content'));
+    expect(loadedApiContentNode.textContent).toBe(apiMessage);
+
+    loadedTestContentNode = await waitForElement(() =>
+      getByTestId(container, 'loaded-test-content'),
+    );
+    expect(loadedTestContentNode.textContent).toBe(testRouteMessage);
+  });
+
+  it('only reports isFinished when all requests have finished', async () => {
+    const Content = () => {
+      const [{ isFinished }] = useRequests([
+        {
+          url: '/api',
+          update: {
+            apiMessage: (prevValue, newValue) => newValue,
+          },
+        },
+        {
+          url: '/test',
+          update: {
+            testMessage: (prevValue, newValue) => newValue,
+          },
+        },
+      ]);
+      const apiMessage = useSelector(state => state.entities.apiMessage);
+      const testMessage = useSelector(state => state.entities.testMessage);
+
+      if (!isFinished) {
+        return <div data-testid="loading-content">loading</div>;
+      }
+
+      return (
+        <div>
+          <div data-testid="loaded-api-content">{apiMessage}</div>
+          <div data-testid="loaded-test-content">{testMessage}</div>
+        </div>
+      );
+    };
+
+    const { container } = render(
+      <App>
+        <Content />
+      </App>,
+    );
+
+    // Initial loading
+
+    let loadingContentNode = getByTestId(container, 'loading-content');
+    expect(loadingContentNode.textContent).toBe('loading');
+
+    // Loaded
+
+    let loadedApiContentNode = await waitForElement(() =>
+      getByTestId(container, 'loaded-api-content'),
+    );
+    expect(loadedApiContentNode.textContent).toBe(apiMessage);
+
+    let loadedTestContentNode = await waitForElement(() =>
+      getByTestId(container, 'loaded-test-content'),
+    );
+    expect(loadedTestContentNode.textContent).toBe(testRouteMessage);
   });
 
   it('cancels pending requests as part of cleanup', async () => {
@@ -146,17 +218,18 @@ describe('useRequests', () => {
         {
           url: '/api',
           update: {
-            message: (prevValue, newValue) => newValue,
+            apiMessage: (prevValue, newValue) => newValue,
           },
         },
         {
           url: '/test',
           update: {
-            message: (prevValue, newValue) => newValue,
+            testMessage: (prevValue, newValue) => newValue,
           },
         },
       ]);
-      const message = useSelector(state => state.entities.message);
+      const apiMessage = useSelector(state => state.entities.apiMessage);
+      const testMessage = useSelector(state => state.entities.testMessage);
 
       if (isPending) {
         return <div data-testid="loading-content">loading</div>;
@@ -164,7 +237,8 @@ describe('useRequests', () => {
 
       return (
         <div>
-          <div data-testid="loaded-content">{message}</div>
+          <div data-testid="loaded-api-content">{apiMessage}</div>
+          <div data-testid="loaded-test-content">{testMessage}</div>
           <button data-testid="refresh-button" onClick={refresh}>
             refresh
           </button>
@@ -239,8 +313,15 @@ describe('useRequests', () => {
 
     // Loaded now
 
-    const loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
-    expect(loadedContentNode.textContent).toBe(apiMessage);
+    let loadedApiContentNode = await waitForElement(() =>
+      getByTestId(container, 'loaded-api-content'),
+    );
+    expect(loadedApiContentNode.textContent).toBe(apiMessage);
+
+    let loadedTestContentNode = await waitForElement(() =>
+      getByTestId(container, 'loaded-test-content'),
+    );
+    expect(loadedTestContentNode.textContent).toBe(testRouteMessage);
   });
 
   it('does nothing if query config is null', async () => {

@@ -24,7 +24,7 @@ const useQueriesState = (queryConfigs: Array<QueryConfig>): QueriesState => {
   );
 
   const isFinished = useSelector(state =>
-    queryConfigs.some(queryConfig =>
+    queryConfigs.every(queryConfig =>
       querySelectors.isFinished(queriesSelector(state), queryConfig),
     ),
   );

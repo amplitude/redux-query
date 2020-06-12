@@ -8,7 +8,7 @@ import type { QueryConfig } from 'redux-query/types.js.flow';
 import ReduxQueryContext from '../context';
 import type { QueriesState } from '../types';
 
-const useQueriesState = (queryConfig: Array<QueryConfig>): QueriesState => {
+const useQueriesState = (queryConfigs: Array<QueryConfig>): QueriesState => {
   const contextValue = React.useContext(ReduxQueryContext);
 
   if (!contextValue) {
@@ -19,14 +19,14 @@ const useQueriesState = (queryConfig: Array<QueryConfig>): QueriesState => {
 
   const { queriesSelector } = contextValue;
 
-  const queriesState = useSelector(queriesSelector);
-
-  const isPending = queryConfig.some(queryConfig =>
-    querySelectors.isPending(queriesState, queryConfig),
+  const isPending = useSelector(state =>
+    queryConfigs.some(queryConfig => querySelectors.isPending(queriesSelector(state), queryConfig)),
   );
 
-  const isFinished = queryConfig.every(queryConfig =>
-    querySelectors.isFinished(queriesState, queryConfig),
+  const isFinished = useSelector(state =>
+    queryConfigs.every(queryConfig =>
+      querySelectors.isFinished(queriesSelector(state), queryConfig),
+    ),
   );
 
   const queryState = React.useMemo(

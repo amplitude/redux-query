@@ -28,6 +28,15 @@ export type QueryConfig = {|
   url: Url,
 |};
 
+export type QueryDetails = {
+  isFinished: boolean,
+  isPending: boolean,
+  status?: number,
+  headers: ?{ [key: string]: any },
+  lastUpdated?: number,
+  queryCount: number,
+};
+
 export type Url = string;
 
 export type RequestBody = any;

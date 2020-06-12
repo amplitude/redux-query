@@ -4,67 +4,73 @@ import idx from 'idx';
 
 import type { State as QueriesState } from '../reducers/queries';
 import { getQueryKey } from '../lib/query-key';
-import type { QueryConfig } from '../types';
+import type { QueryConfig, QueryDetails } from '../types';
+import { createSelector } from 'reselect';
 
-export const isFinished = (queriesState: QueriesState, queryConfig: ?QueryConfig): boolean => {
-  const queryKey = getQueryKey(queryConfig);
-
-  if (!queryKey) {
-    return false;
-  }
-
-  return idx(queriesState, _ => _[queryKey].isFinished) || false;
+const defaultDetailsObject = {
+  isFinished: false,
+  isPending: false,
+  headers: null,
+  queryCount: 0,
 };
 
-export const isPending = (queriesState: QueriesState, queryConfig: ?QueryConfig): boolean => {
-  const queryKey = getQueryKey(queryConfig);
-
-  if (!queryKey) {
-    return false;
-  }
-
-  return idx(queriesState, _ => _[queryKey].isPending) || false;
-};
-
-export const status = (queriesState: QueriesState, queryConfig: ?QueryConfig): ?number => {
-  const queryKey = getQueryKey(queryConfig);
-
-  if (!queryKey) {
-    return null;
-  }
-
-  return idx(queriesState, _ => _[queryKey].status);
-};
-
-export const headers = (
+export const getQueryDetails: (
   queriesState: QueriesState,
   queryConfig: ?QueryConfig,
-): ?{ [key: string]: any } => {
+) => QueryDetails = (queriesState: QueriesState, queryConfig: ?QueryConfig) => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {
-    return null;
+    return defaultDetailsObject;
   }
 
-  return idx(queriesState, _ => _[queryKey].headers);
+  return idx(queriesState, _ => _[queryKey]) || defaultDetailsObject;
 };
 
-export const lastUpdated = (queriesState: QueriesState, queryConfig: ?QueryConfig): ?number => {
-  const queryKey = getQueryKey(queryConfig);
+export const isFinished: (
+  queriesState: QueriesState,
+  queryConfig: ?QueryConfig,
+) => boolean = createSelector(
+  getQueryDetails,
+  query => query.isFinished,
+);
 
-  if (!queryKey) {
-    return null;
-  }
+export const isPending: (
+  queriesState: QueriesState,
+  queryConfig: ?QueryConfig,
+) => boolean = createSelector(
+  getQueryDetails,
+  query => query.isPending,
+);
 
-  return idx(queriesState, _ => _[queryKey].lastUpdated);
-};
+export const status: (
+  queriesState: QueriesState,
+  queryConfig: ?QueryConfig,
+) => ?number = createSelector(
+  getQueryDetails,
+  query => query.status,
+);
 
-export const queryCount = (queriesState: QueriesState, queryConfig: ?QueryConfig): number => {
-  const queryKey = getQueryKey(queryConfig);
+export const headers: (
+  queriesState: QueriesState,
+  queryConfig: ?QueryConfig,
+) => ?{ [key: string]: any } = createSelector(
+  getQueryDetails,
+  query => query.headers,
+);
 
-  if (!queryKey) {
-    return 0;
-  }
+export const lastUpdated: (
+  queriesState: QueriesState,
+  queryConfig: ?QueryConfig,
+) => ?number = createSelector(
+  getQueryDetails,
+  query => query.lastUpdated,
+);
 
-  return idx(queriesState, _ => _[queryKey].queryCount) || 0;
-};
+export const queryCount: (
+  queriesState: QueriesState,
+  queryConfig: ?QueryConfig,
+) => number = createSelector(
+  getQueryDetails,
+  query => query.queryCount,
+);

@@ -143,6 +143,15 @@ declare module 'redux-query' {
     headers?: { [key: string]: string };
   }
 
+  export type QueryDetails = {
+    isFinished: boolean;
+    isPending: boolean;
+    status?: number;
+    headers?: ResponseHeaders;
+    lastUpdated?: number;
+    queryCount: number;
+  };
+
   export interface QueryConfig<TEntities = Entities> {
     body?: RequestBody;
     force?: boolean;
@@ -239,6 +248,7 @@ declare module 'redux-query' {
   export const errorsReducer: ErrorsReducer;
 
   export const querySelectors: {
+    getQueryDetails: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => QueryDetails;
     isFinished: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => boolean;
     isPending: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => boolean;
     status: (

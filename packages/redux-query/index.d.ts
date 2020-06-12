@@ -25,14 +25,7 @@ declare module 'redux-query' {
   }
   export type EntitiesState = Entities;
 
-  export type KnownHttpMethods =
-    | 'GET'
-    | 'HEAD'
-    | 'PUT'
-    | 'POST'
-    | 'DELETE'
-    | 'PATCH'
-    | 'OPTIONS';
+  export type KnownHttpMethods = 'GET' | 'HEAD' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS';
   export type HttpMethods = KnownHttpMethods | string;
 
   export const httpMethods: { [k in KnownHttpMethods]: KnownHttpMethods };
@@ -46,16 +39,16 @@ declare module 'redux-query' {
   export type RollbackStrategy<T> = (initialValue: T, currentValue: T) => T;
 
   export type Update<TEntities = Entities> = {
-    [K in keyof TEntities]?: UpdateStrategy<TEntities[K]>;
-  }
+    [K in keyof TEntities]?: UpdateStrategy<TEntities[K]>
+  };
 
   export type OptimisticUpdate<TEntities = Entities> = {
-    [K in keyof TEntities]?: OptimisticUpdateStrategy<TEntities[K]>;
-  }
+    [K in keyof TEntities]?: OptimisticUpdateStrategy<TEntities[K]>
+  };
 
   export type Rollback<TEntities = Entities> = {
-    [K in keyof TEntities]?: RollbackStrategy<TEntities[K]>;
-  }
+    [K in keyof TEntities]?: RollbackStrategy<TEntities[K]>
+  };
 
   export interface WithTime {
     time: number;
@@ -69,7 +62,8 @@ declare module 'redux-query' {
     update: Update<TEntities>;
   }
 
-  export type RequestAsyncAction<TEntities = Entities> = Action<'@@query/REQUEST_ASYNC'> & QueryConfig<TEntities>;
+  export type RequestAsyncAction<TEntities = Entities> = Action<'@@query/REQUEST_ASYNC'> &
+    QueryConfig<TEntities>;
 
   export interface QueryStartParams {
     body?: RequestBody;
@@ -95,11 +89,17 @@ declare module 'redux-query' {
     url: Url;
   }
 
-  export type RequestSuccessAction<TEntities = Entities> = Action<'@@query/REQUEST_SUCCESS'> | QueryResponse<TEntities> | WithTime;
-  export type RequestFailureAction<TEntities = Entities> = Action<'@@query/REQUEST_FAILURE'> | QueryResponse<TEntities> | WithTime;
-  export type MutateAsyncAction<TEntities = Entities> = Action<'@@query/MUTATE_ASYNC'> & QueryConfig<TEntities>;
+  export type RequestSuccessAction<TEntities = Entities> = Action<'@@query/REQUEST_SUCCESS'> &
+    QueryResponse<TEntities> &
+    WithTime;
+  export type RequestFailureAction<TEntities = Entities> = Action<'@@query/REQUEST_FAILURE'> &
+    QueryResponse<TEntities> &
+    WithTime;
+  export type MutateAsyncAction<TEntities = Entities> = Action<'@@query/MUTATE_ASYNC'> &
+    QueryConfig<TEntities>;
   export type MutateSuccessAction = Action<'@@query/MUTATE_SUCCESS'> & QueryResponse;
-  export type UpdateEntitiesAction<TEntities = Entities> = Action<'@@query/UPDATE_ENTITIES'> & WithUpdateEntities<TEntities>;
+  export type UpdateEntitiesAction<TEntities = Entities> = Action<'@@query/UPDATE_ENTITIES'> &
+    WithUpdateEntities<TEntities>;
   export type CancelQueryAction = Action<'@@query/CANCEL_QUERY'> & WithQueryKey;
   export type ReduxQueryAction<TEntities = Entities> =
     | RequestAsyncAction<TEntities>
@@ -173,9 +173,13 @@ declare module 'redux-query' {
 
   export type QueriesSelector<TState = any> = (state: TState) => QueriesState;
 
-  export type EntitiesSelector<TEntities = EntitiesState, TState = any> = (state: TState) => TEntities;
+  export type EntitiesSelector<TEntities = EntitiesState, TState = any> = (
+    state: TState,
+  ) => TEntities;
 
-  export type QueryKeyBuilder<TEntities = Entities> = (queryConfig?: QueryConfig<TEntities>) => QueryKey | undefined;
+  export type QueryKeyBuilder<TEntities = Entities> = (
+    queryConfig?: QueryConfig<TEntities>,
+  ) => QueryKey | undefined;
 
   export interface QueryState {
     headers?: ResponseHeaders;
@@ -211,9 +215,18 @@ declare module 'redux-query' {
     };
     retryableStatusCodes: ResponseStatus[];
   }
-  export type QueriesReducer<TEntities = EntitiesState> = Reducer<QueriesState, ReduxQueryAction<TEntities>>;
-  export type EntitiesReducer<TEntities = EntitiesState> = Reducer<TEntities, ReduxQueryAction<TEntities>>;
-  export type ErrorsReducer<TEntities = EntitiesState> = Reducer<ErrorsState, ReduxQueryAction<TEntities>>;
+  export type QueriesReducer<TEntities = EntitiesState> = Reducer<
+    QueriesState,
+    ReduxQueryAction<TEntities>
+  >;
+  export type EntitiesReducer<TEntities = EntitiesState> = Reducer<
+    TEntities,
+    ReduxQueryAction<TEntities>
+  >;
+  export type ErrorsReducer<TEntities = EntitiesState> = Reducer<
+    ErrorsState,
+    ReduxQueryAction<TEntities>
+  >;
   export type QueryMiddlewareFactory = <TEntities = EntitiesState, TState = any>(
     networkInterface: NetworkInterface,
     queriesSelector: QueriesSelector<TState>,
@@ -228,8 +241,14 @@ declare module 'redux-query' {
   export const querySelectors: {
     isFinished: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => boolean;
     isPending: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => boolean;
-    status: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => ResponseStatus | undefined;
-    headers: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => ResponseHeaders | undefined;
+    status: (
+      queriesState: QueriesState,
+      queryConfig: QueryConfig<any>,
+    ) => ResponseStatus | undefined;
+    headers: (
+      queriesState: QueriesState,
+      queryConfig: QueryConfig<any>,
+    ) => ResponseHeaders | undefined;
     lastUpdated: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => number | undefined;
     queryCount: (queriesState: QueriesState, queryConfig: QueryConfig<any>) => number;
   };
@@ -254,8 +273,13 @@ declare module 'redux-query' {
   };
 
   export const queryMiddleware: QueryMiddlewareFactory;
-  export interface ReduxQueryDispatch<TEntities = Entities, A extends AnyAction = ReduxQueryAction<TEntities>> {
-    <T extends ReduxQueryAction<TEntities>>(action: ReduxQueryAction<TEntities>): Promise<ActionPromiseValue<TEntities>>;
+  export interface ReduxQueryDispatch<
+    TEntities = Entities,
+    A extends AnyAction = ReduxQueryAction<TEntities>
+  > {
+    <T extends ReduxQueryAction<TEntities>>(action: ReduxQueryAction<TEntities>): Promise<
+      ActionPromiseValue<TEntities>
+    >;
     <T extends A>(action: T): T;
   }
 }

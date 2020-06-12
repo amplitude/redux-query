@@ -70,14 +70,14 @@ store.dispatch(cancelQuery('{"url":"/api/playlists"}'));
 
 ## updateEntities
 
-You can manually update [entities](entities) within the `entitiesReducer` Redux state with this action. The only required parameter is an `update` object map, just like the `update` field in [query configs](query-configs#request-query-config-fields).
+You can manually update [entities](entities) within the `entitiesReducer` Redux state with this action. The only required parameter is an object map just like the `optimisticUpdate` field in [query configs](query-configs#request-query-config-fields).
 
 ```javascript
 import { updateEntities } from 'redux-query';
 
 store.dispatch(
   updateEntities({
-    email: 'ryan@amplitude.com',
+    email: (prevValue) => 'ryan@amplitude.com',
   }),
 );
 ```

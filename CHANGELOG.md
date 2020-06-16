@@ -1,3 +1,9 @@
+## 3.4.0
+
+- Correct docs of updateEntitites (jaschaephraim [#183](https://github.com/amplitude/redux-query/pull/183))
+- Update typescript typings (siegcollado [#176](https://github.com/amplitude/redux-query/pull/176))
+- Add reselect dependency improving cache, add getQueryDetails to query selectors (myztiq [#186](https://github.com/amplitude/redux-query/pull/186))
+
 ## 3.3.1
 
 - Fix `finishedCallback` to not throw console warning (mili-confluent [#166](https://github.com/amplitude/redux-query/pull/166))

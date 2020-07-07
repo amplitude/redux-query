@@ -66,4 +66,7 @@ declare module 'redux-query-react' {
 
   export const connectRequest: RequestConnector;
   export const Provider: ReduxQueryProvider;
+  export const useRequest: UseRequestHook;
+  export const useRequests: UseRequestsHook;
+  export const useMutation: UseMutationHook;
 }

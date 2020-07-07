@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "docusaurus": "1.14"
+  },
+  "resolutions": {
+    "**/kind-of": "6.0.3"
   }
 }

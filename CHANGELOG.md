@@ -1,4 +1,10 @@
-## 3.4.0
+## 3.4.2
+
+- Security fixes
+- Package upgrades (rctbusk [#189](https://github.com/amplitude/redux-query/pull/189))
+- Fix typescript typings (siegcollado [#188](https://github.com/amplitude/redux-query/pull/188))
+
+## 3.4.1
 
 - Correct docs of updateEntitites (jaschaephraim [#183](https://github.com/amplitude/redux-query/pull/183))
 - Update typescript typings (siegcollado [#176](https://github.com/amplitude/redux-query/pull/176))

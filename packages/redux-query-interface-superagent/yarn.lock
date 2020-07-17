@@ -4116,9 +4116,9 @@ lodash.sortby@^4.7.0:
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
 lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 loose-envify@^1.0.0:
   version "1.4.0"
@@ -5029,10 +5029,10 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
-redux-query@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.4.1.tgz#80ad388b591be4dc3d01c3b8b0f7934d095b2b98"
-  integrity sha512-pXAaQ5d0e42zV5yaSEe1TnE+digiLinVqG0k29ROcUaWLGeqRWdQfRu6VMLK6cb9Pp3TIWQOCQkIEbmLp42t4w==
+redux-query@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.4.2.tgz#a2ad090d1dd540bd03a0c04bb613c029fa6cc1dc"
+  integrity sha512-j+3/nXvi1tgTh8A9X0ejYYa9zcB3WBrx51XeYaooo2jhRGIngQplkcSB6CSsmIAyBY/+pLYT7xlJMACnTiwaxA==
   dependencies:
     backo "^1.1.0"
     idx "^2.5.6"

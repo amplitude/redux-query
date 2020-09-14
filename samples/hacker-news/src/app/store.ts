@@ -24,7 +24,10 @@ export const store = configureStore({
   //   entities: entitiesReducer,
   //   queries: queriesReducer
   // },
-  middleware: [queryMiddleware(superagentInterface, getQueries, getEntities)],
+  // Important: Do not replace all default middleware like this.
+  // middleware: [queryMiddleware(superagentInterface, getQueries, getEntities)],
+  // Instead append like this. (Concat can take an array if need be.)
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(queryMiddleware(superagentInterface, getQueries, getEntities)),
 });
 
 export type AppThunk<ReturnType = void> = ThunkAction<

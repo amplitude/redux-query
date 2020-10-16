@@ -22,7 +22,10 @@ declare module 'redux-query-react' {
   }
   export type ForceRequestCallback<TEntities = Entities> = () => Promise<
     ActionPromiseValue<TEntities>
-  >;
+  > | void;
+
+  export type ForceRequestsCallback = () => void;
+
   export interface WithForceRequest<TEntities = Entities> {
     forceRequest: ForceRequestCallback<TEntities>;
   }
@@ -45,9 +48,7 @@ declare module 'redux-query-react' {
   }
   export type ReduxQueryProvider = React.ComponentType<ProviderProps>;
 
-  export type ActionPromise<TEntities = Entities> =
-    | Promise<ActionPromiseValue<TEntities>>
-    | undefined;
+  export type ActionPromise<TEntities = Entities> = Promise<ActionPromiseValue<TEntities>>;
   type RunMutation<TEntities = Entities, TArgs = never> = (
     ...args: TArgs
   ) => ActionPromise<TEntities>;
@@ -58,7 +59,7 @@ declare module 'redux-query-react' {
 
   export type UseRequestsHook = <TEntities = Entities>(
     queryConfigs: Array<QueryConfig<TEntities> | null | undefined> | null | undefined,
-  ) => [QueryState, ForceRequestCallback<TEntities>];
+  ) => [QueryState, ForceRequestsCallback];
 
   export type UseMutationHook = <TEntities = Entities, TArgs = never>(
     createQueryConfig: QueryConfigFactory<TEntities, TArgs>,

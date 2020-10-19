@@ -7,7 +7,7 @@
 // https://github.com/facebook/jest/issues/3126#issuecomment-483320742
 
 module.exports = {
-  presets: ['@babel/preset-flow', '@babel/preset-react', '@babel/preset-env'],
+  presets: ['@babel/preset-typescript', '@babel/preset-react', '@babel/preset-env'],
   plugins: ['@babel/plugin-proposal-object-rest-spread', 'babel-plugin-idx'],
   env: {
     test: {

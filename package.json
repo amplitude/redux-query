@@ -5,7 +5,8 @@
     "build": "lerna bootstrap",
     "coverage": "codecov",
     "test": "jest --coverage --no-cache",
-    "flow-check": "flow check --max-warnings=0"
+    "flow-check": "flow check --max-warnings=0",
+    "prettier-fix": "prettier --write '**/*.{js,json,md,html,scss,css}'"
   },
   "devDependencies": {
     "@babel/core": "^7.0.1",

@@ -73,7 +73,11 @@ describe('query middleware', () => {
       const entitiesSelector = state => state.entities;
       const dispatch = () => {};
       const getState = () => {};
-      nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -125,7 +129,11 @@ describe('query middleware', () => {
         entities: {},
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -163,7 +171,11 @@ describe('query middleware', () => {
         entities: {},
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -200,7 +212,11 @@ describe('query middleware', () => {
         entities: {},
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -231,7 +247,11 @@ describe('query middleware', () => {
           },
         },
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -262,7 +282,11 @@ describe('query middleware', () => {
           },
         },
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -304,7 +328,11 @@ describe('query middleware', () => {
           },
         },
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -346,7 +374,11 @@ describe('query middleware', () => {
           },
         },
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -387,7 +419,11 @@ describe('query middleware', () => {
         entities: {},
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -425,7 +461,11 @@ describe('query middleware', () => {
         entities: {},
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -462,7 +502,11 @@ describe('query middleware', () => {
         entities: {},
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -506,7 +550,11 @@ describe('query middleware', () => {
         },
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -550,7 +598,11 @@ describe('query middleware', () => {
         },
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });
@@ -599,7 +651,11 @@ describe('query middleware', () => {
         },
         queries: {},
       });
-      const nextHandler = queryMiddleware(mockNetworkInterface, queriesSelector, entitiesSelector)({
+      const nextHandler = queryMiddleware(
+        mockNetworkInterface,
+        queriesSelector,
+        entitiesSelector,
+      )({
         dispatch,
         getState,
       });

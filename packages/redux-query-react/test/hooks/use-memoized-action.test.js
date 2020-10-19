@@ -12,7 +12,10 @@ describe('useMemoizedQueryConfig', () => {
     };
 
     const callback = () => {};
-    const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
+    const transform = queryConfig => ({
+      ...queryConfig,
+      unstable_preDispatchCallback: callback,
+    });
 
     const { result } = renderHook(() => useMemoizedQueryConfig(queryConfig, transform));
 
@@ -37,7 +40,10 @@ describe('useMemoizedQueryConfig', () => {
 
     // Initial render
 
-    const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
+    const transform = queryConfig => ({
+      ...queryConfig,
+      unstable_preDispatchCallback: callback,
+    });
     const { result, rerender } = renderHook(() => useMemoizedQueryConfig(queryConfig, transform));
     const returnValue1 = result.current;
 
@@ -68,7 +74,10 @@ describe('useMemoizedQueryConfig', () => {
     };
 
     const callback = () => {};
-    const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
+    const transform = queryConfig => ({
+      ...queryConfig,
+      unstable_preDispatchCallback: callback,
+    });
 
     const { result, rerender } = renderHook(() => useMemoizedQueryConfig(queryConfig1, transform));
     const firstReturnValue = result.current;
@@ -97,7 +106,10 @@ describe('useMemoizedQueryConfig', () => {
 
     let queryConfig = queryConfig1;
     const callback = () => {};
-    const transform = queryConfig => ({ ...queryConfig, unstable_preDispatchCallback: callback });
+    const transform = queryConfig => ({
+      ...queryConfig,
+      unstable_preDispatchCallback: callback,
+    });
 
     // Initial render
 

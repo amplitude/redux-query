@@ -1,52 +1,50 @@
-// @flow
+import * as actionTypes from "../constants/action-types"
 
-import * as actionTypes from '../constants/action-types';
-
-import type { Action } from '../actions';
-import type { ResponseBody, ResponseHeaders, ResponseText } from '../types';
+import {Action} from "../actions"
+import {ResponseBody, ResponseHeaders, ResponseText} from "../types"
 
 export type State = {
-  [key: string]: {|
-    responseBody: ?ResponseBody,
-    responseHeaders: ?ResponseHeaders,
-    responseText: ?ResponseText,
-  |},
-};
+    [key: string]: {
+        responseBody: ResponseBody | null | undefined
+        responseHeaders: ResponseHeaders | null | undefined
+        responseText: ResponseText | null | undefined
+    }
+}
 
-const initialState = {};
+const initialState = {}
 
 const queries = (state: State = initialState, action: Action) => {
-  switch (action.type) {
-    case actionTypes.RESET: {
-      return {};
-    }
-    case actionTypes.MUTATE_START:
-    case actionTypes.REQUEST_START: {
-      const { queryKey } = action;
-      const newState = { ...state };
+    switch (action.type) {
+        case actionTypes.RESET: {
+            return {}
+        }
+        case actionTypes.MUTATE_START:
+        case actionTypes.REQUEST_START: {
+            const {queryKey} = action
+            const newState = {...state}
 
-      delete newState[queryKey];
+            delete newState[queryKey]
 
-      return newState;
-    }
-    case actionTypes.MUTATE_FAILURE:
-    case actionTypes.REQUEST_FAILURE: {
-      const { queryKey } = action;
+            return newState
+        }
+        case actionTypes.MUTATE_FAILURE:
+        case actionTypes.REQUEST_FAILURE: {
+            const {queryKey} = action
 
-      return {
-        ...state,
-        [queryKey]: {
-          ...state[queryKey],
-          responseBody: action.responseBody,
-          responseText: action.responseText,
-          responseHeaders: action.responseHeaders,
-        },
-      };
+            return {
+                ...state,
+                [queryKey]: {
+                    ...state[queryKey],
+                    responseBody: action.responseBody,
+                    responseText: action.responseText,
+                    responseHeaders: action.responseHeaders,
+                },
+            }
+        }
+        default: {
+            return state
+        }
     }
-    default: {
-      return state;
-    }
-  }
-};
+}
 
-export default queries;
+export default queries

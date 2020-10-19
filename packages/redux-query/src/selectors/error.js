@@ -1,15 +1,18 @@
-// @flow
-
 import idx from 'idx';
 
-import type { State as ErrorsState } from '../reducers/errors';
+import { State as ErrorsState } from '../reducers/errors';
 import { getQueryKey } from '../lib/query-key';
-import type { QueryConfig } from '../types';
+import { QueryConfig } from '../types';
 
 export const responseBody = (
   errorsState: ErrorsState,
   queryConfig: QueryConfig,
-): ?{ [key: string]: any } => {
+):
+  | {
+      [key: string]: any,
+    }
+  | null
+  | undefined => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {
@@ -19,7 +22,10 @@ export const responseBody = (
   return idx(errorsState, _ => _[queryKey].responseBody);
 };
 
-export const responseText = (errorsState: ErrorsState, queryConfig: QueryConfig): ?string => {
+export const responseText = (
+  errorsState: ErrorsState,
+  queryConfig: QueryConfig,
+): string | null | undefined => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {
@@ -32,7 +38,12 @@ export const responseText = (errorsState: ErrorsState, queryConfig: QueryConfig)
 export const responseHeaders = (
   errorsState: ErrorsState,
   queryConfig: QueryConfig,
-): ?{ [key: string]: any } => {
+):
+  | {
+      [key: string]: any,
+    }
+  | null
+  | undefined => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {

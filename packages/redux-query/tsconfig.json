@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig",
+  "extends": "../../tsconfig.base",
   "compilerOptions": {
     "outDir": "typescript",
     "jsx": "react",
@@ -22,5 +22,5 @@
     "noEmit": true,
     "strict": true
   },
-  "include": ["./src/**/*"]
+  "include": ["src"]
 }

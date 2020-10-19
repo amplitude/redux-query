@@ -1,19 +1,17 @@
-// @flow
+import stringify from "json-stable-stringify"
 
-import stringify from 'json-stable-stringify';
+import {QueryKeyGetter} from "../types"
 
-import type { QueryKeyGetter } from '../types';
+export const getQueryKey: QueryKeyGetter = (queryConfig) => {
+    if (!queryConfig) {
+        return null
+    }
 
-export const getQueryKey: QueryKeyGetter = queryConfig => {
-  if (!queryConfig) {
-    return null;
-  }
+    const {url, body, queryKey} = queryConfig
 
-  const { url, body, queryKey } = queryConfig;
-
-  if (queryKey !== null && queryKey !== undefined) {
-    return queryKey;
-  } else {
-    return (stringify({ url, body }): string);
-  }
-};
+    if (queryKey !== null && queryKey !== undefined) {
+        return queryKey
+    } else {
+        return stringify({url, body}) as string
+    }
+}

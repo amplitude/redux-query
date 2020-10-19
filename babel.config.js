@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 'use strict';
 
 // NOTE(ryan): Set node target to current for @babel/preset-env to avoid errors when running jest
@@ -8,7 +6,11 @@
 
 module.exports = {
   presets: ['@babel/preset-typescript', '@babel/preset-react', '@babel/preset-env'],
-  plugins: ['@babel/plugin-proposal-object-rest-spread', 'babel-plugin-idx'],
+  plugins: [
+    '@babel/plugin-proposal-object-rest-spread',
+    'babel-plugin-idx',
+    '@babel/plugin-transform-destructuring',
+  ],
   env: {
     test: {
       presets: [

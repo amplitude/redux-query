@@ -1,5 +1,3 @@
-// @flow
-
 import {
   MUTATE_FAILURE,
   MUTATE_START,
@@ -10,7 +8,7 @@ import {
 } from '../constants/action-types';
 import { optimisticUpdateEntities } from '../lib/update';
 
-import type { Action } from '../actions';
+import { Action } from '../actions';
 
 export type State = {
   [key: string]: any,

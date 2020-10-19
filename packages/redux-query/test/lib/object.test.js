@@ -18,6 +18,9 @@ describe('pick', () => {
   });
 
   test('should work with multiple keys', () => {
-    expect(pick({ a: 'a', b: 'b', c: 'c' }, ['b', 'c'])).toEqual({ b: 'b', c: 'c' });
+    expect(pick({ a: 'a', b: 'b', c: 'c' }, ['b', 'c'])).toEqual({
+      b: 'b',
+      c: 'c',
+    });
   });
 });

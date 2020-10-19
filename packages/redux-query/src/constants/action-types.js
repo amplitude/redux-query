@@ -1,5 +1,3 @@
-// @flow
-
 export const REQUEST_ASYNC = '@@query/REQUEST_ASYNC';
 export const REQUEST_START = '@@query/REQUEST_START';
 export const REQUEST_SUCCESS = '@@query/REQUEST_SUCCESS';

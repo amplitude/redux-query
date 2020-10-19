@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 
 import useRequest from '../../src/hooks/use-request';

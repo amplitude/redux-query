@@ -1,0 +1,2 @@
+packages/redux-query/node_modules/**
+packages/redux-query-react/node_modules/**

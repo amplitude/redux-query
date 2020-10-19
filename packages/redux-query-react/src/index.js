@@ -1,5 +1,3 @@
-// @flow
-
 import connectRequest from './components/connect-request';
 import Provider from './components/Provider';
 import useMutation from './hooks/use-mutation';

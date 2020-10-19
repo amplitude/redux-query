@@ -1,18 +1,16 @@
-// @flow
-
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
-import type { ActionPromiseValue, QueryConfig, QueryKey } from 'redux-query/types.js.flow';
+import { ActionPromiseValue, QueryConfig, QueryKey } from 'redux-query/types.js.flow';
 
 import useConstCallback from './use-const-callback';
 import useMemoizedQueryConfigs from './use-memoized-query-configs';
 import useQueriesState from './use-queries-state';
 
-import type { QueriesState } from '../types';
+import { QueriesState } from '../types';
 
-const difference = <T>(a: $ReadOnlyArray<T>, b: $ReadOnlyArray<T>): Array<T> => {
+const difference = <T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>): Array<T> => {
   const bSet = new Set(b);
 
   return a.filter(x => !bSet.has(x));
@@ -24,15 +22,18 @@ const diffQueryConfigs = (
 ) => {
   const prevQueryKeys = prevQueryConfigs.map(config => getQueryKey(config));
   const queryKeys = queryConfigs.map(config => getQueryKey(config));
-  const queryConfigByQueryKey = queryKeys.reduce((accum, queryKey: ?QueryKey, i) => {
-    const queryConfig = queryConfigs[i];
+  const queryConfigByQueryKey = queryKeys.reduce(
+    (accum, queryKey: QueryKey | null | undefined, i) => {
+      const queryConfig = queryConfigs[i];
 
-    if (queryConfig) {
-      accum.set(queryKey, queryConfig);
-    }
+      if (queryConfig) {
+        accum.set(queryKey, queryConfig);
+      }
 
-    return accum;
-  }, new Map());
+      return accum;
+    },
+    new Map(),
+  );
 
   // Keys that existed before that no longer exist, should be subject to cancellation
   const cancelKeys = difference(prevQueryKeys, queryKeys).filter(Boolean);
@@ -47,17 +48,17 @@ const diffQueryConfigs = (
 };
 
 const useRequests = (
-  providedQueryConfigs: ?Array<QueryConfig>,
-): [QueriesState, () => ?Promise<ActionPromiseValue>] => {
+  providedQueryConfigs: Array<QueryConfig> | null | undefined,
+): [QueriesState, () => Promise<ActionPromiseValue> | null | undefined] => {
   const reduxDispatch = useDispatch();
 
-  const previousQueryConfigs = React.useRef<Array<QueryConfig>>([]);
+  const previousQueryConfigs = React.useRef < Array < QueryConfig >> [];
 
   // This hook manually tracks the pending state, which is synchronized as precisely as possible
   // with the Redux state. This may seem a little hacky, but we're trying to avoid any asynchronous
   // synchronization. Hence why the pending state here is using a ref and it is updated via a
   // synchronous callback, which is called from the redux-query query middleware.
-  const pendingRequests = React.useRef<Set<QueryKey>>(new Set());
+  const pendingRequests = React.useRef < Set < QueryKey >> new Set();
 
   // These "const callbacks" are memoized across re-renders. Unlike useCallback, useConstCallback
   // guarantees memoization, which is relied upon elsewhere in this hook to explicitly control when
@@ -81,7 +82,7 @@ const useRequests = (
     }
   });
 
-  const finishedCallback = useConstCallback((queryKey: ?QueryKey) => {
+  const finishedCallback = useConstCallback((queryKey: QueryKey | null | undefined) => {
     return () => {
       if (queryKey != null) {
         pendingRequests.current.delete(queryKey);
@@ -89,15 +90,16 @@ const useRequests = (
     };
   });
 
-  const transformQueryConfig = useConstCallback(
-    (queryConfig: ?QueryConfig): ?QueryConfig => {
-      return {
-        ...queryConfig,
-        unstable_preDispatchCallback: finishedCallback(getQueryKey(queryConfig)),
-        retry: true,
-      };
-    },
-  );
+  const transformQueryConfig = useConstCallback((queryConfig: QueryConfig | null | undefined):
+    | QueryConfig
+    | null
+    | undefined => {
+    return {
+      ...queryConfig,
+      unstable_preDispatchCallback: finishedCallback(getQueryKey(queryConfig)),
+      retry: true,
+    };
+  });
 
   // Query configs are memoized based on query key. As long as the query keys in the list don't
   // change, the query config list won't change.

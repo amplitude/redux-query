@@ -1,20 +1,18 @@
-// @flow
-
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
-import type { ActionPromiseValue, QueryConfig, QueryKey } from 'redux-query/types.js.flow';
+import { ActionPromiseValue, QueryConfig, QueryKey } from 'redux-query/types.js.flow';
 
 import useConstCallback from './use-const-callback';
 import useMemoizedQueryConfig from './use-memoized-query-config';
 import useQueryState from './use-query-state';
 
-import type { QueryState } from '../types';
+import { QueryState } from '../types';
 
 const useRequest = (
-  providedQueryConfig: ?QueryConfig,
-): [QueryState, () => ?Promise<ActionPromiseValue>] => {
+  providedQueryConfig: QueryConfig | null | undefined,
+): [QueryState, () => Promise<ActionPromiseValue> | null | undefined] => {
   const reduxDispatch = useDispatch();
 
   // This hook manually tracks the pending state, which is synchronized as precisely as possible
@@ -33,15 +31,16 @@ const useRequest = (
   // Setting `retry` to `true` for these query configs makes it so that when this query config is
   // passed to a requestAsync action, if a previous request with the same query key failed, it will
   // retry the request (if `retry` is `false`, then it would essentially ignore the action).
-  const transformQueryConfig = useConstCallback(
-    (queryConfig: ?QueryConfig): ?QueryConfig => {
-      return {
-        ...queryConfig,
-        unstable_preDispatchCallback: finishedCallback,
-        retry: true,
-      };
-    },
-  );
+  const transformQueryConfig = useConstCallback((queryConfig: QueryConfig | null | undefined):
+    | QueryConfig
+    | null
+    | undefined => {
+    return {
+      ...queryConfig,
+      unstable_preDispatchCallback: finishedCallback,
+      retry: true,
+    };
+  });
 
   // Query configs are memoized based on query key. As long as the query key doesn't change, the
   // query config won't change.

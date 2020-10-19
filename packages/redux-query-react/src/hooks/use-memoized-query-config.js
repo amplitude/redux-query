@@ -1,8 +1,6 @@
-// @flow
-
 import * as React from 'react';
 import { getQueryKey } from 'redux-query';
-import type { QueryConfig } from 'redux-query/types.js.flow';
+import { QueryConfig } from 'redux-query/types.js.flow';
 
 const identity = x => x;
 
@@ -11,9 +9,9 @@ const identity = x => x;
  * the provided queryConfig changes.
  */
 const useMemoizedQueryConfig = (
-  providedQueryConfig: ?QueryConfig,
-  transform: (?QueryConfig) => ?QueryConfig = identity,
-): ?QueryConfig => {
+  providedQueryConfig: QueryConfig | null | undefined,
+  transform: (arg0: QueryConfig | null | undefined) => QueryConfig | null | undefined = identity,
+): QueryConfig | null | undefined => {
   const [queryConfig, setQueryConfig] = React.useState(
     providedQueryConfig ? transform(providedQueryConfig) : null,
   );

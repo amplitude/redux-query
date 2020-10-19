@@ -1,10 +1,8 @@
-// @flow
-
 import idx from 'idx';
 
-import type { State as QueriesState } from '../reducers/queries';
+import { State as QueriesState } from '../reducers/queries';
 import { getQueryKey } from '../lib/query-key';
-import type { QueryConfig, QueryDetails } from '../types';
+import { QueryConfig, QueryDetails } from '../types';
 import { createSelector } from 'reselect';
 
 const defaultDetailsObject = {
@@ -16,8 +14,8 @@ const defaultDetailsObject = {
 
 export const getQueryDetails: (
   queriesState: QueriesState,
-  queryConfig: ?QueryConfig,
-) => QueryDetails = (queriesState: QueriesState, queryConfig: ?QueryConfig) => {
+  queryConfig: QueryConfig | null | undefined,
+) => QueryDetails = (queriesState: QueriesState, queryConfig: QueryConfig | null | undefined) => {
   const queryKey = getQueryKey(queryConfig);
 
   if (!queryKey) {
@@ -29,48 +27,35 @@ export const getQueryDetails: (
 
 export const isFinished: (
   queriesState: QueriesState,
-  queryConfig: ?QueryConfig,
-) => boolean = createSelector(
-  getQueryDetails,
-  query => query.isFinished,
-);
+  queryConfig: QueryConfig | null | undefined,
+) => boolean = createSelector(getQueryDetails, query => query.isFinished);
 
 export const isPending: (
   queriesState: QueriesState,
-  queryConfig: ?QueryConfig,
-) => boolean = createSelector(
-  getQueryDetails,
-  query => query.isPending,
-);
+  queryConfig: QueryConfig | null | undefined,
+) => boolean = createSelector(getQueryDetails, query => query.isPending);
 
 export const status: (
   queriesState: QueriesState,
-  queryConfig: ?QueryConfig,
-) => ?number = createSelector(
-  getQueryDetails,
-  query => query.status,
-);
+  queryConfig: QueryConfig | null | undefined,
+) => number | null | undefined = createSelector(getQueryDetails, query => query.status);
 
 export const headers: (
   queriesState: QueriesState,
-  queryConfig: ?QueryConfig,
-) => ?{ [key: string]: any } = createSelector(
-  getQueryDetails,
-  query => query.headers,
-);
+  queryConfig: QueryConfig | null | undefined,
+) =>
+  | {
+      [key: string]: any,
+    }
+  | null
+  | undefined = createSelector(getQueryDetails, query => query.headers);
 
 export const lastUpdated: (
   queriesState: QueriesState,
-  queryConfig: ?QueryConfig,
-) => ?number = createSelector(
-  getQueryDetails,
-  query => query.lastUpdated,
-);
+  queryConfig: QueryConfig | null | undefined,
+) => number | null | undefined = createSelector(getQueryDetails, query => query.lastUpdated);
 
 export const queryCount: (
   queriesState: QueriesState,
-  queryConfig: ?QueryConfig,
-) => number = createSelector(
-  getQueryDetails,
-  query => query.queryCount,
-);
+  queryConfig: QueryConfig | null | undefined,
+) => number = createSelector(getQueryDetails, query => query.queryCount);

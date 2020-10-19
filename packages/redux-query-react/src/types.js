@@ -1,15 +1,18 @@
-// @flow
+export type QueryState = {
+    headers:
+        | {
+              [key: string]: any
+          }
+        | null
+        | undefined
+    isFinished: boolean
+    isPending: boolean
+    lastUpdated: number | null | undefined
+    queryCount: number
+    status: number | null | undefined
+}
 
-export type QueryState = {|
-  headers: ?{ [key: string]: any },
-  isFinished: boolean,
-  isPending: boolean,
-  lastUpdated: ?number,
-  queryCount: number,
-  status: ?number,
-|};
-
-export type QueriesState = {|
-  isFinished: boolean,
-  isPending: boolean,
-|};
+export type QueriesState = {
+    isFinished: boolean
+    isPending: boolean
+}

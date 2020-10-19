@@ -77,7 +77,7 @@ import { updateEntities } from 'redux-query';
 
 store.dispatch(
   updateEntities({
-    email: (prevValue) => 'ryan@amplitude.com',
+    email: prevValue => 'ryan@amplitude.com',
   }),
 );
 ```

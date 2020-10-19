@@ -1,4 +1,4 @@
-// @flow
+import { $Keys, $Keys } from 'utility-types';
 
 const HttpMethods = {
   DELETE: 'DELETE',

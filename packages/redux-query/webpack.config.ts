@@ -17,7 +17,7 @@ module.exports = {
     },
   },
   entry: {
-    'redux-query': './src/index.js',
+    'redux-query': './src/index.ts',
   },
   output: {
     path: path.join(__dirname, 'dist/umd'),
@@ -37,7 +37,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.tsx?$/,
         loader: 'babel-loader',
         include: path.join(__dirname, 'src'),
       },

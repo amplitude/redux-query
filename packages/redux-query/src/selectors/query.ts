@@ -45,7 +45,7 @@ export const headers: (
   queryConfig: QueryConfig | null | undefined,
 ) =>
   | {
-      [key: string]: any,
+      [key: string]: any;
     }
   | null
   | undefined = createSelector(getQueryDetails, query => query.headers);

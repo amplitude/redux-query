@@ -9,7 +9,7 @@ export const responseBody = (
   queryConfig: QueryConfig,
 ):
   | {
-      [key: string]: any,
+      [key: string]: any;
     }
   | null
   | undefined => {
@@ -40,7 +40,7 @@ export const responseHeaders = (
   queryConfig: QueryConfig,
 ):
   | {
-      [key: string]: any,
+      [key: string]: any;
     }
   | null
   | undefined => {

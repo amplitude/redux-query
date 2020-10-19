@@ -11,7 +11,7 @@ import { optimisticUpdateEntities } from '../lib/update';
 import { Action } from '../actions';
 
 export type State = {
-  [key: string]: any,
+  [key: string]: any;
 };
 
 const initialState = {};

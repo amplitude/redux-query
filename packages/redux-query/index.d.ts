@@ -107,10 +107,16 @@ declare module 'redux-query' {
     | UpdateEntitiesAction<TEntities>
     | CancelQueryAction;
 
-  export const requestAsync: <T>(params: QueryConfig<T>) => RequestAsyncAction<T>;
-  export const mutateAsync: <T>(params: QueryConfig<T>) => MutateAsyncAction<T>;
-  export const cancelQuery: <T>(queryKey: QueryKey) => CancelQueryAction;
-  export const updateEntities: <T>(update: Update<T>) => UpdateEntitiesAction<T>;
+  export const requestAsync: <TEntities = Entities>(
+    params: QueryConfig<TEntities>,
+  ) => RequestAsyncAction<TEntities>;
+  export const mutateAsync: <TEntities = Entities>(
+    params: QueryConfig<TEntities>,
+  ) => MutateAsyncAction<TEntities>;
+  export const cancelQuery: (queryKey: QueryKey) => CancelQueryAction;
+  export const updateEntities: <TEntities = Entities>(
+    update: Update<TEntities>,
+  ) => UpdateEntitiesAction<TEntities>;
 
   export interface NetworkHandler {
     abort: () => void;

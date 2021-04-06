@@ -3,7 +3,13 @@ import { render, waitForElement, getByTestId, fireEvent } from '@testing-library
 import { Provider, useSelector, connect } from 'react-redux';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 
-import { entitiesReducer, queriesReducer, queryMiddleware, querySelectors } from 'redux-query';
+import {
+  entitiesReducer,
+  queriesReducer,
+  queryMiddleware,
+  querySelectors,
+  QueryConfig,
+} from 'redux-query';
 
 import connectRequest from '../../src/components/connect-request';
 
@@ -243,7 +249,7 @@ describe('useRequest', () => {
       );
     };
 
-    const ContentContainer = connectRequest(() => null)(Content);
+    const ContentContainer = connectRequest(() => [])(Content);
 
     const { container } = render(
       <App>
@@ -281,14 +287,17 @@ describe('useRequest', () => {
     };
 
     const mapPropsToConfigs = (props) => {
-      return [
+      const queries: Array<QueryConfig> = [
         {
           url: '/api',
           update: {
             message1: () => 'loaded',
           },
         },
-        !props.isFirstRequestLoading && {
+      ];
+
+      if (!props.isFirstRequestLoading) {
+        queries.push({
           url: '/api',
           body: {
             a: 'a',
@@ -296,8 +305,10 @@ describe('useRequest', () => {
           update: {
             message2: () => 'loaded',
           },
-        },
-      ];
+        });
+      }
+
+      return queries;
     };
 
     const ContentContainer = connect(mapStateToProps)(connectRequest(mapPropsToConfigs)(Content));

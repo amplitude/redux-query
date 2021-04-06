@@ -142,7 +142,9 @@ const useMultiRequest = <Config,>(mapPropsToConfigs: MapPropsToConfigs<Config>, 
   // When the component unmounts, cancel all pending requests
   React.useEffect(() => {
     return () => {
-      [...pendingRequests.current].forEach(dispatchCancelToRedux);
+      const pendingRequestsArray: QueryKey[] = Array.from(pendingRequests.current);
+
+      pendingRequestsArray.forEach(dispatchCancelToRedux);
     };
   }, [dispatchCancelToRedux]);
 

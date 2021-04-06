@@ -29,8 +29,6 @@ module.exports = {
     // 'plugin:react-hooks/recommended', // <-- can't be turned on until CRAv4
     // These configs turn off rules that would conflict with Prettier formatting.
     'prettier',
-    'prettier/@typescript-eslint',
-    'prettier/react',
   ],
   settings: {
     react: {
@@ -116,9 +114,19 @@ module.exports = {
     ],
     'consistent-this': ['off', 'just_dont_do_it_at_all'],
     'no-underscore-dangle': 'off',
+    'no-prototype-builtins': 'off',
+
     /* ~~ END RULES THAT MAKE OUR CONFIG LESS STRICT (RELATIVE TO WHAT'S IN `extends`) ~~ */
 
     /* ~~ CUSTOM RULE THAT BROKE FOLLOWING THE TYPESCRIPT MIGRATION  */
     // '@amplitude/amplitude/sort-imports': 'error',
   },
+  overrides: [
+    {
+      files: ['/**/*.test.ts'],
+      rules: {
+        '@typescript-eslint/ban-ts-comment': 'warn',
+      },
+    },
+  ],
 };

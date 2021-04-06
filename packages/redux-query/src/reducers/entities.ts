@@ -7,6 +7,7 @@ import {
   UPDATE_ENTITIES,
 } from '../constants/action-types';
 import { optimisticUpdateEntities } from '../lib/update';
+import { OptimisticUpdate } from '../types';
 
 import { Action } from '../actions';
 
@@ -37,7 +38,7 @@ const entities = (state: State = initialState, action: Action) => {
   } else if (action.type === UPDATE_ENTITIES) {
     return {
       ...state,
-      ...optimisticUpdateEntities(action.update, state),
+      ...optimisticUpdateEntities(action.update as OptimisticUpdate, state),
     };
   } else {
     return state;

@@ -23,6 +23,7 @@ describe('errors reducer', () => {
         responseHeaders: {},
       },
     };
+    // @ts-ignore
     const newState = errors(prevState, action);
     const expectedState = {
       '{"url":"/hello"}': {
@@ -64,6 +65,7 @@ describe('errors reducer', () => {
         responseHeaders: {},
       },
     };
+    // @ts-ignore
     const newState = errors(prevState, action);
     const expectedState = {
       '{"url":"/test"}': {
@@ -107,6 +109,7 @@ describe('errors reducer', () => {
         },
       },
     };
+    // @ts-ignore
     const newState = errors(prevState, action);
     const expectedState = {
       '{"url":"/test"}': {
@@ -141,6 +144,7 @@ describe('errors reducer', () => {
         responseHeaders: {},
       },
     };
+    // @ts-ignore
     const newState = errors(prevState, action);
     const expectedState = {
       '{"url":"/test"}': {
@@ -169,6 +173,7 @@ describe('errors reducer', () => {
         },
       },
     };
+    // @ts-ignore
     const newState = errors(prevState, action);
     const expectedState = {};
     expect(newState).toEqual(expectedState);

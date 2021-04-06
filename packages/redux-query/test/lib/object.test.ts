@@ -1,8 +1,8 @@
 import { pick } from '../../src/lib/object';
 
 describe('pick', () => {
-  test('should do nothing with empty objects and no keys', () => {
-    expect(pick({})).toEqual({});
+  test('should do nothing with empty objects and empty keys', () => {
+    expect(pick({}, [])).toEqual({});
   });
 
   test('should do nothing with empty objects and keys', () => {

@@ -1,5 +1,4 @@
 import Backoff from 'backo';
-import idx from 'idx';
 
 import {
   requestStart,
@@ -12,7 +11,7 @@ import {
   PublicAction,
 } from '../actions';
 import * as actionTypes from '../constants/action-types';
-import httpMethods from '../constants/http-methods';
+import { HttpMethod } from '../constants/http-methods';
 import * as statusCodes from '../constants/status-codes';
 import { getQueryKey } from '../lib/query-key';
 import { updateEntities, optimisticUpdateEntities, rollbackEntities } from '../lib/update';
@@ -24,7 +23,6 @@ import {
   NetworkHandler,
   NetworkInterface,
   QueriesSelector,
-  QueryKey,
   ResponseBody,
   Status,
   Transform,
@@ -88,7 +86,7 @@ const queryMiddleware = (
   networkInterface: NetworkInterface,
   queriesSelector: QueriesSelector,
   entitiesSelector: EntitiesSelector,
-  customConfig: Config,
+  customConfig?: Config,
 ) => {
   const networkHandlersByQueryKey: {
     [key: string]: NetworkHandler;
@@ -103,7 +101,7 @@ const queryMiddleware = (
     }
   };
 
-  return ({ dispatch, getState }: ReduxStore) => (next: Next) => (action: PublicAction) => {
+  return ({ dispatch, getState }: ReduxStore) => (next?: Next) => (action: PublicAction) => {
     let returnValue;
     const config = { ...defaultConfig, ...customConfig };
 
@@ -138,14 +136,14 @@ const queryMiddleware = (
         const queries = queriesSelector(state);
 
         const queriesState = queries[queryKey];
-        const isPending = idx(queriesState, (_) => _.isPending);
-        const status = idx(queriesState, (_) => _.status);
+        const isPending = queriesState?.isPending;
+        const status = queriesState?.status;
         const hasSucceeded = isStatusOk(status);
 
         if (force || !queriesState || (retry && !isPending && !hasSucceeded)) {
           returnValue = new Promise<ActionPromiseValue>((resolve) => {
             const start = new Date();
-            const { method = httpMethods.GET } = options;
+            const { method = HttpMethod.GET } = options;
             let attempts = 0;
             const backoff = new Backoff({
               min: config.backoff.minDuration,
@@ -184,7 +182,7 @@ const queryMiddleware = (
                 }
 
                 const end = new Date();
-                const duration = end - start;
+                const duration = end.getTime() - start.getTime();
                 let transformed;
                 let newEntities;
 
@@ -292,7 +290,7 @@ const queryMiddleware = (
 
         returnValue = new Promise<ActionPromiseValue>((resolve) => {
           const start = new Date();
-          const { method = httpMethods.POST } = options;
+          const { method = HttpMethod.POST } = options;
 
           const networkHandler = networkInterface(url, method, {
             body,
@@ -316,7 +314,7 @@ const queryMiddleware = (
 
           networkHandler.execute((err, status, responseBody, responseText, responseHeaders) => {
             const end = new Date();
-            const duration = end - start;
+            const duration = end.getTime() - start.getTime();
             const state = getState();
             const entities = entitiesSelector(state);
             let transformed;
@@ -408,7 +406,7 @@ const queryMiddleware = (
 
         if (queryKey in pendingQueries) {
           abortQuery(queryKey);
-          returnValue = next(action);
+          returnValue = next && next(action);
         } else {
           // eslint-disable-next-line
           console.warn('Trying to cancel a request that is not in flight: ', queryKey);
@@ -428,12 +426,12 @@ const queryMiddleware = (
           }
         }
 
-        returnValue = next(action);
+        returnValue = next && next(action);
 
         break;
       }
       default: {
-        returnValue = next(action);
+        returnValue = next && next(action);
       }
     }
 

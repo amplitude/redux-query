@@ -26,9 +26,9 @@ declare module 'redux-query' {
   export type EntitiesState = Entities;
 
   export type KnownHttpMethods = 'GET' | 'HEAD' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS';
-  export type HttpMethods = KnownHttpMethods | string;
+  export type HttpMethod = KnownHttpMethods | string;
 
-  export const httpMethods: { [k in KnownHttpMethods]: KnownHttpMethods };
+  export const HttpMethod: { [k in KnownHttpMethods]: KnownHttpMethods };
 
   export type TransformStrategy<TEntities = Entities, TBody = ResponseBody> = (
     body: TBody,
@@ -133,13 +133,13 @@ declare module 'redux-query' {
 
   export type NetworkInterface = (
     url: Url,
-    method: HttpMethods,
+    method: HttpMethod,
     networkOptions: NetworkOptions,
   ) => NetworkHandler;
 
   export interface QueryOptions {
     credentials?: CredentialOption;
-    method?: HttpMethods;
+    method?: HttpMethod;
     headers?: { [key: string]: string };
   }
 

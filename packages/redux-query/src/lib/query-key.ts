@@ -4,7 +4,7 @@ import { QueryKeyGetter } from '../types';
 
 export const getQueryKey: QueryKeyGetter = (queryConfig) => {
   if (!queryConfig) {
-    return null;
+    return '';
   }
 
   const { url, body, queryKey } = queryConfig;

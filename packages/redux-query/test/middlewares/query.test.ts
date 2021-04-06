@@ -71,8 +71,8 @@ describe('query middleware', () => {
     beforeAll(() => {
       const queriesSelector = (state) => state.queries;
       const entitiesSelector = (state) => state.entities;
-      const dispatch = () => {};
-      const getState = () => {};
+      const dispatch = () => null;
+      const getState = () => null;
       nextHandler = queryMiddleware(
         mockNetworkInterface,
         queriesSelector,
@@ -242,7 +242,7 @@ describe('query middleware', () => {
       const getState = () => ({
         entities: {},
         queries: {
-          [queryKey]: {
+          [queryKey as string]: {
             isPending: false,
           },
         },
@@ -276,7 +276,7 @@ describe('query middleware', () => {
       const getState = () => ({
         entities: {},
         queries: {
-          [queryKey]: {
+          [queryKey as string]: {
             isPending: true,
             status: 500,
           },
@@ -322,7 +322,7 @@ describe('query middleware', () => {
       const getState = () => ({
         entities: {},
         queries: {
-          [queryKey]: {
+          [queryKey as string]: {
             isPending: false,
             status: 500,
           },
@@ -368,7 +368,7 @@ describe('query middleware', () => {
       const getState = () => ({
         entities: {},
         queries: {
-          [queryKey]: {
+          [queryKey as string]: {
             isPending: false,
             status: 200,
           },

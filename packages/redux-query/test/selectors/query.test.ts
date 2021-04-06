@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getQueryKey } from '../../src/lib/query-key';
 import * as querySelectors from '../../src/selectors/query';
 

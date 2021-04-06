@@ -54,7 +54,7 @@ type RequestSuccessParams = {
   url: Url;
 };
 
-type RequestSuccessAction = RequestSuccessParams & {
+export type RequestSuccessAction = RequestSuccessParams & {
   type: '@@query/REQUEST_SUCCESS';
   time: number;
 };
@@ -99,7 +99,7 @@ type RequestFailureParams = {
   url: Url;
 };
 
-type RequestFailureAction = RequestFailureParams & {
+export type RequestFailureAction = RequestFailureParams & {
   type: '@@query/REQUEST_FAILURE';
   time: number;
 };
@@ -138,7 +138,7 @@ type MutateStartParams = {
   url: Url;
 };
 
-type MutateStartAction = MutateStartParams & {
+export type MutateStartAction = MutateStartParams & {
   type: '@@query/MUTATE_START';
 };
 
@@ -172,7 +172,7 @@ type MutateSuccessParams = {
   url: Url;
 };
 
-type MutateSuccessAction = MutateSuccessParams & {
+export type MutateSuccessAction = MutateSuccessParams & {
   type: '@@query/MUTATE_SUCCESS';
   time: number;
 };
@@ -205,7 +205,7 @@ export const mutateSuccess = ({
   };
 };
 
-type MutateFailureParams = {
+export type MutateFailureParams = {
   body: RequestBody;
   duration: Duration;
   meta: Meta | null | undefined;
@@ -218,7 +218,7 @@ type MutateFailureParams = {
   url: Url;
 };
 
-type MutateFailureAction = MutateFailureParams & {
+export type MutateFailureAction = MutateFailureParams & {
   type: '@@query/MUTATE_FAILURE';
   time: number;
 };
@@ -251,7 +251,7 @@ export const mutateFailure = ({
   };
 };
 
-type RequestAsyncAction = QueryConfig & {
+export type RequestAsyncAction = QueryConfig & {
   type: '@@query/REQUEST_ASYNC';
 };
 
@@ -284,7 +284,7 @@ export const requestAsync = ({
   };
 };
 
-type MutateAsyncAction = QueryConfig & {
+export type MutateAsyncAction = QueryConfig & {
   type: '@@query/MUTATE_ASYNC';
 };
 
@@ -343,7 +343,7 @@ type ResetParams = {
 
 type ResetAction = {
   type: '@@query/RESET';
-  entities: Entities;
+  entities?: Entities;
 };
 
 export const reset = ({ entities }: ResetParams): ResetAction => {

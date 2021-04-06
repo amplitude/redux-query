@@ -1,5 +1,3 @@
-import idx from 'idx';
-
 import { State as QueriesState } from '../reducers/queries';
 import { getQueryKey } from '../lib/query-key';
 import { QueryConfig, QueryDetails } from '../types';
@@ -22,7 +20,7 @@ export const getQueryDetails: (
     return defaultDetailsObject;
   }
 
-  return idx(queriesState, (_) => _[queryKey]) || defaultDetailsObject;
+  return queriesState?.[queryKey] || defaultDetailsObject;
 };
 
 export const isFinished: (

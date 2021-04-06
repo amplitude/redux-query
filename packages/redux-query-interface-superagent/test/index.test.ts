@@ -1,6 +1,6 @@
 import superagent from 'superagent';
 import superagentMock from 'superagent-mock';
-import { httpMethods } from 'redux-query';
+import { HttpMethod } from 'redux-query';
 
 import superagentInterface from '../src';
 
@@ -34,12 +34,12 @@ const superagentMockConfig = [
   {
     pattern: '/api',
     fixtures: () => {},
-    delete: mockEndpoint(httpMethods.DELETE),
-    get: mockEndpoint(httpMethods.GET),
-    head: mockEndpoint(httpMethods.HEAD),
-    patch: mockEndpoint(httpMethods.PATCH),
-    post: mockEndpoint(httpMethods.POST),
-    put: mockEndpoint(httpMethods.PUT),
+    delete: mockEndpoint(HttpMethod.DELETE),
+    get: mockEndpoint(HttpMethod.GET),
+    head: mockEndpoint(HttpMethod.HEAD),
+    patch: mockEndpoint(HttpMethod.PATCH),
+    post: mockEndpoint(HttpMethod.POST),
+    put: mockEndpoint(HttpMethod.PUT),
   },
 ];
 
@@ -47,62 +47,62 @@ superagentMock(superagent, superagentMockConfig);
 
 describe('superagent interface', () => {
   test('returns an object with both execute and abort functions, as well as the request instance', () => {
-    const networkInterface = superagentInterface('/api', httpMethods.GET);
+    const networkInterface = superagentInterface('/api', HttpMethod.GET);
     expect(typeof networkInterface.execute).toBe('function');
     expect(typeof networkInterface.abort).toBe('function');
   });
 
   test('returns a DELETE request when supplied a HEAD method', () => {
-    const { execute } = superagentInterface('/api', httpMethods.DELETE);
+    const { execute } = superagentInterface('/api', HttpMethod.DELETE);
 
     execute((err, status, body, text) => {
       expect(status).toEqual(200);
-      expect(text).toEqual(httpMethods.DELETE);
+      expect(text).toEqual(HttpMethod.DELETE);
     });
   });
 
   test('returns a GET request when supplied a GET method', () => {
-    const { execute } = superagentInterface('/api', httpMethods.GET);
+    const { execute } = superagentInterface('/api', HttpMethod.GET);
 
     execute((err, status, body, text) => {
       expect(status).toEqual(200);
-      expect(text).toEqual(httpMethods.GET);
+      expect(text).toEqual(HttpMethod.GET);
     });
   });
 
   test('returns a HEAD request when supplied a HEAD method', () => {
-    const { execute } = superagentInterface('/api', httpMethods.HEAD);
+    const { execute } = superagentInterface('/api', HttpMethod.HEAD);
 
     execute((err, status, body, text) => {
       expect(status).toEqual(200);
-      expect(text).toEqual(httpMethods.HEAD);
+      expect(text).toEqual(HttpMethod.HEAD);
     });
   });
 
   test('returns a PATCH request when supplied a PATCH method', () => {
-    const { execute } = superagentInterface('/api', httpMethods.PATCH);
+    const { execute } = superagentInterface('/api', HttpMethod.PATCH);
 
     execute((err, status, body, text) => {
       expect(status).toEqual(200);
-      expect(text).toEqual(httpMethods.PATCH);
+      expect(text).toEqual(HttpMethod.PATCH);
     });
   });
 
   test('returns a POST request when supplied a POST method', () => {
-    const { execute } = superagentInterface('/api', httpMethods.POST);
+    const { execute } = superagentInterface('/api', HttpMethod.POST);
 
     execute((err, status, body, text) => {
       expect(status).toEqual(200);
-      expect(text).toEqual(httpMethods.POST);
+      expect(text).toEqual(HttpMethod.POST);
     });
   });
 
   test('returns a PUT request when supplied a PUT method', () => {
-    const { execute } = superagentInterface('/api', httpMethods.PUT);
+    const { execute } = superagentInterface('/api', HttpMethod.PUT);
 
     execute((err, status, body, text) => {
       expect(status).toEqual(200);
-      expect(text).toEqual(httpMethods.PUT);
+      expect(text).toEqual(HttpMethod.PUT);
     });
   });
 
@@ -112,7 +112,7 @@ describe('superagent interface', () => {
   });
 
   test('includes headers when headers are provided', () => {
-    const { execute } = superagentInterface('/echo-headers', httpMethods.GET, {
+    const { execute } = superagentInterface('/echo-headers', HttpMethod.GET, {
       headers: {
         'X-Org': 21,
       },

@@ -4,11 +4,7 @@
 
 module.exports = {
   presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
-  plugins: [
-    '@babel/plugin-proposal-object-rest-spread',
-    'babel-plugin-idx',
-    '@babel/plugin-transform-destructuring',
-  ],
+  plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/plugin-transform-destructuring'],
   env: {
     test: {
       presets: [

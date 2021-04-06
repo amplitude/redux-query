@@ -34,12 +34,9 @@ export type QueryDetails = {
   isFinished: boolean;
   isPending: boolean;
   status?: number;
-  headers:
-    | {
-        [key: string]: any;
-      }
-    | null
-    | undefined;
+  headers?: {
+    [key: string]: any;
+  } | null;
   lastUpdated?: number;
   queryCount: number;
 };
@@ -66,7 +63,7 @@ export type ResponseHeaders = {
   [key: string]: any;
 };
 
-export type Status = number;
+export type Status = number | undefined;
 
 export type Duration = number;
 
@@ -122,9 +119,7 @@ export type QueriesSelector = (state: any) => QueriesState;
 
 export type EntitiesSelector = (state: any) => EntitiesState;
 
-export type QueryKeyGetter = (
-  queryConfig: QueryConfig | null | undefined,
-) => QueryKey | null | undefined;
+export type QueryKeyGetter = (queryConfig: QueryConfig | null | undefined) => QueryKey;
 
 export type ActionPromiseValue = {
   body: ResponseBody;

@@ -12,6 +12,7 @@ describe('entities reducer', () => {
     const prevState = {
       user: 'ryanashcraft',
     };
+    // @ts-ignore
     const newEntities = entities(prevState, action);
     const expectedEntities = {
       message: 'hello, world!',
@@ -30,6 +31,7 @@ describe('entities reducer', () => {
     const prevState = {
       user: 'ryanashcraft',
     };
+    // @ts-ignore
     const newEntities = entities(prevState, action);
     const expectedEntities = {
       message: 'hello, world!',
@@ -49,6 +51,7 @@ describe('entities reducer', () => {
       message: 'hello, world!',
       user: 'ryanashcraft',
     };
+    // @ts-ignore
     const newEntities = entities(prevState, action);
     const expectedEntities = {
       message: 'hello, optimistic world!',
@@ -68,6 +71,7 @@ describe('entities reducer', () => {
       message: 'hello, optimistic world!',
       user: 'ryanashcraft',
     };
+    // @ts-ignore
     const newEntities = entities(prevState, action);
     const expectedEntities = {
       message: 'hello, world!',
@@ -84,6 +88,7 @@ describe('entities reducer', () => {
       message: 'hello, world!',
       user: 'ryanashcraft',
     };
+    // @ts-ignore
     const newEntities = entities(prevState, action);
     const expectedEntities = {};
     expect(newEntities).toEqual(expectedEntities);
@@ -106,6 +111,7 @@ describe('entities reducer', () => {
         },
       },
     };
+    // @ts-ignore
     const newEntities = entities(prevState, action);
     const expectedEntities = {
       some: {
@@ -146,6 +152,7 @@ describe('entities reducer', () => {
         },
       },
     };
+    // @ts-ignore
     const newEntities = entities(prevState, action);
     const expectedEntities = {
       some: {

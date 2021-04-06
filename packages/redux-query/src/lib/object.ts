@@ -1,4 +1,4 @@
-export const pick = <T>(source: any, keysToPick: Array<string>): any => {
+export const pick = <T>(source: any, keysToPick: Array<string>): T => {
   const picked = { ...source };
   const keysToPickSet = new Set(keysToPick);
   const keysToDelete = Object.keys(source).filter((key) => !keysToPickSet.has(key));

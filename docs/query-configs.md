@@ -37,7 +37,7 @@ const helloWorld = {
   body: {
     message: 'hello',
   },
-  transform: responseBody => {
+  transform: (responseBody) => {
     // The server responded with a JSON body: { "data": "hello" }
     return {
       echoedMessage: responseBody.data,
@@ -55,12 +55,12 @@ const helloWorld = {
 // Query config for retrieving current user's playlists
 const playlists = () => ({
   url: '/api/playlists',
-  transform: responseBody => {
+  transform: (responseBody) => {
     const { data } = responseBody;
 
     // Server returned key-value pair of playlists by id
     const { playlists } = data;
-    const playlistIds = playlists.map(playlist => playlist.id);
+    const playlistIds = playlists.map((playlist) => playlist.id);
 
     return {
       playlistIds,
@@ -82,12 +82,12 @@ const playlists = () => ({
 });
 
 // Query config for making a new playlist
-const makePlaylist = name => ({
+const makePlaylist = (name) => ({
   url: '/api/make-playlist',
   body: {
     name,
   },
-  transform: responseBody => {
+  transform: (responseBody) => {
     const { data } = responseBody;
 
     // Server returned a single playlist model object

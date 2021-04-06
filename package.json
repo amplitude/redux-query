@@ -6,7 +6,7 @@
     "coverage": "codecov",
     "test": "jest --coverage --no-cache",
     "type-check": "tsc --noEmit",
-    "prettier-fix": "prettier --write '**/*.{js,json,md,html,scss,css}'"
+    "prettier-fix": "prettier --write '**/*.{js,ts,tsx,json,md,html,scss,css}'"
   },
   "devDependencies": {
     "@amplitude/eslint-plugin-amplitude": "^1.0.1",

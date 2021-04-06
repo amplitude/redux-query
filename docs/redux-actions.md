@@ -19,8 +19,8 @@ export const updateDashboard = (dashboardId, newName) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    changeName: newName => {
-      dispatch(updateDashboard(props.dashboardId, newName)).then(result => {
+    changeName: (newName) => {
+      dispatch(updateDashboard(props.dashboardId, newName)).then((result) => {
         if (result.status !== 200) {
           dispatch(showUpdateDashboardFailedNotification(props.dashboardId));
         }
@@ -77,7 +77,7 @@ import { updateEntities } from 'redux-query';
 
 store.dispatch(
   updateEntities({
-    email: prevValue => 'ryan@amplitude.com',
+    email: (prevValue) => 'ryan@amplitude.com',
   }),
 );
 ```

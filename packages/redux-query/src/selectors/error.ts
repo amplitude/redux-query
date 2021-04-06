@@ -19,7 +19,7 @@ export const responseBody = (
     return null;
   }
 
-  return idx(errorsState, _ => _[queryKey].responseBody);
+  return idx(errorsState, (_) => _[queryKey].responseBody);
 };
 
 export const responseText = (
@@ -32,7 +32,7 @@ export const responseText = (
     return null;
   }
 
-  return idx(errorsState, _ => _[queryKey].responseText);
+  return idx(errorsState, (_) => _[queryKey].responseText);
 };
 
 export const responseHeaders = (
@@ -50,5 +50,5 @@ export const responseHeaders = (
     return null;
   }
 
-  return idx(errorsState, _ => _[queryKey].responseHeaders);
+  return idx(errorsState, (_) => _[queryKey].responseHeaders);
 };

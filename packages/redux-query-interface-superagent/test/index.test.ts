@@ -4,7 +4,7 @@ import { httpMethods } from 'redux-query';
 
 import superagentInterface from '../src';
 
-const mockEndpoint = requestHttpMethod => () => {
+const mockEndpoint = (requestHttpMethod) => () => {
   return {
     text: requestHttpMethod,
     status: 200,

@@ -37,7 +37,7 @@ const superagentNetworkInterface: NetworkInterface = (
     request.withCredentials();
   }
 
-  const execute = cb =>
+  const execute = (cb) =>
     request.end((err, response) => {
       const resStatus = (response && response.status) || 0;
       const resBody = (response && response.body) || undefined;

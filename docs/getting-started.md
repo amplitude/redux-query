@@ -56,8 +56,8 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 import superagentInterface from 'redux-query-interface-superagent';
 
-export const getQueries = state => state.queries;
-export const getEntities = state => state.entities;
+export const getQueries = (state) => state.queries;
+export const getEntities = (state) => state.entities;
 
 const reducer = combineReducers({
   entities: entitiesReducer,
@@ -84,7 +84,7 @@ import { Provider as ReduxQueryProvider } from 'redux-query-react';
 import App from './App';
 import store from './store';
 
-export const getQueries = state => state.queries;
+export const getQueries = (state) => state.queries;
 
 const Root = () => {
   return (

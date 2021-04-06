@@ -30,8 +30,8 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 import superagentInterface from 'redux-query-interface-superagent';
 
-export const getQueries = state => state.queries;
-export const getEntities = state => state.entities;
+export const getQueries = (state) => state.queries;
+export const getEntities = (state) => state.entities;
 
 const reducer = combineReducers({
   entities: entitiesReducer,
@@ -54,7 +54,7 @@ export default store;
 export const topStoriesRequest = () => {
   return {
     url: `https://hacker-news.firebaseio.com/v0/topstories.json`,
-    transform: body => ({
+    transform: (body) => ({
       // The server responds with an array of IDs
       topStoryIds: body,
     }),
@@ -67,10 +67,10 @@ export const topStoriesRequest = () => {
   };
 };
 
-export const itemRequest = itemId => {
+export const itemRequest = (itemId) => {
   return {
     url: `https://hacker-news.firebaseio.com/v0/item/${itemId}.json`,
-    transform: body => ({
+    transform: (body) => ({
       // The server responds with the metadata for that item
       itemsById: {
         [itemId]: body,
@@ -95,7 +95,7 @@ export const itemRequest = itemId => {
 ```javascript
 const emptyArray = [];
 
-export const getTopStoryIds = state => {
+export const getTopStoryIds = (state) => {
   return state.entities.topStoryIds || emptyArray;
 };
 
@@ -116,9 +116,9 @@ import { useRequest } from 'redux-query-react';
 import * as storyQueryConfigs from '../query-configs/stories';
 import * as storySelectors from '../selectors/stories';
 
-const Item = props => {
+const Item = (props) => {
   const [{ isPending }] = useRequest(storyQueryConfigs.itemRequest(props.itemId));
-  const item = useSelector(state => storySelectors.getItem(state, props.itemId));
+  const item = useSelector((state) => storySelectors.getItem(state, props.itemId));
 
   return (
     <li>
@@ -160,13 +160,13 @@ import Item from '../components/Item';
 import * as storyQueryConfigs from '../query-configs/stories';
 import * as storySelectors from '../selectors/stories';
 
-const TopStories = props => {
+const TopStories = (props) => {
   useRequest(storyQueryConfigs.topStoriesRequest());
   const topStoryIds = useSelector(storySelectors.getTopStoryIds);
 
   return (
     <ol>
-      {topStoryIds.slice(0, 30).map(itemId => (
+      {topStoryIds.slice(0, 30).map((itemId) => (
         <Item itemId={itemId} key={itemId} />
       ))}
     </ol>
@@ -186,7 +186,7 @@ import { Provider as ReduxQueryProvider } from 'redux-query-react';
 import TopStories from '../components/TopStories';
 import { getQueries } from '../store';
 
-const HackerNews = props => {
+const HackerNews = (props) => {
   return (
     <Provider store={props.store}>
       <ReduxQueryProvider queriesSelector={getQueries}>

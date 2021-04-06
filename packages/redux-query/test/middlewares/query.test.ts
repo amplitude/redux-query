@@ -48,9 +48,9 @@ const mockNetworkInterface = (url, method, options) => {
 const mockDispatchToAssertActions = (actionsToDispatch, done) => {
   let actionsLeft = actionsToDispatch;
 
-  return action => {
+  return (action) => {
     // Don't do a deep equal, just check type, url, and status fields
-    Object.keys(actionsLeft[0]).forEach(keyToCheck => {
+    Object.keys(actionsLeft[0]).forEach((keyToCheck) => {
       expect(action[keyToCheck]).toEqual(actionsLeft[0][keyToCheck]);
     });
 
@@ -69,8 +69,8 @@ describe('query middleware', () => {
     let nextHandler;
 
     beforeAll(() => {
-      const queriesSelector = state => state.queries;
-      const entitiesSelector = state => state.entities;
+      const queriesSelector = (state) => state.queries;
+      const entitiesSelector = (state) => state.entities;
       const dispatch = () => {};
       const getState = () => {};
       nextHandler = queryMiddleware(
@@ -92,10 +92,10 @@ describe('query middleware', () => {
       expect(typeof actionHandler).toBe('function');
     });
 
-    test('must pass action to `next` if not a redux-query action', done => {
+    test('must pass action to `next` if not a redux-query action', (done) => {
       const actionObj = {};
 
-      const actionHandler = nextHandler(action => {
+      const actionHandler = nextHandler((action) => {
         expect(action).toBe(actionObj);
         done();
       });
@@ -105,10 +105,10 @@ describe('query middleware', () => {
   });
 
   describe('must handle requests', () => {
-    const queriesSelector = state => state.queries;
-    const entitiesSelector = state => state.entities;
+    const queriesSelector = (state) => state.queries;
+    const entitiesSelector = (state) => state.entities;
 
-    test('by dispatching start and success actions', done => {
+    test('by dispatching start and success actions', (done) => {
       const url = '/api';
       const actionsToDispatch = [
         {
@@ -147,7 +147,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('should use query key if provided', done => {
+    test('should use query key if provided', (done) => {
       const url = '/api';
       const queryKey = '@specialSnowflake';
       const actionsToDispatch = [
@@ -190,7 +190,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('should use headers if provided as an option', done => {
+    test('should use headers if provided as an option', (done) => {
       const url = '/echo-headers';
       const headers = { 'x-message': apiMessage };
       const actionsToDispatch = [
@@ -301,7 +301,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('should fetch with `retry` if request by same URL is not pending and has not succeeded', done => {
+    test('should fetch with `retry` if request by same URL is not pending and has not succeeded', (done) => {
       const url = '/api';
       const actionsToDispatch = [
         {
@@ -347,7 +347,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('should fetch with `force` even though request by same URL has succeeded', done => {
+    test('should fetch with `force` even though request by same URL has succeeded', (done) => {
       const url = '/api';
       const actionsToDispatch = [
         {
@@ -395,10 +395,10 @@ describe('query middleware', () => {
   });
 
   describe('must handle mutations', () => {
-    const queriesSelector = state => state.queries;
-    const entitiesSelector = state => state.entities;
+    const queriesSelector = (state) => state.queries;
+    const entitiesSelector = (state) => state.entities;
 
-    test('by dispatching start and success actions', done => {
+    test('by dispatching start and success actions', (done) => {
       const url = '/api';
       const actionsToDispatch = [
         {
@@ -437,7 +437,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('should use query key if provided', done => {
+    test('should use query key if provided', (done) => {
       const url = '/api';
       const queryKey = '@specialHailChunk';
       const actionsToDispatch = [
@@ -480,7 +480,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('should use headers if provided as an option', done => {
+    test('should use headers if provided as an option', (done) => {
       const url = '/echo-headers';
       const headers = { 'x-message': apiMessage };
       const actionsToDispatch = [
@@ -523,7 +523,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('by supporting optimistic updates', done => {
+    test('by supporting optimistic updates', (done) => {
       const url = '/api';
       const optimisticMessage = 'hello, optimistic world!';
       const actionsToDispatch = [
@@ -571,7 +571,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('by reverting optimistic updates in case of failure', done => {
+    test('by reverting optimistic updates in case of failure', (done) => {
       const url = '/bad-url';
       const optimisticMessage = 'hello, optimistic world!';
       const actionsToDispatch = [
@@ -619,7 +619,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('by reverting optimistic updates with rollback in case of failure', done => {
+    test('by reverting optimistic updates with rollback in case of failure', (done) => {
       const url = '/message/hello/update';
       const actionsToDispatch = [
         {
@@ -664,7 +664,7 @@ describe('query middleware', () => {
         type: actionTypes.MUTATE_ASYNC,
         url,
         optimisticUpdate: {
-          messagesById: messagesById => ({
+          messagesById: (messagesById) => ({
             ...messagesById,
             hello: 'world',
           }),
@@ -686,10 +686,10 @@ describe('query middleware', () => {
   });
 
   describe('must handle cancelations', () => {
-    const queriesSelector = state => state.queries;
-    const entitiesSelector = state => state.entities;
+    const queriesSelector = (state) => state.queries;
+    const entitiesSelector = (state) => state.entities;
 
-    test('by aborting request network requests', done => {
+    test('by aborting request network requests', (done) => {
       const url = '/api';
       const mockNetworkInterface = () => {
         return {
@@ -697,7 +697,7 @@ describe('query middleware', () => {
             // Test passes if async callback called
             done();
           },
-          execute: cb => {
+          execute: (cb) => {
             // Simulate network latency
             setTimeout(() => cb(null, 200, {}), 500);
           },
@@ -723,7 +723,7 @@ describe('query middleware', () => {
       });
     });
 
-    test('by aborting mutation network requests', done => {
+    test('by aborting mutation network requests', (done) => {
       const url = '/api';
       const mockNetworkInterface = () => {
         return {
@@ -731,7 +731,7 @@ describe('query middleware', () => {
             // Test passes if async callback called
             done();
           },
-          execute: cb => {
+          execute: (cb) => {
             // Simulate network latency
             setTimeout(() => cb(null, 200, {}), 500);
           },
@@ -759,10 +759,10 @@ describe('query middleware', () => {
   });
 
   describe('must handle being reset', () => {
-    const queriesSelector = state => state.queries;
-    const entitiesSelector = state => state.entities;
+    const queriesSelector = (state) => state.queries;
+    const entitiesSelector = (state) => state.entities;
 
-    test('by canceling all pending queries', done => {
+    test('by canceling all pending queries', (done) => {
       let queriesLeft = 2;
       const mockNetworkInterface = () => {
         return {
@@ -774,7 +774,7 @@ describe('query middleware', () => {
               done();
             }
           },
-          execute: cb => {
+          execute: (cb) => {
             // Simulate network latency
             setTimeout(() => cb(null, 200, {}), 500);
           },

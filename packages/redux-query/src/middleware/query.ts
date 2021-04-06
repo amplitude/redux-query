@@ -94,7 +94,7 @@ const queryMiddleware = (
     [key: string]: NetworkHandler;
   } = {};
 
-  const abortQuery = queryKey => {
+  const abortQuery = (queryKey) => {
     const networkHandler = networkHandlersByQueryKey[queryKey];
 
     if (networkHandler) {
@@ -138,12 +138,12 @@ const queryMiddleware = (
         const queries = queriesSelector(state);
 
         const queriesState = queries[queryKey];
-        const isPending = idx(queriesState, _ => _.isPending);
-        const status = idx(queriesState, _ => _.status);
+        const isPending = idx(queriesState, (_) => _.isPending);
+        const status = idx(queriesState, (_) => _.status);
         const hasSucceeded = isStatusOk(status);
 
         if (force || !queriesState || (retry && !isPending && !hasSucceeded)) {
-          returnValue = new Promise<ActionPromiseValue>(resolve => {
+          returnValue = new Promise<ActionPromiseValue>((resolve) => {
             const start = new Date();
             const { method = httpMethods.GET } = options;
             let attempts = 0;
@@ -290,7 +290,7 @@ const queryMiddleware = (
           throw new Error('Failed to generate queryKey for mutation');
         }
 
-        returnValue = new Promise<ActionPromiseValue>(resolve => {
+        returnValue = new Promise<ActionPromiseValue>((resolve) => {
           const start = new Date();
           const { method = httpMethods.POST } = options;
 

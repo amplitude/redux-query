@@ -22,7 +22,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useRequest } from 'redux-query-react';
 
-const getNotifications = state => state.entities.notifications;
+const getNotifications = (state) => state.entities.notifications;
 
 const notificationsRequest = {
   url: '/api/notifications',
@@ -48,7 +48,7 @@ const NotificationsView = () => {
     <div>
       <button onClick={refresh}>Refresh</button>
       <ul>
-        {notifications.map(notification => (
+        {notifications.map((notification) => (
           <Notification key={notificationId} />
         ))}
       </ul>

@@ -23,7 +23,7 @@ import { connect } from 'react-redux';
 import { querySelectors } from 'redux-query';
 import { connectRequest } from 'redux-query-react';
 
-const getQueries = state => state.queries;
+const getQueries = (state) => state.queries;
 
 const getNotification = (state, notificationId) => {
   return (state.entities.notificationsById || {})[notificationId];
@@ -34,16 +34,16 @@ class NotificationView extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  isLoading: mapPropsToConfigs(props).some(queryConfig =>
+  isLoading: mapPropsToConfigs(props).some((queryConfig) =>
     querySelectors.isPending(getQueries, queryConfig),
   ),
   notification: getNotification(state, props.notificationId),
 });
 
-const mapPropsToConfigs = props => [
+const mapPropsToConfigs = (props) => [
   {
     url: `/api/notification/${props.notificationId}`,
-    transform: responseBody => {
+    transform: (responseBody) => {
       const { notification } = responseBody.data;
 
       return {

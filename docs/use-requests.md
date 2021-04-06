@@ -28,11 +28,11 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useRequests } from 'redux-query-react';
 
-const getUsers = state => state.entities.users;
+const getUsers = (state) => state.entities.users;
 
 const userIds = ['ryan.busk@amplitude.com', 'ryan@amplitude.com' /* etc... */]; // arbitrary number of users
 
-const requests = userIds.map(userId => {
+const requests = userIds.map((userId) => {
   return {
     url: `/api/users/${userId}`,
     update: {
@@ -56,7 +56,7 @@ const NotificationsView = () => {
     <div>
       <button onClick={refresh}>Refresh</button>
       <ul>
-        {users.map(user => (
+        {users.map((user) => (
           <User key={user.userId} />
         ))}
       </ul>

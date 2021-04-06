@@ -33,8 +33,8 @@ import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 
 import mockNetworkInterface from './mock-network-interface';
 
-export const getQueries = state => state.queries;
-export const getEntities = state => state.entities;
+export const getQueries = (state) => state.queries;
+export const getEntities = (state) => state.entities;
 
 const reducer = combineReducers({
   entities: entitiesReducer,
@@ -89,7 +89,7 @@ export const changeNameMutation = (name, optimistic) => {
 ### `selectors/name.js`
 
 ```javascript
-export const getName = state => state.entities.name;
+export const getName = (state) => state.entities.name;
 ```
 
 ## Components
@@ -104,7 +104,7 @@ import { useRequest, useMutation } from 'redux-query-react';
 import * as nameQueryConfigs from '../query-configs/name';
 import * as nameSelectors from '../selectors/name';
 
-const ChangeUsernameForm = props => {
+const ChangeUsernameForm = (props) => {
   const [inputValue, setInputValue] = React.useState('');
   const [status, setStatus] = React.useState(null);
   const [error, setError] = React.useState(null);
@@ -113,13 +113,13 @@ const ChangeUsernameForm = props => {
 
   useRequest(nameQueryConfigs.nameRequest());
 
-  const [queryState, changeName] = useMutation(optimistic =>
+  const [queryState, changeName] = useMutation((optimistic) =>
     nameQueryConfigs.changeNameMutation(inputValue, optimistic),
   );
 
   const submit = React.useCallback(
-    optimistic => {
-      changeName(optimistic).then(result => {
+    (optimistic) => {
+      changeName(optimistic).then((result) => {
         if (result !== 200) {
           setError(result.text);
         }
@@ -138,7 +138,7 @@ const ChangeUsernameForm = props => {
       <p>{username || <em>(no username set)</em>}</p>
       <h2>Change username</h2>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           // Prevent default form behavior.
           e.preventDefault();
         }}
@@ -148,7 +148,7 @@ const ChangeUsernameForm = props => {
           value={inputValue}
           placeholder="Enter a new username"
           disabled={isPending}
-          onChange={e => {
+          onChange={(e) => {
             setInputValue(e.target.value);
           }}
         />
@@ -234,7 +234,7 @@ const Intro = () => {
   );
 };
 
-const App = props => {
+const App = (props) => {
   return (
     <Provider store={props.store}>
       <ReduxQueryProvider queriesSelector={getQueries}>

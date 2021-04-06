@@ -2,7 +2,7 @@ import stringify from 'json-stable-stringify';
 
 import { QueryKeyGetter } from '../types';
 
-export const getQueryKey: QueryKeyGetter = queryConfig => {
+export const getQueryKey: QueryKeyGetter = (queryConfig) => {
   if (!queryConfig) {
     return null;
   }

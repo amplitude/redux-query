@@ -25,7 +25,7 @@ const makeCommentReactMutation = (commentId, reactionType) => ({
   body: {
     reactionType,
   },
-  transform: responseBody => {
+  transform: (responseBody) => {
     const comment = responseBody.data.comment;
 
     return {
@@ -58,14 +58,14 @@ const reactions = [
 ];
 
 const Comment = () => {
-  const [{ isPending }, reactToComment] = useMutation(reactionType =>
+  const [{ isPending }, reactToComment] = useMutation((reactionType) =>
     makeCommentReactMutation(props.comment.id, reactionType),
   );
 
   return (
     <div>
       <div>{props.comment.body}</div>
-      {emojis.map(emoji => (
+      {emojis.map((emoji) => (
         <button key={emoji.type} onClick={() => reactToComment(emoji.type)} disabled={isPending}>
           {emoji.text}
         </button>

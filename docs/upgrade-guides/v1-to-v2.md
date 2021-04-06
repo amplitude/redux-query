@@ -70,7 +70,7 @@ import { updateEntities } from 'redux-query';
 
 dispatch(
   updateEntities({
-    dashboards: value => omit(value, '78dhr8v'),
+    dashboards: (value) => omit(value, '78dhr8v'),
   }),
 );
 ```

@@ -22,23 +22,23 @@ export const getQueryDetails: (
     return defaultDetailsObject;
   }
 
-  return idx(queriesState, _ => _[queryKey]) || defaultDetailsObject;
+  return idx(queriesState, (_) => _[queryKey]) || defaultDetailsObject;
 };
 
 export const isFinished: (
   queriesState: QueriesState,
   queryConfig: QueryConfig | null | undefined,
-) => boolean = createSelector(getQueryDetails, query => query.isFinished);
+) => boolean = createSelector(getQueryDetails, (query) => query.isFinished);
 
 export const isPending: (
   queriesState: QueriesState,
   queryConfig: QueryConfig | null | undefined,
-) => boolean = createSelector(getQueryDetails, query => query.isPending);
+) => boolean = createSelector(getQueryDetails, (query) => query.isPending);
 
 export const status: (
   queriesState: QueriesState,
   queryConfig: QueryConfig | null | undefined,
-) => number | null | undefined = createSelector(getQueryDetails, query => query.status);
+) => number | null | undefined = createSelector(getQueryDetails, (query) => query.status);
 
 export const headers: (
   queriesState: QueriesState,
@@ -48,14 +48,14 @@ export const headers: (
       [key: string]: any;
     }
   | null
-  | undefined = createSelector(getQueryDetails, query => query.headers);
+  | undefined = createSelector(getQueryDetails, (query) => query.headers);
 
 export const lastUpdated: (
   queriesState: QueriesState,
   queryConfig: QueryConfig | null | undefined,
-) => number | null | undefined = createSelector(getQueryDetails, query => query.lastUpdated);
+) => number | null | undefined = createSelector(getQueryDetails, (query) => query.lastUpdated);
 
 export const queryCount: (
   queriesState: QueriesState,
   queryConfig: QueryConfig | null | undefined,
-) => number = createSelector(getQueryDetails, query => query.queryCount);
+) => number = createSelector(getQueryDetails, (query) => query.queryCount);

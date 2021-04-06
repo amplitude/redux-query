@@ -6,7 +6,7 @@ import React from 'react';
  * hooks.
  */
 const useConstCallback = <T>(callback: T): T => {
-  const ref = React.useRef < T > callback;
+  const ref = React.useRef<T>(callback);
 
   return ref.current;
 };

@@ -1,17 +1,22 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
+import {
+  requestAsync,
+  cancelQuery,
+  getQueryKey,
+  ActionPromiseValue,
+  QueryConfig,
+  QueryKey,
+} from 'redux-query';
 
-import { ActionPromiseValue, QueryConfig, QueryKey } from 'redux-query/types.js.flow';
+import { QueryState } from '../types';
 
 import useConstCallback from './use-const-callback';
 import useMemoizedQueryConfig from './use-memoized-query-config';
 import useQueryState from './use-query-state';
 
-import { QueryState } from '../types';
-
 const useRequest = (
-  providedQueryConfig: QueryConfig | null | undefined,
+  providedQueryConfig: QueryConfig,
 ): [QueryState, () => Promise<ActionPromiseValue> | null | undefined] => {
   const reduxDispatch = useDispatch();
 
@@ -31,16 +36,15 @@ const useRequest = (
   // Setting `retry` to `true` for these query configs makes it so that when this query config is
   // passed to a requestAsync action, if a previous request with the same query key failed, it will
   // retry the request (if `retry` is `false`, then it would essentially ignore the action).
-  const transformQueryConfig = useConstCallback((queryConfig: QueryConfig | null | undefined):
-    | QueryConfig
-    | null
-    | undefined => {
-    return {
-      ...queryConfig,
-      unstable_preDispatchCallback: finishedCallback,
-      retry: true,
-    };
-  });
+  const transformQueryConfig = useConstCallback(
+    (queryConfig: QueryConfig): QueryConfig => {
+      return {
+        ...queryConfig,
+        unstable_preDispatchCallback: finishedCallback,
+        retry: true,
+      };
+    },
+  );
 
   // Query configs are memoized based on query key. As long as the query key doesn't change, the
   // query config won't change.
@@ -50,7 +54,7 @@ const useRequest = (
   // (e.g.`isPending`, `queryCount`, etc.)
   const queryState = useQueryState(queryConfig);
 
-  const dispatchRequestToRedux = useConstCallback(queryConfig => {
+  const dispatchRequestToRedux = useConstCallback((queryConfig) => {
     const promise = reduxDispatch(requestAsync(queryConfig));
 
     // If a promise is not returned, we know that the query middleware ignored this request and

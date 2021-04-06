@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { querySelectors } from 'redux-query';
-import { QueryConfig } from 'redux-query/types.js.flow';
+import { querySelectors, QueryConfig } from 'redux-query';
 
 import ReduxQueryContext from '../context';
 import { QueryState } from '../types';
 
-const useQueryState = (queryConfig: QueryConfig | null | undefined): QueryState => {
+const useQueryState = (queryConfig: QueryConfig): QueryState => {
   const contextValue = React.useContext(ReduxQueryContext);
 
   if (!contextValue) {
@@ -17,27 +16,29 @@ const useQueryState = (queryConfig: QueryConfig | null | undefined): QueryState 
 
   const { queriesSelector } = contextValue;
 
-  const isPending = useSelector(state =>
+  const isPending = useSelector((state) =>
     querySelectors.isPending(queriesSelector(state), queryConfig),
   );
 
-  const isFinished = useSelector(state =>
+  const isFinished = useSelector((state) =>
     querySelectors.isFinished(queriesSelector(state), queryConfig),
   );
 
-  const status = useSelector(state => querySelectors.status(queriesSelector(state), queryConfig));
+  const status = useSelector((state) => querySelectors.status(queriesSelector(state), queryConfig));
 
-  const headers = useSelector(state => querySelectors.headers(queriesSelector(state), queryConfig));
+  const headers = useSelector((state) =>
+    querySelectors.headers(queriesSelector(state), queryConfig),
+  );
 
-  const lastUpdated = useSelector(state =>
+  const lastUpdated = useSelector((state) =>
     querySelectors.lastUpdated(queriesSelector(state), queryConfig),
   );
 
-  const queryCount = useSelector(state =>
+  const queryCount = useSelector((state) =>
     querySelectors.queryCount(queriesSelector(state), queryConfig),
   );
 
-  const queryState = React.useMemo(
+  const queryState: QueryState = React.useMemo(
     () => ({
       isPending,
       isFinished,

@@ -1,6 +1,6 @@
 // @flow
 
-import type { ActionPromiseValue, QueryConfig } from 'redux-query/types.js.flow';
+import type { ActionPromiseValue, QueryConfig } from 'redux-query';
 
 import type { QueryState } from '../types';
 

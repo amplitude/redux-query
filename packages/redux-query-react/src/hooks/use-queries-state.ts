@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { querySelectors } from 'redux-query';
-import { QueryConfig } from 'redux-query/types.js.flow';
+import { querySelectors, QueryConfig } from 'redux-query';
 
 import ReduxQueryContext from '../context';
 import { QueriesState } from '../types';
@@ -17,12 +16,14 @@ const useQueriesState = (queryConfigs: Array<QueryConfig>): QueriesState => {
 
   const { queriesSelector } = contextValue;
 
-  const isPending = useSelector(state =>
-    queryConfigs.some(queryConfig => querySelectors.isPending(queriesSelector(state), queryConfig)),
+  const isPending = useSelector((state) =>
+    queryConfigs.some((queryConfig) =>
+      querySelectors.isPending(queriesSelector(state), queryConfig),
+    ),
   );
 
-  const isFinished = useSelector(state =>
-    queryConfigs.every(queryConfig =>
+  const isFinished = useSelector((state) =>
+    queryConfigs.every((queryConfig) =>
       querySelectors.isFinished(queriesSelector(state), queryConfig),
     ),
   );

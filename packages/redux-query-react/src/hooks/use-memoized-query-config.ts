@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { getQueryKey } from 'redux-query';
-import { QueryConfig } from 'redux-query/types.js.flow';
+import { getQueryKey, QueryConfig } from 'redux-query';
 
-const identity = x => x;
+const identity = (x) => x;
 
 /**
  * Other hooks are guaranteed to only receive a new Redux action if and only if the query key of
  * the provided queryConfig changes.
  */
 const useMemoizedQueryConfig = (
-  providedQueryConfig: QueryConfig | null | undefined,
-  transform: (arg0: QueryConfig | null | undefined) => QueryConfig | null | undefined = identity,
-): QueryConfig | null | undefined => {
+  providedQueryConfig: QueryConfig | undefined,
+  transform: (arg0: QueryConfig) => QueryConfig = identity,
+): QueryConfig => {
   const [queryConfig, setQueryConfig] = React.useState(
     providedQueryConfig ? transform(providedQueryConfig) : null,
   );

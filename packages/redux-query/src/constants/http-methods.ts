@@ -1,4 +1,4 @@
-import { $Keys, $Keys } from 'utility-types';
+import { $Keys } from 'utility-types';
 
 const HttpMethods = {
   DELETE: 'DELETE',

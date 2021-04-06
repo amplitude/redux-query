@@ -1,21 +1,29 @@
+// @flow
+
+import hoistStatics from 'hoist-non-react-statics';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  requestAsync,
-  cancelQuery,
-  getQueryKey,
-  ActionPromiseValue,
-  QueryConfig,
-  QueryKey,
-} from 'redux-query';
+import { requestAsync, cancelQuery, getQueryKey } from 'redux-query';
 
-import useConstCallback from './use-const-callback';
-import useMemoizedQueryConfigs from './use-memoized-query-configs';
-import useQueriesState from './use-queries-state';
+import type { QueryConfig, QueryKey } from 'redux-query';
 
-import { QueriesState } from '../types';
+import useConstCallback from '../hooks/use-const-callback';
+import useMemoizedQueryConfigs from '../hooks/use-memoized-query-configs';
 
-const difference = <T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>): Array<T> => {
+type Diff<T, U> = T extends U ? never : T;
+
+type MapPropsToConfigs<T> = (props: T) => QueryConfig | Array<QueryConfig>;
+
+type Options = {
+  forwardRef?: boolean;
+  pure?: boolean;
+};
+
+const normalizeToArray = (maybe: QueryConfig | Array<QueryConfig>): Array<QueryConfig> => {
+  return (Array.isArray(maybe) ? maybe : [maybe]).filter(Boolean);
+};
+
+const difference = <T,>(a: ReadonlyArray<T>, b: ReadonlyArray<T>): Array<T> => {
   const bSet = new Set(b);
 
   return a.filter((x) => !bSet.has(x));
@@ -27,18 +35,15 @@ const diffQueryConfigs = (
 ) => {
   const prevQueryKeys = prevQueryConfigs.map((config) => getQueryKey(config));
   const queryKeys = queryConfigs.map((config) => getQueryKey(config));
-  const queryConfigByQueryKey = queryKeys.reduce(
-    (accum, queryKey: QueryKey | null | undefined, i) => {
-      const queryConfig = queryConfigs[i];
+  const queryConfigByQueryKey = queryKeys.reduce((accum, queryKey: QueryKey, i) => {
+    const queryConfig = queryConfigs[i];
 
-      if (queryConfig) {
-        accum.set(queryKey, queryConfig);
-      }
+    if (queryConfig) {
+      accum.set(queryKey, queryConfig);
+    }
 
-      return accum;
-    },
-    new Map(),
-  );
+    return accum;
+  }, new Map());
 
   // Keys that existed before that no longer exist, should be subject to cancellation
   const cancelKeys = difference(prevQueryKeys, queryKeys).filter(Boolean);
@@ -52,9 +57,7 @@ const diffQueryConfigs = (
   return { cancelKeys, requestQueryConfigs };
 };
 
-const useRequests = (
-  providedQueryConfigs: Array<QueryConfig>,
-): [QueriesState, () => Promise<ActionPromiseValue>] => {
+const useMultiRequest = <Config,>(mapPropsToConfigs: MapPropsToConfigs<Config>, props: Config) => {
   const reduxDispatch = useDispatch();
 
   const previousQueryConfigs = React.useRef<Array<QueryConfig>>([]);
@@ -89,7 +92,7 @@ const useRequests = (
 
   const finishedCallback = useConstCallback((queryKey: QueryKey) => {
     return () => {
-      if (queryKey !== null) {
+      if (queryKey != null) {
         pendingRequests.current.delete(queryKey);
       }
     };
@@ -107,12 +110,10 @@ const useRequests = (
 
   // Query configs are memoized based on query key. As long as the query keys in the list don't
   // change, the query config list won't change.
-  const queryConfigs = useMemoizedQueryConfigs(providedQueryConfigs, transformQueryConfig);
-
-  // This is an object containing two variables, isPending and isFinished, these apply to all queries.
-  // If any queries are pending, isPending is true, and
-  // unless all queries are finished, isFinished will be false.
-  const queriesState = useQueriesState(queryConfigs);
+  const queryConfigs = useMemoizedQueryConfigs(
+    normalizeToArray(mapPropsToConfigs(props)),
+    transformQueryConfig,
+  );
 
   const forceRequest = React.useCallback(() => {
     queryConfigs.forEach((requestReduxAction) => {
@@ -133,19 +134,61 @@ const useRequests = (
     );
 
     requestQueryConfigs.forEach(dispatchRequestToRedux);
-    cancelKeys.forEach((queryKey) => dispatchCancelToRedux(queryKey));
+    cancelKeys.forEach((queryKey) => queryKey && dispatchCancelToRedux(queryKey));
 
     previousQueryConfigs.current = queryConfigs;
-  }, [dispatchCancelToRedux, dispatchRequestToRedux, previousQueryConfigs, queryConfigs]);
+  }, [dispatchCancelToRedux, dispatchRequestToRedux, queryConfigs]);
 
   // When the component unmounts, cancel all pending requests
   React.useEffect(() => {
     return () => {
       [...pendingRequests.current].forEach(dispatchCancelToRedux);
     };
-  }, [dispatchCancelToRedux, pendingRequests]);
+  }, [dispatchCancelToRedux]);
 
-  return [queriesState, forceRequest];
+  return forceRequest;
 };
 
-export default useRequests;
+type Wrapper<Config> = (
+  WrappedComponent: React.AbstractComponent<Config>,
+) => React.AbstractComponent<Diff<Config, { forceRequest: () => void }>>;
+
+/**
+ * This is the higher-order component code. Some of the code here was influenced by react-redux's
+ * `connectAdvanced` implementation.
+ *
+ * See https://github.com/reduxjs/react-redux/blob/master/src/components/connectAdvanced.js
+ * react-redux is licensed under the MIT License. Copyright (c) 2015-present Dan Abramov.
+ */
+const connectRequest = <Config,>(
+  mapPropsToConfigs: MapPropsToConfigs<Config>,
+  options?: Options,
+): Wrapper<Config> => (WrappedComponent) => {
+  const { pure = true, forwardRef = false } = options || {};
+
+  const ConnectRequestFunction = (props: Config) => {
+    const forceRequest = useMultiRequest<Config>(mapPropsToConfigs, props);
+
+    return <WrappedComponent {...props} forceRequest={forceRequest} />;
+  };
+
+  const ConnectRequest = pure ? React.memo(ConnectRequestFunction) : ConnectRequestFunction;
+  const wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  const displayName = `ConnectRequest(${wrappedComponentName})`;
+
+  ConnectRequest.displayName = displayName;
+
+  if (forwardRef) {
+    const forwarded = React.forwardRef<Config, any>((props: Config, ref) => (
+      <ConnectRequest {...props} forwardedRef={ref} />
+    ));
+
+    forwarded.displayName = displayName;
+
+    return hoistStatics(forwarded, WrappedComponent);
+  }
+
+  return hoistStatics(ConnectRequest, WrappedComponent);
+};
+
+export default connectRequest;

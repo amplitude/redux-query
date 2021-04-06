@@ -7,8 +7,8 @@ import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 import useRequests from '../../src/hooks/use-requests';
 import ReduxQueryProvider from '../../src/components/Provider';
 
-export const getQueries = state => state.queries;
-export const getEntities = state => state.entities;
+export const getQueries = (state) => state.queries;
+export const getEntities = (state) => state.entities;
 
 const reducer = combineReducers({
   entities: entitiesReducer,
@@ -21,8 +21,8 @@ const apiMessage = 'hello, world!';
 const artificialTestNetworkDelay = 200;
 const testRouteMessage = 'test message';
 
-const mockNetworkInterface = url => {
-  let timeoutId = null;
+const mockNetworkInterface = (url) => {
+  let timeoutId: any = null;
 
   return {
     abort() {
@@ -63,7 +63,7 @@ const mockNetworkInterface = url => {
 
 let store;
 
-const App = props => {
+const App = (props) => {
   return (
     <Provider store={store}>
       <ReduxQueryProvider queriesSelector={getQueries}>{props.children}</ReduxQueryProvider>
@@ -95,8 +95,8 @@ describe('useRequests', () => {
           },
         },
       ]);
-      const apiMessage = useSelector(state => state.entities.apiMessage);
-      const testMessage = useSelector(state => state.entities.testMessage);
+      const apiMessage = useSelector((state) => state.entities.apiMessage);
+      const testMessage = useSelector((state) => state.entities.testMessage);
 
       if (isPending) {
         return <div data-testid="loading-content">loading</div>;
@@ -138,7 +138,7 @@ describe('useRequests', () => {
 
     // Click refresh button
 
-    let buttonNode = getByTestId(container, 'refresh-button');
+    const buttonNode = getByTestId(container, 'refresh-button');
     fireEvent.click(buttonNode);
 
     // We're in a loading state again
@@ -173,8 +173,8 @@ describe('useRequests', () => {
           },
         },
       ]);
-      const apiMessage = useSelector(state => state.entities.apiMessage);
-      const testMessage = useSelector(state => state.entities.testMessage);
+      const apiMessage = useSelector((state) => state.entities.apiMessage);
+      const testMessage = useSelector((state) => state.entities.testMessage);
 
       if (!isFinished) {
         return <div data-testid="loading-content">loading</div>;
@@ -196,17 +196,17 @@ describe('useRequests', () => {
 
     // Initial loading
 
-    let loadingContentNode = getByTestId(container, 'loading-content');
+    const loadingContentNode = getByTestId(container, 'loading-content');
     expect(loadingContentNode.textContent).toBe('loading');
 
     // Loaded
 
-    let loadedApiContentNode = await waitForElement(() =>
+    const loadedApiContentNode = await waitForElement(() =>
       getByTestId(container, 'loaded-api-content'),
     );
     expect(loadedApiContentNode.textContent).toBe(apiMessage);
 
-    let loadedTestContentNode = await waitForElement(() =>
+    const loadedTestContentNode = await waitForElement(() =>
       getByTestId(container, 'loaded-test-content'),
     );
     expect(loadedTestContentNode.textContent).toBe(testRouteMessage);
@@ -228,8 +228,8 @@ describe('useRequests', () => {
           },
         },
       ]);
-      const apiMessage = useSelector(state => state.entities.apiMessage);
-      const testMessage = useSelector(state => state.entities.testMessage);
+      const apiMessage = useSelector((state) => state.entities.apiMessage);
+      const testMessage = useSelector((state) => state.entities.testMessage);
 
       if (isPending) {
         return <div data-testid="loading-content">loading</div>;
@@ -255,7 +255,7 @@ describe('useRequests', () => {
           <a
             data-testid="broken-link"
             href="/broken-link"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               setPath('broken-link');
             }}
@@ -265,7 +265,7 @@ describe('useRequests', () => {
           <a
             data-testid="home-link"
             href="/"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               setPath('/');
             }}
@@ -291,19 +291,19 @@ describe('useRequests', () => {
     // unmounting the component that has the useRequests hook, triggering the network request to be
     // canceled.
 
-    let brokenLinkNode = await waitForElement(() => getByTestId(container, 'broken-link'));
+    const brokenLinkNode = await waitForElement(() => getByTestId(container, 'broken-link'));
     fireEvent.click(brokenLinkNode);
 
     // 404 page loaded - check that query was actually canceled in Redux
 
-    let notFoundNode = await waitForElement(() => getByTestId(container, '404'));
+    const notFoundNode = await waitForElement(() => getByTestId(container, '404'));
     expect(notFoundNode.textContent).toBe('404');
     expect(store.getState().queries['{"url":"/api"}'].isPending).toBe(false);
     expect(store.getState().entities.message).toBeUndefined();
 
     // Go back home
 
-    let homeLinkNode = await waitForElement(() => getByTestId(container, 'home-link'));
+    const homeLinkNode = await waitForElement(() => getByTestId(container, 'home-link'));
     fireEvent.click(homeLinkNode);
 
     // Check that query begins again
@@ -313,12 +313,12 @@ describe('useRequests', () => {
 
     // Loaded now
 
-    let loadedApiContentNode = await waitForElement(() =>
+    const loadedApiContentNode = await waitForElement(() =>
       getByTestId(container, 'loaded-api-content'),
     );
     expect(loadedApiContentNode.textContent).toBe(apiMessage);
 
-    let loadedTestContentNode = await waitForElement(() =>
+    const loadedTestContentNode = await waitForElement(() =>
       getByTestId(container, 'loaded-test-content'),
     );
     expect(loadedTestContentNode.textContent).toBe(testRouteMessage);
@@ -326,8 +326,8 @@ describe('useRequests', () => {
 
   it('does nothing if query config is null', async () => {
     const Content = () => {
-      const [{ isPending }] = useRequests(null);
-      const message = useSelector(state => state.entities.message);
+      const [{ isPending }] = useRequests(null as any);
+      const message = useSelector((state) => state.entities.message);
 
       if (isPending) {
         return <div data-testid="loading-content">loading</div>;
@@ -348,7 +348,7 @@ describe('useRequests', () => {
 
     // It never loads
 
-    let loadedContentNode = getByTestId(container, 'loaded-content');
+    const loadedContentNode = getByTestId(container, 'loaded-content');
     expect(loadedContentNode.textContent).toBe('');
   });
 });

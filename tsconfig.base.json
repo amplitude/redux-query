@@ -8,21 +8,13 @@
     "esModuleInterop": true,
     "module": "commonjs",
     "noUnusedLocals": true,
-    "outDir": "typescript",
-    "skipLibCheck": true,
     "sourceMap": true,
-    "target": "ES2016",
     "noImplicitAny": false,
     "noImplicitThis": true,
     "alwaysStrict": true,
     "strictBindCallApply": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "paths": {
-      "@redux-query/*": ["redux-query/src/*"],
-      "@redux-query-interface-superagent/*": ["redux-query-interface-superagent/src/*"],
-      "@redux-query-react/*": ["redux-query-react/src/*"]
-    }
+    "strictPropertyInitialization": true
   }
 }

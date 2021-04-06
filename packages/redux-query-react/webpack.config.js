@@ -29,7 +29,7 @@ module.exports = {
     },
   },
   entry: {
-    'redux-query-react': './src/index.js',
+    'redux-query-react': './src/index.ts',
   },
   output: {
     path: path.join(__dirname, 'dist/umd'),
@@ -48,11 +48,22 @@ module.exports = {
   ],
   module: {
     rules: [
+      // ts-loader: convert typescript (es6) to javascript (es6),
+      // babel-loader: converts javascript (es6) to javascript (es5)
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.tsx?$/,
+        loaders: ['babel-loader', 'ts-loader'],
+        include: [path.join(__dirname, 'src'), path.join(__dirname, '..', 'redux-query', 'src')],
+      },
+      // babel-loader for pure javascript (es6) => javascript (es5)
+      {
+        test: /\.(jsx?)$/,
+        loaders: ['babel'],
         include: [path.join(__dirname, 'src'), path.join(__dirname, '..', 'redux-query', 'src')],
       },
     ],
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx'],
   },
 };

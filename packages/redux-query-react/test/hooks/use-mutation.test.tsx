@@ -7,8 +7,8 @@ import { entitiesReducer, queriesReducer, queryMiddleware } from 'redux-query';
 import useMutation from '../../src/hooks/use-mutation';
 import ReduxQueryProvider from '../../src/components/Provider';
 
-export const getQueries = state => state.queries;
-export const getEntities = state => state.entities;
+export const getQueries = (state) => state.queries;
+export const getEntities = (state) => state.entities;
 
 const reducer = combineReducers({
   entities: entitiesReducer,
@@ -17,8 +17,8 @@ const reducer = combineReducers({
 
 const artificialNetworkDelay = 100;
 
-const mockNetworkInterface = (url, method, { body: requestBody }) => {
-  let timeoutId = null;
+const mockNetworkInterface = (url, method, { body: requestBody }: { body?: any }) => {
+  let timeoutId: any = null;
 
   return {
     abort() {
@@ -47,7 +47,7 @@ const mockNetworkInterface = (url, method, { body: requestBody }) => {
 
 let store;
 
-const App = props => {
+const App = (props) => {
   return (
     <Provider store={store}>
       <ReduxQueryProvider queriesSelector={getQueries}>{props.children}</ReduxQueryProvider>
@@ -74,7 +74,7 @@ describe('useMutation', () => {
           message: (prevValue, newValue) => newValue,
         },
       }));
-      const message = useSelector(state => state.entities.message);
+      const message = useSelector((state) => state.entities.message);
 
       return (
         <div>
@@ -99,22 +99,24 @@ describe('useMutation', () => {
 
     // Loaded
 
-    let emptyStateNode = getByTestId(container, 'empty-state');
+    const emptyStateNode = getByTestId(container, 'empty-state');
     expect(emptyStateNode.textContent).toBe('empty');
 
     // Click submit button
 
-    let buttonNode = getByTestId(container, 'submit-button');
+    const buttonNode = getByTestId(container, 'submit-button');
     fireEvent.click(buttonNode);
 
     // We're in a loading state now
 
-    let loadingContentNode = await waitForElement(() => getByTestId(container, 'loading-content'));
+    const loadingContentNode = await waitForElement(() =>
+      getByTestId(container, 'loading-content'),
+    );
     expect(loadingContentNode.textContent).toBe('loading');
 
     // Mutation finished, message should be visible
 
-    let loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
+    const loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
     expect(loadedContentNode.textContent).toBe('Ryan');
   });
 
@@ -133,7 +135,7 @@ describe('useMutation', () => {
       }));
 
       const onSubmit = React.useCallback(() => {
-        mutate().then(result => setMessage(result.body.message));
+        mutate().then((result) => setMessage(result.body.message));
       }, [mutate]);
 
       return (
@@ -159,22 +161,24 @@ describe('useMutation', () => {
 
     // Loaded
 
-    let emptyStateNode = getByTestId(container, 'empty-state');
+    const emptyStateNode = getByTestId(container, 'empty-state');
     expect(emptyStateNode.textContent).toBe('empty');
 
     // Click submit button
 
-    let buttonNode = getByTestId(container, 'submit-button');
+    const buttonNode = getByTestId(container, 'submit-button');
     fireEvent.click(buttonNode);
 
     // We're in a loading state now
 
-    let loadingContentNode = await waitForElement(() => getByTestId(container, 'loading-content'));
+    const loadingContentNode = await waitForElement(() =>
+      getByTestId(container, 'loading-content'),
+    );
     expect(loadingContentNode.textContent).toBe('loading');
 
     // Mutation finished, message should be visible
 
-    let loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
+    const loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
     expect(loadedContentNode.textContent).toBe('Ryan');
   });
 });

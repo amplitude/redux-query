@@ -1,9 +1,12 @@
 import * as React from 'react';
-import { getQueryKey } from 'redux-query';
+import { getQueryKey, QueryConfig, QueryKey } from 'redux-query';
 
-import { QueryConfig, QueryKey } from 'redux-query/types.js.flow';
+type Truthy<T> = T extends false | '' | 0 | null | undefined ? never : T; // from lodash
+const truthy = <T>(value: T): value is Truthy<T> => {
+  return !!value;
+};
 
-const identity = x => x;
+const identity = (x) => x;
 
 /**
  * This hook memoizes the list of query configs that are returned form the `mapPropsToConfigs`
@@ -18,27 +21,31 @@ const identity = x => x;
  * in the list's query key changes, an entirely new list of query configs is returned.
  */
 const useMemoizedQueryConfigs = (
-  providedQueryConfigs: Array<QueryConfig> | null | undefined,
-  transform: (arg0: QueryConfig | null | undefined) => QueryConfig | null | undefined = identity,
-) => {
+  providedQueryConfigs: Array<QueryConfig> | undefined,
+  transform: (arg0: QueryConfig) => QueryConfig = identity,
+): Array<QueryConfig> => {
   const queryConfigs = providedQueryConfigs
     ? providedQueryConfigs
-        .map((queryConfig: QueryConfig | null | undefined): QueryConfig | null | undefined => {
+        .map((queryConfig: QueryConfig): QueryConfig | null => {
           const queryKey = getQueryKey(queryConfig);
 
-          if (queryKey) {
-            return transform(queryConfig);
+          if (!queryKey) {
+            return null;
           }
+
+          return transform(queryConfig);
         })
-        .filter(Boolean)
+        .filter(truthy)
     : [];
-  const [memoizedQueryConfigs, setMemoizedQueryConfigs] = React.useState(queryConfigs);
+  const [memoizedQueryConfigs, setMemoizedQueryConfigs] = React.useState<Array<QueryConfig>>(
+    queryConfigs,
+  );
   const previousQueryKeys = React.useRef<Array<QueryKey>>(
-    queryConfigs.map(getQueryKey).filter(Boolean),
+    queryConfigs.map(getQueryKey).filter(truthy),
   );
 
   React.useEffect(() => {
-    const queryKeys = queryConfigs.map(getQueryKey).filter(Boolean);
+    const queryKeys = queryConfigs.map(getQueryKey).filter(truthy);
 
     if (
       queryKeys.length !== previousQueryKeys.current.length ||

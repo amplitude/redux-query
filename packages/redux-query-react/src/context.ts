@@ -4,6 +4,6 @@ type ReduxQueryContextValue = {
   queriesSelector: (state: any, ...rest: any) => any;
 };
 
-const ReduxQueryContext = React.createContext < ReduxQueryContextValue > null;
+const ReduxQueryContext = React.createContext<ReduxQueryContextValue>(null);
 
 export default ReduxQueryContext;

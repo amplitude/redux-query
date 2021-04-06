@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { mutateAsync } from 'redux-query';
-import { ActionPromiseValue, QueryConfig } from 'redux-query/types.js.flow';
+import { mutateAsync, ActionPromiseValue, QueryConfig } from 'redux-query';
 
 import { QueryState } from '../types';
 import useQueryState from './use-query-state';

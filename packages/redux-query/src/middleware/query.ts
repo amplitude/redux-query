@@ -179,6 +179,7 @@ const queryMiddleware = (
                 ) {
                   // TODO take into account Retry-After header if 503
                   setTimeout(attemptRequest, backoff.duration());
+
                   return;
                 }
 
@@ -209,7 +210,7 @@ const queryMiddleware = (
                   resolve({
                     body: responseBody,
                     duration,
-                    status: status,
+                    status,
                     text: responseText,
                     headers: responseHeaders,
                   });

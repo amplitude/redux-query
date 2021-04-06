@@ -1,11 +1,9 @@
-'use strict';
-
 // NOTE(ryan): Set node target to current for @babel/preset-env to avoid errors when running jest
 // `async` test functions ("ReferenceError: regeneratorRuntime is not defined").
 // https://github.com/facebook/jest/issues/3126#issuecomment-483320742
 
 module.exports = {
-  presets: ['@babel/preset-typescript', '@babel/preset-react', '@babel/preset-env'],
+  presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
   plugins: [
     '@babel/plugin-proposal-object-rest-spread',
     'babel-plugin-idx',

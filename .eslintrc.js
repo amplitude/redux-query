@@ -123,7 +123,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['/**/*.test.ts'],
+      files: ['**/*.test.ts'],
       rules: {
         '@typescript-eslint/ban-ts-comment': 'warn',
       },

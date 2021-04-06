@@ -1,21 +1,21 @@
 import superagent from 'superagent';
-import { HttpMethod } from 'redux-query';
+import { httpMethods } from 'redux-query';
 
 import { NetworkInterface } from 'redux-query';
 
 const createRequest = (url, method, body) => {
   switch (method) {
-    case HttpMethod.HEAD:
+    case httpMethods.HEAD:
       return superagent.head(url, body);
-    case HttpMethod.GET:
+    case httpMethods.GET:
       return superagent.get(url, body);
-    case HttpMethod.POST:
+    case httpMethods.POST:
       return superagent.post(url, body);
-    case HttpMethod.PUT:
+    case httpMethods.PUT:
       return superagent.put(url, body);
-    case HttpMethod.PATCH:
+    case httpMethods.PATCH:
       return superagent.patch(url, body);
-    case HttpMethod.DELETE:
+    case httpMethods.DELETE:
       return superagent.delete(url, body);
     default:
       throw new Error(`Unsupported HTTP method: ${method}`);

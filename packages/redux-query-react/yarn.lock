@@ -5380,10 +5380,10 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
-redux-query@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.4.1.tgz#80ad388b591be4dc3d01c3b8b0f7934d095b2b98"
-  integrity sha512-pXAaQ5d0e42zV5yaSEe1TnE+digiLinVqG0k29ROcUaWLGeqRWdQfRu6VMLK6cb9Pp3TIWQOCQkIEbmLp42t4w==
+redux-query@^3.5.0-alpha.1:
+  version "3.5.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.5.0-alpha.1.tgz#78bf6379dbf32489b8836eaedc99f6de0b5358b5"
+  integrity sha512-yilPeR9I95W8D/Xf5uQSJ493CIE02JQ/EQAjatacNaO/yUMJ7gMv6S7EuVSvLOqIz4nY5J2MMhXkj8F+8XqNAA==
   dependencies:
     backo "^1.1.0"
     idx "^2.5.6"
@@ -6192,9 +6192,9 @@ tmp@^0.0.33:
     os-tmpdir "~1.0.2"
 
 tmpl@1.0.x:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz#23640dd7b42d00433911140820e5cf440e521dd1"
-  integrity sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE=
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.5.tgz#8683e0b902bb9c20c4f726e3c0b69f36518c07cc"
+  integrity sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"

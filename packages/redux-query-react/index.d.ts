@@ -53,6 +53,10 @@ declare module 'redux-query-react' {
     ...args: TArgs
   ) => ActionPromise<TEntities>;
 
+  type RunRequest<TEntities = Entities, TArgs = never> = (
+    ...args: TArgs
+  ) => ActionPromise<TEntities>;
+
   export type UseRequestHook = <TEntities = Entities>(
     queryConfig: QueryConfig<TEntities> | null | undefined,
   ) => [QueryState, ForceRequestCallback<TEntities>];
@@ -61,6 +65,10 @@ declare module 'redux-query-react' {
     queryConfigs: Array<QueryConfig<TEntities> | null | undefined> | null | undefined,
   ) => [QueryState, ForceRequestsCallback];
 
+  export type UseRequestOnDemandHook = <TEntities = Entities, TArgs = never>(
+    createQueryConfig: QueryConfigFactory<TEntities, TArgs>,
+  ) => [QueryState, RunRequest<TEntities, TArgs>];
+
   export type UseMutationHook = <TEntities = Entities, TArgs = never>(
     createQueryConfig: QueryConfigFactory<TEntities, TArgs>,
   ) => [QueryState, RunMutation<TEntities, TArgs>];
@@ -68,6 +76,7 @@ declare module 'redux-query-react' {
   export const connectRequest: RequestConnector;
   export const Provider: ReduxQueryProvider;
   export const useRequest: UseRequestHook;
+  export const useRequestOnDemand: UseRequestOnDemandHook;
   export const useRequests: UseRequestsHook;
   export const useMutation: UseMutationHook;
 }

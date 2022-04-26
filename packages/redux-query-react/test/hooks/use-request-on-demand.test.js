@@ -112,7 +112,7 @@ describe('useRequestOnDemand', () => {
     let loadingContentNode = await waitForElement(() => getByTestId(container, 'loading-content'));
     expect(loadingContentNode.textContent).toBe('loading');
 
-    // Mutation finished, message should be visible
+    // Request finished, message should be visible
 
     let loadedContentNode = await waitForElement(() => getByTestId(container, 'loaded-content'));
     expect(loadedContentNode.textContent).toBe('BodyValue');

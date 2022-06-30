@@ -23,7 +23,12 @@ const useRequestOnDemand = (
 
   const request = React.useCallback(
     (...args: $ReadOnlyArray<mixed>) => {
-      const queryConfig = makeQueryConfig(...args);
+      const queryConfig = {
+        // Force the request to be made, even if the query state is already pending.
+        // However, allow user to override if force is passed explicitly.
+        force: true,
+        ...makeQueryConfig(...args),
+      };
 
       setQueryConfig(queryConfig);
 

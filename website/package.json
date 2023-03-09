@@ -13,5 +13,8 @@
   },
   "resolutions": {
     "**/kind-of": "6.0.3"
+  },
+  "dependencies": {
+    "loader-utils": "2.0.4"
   }
 }

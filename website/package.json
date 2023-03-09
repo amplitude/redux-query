@@ -12,10 +12,9 @@
     "docusaurus": "1.14"
   },
   "resolutions": {
-    "**/kind-of": "6.0.3"
-  },
-  "dependencies": {
+    "**/kind-of": "6.0.3",
     "http-cache-semantics": "4.1.1",
-    "loader-utils": "3.2.1"
+    "loader-utils": "3.2.1",
+    "shell-quote": "1.7.2"
   }
 }

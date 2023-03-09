@@ -15,6 +15,7 @@
     "**/kind-of": "6.0.3"
   },
   "dependencies": {
+    "http-cache-semantics": "4.1.1",
     "loader-utils": "3.2.1"
   }
 }

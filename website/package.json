@@ -16,6 +16,7 @@
     "**/http-cache-semantics": "4.1.1",
     "**/loader-utils": "3.2.1",
     "**/shell-quote": "^1.7.3",
-    "**/trim-newlines": "3.0.1"
+    "**/trim-newlines": "3.0.1",
+    "**/immer": "9.0.6"
   }
 }

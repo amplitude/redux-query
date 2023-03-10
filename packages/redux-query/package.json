@@ -65,6 +65,9 @@
     "webpack": "^4.19.0",
     "webpack-cli": "^3.1.0"
   },
+  "resolutions": {
+    "**/qs": "6.2.4"
+  },
   "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest"

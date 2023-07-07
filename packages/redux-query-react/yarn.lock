@@ -4134,10 +4134,7 @@ iconv-lite@0.4.24, iconv-lite@^0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-idx@^2.5.6:
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/idx/-/idx-2.5.6.tgz#1f824595070100ae9ad585c86db08dc74f83a59d"
-  integrity sha512-WFXLF7JgPytbMgelpRY46nHz5tyDcedJ76pLV+RJWdb8h33bxFq4bdZau38DhNSzk5eVniBf1K3jwfK+Lb5nYA==
+
 
 ieee754@^1.1.4:
   version "1.2.1"
@@ -6508,7 +6505,6 @@ redux-query@^3.5.0-alpha.1:
   integrity sha512-oqzScFf3/TaQI2p7h6t1IapcAZ+q59BHYVURwjFJQsoBpfdKK9a2JJRY3yw8SfYm9PeFTq4xg+3cM9+dBm2kiw==
   dependencies:
     backo "^1.1.0"
-    idx "^2.5.6"
     invariant "^2.2.0"
     json-stable-stringify "^1.0.0"
     reselect "^4.0.0"

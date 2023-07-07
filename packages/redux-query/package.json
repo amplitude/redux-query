@@ -34,7 +34,6 @@
   "license": "MIT",
   "dependencies": {
     "backo": "^1.1.0",
-    "idx": "^2.5.6",
     "invariant": "^2.2.0",
     "json-stable-stringify": "^1.0.0",
     "reselect": "^4.0.0"
@@ -53,7 +52,6 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.2",
-    "babel-plugin-idx": "^2.4.0",
     "cross-env": "^1.0.7",
     "eslint": "^5.11.1",
     "eslint-plugin-flowtype": "^3.10.1",

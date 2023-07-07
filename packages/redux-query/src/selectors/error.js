@@ -1,7 +1,5 @@
 // @flow
 
-import idx from 'idx';
-
 import type { State as ErrorsState } from '../reducers/errors';
 import { getQueryKey } from '../lib/query-key';
 import type { QueryConfig } from '../types';
@@ -16,7 +14,7 @@ export const responseBody = (
     return null;
   }
 
-  return idx(errorsState, _ => _[queryKey].responseBody);
+  return errorsState?.[queryKey]?.responseBody;
 };
 
 export const responseText = (errorsState: ErrorsState, queryConfig: QueryConfig): ?string => {
@@ -26,7 +24,7 @@ export const responseText = (errorsState: ErrorsState, queryConfig: QueryConfig)
     return null;
   }
 
-  return idx(errorsState, _ => _[queryKey].responseText);
+  return errorsState?.[queryKey]?.responseText;
 };
 
 export const responseHeaders = (
@@ -39,5 +37,5 @@ export const responseHeaders = (
     return null;
   }
 
-  return idx(errorsState, _ => _[queryKey].responseHeaders);
+  return errorsState?.[queryKey]?.responseHeaders;
 };

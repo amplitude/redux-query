@@ -8,7 +8,7 @@
 
 module.exports = {
   presets: ['@babel/preset-flow', '@babel/preset-react', '@babel/preset-env'],
-  plugins: ['@babel/plugin-proposal-object-rest-spread', 'babel-plugin-idx'],
+  plugins: ['@babel/plugin-proposal-object-rest-spread'],
   env: {
     test: {
       presets: [

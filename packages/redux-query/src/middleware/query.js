@@ -1,7 +1,6 @@
 // @flow
 
 import Backoff from 'backo';
-import idx from 'idx';
 
 import {
   requestStart,
@@ -137,8 +136,8 @@ const queryMiddleware = (
         const queries = queriesSelector(state);
 
         const queriesState = queries[queryKey];
-        const isPending = idx(queriesState, _ => _.isPending);
-        const status = idx(queriesState, _ => _.status);
+        const isPending = queriesState?.isPending;
+        const status = queriesState?.status;
         const hasSucceeded = isStatusOk(status);
 
         if (force || !queriesState || (retry && !isPending && !hasSucceeded)) {

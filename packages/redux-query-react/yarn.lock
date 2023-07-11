@@ -4134,11 +4134,6 @@ iconv-lite@0.4.24, iconv-lite@^0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-idx@^2.5.6:
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/idx/-/idx-2.5.6.tgz#1f824595070100ae9ad585c86db08dc74f83a59d"
-  integrity sha512-WFXLF7JgPytbMgelpRY46nHz5tyDcedJ76pLV+RJWdb8h33bxFq4bdZau38DhNSzk5eVniBf1K3jwfK+Lb5nYA==
-
 ieee754@^1.1.4:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
@@ -6502,13 +6497,12 @@ realpath-native@^2.0.0:
   resolved "https://registry.yarnpkg.com/realpath-native/-/realpath-native-2.0.0.tgz#7377ac429b6e1fd599dc38d08ed942d0d7beb866"
   integrity sha512-v1SEYUOXXdbBZK8ZuNgO4TBjamPsiSgcFr0aP+tEKpQZK8vooEUqV6nm6Cv502mX4NF2EfsnVqtNAHG+/6Ur1Q==
 
-redux-query@^3.5.1-alpha.1:
-  version "3.5.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.5.1-alpha.1.tgz#bd3d1109e0a8dc8b0c8c96fa03bd2631979b57e9"
-  integrity sha512-YqbdV2qamE9+LD2u7r557s1q6zS1LJy6L7a7vArAgIWwLeHGu8TOi5BShZQmu62w9Zuob+4MM324wFDBZuL3Hg==
+redux-query@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/redux-query/-/redux-query-3.5.1.tgz#889769214d32829a9302807f56285f29af0b70e8"
+  integrity sha512-2s8ekKJYLYxQwBdhbwhewVbNM+HKNLuyWk3lR3gXRbbDlwnWccUv78qwtaHU4LXcjXzpG2lfYeFqGPQd+hneKw==
   dependencies:
     backo "^1.1.0"
-    idx "^2.5.6"
     invariant "^2.2.0"
     json-stable-stringify "^1.0.0"
     reselect "^4.0.0"

@@ -3,23 +3,24 @@
 import Backoff from 'backo';
 
 import {
-  requestStart,
-  requestFailure,
-  requestSuccess,
-  mutateStart,
   mutateFailure,
+  mutateStart,
   mutateSuccess,
+  requestFailure,
+  requestStart,
+  requestSuccess,
 } from '../actions';
 import * as actionTypes from '../constants/action-types';
 import httpMethods from '../constants/http-methods';
 import * as statusCodes from '../constants/status-codes';
-import { getQueryKey } from '../lib/query-key';
-import { updateEntities, optimisticUpdateEntities, rollbackEntities } from '../lib/update';
 import { pick } from '../lib/object';
+import { getQueryKey } from '../lib/query-key';
+import { optimisticUpdateEntities, rollbackEntities, updateEntities } from '../lib/update';
+import { RequestsForTestData } from '../lib/requestsForTestData';
 
 import type { Action, PublicAction } from '../actions';
+import type { State as QueriesState } from '../reducers/queries';
 import type {
-  ActionPromiseValue,
   EntitiesSelector,
   NetworkHandler,
   NetworkInterface,
@@ -29,7 +30,6 @@ import type {
   Status,
   Transform,
 } from '../types';
-import type { State as QueriesState } from '../reducers/queries';
 
 type Config = {|
   backoff: {|
@@ -101,6 +101,8 @@ const queryMiddleware = (
     }
   };
 
+  const requestsForTestData = new RequestsForTestData();
+
   return ({ dispatch, getState }: ReduxStore) => (next: Next) => (action: PublicAction) => {
     let returnValue;
     const config = { ...defaultConfig, ...customConfig };
@@ -171,6 +173,8 @@ const queryMiddleware = (
               attempts += 1;
 
               networkHandler.execute((err, status, responseBody, responseText, responseHeaders) => {
+                requestsForTestData.addRequest(url, body, method, responseBody);
+
                 if (
                   config.retryableStatusCodes.includes(status) &&
                   attempts < config.backoff.maxAttempts
@@ -312,6 +316,8 @@ const queryMiddleware = (
           );
 
           networkHandler.execute((err, status, responseBody, responseText, responseHeaders) => {
+            requestsForTestData.addRequest(url, body, method, responseBody);
+
             const end = new Date();
             const duration = end - start;
             const state = getState();

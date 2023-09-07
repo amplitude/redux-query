@@ -1,6 +1,6 @@
 {
   "name": "redux-query-react",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "The React interface for integrating with redux-query",
   "homepage": "https://github.com/amplitude/redux-query",
   "main": "dist/commonjs/index.js",
@@ -68,7 +68,7 @@
     "react-redux": "7.1.0",
     "react-test-renderer": "^16.8.6",
     "redux": "^4.0.1",
-    "redux-query": "^3.6.0",
+    "redux-query": "^3.6.1",
     "rimraf": "^2.4.3",
     "terser-webpack-plugin": "^1.3.0",
     "webpack": "^4.19.0",

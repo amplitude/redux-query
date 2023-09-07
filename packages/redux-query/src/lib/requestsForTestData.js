@@ -25,7 +25,7 @@ const createBaseRequests = () => {
   };
 };
 
-const cookieName = 'amp_store_requests_for_test_data';
+const cookieName = 'redux_query_store_requests_for_test_data';
 
 export class RequestsForTestData {
   requests: Requests = createBaseRequests();

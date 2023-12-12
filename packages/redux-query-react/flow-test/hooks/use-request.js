@@ -8,7 +8,7 @@ const Card = () => {
   const [{ isPending }] = useRequest({
     url: '/api',
     customQueryMiddlewareConfig: {
-      retryableStatusCodes: [200],
+      retryableStatusCodes: [504],
     },
   });
 

@@ -96,13 +96,15 @@ const useMultiRequest = <Config>(mapPropsToConfigs: MapPropsToConfigs<Config>, p
     };
   });
 
-  const transformQueryConfig = useConstCallback((queryConfig: ?QueryConfig): ?QueryConfig => {
-    return {
-      ...queryConfig,
-      unstable_preDispatchCallback: finishedCallback(getQueryKey(queryConfig)),
-      retry: true,
-    };
-  });
+  const transformQueryConfig = useConstCallback(
+    (queryConfig: ?QueryConfig): ?QueryConfig => {
+      return {
+        ...queryConfig,
+        unstable_preDispatchCallback: finishedCallback(getQueryKey(queryConfig)),
+        retry: true,
+      };
+    },
+  );
 
   // Query configs are memoized based on query key. As long as the query keys in the list don't
   // change, the query config list won't change.

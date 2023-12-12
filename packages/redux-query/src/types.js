@@ -13,6 +13,15 @@ type QueryOptions = {
   headers?: { [key: string]: any },
 };
 
+export type QueryMiddlewareConfig = {|
+  backoff: {|
+    maxAttempts: number,
+    minDuration: number,
+    maxDuration: number,
+  |},
+  retryableStatusCodes: Array<Status>,
+|};
+
 export type QueryConfig = {|
   body?: RequestBody,
   force?: boolean,
@@ -26,6 +35,7 @@ export type QueryConfig = {|
   rollback?: { [key: string]: (initialValue: any, currentValue: any) => any },
   unstable_preDispatchCallback?: () => void,
   url: Url,
+  customQueryMiddlewareConfig?: QueryMiddlewareConfig,
 |};
 
 export type QueryDetails = {

@@ -39,15 +39,15 @@ declare module 'redux-query' {
   export type RollbackStrategy<T> = (initialValue: T, currentValue: T) => T;
 
   export type Update<TEntities = Entities> = {
-    [K in keyof TEntities]?: UpdateStrategy<TEntities[K]>
+    [K in keyof TEntities]?: UpdateStrategy<TEntities[K]>;
   };
 
   export type OptimisticUpdate<TEntities = Entities> = {
-    [K in keyof TEntities]?: OptimisticUpdateStrategy<TEntities[K]>
+    [K in keyof TEntities]?: OptimisticUpdateStrategy<TEntities[K]>;
   };
 
   export type Rollback<TEntities = Entities> = {
-    [K in keyof TEntities]?: RollbackStrategy<TEntities[K]>
+    [K in keyof TEntities]?: RollbackStrategy<TEntities[K]>;
   };
 
   export interface WithTime {
@@ -158,6 +158,15 @@ declare module 'redux-query' {
     queryCount: number;
   };
 
+  export type QueryMiddlewareConfig = {
+    backoff: {
+      maxAttempts: number;
+      minDuration: number;
+      maxDuration: number;
+    };
+    retryableStatusCodes: Array<Status>;
+  };
+
   export interface QueryConfig<TEntities = Entities> {
     body?: RequestBody;
     force?: boolean;
@@ -171,6 +180,7 @@ declare module 'redux-query' {
     rollback?: Rollback<TEntities>;
     unstable_preDispatchCallback?: () => void;
     url: Url;
+    customQueryMiddlewareConfig?: QueryMiddlewareConfig;
   }
 
   export interface QueriesState {

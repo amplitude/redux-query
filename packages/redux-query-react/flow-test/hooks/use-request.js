@@ -7,7 +7,7 @@ import useRequest from '../../src/hooks/use-request';
 const Card = () => {
   const [{ isPending }] = useRequest({
     url: '/api',
-    customQueryConfig: {
+    customQueryMiddlewareConfig: {
       retryableStatusCodes: [200],
     },
   });

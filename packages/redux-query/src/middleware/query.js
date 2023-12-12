@@ -29,7 +29,7 @@ import type {
   ResponseBody,
   Status,
   Transform,
-  Config,
+  QueryMiddlewareConfig,
 } from '../types';
 
 type ReduxStore = {|
@@ -39,7 +39,7 @@ type ReduxStore = {|
 
 type Next = (action: PublicAction) => any;
 
-const defaultConfig: Config = {
+const defaultConfig: QueryMiddlewareConfig = {
   backoff: {
     maxAttempts: 5,
     minDuration: 300,
@@ -97,8 +97,8 @@ const queryMiddleware = (
 
   return ({ dispatch, getState }: ReduxStore) => (next: Next) => (action: PublicAction) => {
     let returnValue;
-    const customQueryConfigFromAction = action.customQueryConfig || {};
-    const config = { ...defaultConfig, ...customConfig, ...customQueryConfigFromAction };
+    const customQueryMiddlewareConfigFromAction = action.customQueryMiddlewareConfig || {};
+    const config = { ...defaultConfig, ...customConfig, ...customQueryMiddlewareConfigFromAction };
 
     switch (action.type) {
       case actionTypes.REQUEST_ASYNC: {

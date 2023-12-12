@@ -276,7 +276,7 @@ export const requestAsync = ({
   url,
   /* eslint-disable-next-line camelcase */
   unstable_preDispatchCallback,
-  customQueryConfig,
+  customQueryMiddlewareConfig,
 }: QueryConfig): RequestAsyncAction => {
   return {
     type: actionTypes.REQUEST_ASYNC,
@@ -290,7 +290,7 @@ export const requestAsync = ({
     update,
     url,
     unstable_preDispatchCallback,
-    customQueryConfig,
+    customQueryMiddlewareConfig,
   };
 };
 
@@ -309,7 +309,7 @@ export const mutateAsync = ({
   transform,
   update,
   url,
-  customQueryConfig,
+  customQueryMiddlewareConfig,
 }: QueryConfig): MutateAsyncAction => {
   return {
     type: actionTypes.MUTATE_ASYNC,
@@ -322,7 +322,7 @@ export const mutateAsync = ({
     transform,
     update,
     url,
-    customQueryConfig,
+    customQueryMiddlewareConfig,
   };
 };
 

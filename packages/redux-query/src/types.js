@@ -13,7 +13,7 @@ type QueryOptions = {
   headers?: { [key: string]: any },
 };
 
-export type Config = {|
+export type QueryMiddlewareConfig = {|
   backoff: {|
     maxAttempts: number,
     minDuration: number,
@@ -35,7 +35,7 @@ export type QueryConfig = {|
   rollback?: { [key: string]: (initialValue: any, currentValue: any) => any },
   unstable_preDispatchCallback?: () => void,
   url: Url,
-  customQueryConfig?: Config,
+  customQueryMiddlewareConfig?: QueryMiddlewareConfig,
 |};
 
 export type QueryDetails = {

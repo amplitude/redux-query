@@ -276,6 +276,7 @@ export const requestAsync = ({
   url,
   /* eslint-disable-next-line camelcase */
   unstable_preDispatchCallback,
+  customQueryConfig,
 }: QueryConfig): RequestAsyncAction => {
   return {
     type: actionTypes.REQUEST_ASYNC,
@@ -289,6 +290,7 @@ export const requestAsync = ({
     update,
     url,
     unstable_preDispatchCallback,
+    customQueryConfig,
   };
 };
 
@@ -307,6 +309,7 @@ export const mutateAsync = ({
   transform,
   update,
   url,
+  customQueryConfig,
 }: QueryConfig): MutateAsyncAction => {
   return {
     type: actionTypes.MUTATE_ASYNC,
@@ -319,6 +322,7 @@ export const mutateAsync = ({
     transform,
     update,
     url,
+    customQueryConfig,
   };
 };
 

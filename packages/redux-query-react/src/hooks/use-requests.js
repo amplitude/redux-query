@@ -92,9 +92,10 @@ const useRequests = (
   const transformQueryConfig = useConstCallback(
     (queryConfig: ?QueryConfig): ?QueryConfig => {
       return {
+        // Note: This is the default retry option. Retry can and should be overridden by passed in configuration.
+        retry: true,
         ...queryConfig,
         unstable_preDispatchCallback: finishedCallback(getQueryKey(queryConfig)),
-        retry: true,
       };
     },
   );
